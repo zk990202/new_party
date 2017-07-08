@@ -122,6 +122,7 @@ Route::group(['namespace' => 'Manager', 'prefix' => 'manager'], function (){
     Route::group(['prefix' => 'statistics'], function(){
 
         // 登陆统计
+        Route::get('loginPage', 'StatisticsController@loginPage');
         Route::get('login', 'StatisticsController@login');
     });
 });
