@@ -18,6 +18,10 @@ class StatisticsController extends Controller
         return view('Manager.Statistics.login');
     }
 
+    /**
+     * 登录统计的api接口
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function login(){
         // 获取本月第一天的时间戳
         $end = strtotime(date('Y-m-01', time()));

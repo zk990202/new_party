@@ -27,8 +27,10 @@
     <link rel="stylesheet" href="/AdminLTE/bower_components/bootstrap-daterangepicker/daterangepicker.css">
     <!-- bootstrap wysihtml5 - text editor -->
     <link rel="stylesheet" href="/AdminLTE/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css">
+@section('css')
 
-    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+@show
+<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
     <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
@@ -333,6 +335,9 @@
                     <a href="#">
                         <i class="fa fa-th"></i>
                         <span>统计信息</span>
+                        <span class="pull-right-container">
+                                    <i class="fa fa-angle-left pull-right"></i>
+                                </span>
                     </a>
                     <ul class="treeview-menu">
                         <li><a href="{{ url('manager/statistics/loginPage') }}"><i class="fa fa-circle-o"></i> 登陆</a></li>
@@ -346,8 +351,25 @@
                     <a href="#">
                         <i class="fa fa-th"></i>
                         <span>通知公告管理</span>
+                        <span class="pull-right-container">
+                                    <i class="fa fa-angle-left pull-right"></i>
+                                </span>
                     </a>
                     <ul class="treeview-menu">
+                        <li class="treeview"><a href="#"><i class="fa fa-circle-o"></i>
+                                党校公告
+                                <span class="pull-right-container">
+                                    <i class="fa fa-angle-left pull-right"></i>
+                                </span>
+                                <ul class="treeview-menu">
+                                    <li><a href="{{ url('manager/notice/party-school/70') }}"><i class="fa fa-circle-o"></i> 申请人党校</a></li>
+                                    <li><a href="#"><i class="fa fa-circle-o"></i> 积极分子党校</a></li>
+                                    <li><a href="#"><i class="fa fa-circle-o"></i> 预备党员党校</a></li>
+                                    <li><a href="#"><i class="fa fa-circle-o"></i> 党支部书记培训</a></li>
+                                </ul>
+                            </a>
+                        </li>
+                        <li><a href="#"><i class="fa fa-circle-o"></i> Top Navigation</a></li>
                         <li><a href="#"><i class="fa fa-circle-o"></i> Top Navigation</a></li>
                     </ul>
                 </li>
@@ -355,6 +377,9 @@
                     <a href="#">
                         <i class="fa fa-th"></i>
                         <span>党建新闻</span>
+                        <span class="pull-right-container">
+                                    <i class="fa fa-angle-left pull-right"></i>
+                                </span>
                     </a>
                     <ul class="treeview-menu">
                         <li><a href="#"><i class="fa fa-circle-o"></i> Top Navigation</a></li>
@@ -364,6 +389,9 @@
                     <a href="#">
                         <i class="fa fa-th"></i>
                         <span>学习小组</span>
+                        <span class="pull-right-container">
+                                    <i class="fa fa-angle-left pull-right"></i>
+                                </span>
                     </a>
                     <ul class="treeview-menu">
                         <li><a href="#"><i class="fa fa-circle-o"></i> Top Navigation</a></li>
@@ -373,6 +401,9 @@
                     <a href="#">
                         <i class="fa fa-th"></i>
                         <span>党校培训</span>
+                        <span class="pull-right-container">
+                                    <i class="fa fa-angle-left pull-right"></i>
+                                </span>
                     </a>
                     <ul class="treeview-menu">
                         <li><a href="#"><i class="fa fa-circle-o"></i> Top Navigation</a></li>
@@ -382,6 +413,9 @@
                     <a href="#">
                         <i class="fa fa-th"></i>
                         <span>重要文件</span>
+                        <span class="pull-right-container">
+                                    <i class="fa fa-angle-left pull-right"></i>
+                                </span>
                     </a>
                     <ul class="treeview-menu">
                         <li><a href="#"><i class="fa fa-circle-o"></i> Top Navigation</a></li>
@@ -391,6 +425,9 @@
                     <a href="#">
                         <i class="fa fa-th"></i>
                         <span>理论学习</span>
+                        <span class="pull-right-container">
+                                    <i class="fa fa-angle-left pull-right"></i>
+                                </span>
                     </a>
                     <ul class="treeview-menu">
                         <li><a href="#"><i class="fa fa-circle-o"></i> Top Navigation</a></li>
@@ -400,6 +437,9 @@
                     <a href="#">
                         <i class="fa fa-th"></i>
                         <span>消息管理</span>
+                        <span class="pull-right-container">
+                                    <i class="fa fa-angle-left pull-right"></i>
+                                </span>
                     </a>
                     <ul class="treeview-menu">
                         <li><a href="#"><i class="fa fa-circle-o"></i> Top Navigation</a></li>
@@ -409,6 +449,9 @@
                     <a href="#">
                         <i class="fa fa-th"></i>
                         <span>申请人培训</span>
+                        <span class="pull-right-container">
+                                    <i class="fa fa-angle-left pull-right"></i>
+                                </span>
                     </a>
                     <ul class="treeview-menu">
                         <li><a href="#"><i class="fa fa-circle-o"></i> Top Navigation</a></li>
@@ -418,6 +461,9 @@
                     <a href="#">
                         <i class="fa fa-th"></i>
                         <span>院级积极分子培训</span>
+                        <span class="pull-right-container">
+                                    <i class="fa fa-angle-left pull-right"></i>
+                                </span>
                     </a>
                     <ul class="treeview-menu">
                         <li><a href="#"><i class="fa fa-circle-o"></i> Top Navigation</a></li>
@@ -427,6 +473,9 @@
                     <a href="#">
                         <i class="fa fa-th"></i>
                         <span>预备党员培训</span>
+                        <span class="pull-right-container">
+                                    <i class="fa fa-angle-left pull-right"></i>
+                                </span>
                     </a>
                     <ul class="treeview-menu">
                         <li><a href="#"><i class="fa fa-circle-o"></i> Top Navigation</a></li>
@@ -436,6 +485,9 @@
                     <a href="#">
                         <i class="fa fa-th"></i>
                         <span>支部管理</span>
+                        <span class="pull-right-container">
+                                    <i class="fa fa-angle-left pull-right"></i>
+                                </span>
                     </a>
                     <ul class="treeview-menu">
                         <li><a href="#"><i class="fa fa-circle-o"></i> Top Navigation</a></li>
@@ -445,6 +497,9 @@
                     <a href="#">
                         <i class="fa fa-th"></i>
                         <span>学生信息管理</span>
+                        <span class="pull-right-container">
+                                    <i class="fa fa-angle-left pull-right"></i>
+                                </span>
                     </a>
                     <ul class="treeview-menu">
                         <li><a href="#"><i class="fa fa-circle-o"></i> Top Navigation</a></li>
@@ -454,6 +509,9 @@
                     <a href="#">
                         <i class="fa fa-th"></i>
                         <span>管理员控制</span>
+                        <span class="pull-right-container">
+                                    <i class="fa fa-angle-left pull-right"></i>
+                                </span>
                     </a>
                     <ul class="treeview-menu">
                         <li><a href="#"><i class="fa fa-circle-o"></i> Top Navigation</a></li>
@@ -463,6 +521,9 @@
                     <a href="#">
                         <i class="fa fa-th"></i>
                         <span>系统功能锁</span>
+                        <span class="pull-right-container">
+                                    <i class="fa fa-angle-left pull-right"></i>
+                                </span>
                     </a>
                     <ul class="treeview-menu">
                         <li><a href="#"><i class="fa fa-circle-o"></i> Top Navigation</a></li>
@@ -472,6 +533,9 @@
                     <a href="#">
                         <i class="fa fa-th"></i>
                         <span>杂项控制</span>
+                        <span class="pull-right-container">
+                                    <i class="fa fa-angle-left pull-right"></i>
+                                </span>
                     </a>
                     <ul class="treeview-menu">
                         <li><a href="#"><i class="fa fa-circle-o"></i> Top Navigation</a></li>
@@ -485,20 +549,20 @@
 
     <!-- Content Wrapper. Contains page content -->
 
-        <div class="content-wrapper">
-            <section class="content-header">
-                <h1>
-                    Dashboard
-                    <small>Control panel</small>
-                </h1>
-                <ol class="breadcrumb">
-                    <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-                    <li class="active">Dashboard</li>
-                </ol>
-            </section>
-            @section('main')
-            @show
-        </div>
+    <div class="content-wrapper">
+        <section class="content-header">
+            <h1>
+                Dashboard
+                <small>Control panel</small>
+            </h1>
+            <ol class="breadcrumb">
+                <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+                <li class="active">Dashboard</li>
+            </ol>
+        </section>
+        @section('main')
+        @show
+    </div>
 
     <!-- /.content-wrapper -->
     <footer class="main-footer">
