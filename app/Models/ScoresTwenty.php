@@ -23,14 +23,17 @@ class ScoresTwenty extends Model
         }
         $ten_days_ago_time_stamp = $current_time_stamp - 9*3600*24;
         for($i = 0; $i < 10; $i++){
-            $current_time_stamp = $ten_days_ago_time_stamp + $i*3600*24;//当天时间
-            $current_date = date('Y-m-d', $current_time_stamp);
+//            $current_time_stamp = $ten_days_ago_time_stamp + $i*3600*24;//当天时间
+//            $current_date = date('Y-m-d', $current_time_stamp);
+            $current_date = '2013-10-23';
             $s_date = $current_date.'00:00:00';//当天开始时间
             $e_date = $current_date.'23:59:59';//当天结束时间
             $res_20lessons_arr = self::where('isdeleted', 0)
                 ->whereBetween('complete_time', [$s_date, $e_date])
                 ->get()->toArray();
+            dd($res_20lessons_arr[count($res_20lessons_arr-1)]);
         }
+
 
 
 //        $time = $time - 9*3600*24;//10天之前的时间.

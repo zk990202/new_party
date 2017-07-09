@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers\Manager;
 
+use App\Models\ScoresTwenty;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\LoginCount;
+use Illuminate\Support\Facades\DB;
 use Symfony\Component\VarDumper\Dumper\DataDumperInterface;
 
 class StatisticsController extends Controller
@@ -56,6 +58,7 @@ class StatisticsController extends Controller
 
     public function twentyLessons(){
 
+        ScoresTwenty::scoresTwenty(null);
     }
 
 }
