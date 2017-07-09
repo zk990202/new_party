@@ -19,7 +19,7 @@ class StatisticsController extends Controller
     }
 
     /**
-     * 登陆统计
+     * 登录统计的api接口
      * @return \Illuminate\Http\JsonResponse
      */
     public function login(){

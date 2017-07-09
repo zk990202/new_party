@@ -129,5 +129,11 @@ Route::group(['namespace' => 'Manager', 'prefix' => 'manager'], function (){
         Route::get('twentyLessonsPage', 'StatisticsController@twentyLessonsPage');
         Route::get('twentyLessons', 'StatisticsController@twentyLessons');
     });
+
+    // 通知公告管理
+    Route::group(['prefix' => 'notice'], function(){
+        Route::get('party-school/{type}', 'NoticeController@partySchool');
+
+    });
 });
 
