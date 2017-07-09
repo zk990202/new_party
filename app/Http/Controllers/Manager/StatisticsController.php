@@ -18,6 +18,10 @@ class StatisticsController extends Controller
         return view('Manager.Statistics.login');
     }
 
+    /**
+     * 登陆统计
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function login(){
         // 获取本月第一天的时间戳
         $end = strtotime(date('Y-m-01', time()));
@@ -41,4 +45,17 @@ class StatisticsController extends Controller
             'year' => $count_year
         ]);
     }
+
+    /**
+     * 20课统计
+     */
+    public function twentyLessonsPage(){
+
+        return view('Manager.Statistics.twentyLessons');
+    }
+
+    public function twentyLessons(){
+
+    }
+
 }

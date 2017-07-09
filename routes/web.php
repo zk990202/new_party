@@ -124,6 +124,10 @@ Route::group(['namespace' => 'Manager', 'prefix' => 'manager'], function (){
         // 登陆统计
         Route::get('loginPage', 'StatisticsController@loginPage');
         Route::get('login', 'StatisticsController@login');
+
+        // 20课统计
+        Route::get('twentyLessonsPage', 'StatisticsController@twentyLessonsPage');
+        Route::get('twentyLessons', 'StatisticsController@twentyLessons');
     });
 });
 

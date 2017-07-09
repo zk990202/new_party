@@ -91,7 +91,7 @@ class LoginCount extends Model
             $date = date('Y-m-d', strtotime($date.'+1 day'));
         }
 
-        // 一下是分组数据，按照天，周，月来分组
+        // 以下是分组数据，按照天，周，月来分组
         $res_admin = $res_user = array();
         switch($group){
             case "day":
@@ -106,15 +106,15 @@ class LoginCount extends Model
                     $v_month = date('Y-m', strtotime($v['login_date']));
                     if($c_month != $v_month){
                         $res_user[] = [
-                            'login_date' => date('Y-m', strtotime($v['login_date'].'-1 month')),
+                            'login_date' => $c_month,
                             'login_num' => $sum
                         ];
                         $sum = 0;
                         $c_month = $v_month;
                     } else if ($i == count($res_user_full) - 1){
                         $res_user[] = [
-                            'login_date' => date('Y-m', strtotime($v['login_date'].'-1 month')),
-                            'login_num' => $sum
+                            'login_date' => $c_month,
+                            'login_num' => $sum + $v['login_num']
                         ];
                     }
                     $sum += $v['login_num'];
@@ -126,15 +126,15 @@ class LoginCount extends Model
                     $v_month = date('Y-m', strtotime($v['login_date']));
                     if($c_month != $v_month){
                         $res_admin[] = [
-                            'login_date' => date('Y-m', strtotime($v['login_date'].'-1 month')),
+                            'login_date' => $c_month,
                             'login_num' => $sum
                         ];
                         $sum = 0;
                         $c_month = $v_month;
                     } else if ($i == count($res_admin_full) - 1){
                         $res_admin[] = [
-                            'login_date' => date('Y-m', strtotime($v['login_date'])),
-                            'login_num' => $sum
+                            'login_date' => $c_month,
+                            'login_num' => $sum + $v_month['login_num']
                         ];
                     }
                     $sum += $v['login_num'];

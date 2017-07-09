@@ -8,16 +8,14 @@
                 <div class="nav-tabs-custom">
                     <!-- Tabs within a box -->
                     <ul class="nav nav-tabs pull-right">
-                        <li class="active"><a href="#login_week_chart" data-toggle="tab">过去一周</a></li>
-                        <li ><a href="#login_month_chart" data-toggle="tab">过去一月</a></li>
-                        <li ><a href="#login_year_chart" data-toggle="tab">过去一年</a></li>
-                        <li class="pull-left header"><i class="fa fa-inbox"></i> 登录统计</li>
+                        <li class="active"><a href="#lessons_access_number_chart" data-toggle="tab">通过课数</a></li>
+                        <li ><a href="#lessons_access_20_chart" data-toggle="tab">20课通过</a></li>
+                        <li class="pull-left header"><i class="fa fa-inbox"></i> 20课学习统计</li>
                     </ul>
                     <div class="tab-content no-padding">
                         <!-- Morris chart - Sales -->
-                        <div class="chart tab-pane active" id="login_week_chart" style="position: relative;"></div>
-                        <div class="chart tab-pane" id="login_month_chart" style="position: relative;"></div>
-                        <div class="chart tab-pane" id="login_year_chart" style="position: relative;"></div>
+                        <div class="chart tab-pane active" id="lessons_access_number_chart" style="position: relative;"></div>
+                        <div class="chart tab-pane" id="lessons_access_20_chart" style="position: relative;"></div>
                     </div>
                 </div>
             </section>
@@ -31,7 +29,7 @@
 
     <script>
         $.ajax({
-            'url' : '/manager/statistics/login',
+            'url' : '/manager/statistics/lessons20',
             'method' : 'get',
             'success' : function(data){
                 console.log(data);
@@ -61,7 +59,7 @@
                 }
 
                 new Morris.Area({
-                    element   : 'login_week_chart',
+                    element   : 'lessons_access_number_chart',
                     resize    : true,
                     data      : c_week,
                     xkey      : 'y',
@@ -72,19 +70,9 @@
                 });
 
                 new Morris.Area({
-                    element   : 'login_month_chart',
+                    element   : 'lessons_access_20_chart',
                     resize    : true,
                     data      : c_month,
-                    xkey      : 'y',
-                    ykeys     : ['user', 'admin'],
-                    labels    : ['用户', '管理后台'],
-                    lineColors: ['#a0d0e0', '#3c8dbc'],
-                    hideHover : 'auto'
-                });
-                new Morris.Area({
-                    element   : 'login_year_chart',
-                    resize    : true,
-                    data      : c_year,
                     xkey      : 'y',
                     ykeys     : ['user', 'admin'],
                     labels    : ['用户', '管理后台'],

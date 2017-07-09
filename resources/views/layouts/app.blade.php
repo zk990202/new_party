@@ -336,7 +336,7 @@
                     </a>
                     <ul class="treeview-menu">
                         <li><a href="{{ url('manager/statistics/loginPage') }}"><i class="fa fa-circle-o"></i> 登陆</a></li>
-                        <li><a href="#"><i class="fa fa-circle-o"></i> 20课</a></li>
+                        <li><a href="{{ url('manager/statistics/twentyLessonsPage') }}"><i class="fa fa-circle-o"></i> 20课</a></li>
                         <li><a href="#"><i class="fa fa-circle-o"></i> 申请人结业</a></li>
                         <li><a href="#"><i class="fa fa-circle-o"></i> 积极分子结业</a></li>
                         <li><a href="#"><i class="fa fa-circle-o"></i> 支部统计</a></li>
