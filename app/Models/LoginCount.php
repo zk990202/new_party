@@ -37,8 +37,8 @@ class LoginCount extends Model
         // 这里需要注意，由于不是每天的访问记录都有（有的时候可能没有人访问），所以需要预处理一下数组，将没有的天加进去
         $res_user_full = [];
         $date = date('Y-m-d', $start_time_stamp);
-
         $res_user_arr = array_reverse($res_user_arr);
+
         if($res_user_arr[count($res_user_arr) - 1]['login_date'] != date('Y-m-d', strtotime(date('Y-m-d', $current_time_stamp). '-1 day')))
             $res_user_arr[] = [
                 'login_date' => date('Y-m-d', strtotime(date('Y-m-d', $current_time_stamp). '-1 day')),
@@ -134,7 +134,7 @@ class LoginCount extends Model
                     } else if ($i == count($res_admin_full) - 1){
                         $res_admin[] = [
                             'login_date' => $c_month,
-                            'login_num' => $sum + $v_month['login_num']
+                            'login_num' => $sum + $v['login_num']
                         ];
                     }
                     $sum += $v['login_num'];

@@ -130,7 +130,9 @@ Route::group(['namespace' => 'Manager', 'prefix' => 'manager'], function (){
         Route::get('twentyLessons', 'StatisticsController@twentyLessons');
     });
 
-    // 通知公告管理
+    /**
+     * 通知公告管理模块，路由为 /manager/notice/{action},命名空间 \App\Http|Controllers\Manager\
+     */
     Route::group(['prefix' => 'notice'], function(){
         Route::group(['prefix' => 'party-school'], function(){
             Route::get('{type}', 'NoticeController@partySchool');
@@ -143,9 +145,5 @@ Route::group(['namespace' => 'Manager', 'prefix' => 'manager'], function (){
     });
 
     Route::post('file', 'FileController@upload');
-});
-
-Route::get('test', function(){
-    echo asset('storage/file.txt');
 });
 

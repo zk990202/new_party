@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers\Manager;
 
+use App\Models\ScoresTwenty;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\LoginCount;
+use Illuminate\Support\Facades\DB;
 use Symfony\Component\VarDumper\Dumper\DataDumperInterface;
 
 class StatisticsController extends Controller
@@ -55,7 +57,26 @@ class StatisticsController extends Controller
     }
 
     public function twentyLessons(){
+        // 获取本月第一天的时间戳
+        $end = strtotime(date('Y-m-01', time()));
 
+        // 过去一周
+        $start = strtotime(date("Y-m-d", time()).'-7 day');
+        $count_week = ScoresTwenty::scoresTwenty($start);
+
+        // 上个月
+        $start = strtotime(date("Y-m-d", $end).'-1 month');
+        $count_month = ScoresTwenty::scoresTwenty($start, $end);
+
+        // 过去一年
+        $start = strtotime(date('Y-m-d', $end).'-1 year');
+        $count_year = ScoresTwenty::scoresTwenty($start, $end, "month");
+
+        return response()->json([
+            'week' => $count_week,
+            'month' => $count_month,
+            'year' => $count_year
+        ]);
     }
 
 }

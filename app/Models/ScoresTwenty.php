@@ -5,8 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * Class ScoresModel
- *  入党申请人20课考试成绩
+ * Class ScoresTwenty
+ * 入党申请人20课通过课数统计
  * @package App\Models
  */
 class ScoresTwenty extends Model
@@ -14,56 +14,104 @@ class ScoresTwenty extends Model
     //
     protected $table = 'twt_20scores';
 
-    public static function scoresTwenty($current_time_stamp = null){
-
-        //学习的课数..
+    public static function scoresTwenty($start_time_stamp, $current_time_stamp = null, $group = "day"){
         // set default time stamp
         if($current_time_stamp === null){
             $current_time_stamp = time();
         }
-        $ten_days_ago_time_stamp = $current_time_stamp - 9*3600*24;
-        for($i = 0; $i < 10; $i++){
-            $current_time_stamp = $ten_days_ago_time_stamp + $i*3600*24;//当天时间
-            $current_date = date('Y-m-d', $current_time_stamp);
-            $s_date = $current_date.'00:00:00';//当天开始时间
-            $e_date = $current_date.'23:59:59';//当天结束时间
-            $res_20lessons_arr = self::where('isdeleted', 0)
-                ->whereBetween('complete_time', [$s_date, $e_date])
-                ->get()->toArray();
+        // set current date
+        $current_date = date('Y-m-d', $current_time_stamp);
+
+        //set start date
+        $start_date = date("Y-m-d", $start_time_stamp);
+
+        // get twenty lessons count collection
+        $res_20lessons_arr = self::where('complete_time', '<', $current_date)
+            ->where('complete_time', '>=', $start_date)
+            ->orderBy('complete_time', 'desc')
+            ->get()->toArray();
+        //dd($res_20lessons_arr);
+        
+        //以下是分组数据按照天、周、月来分组
+        $res_20lessons = array();
+        $res_20lessons_final = [];
+        $res_20lessons_arr = array_reverse($res_20lessons_arr);
+        switch ($group){
+            case "day":
+                //将每天的记录整合到一起，使用 c_day 判断
+                $sum = 0;
+                $c_day = date('Y-m-d', $start_time_stamp);
+                foreach ($res_20lessons_arr as $i => $v){
+                    $v_day = date('Y-m-d', strtotime($v['complete_time']));
+                    if($c_day != $v_day){
+                        $res_20lessons[] = [
+                            'complete_time' => $c_day,
+                            'lessons_number' => $sum
+                        ];
+                        $sum = 0;
+                        $c_day = $v_day;
+                    }
+                    else if($i == count($res_20lessons_arr)-1){
+                        $res_20lessons[] = [
+                            'complete_time' => $c_day,
+                            'lessons_number' => $sum + 1
+                        ];
+                    }
+                    $sum += 1;
+                }
+                //把得到的日期-课数数据组进行处理，如果某一天无数据，则置为0
+                $date = date('Y-m-d', $start_time_stamp);
+                if($res_20lessons[count($res_20lessons) - 1]['complete_time'] != date('Y-m-d', strtotime(date('Y-m-d', $current_time_stamp). '-1 day'))){
+                    $res_20lessons[] = [
+                        'complete_time' => date('Y-m-d', strtotime(date('Y-m-d', $current_time_stamp). '-1 day')),
+                        'lessons_number' => 0
+                    ];
+                }
+                
+                foreach ($res_20lessons as $i => $v){
+                    while($v['complete_time'] != $date && $date < date('Y-m-d', $current_time_stamp)){
+                        $res_20lessons_final[] = [
+                            'complete_time' => $date,
+                            'lessons_number' => 0
+                        ];
+                        $date = date('Y-m-d', strtotime($date.'+1 day'));
+                    }
+                    $res_20lessons_final[] = [
+                        'complete_time' => $v['complete_time'],
+                        'lessons_number' => $v['lessons_number']
+                    ];
+                    $date = date('Y-m-d', strtotime($date.'+1 day'));
+                }
+
+                break;
+            
+            case "month":
+                // 将一个月得记录整合到一起，使用 c_month 判断
+                $sum = 0;
+                $c_month = date('Y-m', $start_time_stamp);
+                foreach($res_20lessons_arr as $i => $v) {
+                    $v_month = date('Y-m', strtotime($v['complete_time']));
+                    if ($c_month != $v_month) {
+                        $res_20lessons_final[] = [
+                            'complete_time' => $c_month,
+                            'lessons_number' => $sum
+                        ];
+                        $sum = 0;
+                        $c_month = $v_month;
+                    } else if ($i == count($res_20lessons_arr) - 1) {
+                        $res_20lessons_final[] = [
+                            'complete_time' => $c_month,
+                            'lessons_number' => $sum + 1
+                        ];
+                    }
+                    $sum += 1;
+                }
+                break;
         }
 
 
-//        $time = $time - 9*3600*24;//10天之前的时间.
-//        //上一天..
-//        $results = array();
-//        if($type==1){
-//            for($i=0;$i<10;$i++){
-//                $now_time = $time + $i*3600*24;//当前的时间..
-//                $now_date = date('Y-m-d',$now_time);
-//                $s_date = $now_date.' 00:00:00';//开始时间...
-//                $e_date = $now_date." 23:59:59";//结束时间...
-//                $where = " where isdeleted = 0 and complete_time between '".$s_date."' and '".$e_date."' ";
-//                $result = countNum('20scores',$where);
-//                //print_R($result);
-//                $results[$i]['0'] = (9-$i)."天前";
-//                $results[$i]['1'] = $result;
-//            }//end of for..
-//        }
-//        //通过20课的.
-//        if($type==2){
-//            for($i=0;$i<10;$i++){
-//                $now_time = $time + $i*3600*24;//当前的时间..
-//                $now_date = date('Y-m-d',$now_time);
-//                $s_date = $now_date.' 00:00:00';//开始时间...
-//                $e_date = $now_date." 23:59:59";//结束时间...
-//                $where = " where is_pass20 = 1 and pass20_time between '".$s_date."' and '".$e_date."'";
-//                //print_R($where);
-//                $result = countNum('student_info',$where);
-//                //print_R($result);
-//                $results[$i]['0'] = (9-$i)."天前";
-//                $results[$i]['1'] = $result;
-//            }//end of for..
-//        }
+        return ['twenty_lessons' => $res_20lessons_final];
+
     }
 
 }
