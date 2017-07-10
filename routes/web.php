@@ -132,8 +132,20 @@ Route::group(['namespace' => 'Manager', 'prefix' => 'manager'], function (){
 
     // 通知公告管理
     Route::group(['prefix' => 'notice'], function(){
-        Route::get('party-school/{type}', 'NoticeController@partySchool');
+        Route::group(['prefix' => 'party-school'], function(){
+            Route::get('{type}', 'NoticeController@partySchool');
+            Route::patch('{notice_id}/hide', 'NoticeController@hide');
+            Route::patch('{notice_id}/topUp', 'NoticeController@topUp');
 
+            Route::get('{notice_id}/edit', 'NoticeController@editPage');
+            Route::post('{notice_id}/edit', 'NoticeController@edit');
+        });
     });
+
+    Route::post('file', 'FileController@upload');
+});
+
+Route::get('test', function(){
+    echo asset('storage/file.txt');
 });
 

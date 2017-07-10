@@ -28,4 +28,15 @@ class Resources {
             'isDeleted' =>  $notification->notice_isdeleted
         ];
     }
+
+    public static function File($file){
+        return [
+            'id'    => $file->id,
+            'path'  => $file->file_path,
+            'name'  => $file->file_name,
+            'size'  => $file->file_size,
+            'extension' => $file->file_extension,
+            'usage' => $file->file_usage
+        ];
+    }
 }

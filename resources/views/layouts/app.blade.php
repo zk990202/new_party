@@ -6,6 +6,9 @@
     <title>党建后台管理系统</title>
     <!-- Tell the browser to be responsive to screen width -->
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    {{--x-csrftoken--}}
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
     <!-- Bootstrap 3.3.7 -->
     <link rel="stylesheet" href="/AdminLTE/bower_components/bootstrap/dist/css/bootstrap.min.css">
     <!-- Font Awesome -->
@@ -361,13 +364,13 @@
                                 <span class="pull-right-container">
                                     <i class="fa fa-angle-left pull-right"></i>
                                 </span>
-                                <ul class="treeview-menu">
-                                    <li><a href="{{ url('manager/notice/party-school/70') }}"><i class="fa fa-circle-o"></i> 申请人党校</a></li>
-                                    <li><a href="#"><i class="fa fa-circle-o"></i> 积极分子党校</a></li>
-                                    <li><a href="#"><i class="fa fa-circle-o"></i> 预备党员党校</a></li>
-                                    <li><a href="#"><i class="fa fa-circle-o"></i> 党支部书记培训</a></li>
-                                </ul>
                             </a>
+                            <ul class="treeview-menu">
+                                <li><a href="{{ url('manager/notice/party-school/70') }}"><i class="fa fa-circle-o"></i> 申请人党校</a></li>
+                                <li><a href="{{ url('manager/notice/party-school/71') }}"><i class="fa fa-circle-o"></i> 积极分子党校</a></li>
+                                <li><a href="{{ url('manager/notice/party-school/72') }}"><i class="fa fa-circle-o"></i> 预备党员党校</a></li>
+                                <li><a href="{{ url('manager/notice/party-school/73') }}"><i class="fa fa-circle-o"></i> 党支部书记培训</a></li>
+                            </ul>
                         </li>
                         <li><a href="#"><i class="fa fa-circle-o"></i> Top Navigation</a></li>
                         <li><a href="#"><i class="fa fa-circle-o"></i> Top Navigation</a></li>
@@ -613,6 +616,14 @@
 <script src="/AdminLTE/dist/js/pages/dashboard.js"></script>
 <!-- AdminLTE for demo purposes -->
 <script src="/AdminLTE/dist/js/demo.js"></script>
+
+<script>
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+</script>
 @section('func')
 @show
 
