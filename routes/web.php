@@ -130,8 +130,12 @@ Route::group(['namespace' => 'Manager', 'prefix' => 'manager'], function (){
         Route::get('twentyLessons', 'StatisticsController@twentyLessons');
     });
 
-    // 通知公告管理
+    /**
+     * 通知公告管理模块，路由为 /manager/notice/{action},命名空间 \App\Http|Controllers\Manager\
+     */
     Route::group(['prefix' => 'notice'], function(){
+
+        //党校公告
         Route::get('party-school/{type}', 'NoticeController@partySchool');
 
     });

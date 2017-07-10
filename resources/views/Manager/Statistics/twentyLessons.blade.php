@@ -8,14 +8,16 @@
                 <div class="nav-tabs-custom">
                     <!-- Tabs within a box -->
                     <ul class="nav nav-tabs pull-right">
-                        <li class="active"><a href="#lessons_access_number_chart" data-toggle="tab">通过课数</a></li>
-                        <li ><a href="#lessons_access_20_chart" data-toggle="tab">20课通过</a></li>
-                        <li class="pull-left header"><i class="fa fa-inbox"></i> 20课学习统计</li>
+                        <li class="active"><a href="#twentyLessons_week_chart" data-toggle="tab">过去一周</a></li>
+                        <li ><a href="#twentyLessons_month_chart" data-toggle="tab">过去一月</a></li>
+                        <li ><a href="#twentyLessons_year_chart" data-toggle="tab">过去一年</a></li>
+                        <li class="pull-left header"><i class="fa fa-inbox"></i> 20课统计</li>
                     </ul>
                     <div class="tab-content no-padding">
                         <!-- Morris chart - Sales -->
-                        <div class="chart tab-pane active" id="lessons_access_number_chart" style="position: relative;"></div>
-                        <div class="chart tab-pane" id="lessons_access_20_chart" style="position: relative;"></div>
+                        <div class="chart tab-pane active" id="twentyLessons_week_chart" style="position: relative;"></div>
+                        <div class="chart tab-pane" id="twentyLessons_month_chart" style="position: relative;"></div>
+                        <div class="chart tab-pane" id="twentyLessons_year_chart" style="position: relative;"></div>
                     </div>
                 </div>
             </section>
@@ -29,54 +31,61 @@
 
     <script>
         $.ajax({
-            'url' : '/manager/statistics/lessons20',
+            'url' : '/manager/statistics/twentyLessons',
             'method' : 'get',
             'success' : function(data){
                 console.log(data);
                 var c_week = [];
                 var c_month = [];
                 var c_year = [];
-                for(var i = 0; i < data.week.admin.length; i ++){
+                for(var i = 0; i < data.week.twenty_lessons.length; i ++){
                     c_week[i] = {
-                        y: data.week.admin[i].login_date,
-                        user : data.week.user[i].login_num,
-                        admin : data.week.admin[i].login_num
+                        y: data.week.twenty_lessons[i].complete_time,
+                        twenty_lessons : data.week.twenty_lessons[i].lessons_number
                     }
                 }
-                for(var i = 0; i < data.month.admin.length; i ++){
+                for(var i = 0; i < data.month.twenty_lessons.length; i ++){
                     c_month[i] = {
-                        y: data.month.admin[i].login_date,
-                        user : data.month.user[i].login_num,
-                        admin : data.month.admin[i].login_num
+                        y: data.month.twenty_lessons[i].complete_time,
+                        twenty_lessons : data.month.twenty_lessons[i].lessons_number
                     }
                 }
-                for(var i = 0; i < data.year.admin.length; i ++){
+                for(var i = 0; i < data.year.twenty_lessons.length; i ++){
                     c_year[i] = {
-                        y: data.year.admin[i].login_date,
-                        user : data.year.user[i].login_num,
-                        admin : data.year.admin[i].login_num
+                        y: data.year.twenty_lessons[i].complete_time,
+                        twenty_lessons : data.year.twenty_lessons[i].lessons_number
                     }
                 }
 
                 new Morris.Area({
-                    element   : 'lessons_access_number_chart',
+                    element   : 'twentyLessons_week_chart',
                     resize    : true,
                     data      : c_week,
                     xkey      : 'y',
-                    ykeys     : ['user', 'admin'],
-                    labels    : ['用户', '管理后台'],
-                    lineColors: ['#a0d0e0', '#3c8dbc'],
+                    ykeys     : ['twenty_lessons'],
+                    labels    : ['通过课数'],
+                    lineColors: ['#a0d0e0'],
                     hideHover : 'auto'
                 });
 
                 new Morris.Area({
-                    element   : 'lessons_access_20_chart',
+                    element   : 'twentyLessons_month_chart',
                     resize    : true,
                     data      : c_month,
                     xkey      : 'y',
-                    ykeys     : ['user', 'admin'],
-                    labels    : ['用户', '管理后台'],
-                    lineColors: ['#a0d0e0', '#3c8dbc'],
+                    ykeys     : ['twenty_lessons'],
+                    labels    : ['通过课数'],
+                    lineColors: ['#a0d0e0'],
+                    hideHover : 'auto'
+                });
+                new Morris.Area({
+                    element   : 'twentyLessons_year_chart',
+                    resize    : true,
+                    data      : c_year,
+                    xkey      : 'y',
+                    ykeys     : ['twenty_lessons'],
+                    labels    : ['通过课数'],
+                    lineColors: ['#a0d0e0'],
                     hideHover : 'auto'
                 });
             }

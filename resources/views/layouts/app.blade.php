@@ -363,9 +363,9 @@
                                 </span>
                                 <ul class="treeview-menu">
                                     <li><a href="{{ url('manager/notice/party-school/70') }}"><i class="fa fa-circle-o"></i> 申请人党校</a></li>
-                                    <li><a href="#"><i class="fa fa-circle-o"></i> 积极分子党校</a></li>
-                                    <li><a href="#"><i class="fa fa-circle-o"></i> 预备党员党校</a></li>
-                                    <li><a href="#"><i class="fa fa-circle-o"></i> 党支部书记培训</a></li>
+                                    <li><a href="{{ url('manager/notice/party-school/71') }}"><i class="fa fa-circle-o"></i> 积极分子党校</a></li>
+                                    <li><a href="{{ url('manager/notice/party-school/72') }}"><i class="fa fa-circle-o"></i> 预备党员党校</a></li>
+                                    <li><a href="{{ url('manager/notice/party-school/73') }}"><i class="fa fa-circle-o"></i> 党支部书记培训</a></li>
                                 </ul>
                             </a>
                         </li>
