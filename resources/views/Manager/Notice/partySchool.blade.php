@@ -11,7 +11,7 @@
             <div class="col-xs-12">
                 <div class="box">
                     <div class="box-header">
-                        <h3 class="box-title">Data Table With Full Features</h3>
+                        <h3 class="box-title">党校公告</h3>
                     </div>
                     <!-- /.box-header -->
                     <div class="box-body">
@@ -41,19 +41,20 @@
                                     <td>{{ $notice['isHidden'] ? '隐藏' : '显示'}}</td>
                                     <td>
                                         @if($notice['isHidden'])
-                                            <button type="button" class="btn btn-block btn-success btn-xs">显示</button>
+                                            <button id="show" type="button" class="btn btn-block btn-success btn-xs" value="{{ $notice['id'] }}">显示</button>
                                         @else
-                                            <button type="button" class="btn btn-block btn-danger btn-xs">隐藏</button>
+                                            <button id="hide" type="button" class="btn btn-block btn-danger btn-xs" value="{{ $notice['id'] }}">隐藏</button>
                                         @endif
                                     </td>
                                     <td>
-                                        <button type="button" class="btn btn-block btn-info btn-xs">编辑</button>
+                                        <a href="{{ url('manager/notice/party-school/'.$notice['id'].'/edit') }}">
+                                            <button type="button" class="btn btn-block btn-info btn-xs">编辑</button></a>
                                     </td>
                                     <td>
                                         @if($notice['isTop'])
-                                            <button type="button" class="btn btn-block btn-warning btn-xs">取消</button>
+                                            <button id="down" type="button" class="btn btn-block btn-warning btn-xs" value="{{ $notice['id'] }}">取消</button>
                                         @else
-                                            <button type="button" class="btn btn-block btn-success btn-xs">置顶</button>
+                                            <button id="topUp" type="button" class="btn btn-block btn-success btn-xs" value="{{ $notice['id'] }}">置顶</button>
                                         @endif
                                     </td>
                                 </tr>
@@ -94,7 +95,42 @@
             $('#example1').DataTable({
                 "ordering" : false
             });
+            $('#hide').click(function(){
+                $.ajax({
+                    'url' : '/manager/notice/party-school/' + this.value + '/hide',
+                    'method' : 'patch',
+                    'success' : function(data){
+                        window.location.reload();
+                    }
+                });
+            });
+            $('#show').click(function(){
+                $.ajax({
+                    'url' : '/manager/notice/party-school/' + this.value + '/hide',
+                    'method' : 'patch',
+                    'success' : function(data){
+                        window.location.reload();
+                    }
+                });
+            });
+            $('#topUp').click(function(){
+                $.ajax({
+                    'url' : '/manager/notice/party-school/' + this.value + '/topUp',
+                    'method' : 'patch',
+                    'success' : function(data){
+                        window.location.reload();
+                    }
+                });
+            });
+            $('#down').click(function(){
+                $.ajax({
+                    'url' : '/manager/notice/party-school/' + this.value + '/topUp',
+                    'method' : 'patch',
+                    'success' : function(data){
+                        window.location.reload();
+                    }
+                });
+            });
         })
-
     </script>
 @endsection

@@ -143,10 +143,16 @@ Route::group(['namespace' => 'Manager', 'prefix' => 'manager'], function (){
      * 通知公告管理模块，路由为 /manager/notice/{action},命名空间 \App\Http|Controllers\Manager\
      */
     Route::group(['prefix' => 'notice'], function(){
+        Route::group(['prefix' => 'party-school'], function(){
+            Route::get('{type}', 'NoticeController@partySchool');
+            Route::patch('{notice_id}/hide', 'NoticeController@hide');
+            Route::patch('{notice_id}/topUp', 'NoticeController@topUp');
 
-        //党校公告
-        Route::get('party-school/{type}', 'NoticeController@partySchool');
-
+            Route::get('{notice_id}/edit', 'NoticeController@editPage');
+            Route::post('{notice_id}/edit', 'NoticeController@edit');
+        });
     });
+
+    Route::post('file', 'FileController@upload');
 });
 

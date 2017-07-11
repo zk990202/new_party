@@ -9,7 +9,8 @@ class Notification extends Model
 {
     //
     protected $table = "twt_notification";
-
+    protected $primaryKey = 'notice_id';
+    public $timestamps = false;
     public function column(){
         return $this->belongsTo('App\Models\Column', 'column_id', 'column_id');
     }
@@ -19,7 +20,7 @@ class Notification extends Model
     }
 
     /**
-     * @param $type [70|71|72]
+     * @param $type [70|71|72|73]
      * @return array
      */
     public static function getAllNotice($type){
