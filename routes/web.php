@@ -137,6 +137,10 @@ Route::group(['namespace' => 'Manager', 'prefix' => 'manager'], function (){
         Route::get('academyTestListPage', 'StatisticsController@academyTestListPage');
         Route::get('academyTestList', 'StatisticsController@academyTestList');
 
+        //支部统计
+        Route::get('partyBranchPage/{type}', 'StatisticsController@partyBranchPage');
+        Route::get('partyBranch/{type}', 'StatisticsController@partyBranch');
+
     });
 
     /**
@@ -163,8 +167,6 @@ Route::group(['namespace' => 'Manager', 'prefix' => 'manager'], function (){
 
     Route::post('file', 'FileController@upload');
 
-    Route::get('test', function(){
-        echo "hhhh";
-    });
 });
+
 

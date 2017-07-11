@@ -30,7 +30,7 @@
 @section('func')
 
     <script>
-        $(function(){
+        $(function () {
             $.ajax({
                 'url' : '/manager/statistics/login',
                 'method' : 'get',
@@ -71,7 +71,6 @@
                         lineColors: ['#a0d0e0', '#3c8dbc'],
                         hideHover : 'auto'
                     });
-
                     new Morris.Area({
                         element   : 'login_month_chart',
                         resize    : true,

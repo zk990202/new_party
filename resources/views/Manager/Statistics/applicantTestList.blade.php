@@ -8,8 +8,8 @@
                 <div class="nav-tabs-custom">
                     <!-- Tabs within a box -->
                     <ul class="nav nav-tabs pull-right">
-                        <li class="active"><a href="#applicantTestList_chart" data-toggle="tab">LLLLL</a></li>
-                        <li class="pull-left header"><i class="fa fa-inbox"></i> 申请人结业统计</li>
+                        <li class="active"><a href="#applicantTestList_chart" data-toggle="tab">最近10期</a></li>
+                        <li class="pull-left header"><i class="fa fa-inbox"></i> 入党申请人结业统计</li>
                     </ul>
                     <div class="tab-content no-padding">
                         <!-- Morris chart - Sales -->
@@ -38,16 +38,16 @@
                         res_pass : data.res_pass[i][1]
                     }
                 }
-                console.log(c_res);
-                new Morris.Area({
-                    element   : 'applicantTestList_chart',
-                    resize    : true,
-                    data      : c_res,
-                    xkey      : 'name',
-                    ykeys     : ['res_all', 'res_pass'],
-                    labels    : ['参加考试人数', '通过考试人数'],
-                    lineColors: ['#a0d0e0', '#3c8dbc'],
-                    hideHover : 'auto'
+//                console.log(c_res);
+                new Morris.Bar({
+                    element: 'applicantTestList_chart',
+                    resize: true,
+                    data: c_res,
+                    barColors: ['#00a65a', '#f56954'],
+                    xkey: 'name',
+                    ykeys: ['res_all', 'res_pass'],
+                    labels: ['参加考试人数', '通过考试人数'],
+                    hideHover: 'auto'
                 });
 
             }
