@@ -158,7 +158,7 @@ Route::group(['namespace' => 'Manager', 'prefix' => 'manager'], function (){
     });
 
     Route::post('file', 'FileController@upload');
-
+    
 });
 
 
