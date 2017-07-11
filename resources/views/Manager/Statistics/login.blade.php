@@ -30,69 +30,71 @@
 @section('func')
 
     <script>
-        $.ajax({
-            'url' : '/manager/statistics/login',
-            'method' : 'get',
-            'success' : function(data){
-                console.log(data);
-                var c_week = [];
-                var c_month = [];
-                var c_year = [];
-                for(var i = 0; i < data.week.admin.length; i ++){
-                    c_week[i] = {
-                        y: data.week.admin[i].login_date,
-                        user : data.week.user[i].login_num,
-                        admin : data.week.admin[i].login_num
+        $(function () {
+            $.ajax({
+                'url' : '/manager/statistics/login',
+                'method' : 'get',
+                'success' : function(data){
+                    console.log(data);
+                    var c_week = [];
+                    var c_month = [];
+                    var c_year = [];
+                    for(var i = 0; i < data.week.admin.length; i ++){
+                        c_week[i] = {
+                            y: data.week.admin[i].login_date,
+                            user : data.week.user[i].login_num,
+                            admin : data.week.admin[i].login_num
+                        }
                     }
-                }
-                for(var i = 0; i < data.month.admin.length; i ++){
-                    c_month[i] = {
-                        y: data.month.admin[i].login_date,
-                        user : data.month.user[i].login_num,
-                        admin : data.month.admin[i].login_num
+                    for(var i = 0; i < data.month.admin.length; i ++){
+                        c_month[i] = {
+                            y: data.month.admin[i].login_date,
+                            user : data.month.user[i].login_num,
+                            admin : data.month.admin[i].login_num
+                        }
                     }
-                }
-                for(var i = 0; i < data.year.admin.length; i ++){
-                    c_year[i] = {
-                        y: data.year.admin[i].login_date,
-                        user : data.year.user[i].login_num,
-                        admin : data.year.admin[i].login_num
+                    for(var i = 0; i < data.year.admin.length; i ++){
+                        c_year[i] = {
+                            y: data.year.admin[i].login_date,
+                            user : data.year.user[i].login_num,
+                            admin : data.year.admin[i].login_num
+                        }
                     }
-                }
-                console.log(c_week);
-                new Morris.Area({
-                    element   : 'login_week_chart',
-                    resize    : true,
-                    data      : c_week,
-                    xkey      : 'y',
-                    ykeys     : ['user', 'admin'],
-                    labels    : ['用户', '管理后台'],
-                    lineColors: ['#a0d0e0', '#3c8dbc'],
-                    hideHover : 'auto'
-                });
+                    console.log(c_week);
+                    new Morris.Area({
+                        element   : 'login_week_chart',
+                        resize    : true,
+                        data      : c_week,
+                        xkey      : 'y',
+                        ykeys     : ['user', 'admin'],
+                        labels    : ['用户', '管理后台'],
+                        lineColors: ['#a0d0e0', '#3c8dbc'],
+                        hideHover : 'auto'
+                    });
 
-                new Morris.Area({
-                    element   : 'login_month_chart',
-                    resize    : true,
-                    data      : c_month,
-                    xkey      : 'y',
-                    ykeys     : ['user', 'admin'],
-                    labels    : ['用户', '管理后台'],
-                    lineColors: ['#a0d0e0', '#3c8dbc'],
-                    hideHover : 'auto'
-                });
-                new Morris.Area({
-                    element   : 'login_year_chart',
-                    resize    : true,
-                    data      : c_year,
-                    xkey      : 'y',
-                    ykeys     : ['user', 'admin'],
-                    labels    : ['用户', '管理后台'],
-                    lineColors: ['#a0d0e0', '#3c8dbc'],
-                    hideHover : 'auto'
-                });
-            }
-        });
+                    new Morris.Area({
+                        element   : 'login_month_chart',
+                        resize    : true,
+                        data      : c_month,
+                        xkey      : 'y',
+                        ykeys     : ['user', 'admin'],
+                        labels    : ['用户', '管理后台'],
+                        lineColors: ['#a0d0e0', '#3c8dbc'],
+                        hideHover : 'auto'
+                    });
+                    new Morris.Area({
+                        element   : 'login_year_chart',
+                        resize    : true,
+                        data      : c_year,
+                        xkey      : 'y',
+                        ykeys     : ['user', 'admin'],
+                        labels    : ['用户', '管理后台'],
+                        lineColors: ['#a0d0e0', '#3c8dbc'],
+                        hideHover : 'auto'
+                    });
+                }
+            });
+        })
 
     </script>
 @endsection

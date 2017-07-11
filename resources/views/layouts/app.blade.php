@@ -347,7 +347,18 @@
                         <li><a href="{{ url('manager/statistics/twentyLessonsPage') }}"><i class="fa fa-circle-o"></i> 20课</a></li>
                         <li><a href="{{ url('manager/statistics/applicantTestListPage') }}"><i class="fa fa-circle-o"></i> 申请人结业</a></li>
                         <li><a href="{{ url('manager/statistics/academyTestListPage') }}"><i class="fa fa-circle-o"></i> 积极分子结业</a></li>
-                        <li><a href="#"><i class="fa fa-circle-o"></i> 支部统计</a></li>
+                        <li class="treeview"><a href="#"><i class="fa fa-circle-o"></i>
+                                支部统计
+                                <span class="pull-right-container">
+                                    <i class="fa fa-angle-left pull-right"></i>
+                                </span>
+                            </a>
+                            <ul class="treeview-menu">
+                                <li><a href="{{ url('manager/statistics/partyBranchPage/1') }}"><i class="fa fa-circle-o"></i> 学院</a></li>
+                                <li><a href="{{ url('manager/statistics/partyBranchPage/2') }}"><i class="fa fa-circle-o"></i> 年级</a></li>
+                                <li><a href="{{ url('manager/statistics/partyBranchPage/3') }}"><i class="fa fa-circle-o"></i> 类型</a></li>
+                            </ul>
+                        </li>
                     </ul>
                 </li>
                 <li class="treeview">
