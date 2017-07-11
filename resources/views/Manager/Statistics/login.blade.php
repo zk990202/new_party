@@ -59,7 +59,7 @@
                         admin : data.year.admin[i].login_num
                     }
                 }
-
+                console.log(c_week);
                 new Morris.Area({
                     element   : 'login_week_chart',
                     resize    : true,

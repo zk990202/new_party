@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 
 /**
+ *
  * Class ScoresTwenty
  * 入党申请人20课通过课数统计
  * @package App\Models
