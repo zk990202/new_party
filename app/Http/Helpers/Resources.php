@@ -16,6 +16,7 @@ class Resources {
     public static function Notification(Notification $notification){
         return [
             'id'        =>  $notification->notice_id,
+            'columnId'  =>  $notification->column_id,
             'columnName'=>  $notification->column->column_name,
             'title'     =>  $notification->notice_title,
             'content'   =>  $notification->notice_content,
@@ -37,6 +38,14 @@ class Resources {
             'size'  => $file->file_size,
             'extension' => $file->file_extension,
             'usage' => $file->file_usage
+        ];
+    }
+
+    public static function Column($column){
+        return [
+            'id'    => $column->column_id,
+            'pid'   => $column->column_pid,
+            'name'  => $column->column_name
         ];
     }
 }

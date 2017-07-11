@@ -4,13 +4,19 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Http\Helpers\Resources;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class Notification extends Model
 {
     //
     protected $table = "twt_notification";
     protected $primaryKey = 'notice_id';
-    public $timestamps = false;
+
+    // 创建时间字段
+    const CREATED_AT = 'notice_time';
+
+    protected $fillable = ['column_id', 'notice_title', 'notice_content', 'notice_filename', 'notice_filepath', 'notice_istop', 'author', 'notice_author', 'notice_ishidden', 'notice_isdeleted'];
+
     public function column(){
         return $this->belongsTo('App\Models\Column', 'column_id', 'column_id');
     }
@@ -30,5 +36,37 @@ class Notification extends Model
         return array_map(function($notification){
             return Resources::Notification($notification);
         }, $res_arr);
+    }
+
+    /**
+     * @param $notice_id
+     * @param $data
+     * @throws ModelNotFoundException
+     * @return array|bool
+     */
+    public static function updateById($notice_id, $data){
+        $notice = self::findOrFail($notice_id);
+        $notice->notice_title           = $data['title'];
+        $notice->notice_content         = $data['content'];
+        $notice->notice_filename        = $data['fileName'] ?? $notice->notice_filename;
+        $notice->notice_filepath        = $data['filePath'] ?? $notice->notice_filepath;
+        $res = $notice->save();
+        return $res ? Resources::Notification($notice) : false;
+    }
+
+    public static function add($data){
+        $notice = self::create([
+            'column_id'=>  $data['columnId'],
+            'notice_title'     =>  $data['title'],
+            'notice_content'   =>  $data['content'],
+            'notice_filename'  =>  $data['fileName'],
+            'notice_filepath'  =>  $data['filePath'],
+            'notice_istop'     =>  0,
+            'author'           =>  $data['author'],
+            'notice_ishidden'  =>  0,
+            'notice_isdeleted' =>  0
+        ]);
+
+        return $notice ? Resources::Notification($notice) : false;
     }
 }

@@ -49,7 +49,7 @@ class FileController extends Controller
 
         if(!$this->checkExtension($extension, $usage)){
             return response()->json([
-                'message' => '文件类型不符'
+                'message' => '文件类型不符'.$extension
             ]);
         }
 

@@ -130,8 +130,8 @@ Route::group(['namespace' => 'Manager', 'prefix' => 'manager'], function (){
         Route::get('twentyLessons', 'StatisticsController@twentyLessons');
 
         //申请人结业统计
-        Route::get('applicantTestListPage', 'StatisticsController@applicantTestListPage');
-        Route::get('applicantTestList', 'StatisticsController@applicantTestList');
+        Route::get('applicantTestListPage/{page?}', 'StatisticsController@applicantTestListPage');
+        Route::get('applicantTestList/{page}', 'StatisticsController@applicantTestList');
 
         //积极分子结业统计
         Route::get('academyTestListPage', 'StatisticsController@academyTestListPage');
@@ -143,21 +143,26 @@ Route::group(['namespace' => 'Manager', 'prefix' => 'manager'], function (){
      * 通知公告管理模块，路由为 /manager/notice/{action},命名空间 \App\Http|Controllers\Manager\
      */
     Route::group(['prefix' => 'notice'], function(){
+
+        /**
+         * 党校管理自模块，路由为 /manager/notice/party-school/{action}, 命名空间 \App\Http|Controllers\Manager\
+         */
         Route::group(['prefix' => 'party-school'], function(){
-            Route::get('{type}', 'NoticeController@partySchool');
+            Route::get('list/{type}', 'NoticeController@partySchool');
             Route::patch('{notice_id}/hide', 'NoticeController@hide');
             Route::patch('{notice_id}/topUp', 'NoticeController@topUp');
 
             Route::get('{notice_id}/edit', 'NoticeController@editPage');
             Route::post('{notice_id}/edit', 'NoticeController@edit');
+
+            Route::get('add', 'NoticeController@addPage');
+            Route::post('add', 'NoticeController@add');
+
         });
     });
 
     Route::post('file', 'FileController@upload');
 
-    Route:;get('hh', function() {
-        echo "wqe";
-    });
     Route::get('test', function(){
         echo "hhhh";
     });

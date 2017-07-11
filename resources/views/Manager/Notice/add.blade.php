@@ -21,26 +21,30 @@
                         <div class="box-body">
                             <div class="form-group" >
                                 <label for="noticeTitle">公告标题</label>
-                                <input type="text" class="form-control" id="noticeTitle" value="{{ $notice['title'] }}">
+                                <input type="text" class="form-control" id="noticeTitle" placeholder="公告标题请尽量简明扼要，不要太长">
                             </div>
                             <div class="form-group">
+                                <label for="column">所属栏目</label>
+                                <select id="column" class="form-control">
+                                    @foreach($columns as $column)
+                                        <option value="{{ $column['id'] }}">{{ $column['name'] }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="editor">公告内容</label>
                                 <textarea id="editor" name="editor" rows="10" cols="80">
-                                    {!! htmlspecialchars($notice['content']) !!}
+
                                 </textarea>
                             </div>
                             <div class="form-group">
                                 <label for="inputFile">上传文件</label>
                                 <input type="file" id="inputFile" name="file">
-                                <p class="help-block">
-                                    @if($notice['fileName'])
-                                        已有附件：{{ $notice['fileName'] }}，如不更改请勿重新添加
-                                    @endif
-                                    支持文件格式：
-                                </p>
+
+                                <p class="help-block">支持rar zip tar </p>
                             </div>
                         </div>
                         <!-- /.box-body -->
-                        <input type="hidden" id="noticeId" value="{{ $notice['id'] }}">
                     </form>
                     <div class="box-footer">
                         <button id="submitButton" type="button" class="btn btn-primary">提交</button>
@@ -116,10 +120,11 @@
                             var form = new FormData();
                             form.append('title', $('#noticeTitle').val());
                             form.append('content', $('#editor').val());
+                            form.append('column', $('#column').val());
                             form.append('filePath', path);
                             form.append('fileName', file_name);
                             $.ajax({
-                                url: '/manager/notice/party-school/' + $('#noticeId').val() + '/edit',
+                                url: '/manager/notice/party-school/add',
                                 type: 'POST',
                                 data: form,
                                 cache: false,
@@ -129,7 +134,7 @@
                                 success: function(data){
                                     if(data.success){
                                         alert('修改成功');
-                                        window.location.href = '/manager/notice/party-school/' + $('#noticeId').val() + '/edit';
+                                        window.location.href = '/manager/notice/party-school/list/' + data.info.columnId;
                                     }
                                     else{
                                         alert(data.message);
@@ -149,8 +154,9 @@
                     var form = new FormData();
                     form.append('title', $('#noticeTitle').val());
                     form.append('content', $('#editor').val());
+                    form.append('column', $('#column').val());
                     $.ajax({
-                        url: '/manager/notice/party-school/' + $('#noticeId').val() + '/edit',
+                        url: '/manager/notice/party-school/add',
                         type: 'POST',
                         data: form,
                         cache: false,
@@ -159,8 +165,8 @@
                         contentType: false,
                         success: function(data){
                             if(data.success){
-                                alert('修改成功');
-                                window.location.href = '/manager/notice/party-school/' + $('#noticeId').val() + '/edit';
+                                alert('添加成功');
+                                window.location.href = '/manager/notice/party-school/list/' + data.info.columnId;
                             }
                             else{
                                 alert(data.message);
