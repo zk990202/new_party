@@ -154,5 +154,9 @@ Route::group(['namespace' => 'Manager', 'prefix' => 'manager'], function (){
     });
 
     Route::post('file', 'FileController@upload');
+
+    Route::get('test', function(){
+        echo "hhhh";
+    });
 });
 
