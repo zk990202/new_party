@@ -35,7 +35,6 @@
                 'url' : '/manager/statistics/login',
                 'method' : 'get',
                 'success' : function(data){
-                    console.log(data);
                     var c_week = [];
                     var c_month = [];
                     var c_year = [];

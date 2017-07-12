@@ -33,7 +33,7 @@ class FileController extends Controller
         $usage = $request->input('usage');
         if(empty($usage) || !$this->checkUsage($usage)){
             return response()->json([
-                'message' => '规则不符'
+                'message' => '规则不符'.$usage
             ]);
         }
 
@@ -75,6 +75,10 @@ class FileController extends Controller
             'file' => config('filesystems.disks.'.$disk.'.url').'/'.$path,
             'info' => $file
         ]);
+    }
+
+    public function download($file){
+
     }
 
     /**

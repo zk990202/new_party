@@ -73,7 +73,7 @@
                             var file,
                                 usage,
                                 prefix = trumbowyg.o.prefix;
-                            usage = trumbowyg.o.plugins.usage;
+                            usage = trumbowyg.o.plugins.upload.usage;
                             var $modal = trumbowyg.openModalInsert(
                                 // Title
                                 trumbowyg.lang.upload,
@@ -98,6 +98,7 @@
                                     var data = new FormData();
                                     data.append(trumbowyg.o.plugins.upload.fileFieldName, file);
                                     data.append("usage", usage);
+                                    console.log(usage);
                                     trumbowyg.o.plugins.upload.data.map(function (cur) {
                                         data.append(cur.name, cur.value);
                                     });

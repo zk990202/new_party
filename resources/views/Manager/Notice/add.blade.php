@@ -156,7 +156,7 @@
                     form.append('content', $('#editor').val());
                     form.append('column', $('#column').val());
                     $.ajax({
-                        url: '/manager/notice/party-school/add',
+                        url: '/manager/notice/add',
                         type: 'POST',
                         data: form,
                         cache: false,
