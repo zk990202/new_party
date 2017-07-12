@@ -324,6 +324,14 @@ class ModuleTableSeeder extends Seeder
             'url'       => 'undefined'
         ]);
 
-
+        /**
+         * 消息管理
+         */
+        DB::table('twt_manager_modules')->insert([
+            'self_id'   => 9,
+            'parent_id' => 0,
+            'name'      => '消息管理',
+            'auth'      => 1,
+        ]);
     }
 }
