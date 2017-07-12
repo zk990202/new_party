@@ -130,12 +130,12 @@ Route::group(['namespace' => 'Manager', 'prefix' => 'manager'], function (){
         Route::get('twentyLessons', 'StatisticsController@twentyLessons');
 
         //申请人结业统计
-        Route::get('applicantTestListPage/', 'StatisticsController@applicantTestListPage');
-        Route::get('applicantTestList/', 'StatisticsController@applicantTestList');
+        Route::get('applicantTestListPage', 'StatisticsController@applicantTestListPage');
+        Route::get('applicantTestList', 'StatisticsController@applicantTestList');
 
         //积极分子结业统计
         Route::get('academyTestListPage', 'StatisticsController@academyTestListPage');
-        Route::get('academyTestList', 'StatisticsController@academyTestList');
+        Route::get('academyTestList/{type?}', 'StatisticsController@academyTestList');
 
         //支部统计
         Route::get('partyBranchPage/{type}', 'StatisticsController@partyBranchPage');
@@ -161,6 +161,22 @@ Route::group(['namespace' => 'Manager', 'prefix' => 'manager'], function (){
 
             Route::get('add', 'NoticeController@addPage');
             Route::post('add', 'NoticeController@add');
+
+        });
+
+        /**
+         * 活动通知模块，路由为 /manager/notice/activity/{action}, 命名空间 \App\Http\Controllers\Manager\
+         */
+        Route::group(['prefix' => 'activity'], function (){
+            Route::get('list', 'NoticeController@activity');
+            Route::patch('{activity_id}/hide', 'NoticeController@hide');
+            Route::patch('{activity_id}/topUp', 'NoticeController@topUp');
+
+            Route::get('{activity_id}/edit', 'NoticeController@activityEditPage');
+            Route::post('{activity_id}/edit', 'NoticeController@activityEdit');
+
+            Route::get('add', 'NoticeController@activityAddPage');
+            Route::post('add', 'NoticeController@activityAdd');
 
         });
     });

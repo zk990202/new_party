@@ -25,6 +25,7 @@ class Notification extends Model
         return $this->hasOne('App\Models\User', 'usernumb', 'author');
     }
 
+    //以下是党校公告专区
     /**
      * @param $type [70|71|72|73]
      * @return array
@@ -69,4 +70,42 @@ class Notification extends Model
 
         return $notice ? Resources::Notification($notice) : false;
     }
+
+
+    //以下是活动通知专区
+    public static function activityGetAllNotice(){
+        $res_arr = self::where('column_id', 2)->where('notice_isdeleted', 0)
+            ->orderBy('notice_istop', 'desc')->orderBy('notice_ishidden', 'asc')->orderBy('notice_time', 'desc')
+            ->get()->all();
+        return array_map(function($notification){
+            return Resources::Notification($notification);
+        }, $res_arr);
+    }
+
+    public static function activityUpdateById($activity_id, $data){
+        $notice = self::findOrFail($activity_id);
+        $notice->notice_title           = $data['title'];
+        $notice->notice_content         = $data['content'];
+        $notice->notice_filename        = $data['fileName'] ?? $notice->notice_filename;
+        $notice->notice_filepath        = $data['filePath'] ?? $notice->notice_filepath;
+        $res = $notice->save();
+        return $res ? Resources::Notification($notice) : false;
+    }
+
+    public static function activityAdd($data){
+        $notice = self::create([
+            'column_id' => 2,
+            'notice_title'     =>  $data['title'],
+            'notice_content'   =>  $data['content'],
+            'notice_filename'  =>  $data['fileName'],
+            'notice_filepath'  =>  $data['filePath'],
+            'notice_istop'     =>  0,
+            'author'           =>  $data['author'],
+            'notice_ishidden'  =>  0,
+            'notice_isdeleted' =>  0
+        ]);
+
+        return $notice ? Resources::Notification($notice) : false;
+    }
+
 }

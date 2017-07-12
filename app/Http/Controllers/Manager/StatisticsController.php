@@ -170,9 +170,9 @@ class StatisticsController extends Controller
             ]);
     }
 
-    public function academyTestList(Request $request){
+    public function academyTestList($type){
         //默认显示最近一期（这里未完成，待会还要写表单传过来的数据）
-        if($request->input('test_parent') == null){
+        if($type == null){
             $test_p = DB::table('twt_academy_testlist')
                 ->where('test_parent', 0)
                 ->orderBy('test_id', 'DESC')
@@ -180,7 +180,7 @@ class StatisticsController extends Controller
             $test_parent = $test_p->test_id;
         }
         else{
-            $test_parent = $request->input('test_parent');
+            $test_parent = $type;
         }
 
         //当期所有学院的test
@@ -262,7 +262,6 @@ class StatisticsController extends Controller
 //                ->orderBy('grade', 'DESC')
 //                ->distinct('grade')->get()->toArray();
             $grade = DB::select('select distinct grade from b_class where grade <>0 and grade >2005 order by grade desc');
-            //dd($grade);
             $res_grade = PartyBranch::grade($grade);
             return response()->json([
                 'res_grade' => $res_grade
@@ -272,7 +271,6 @@ class StatisticsController extends Controller
         else{
             //按照类型排列
             $res_category = PartyBranch::category();
-           // dd($res_category);
              return response()->json([
                 'res_category' => $res_category
             ]);

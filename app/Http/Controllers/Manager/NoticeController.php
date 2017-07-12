@@ -22,6 +22,7 @@ class NoticeController extends Controller
         $this->fileExtension = config('fileUpload.');
     }
 
+    //以下为党校公告专区
     /**
      * @param $type [70|71|72|73]
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
@@ -155,4 +156,88 @@ class NoticeController extends Controller
             'message' => '添加失败，请联系后台管理员'
         ]);
     }
+
+
+    //以下为活动通知专区
+    public function activity(){
+        $activity_arr = Notification::activityGetAllNotice();
+        return view('Manager/Notice/activity', ['notices' => $activity_arr]);
+    }
+
+    public function activityEdit(Request $request, $activity_id){
+
+        $content = $request->input('content');
+        $title = $request->input('title');
+        $file_name = $request->input('fileName') ?? null;
+        $file_path = $request->input('filePath') ?? null;
+        try{
+            $res = Notification::activityUpdateById($activity_id, [
+                // 防止编辑器xss攻击，这里进行编码，同时避免二次编码
+                'content'   => htmlspecialchars($content, ENT_COMPAT | ENT_HTML401, ini_get("default_charset") , false),
+                'title'     => $title,
+                'fileName'  => $file_name,
+                'filePath'  => $file_path
+            ]);
+            if($res){
+                return response()->json([
+                    'info' => $res,
+                    'success' => true
+                ]);
+            } else{
+                return response()->json([
+                    'message' => '更新失败，请联系后台管理员',
+                ]);
+            }
+
+        } catch (ModelNotFoundException $e){
+            return response()->json([
+                'message' => '公告id有误，未找到'
+            ]);
+        } catch (Exception $e){
+            return response()->json([
+                'message' => '更新失败'
+            ]);
+        }
+    }
+
+    public function activityEditPage($activity_id){
+        $notification = Notification::findOrFail($activity_id);
+        $notification = Resources::Notification($notification);
+//        dd($notification);
+        return view('Manager.Notice.activityEdit', ['notice' => $notification]);
+    }
+
+    public function activityAddPage(){
+        return view('Manager.Notice.activityAdd');
+    }
+
+    public function activityAdd(Request $request){
+        $title = $request->input('title');
+        $content = $request->input('content');
+        $filePath = $request->input('filePath') ?? '';
+        $fileName = $request->input('fileName') ?? '';
+        if(!$title || !$content ){
+            return response()->json([
+                'message' => '参数丢失'
+            ]);
+        }
+        $res = Notification::activityAdd([
+            'title'     =>  $title,
+            'content'   =>  $content,
+            'fileName'  =>  $fileName,
+            'filePath'  =>  $filePath,
+            // 介入登陆后进行调整
+            'author'    =>  Auth::user() ?? '3014218099'
+        ]);
+        if($res){
+            return response()->json([
+                'success' => true,
+                'info' => $res
+            ]);
+        }
+        return response()->json([
+            'message' => '添加失败，请联系后台管理员'
+        ]);
+    }
+
 }
