@@ -130,8 +130,8 @@ Route::group(['namespace' => 'Manager', 'prefix' => 'manager'], function (){
         Route::get('twentyLessons', 'StatisticsController@twentyLessons');
 
         //申请人结业统计
-        Route::get('applicantTestListPage/{page?}', 'StatisticsController@applicantTestListPage');
-        Route::get('applicantTestList/{page}', 'StatisticsController@applicantTestList');
+        Route::get('applicantTestListPage/', 'StatisticsController@applicantTestListPage');
+        Route::get('applicantTestList/', 'StatisticsController@applicantTestList');
 
         //积极分子结业统计
         Route::get('academyTestListPage', 'StatisticsController@academyTestListPage');
