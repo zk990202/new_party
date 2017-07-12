@@ -20,14 +20,14 @@ return [
     'max_size' => 1024 * 1024 * 5,  // default 5MB
     'rules' => [
         'noticeImg' => [
-            'path' => 'notification',
+            'path' => 'images/notification',
             'extensions' => $imageExtensions,
             'disk' => 'public'
         ],
         'noticeFile' => [
-            'path' => 'notification',
+            'path' => 'files/notification',
             'extensions' => $fileExtensions,
-            'disk' => 'local'
+            'disk' => 'public'
         ]
     ]
 ];

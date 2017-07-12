@@ -48,4 +48,15 @@ class Resources {
             'name'  => $column->column_name
         ];
     }
+    public static function Module($module){
+        return [
+            'id'        =>  $module->self_id,
+            'parent_id' =>  $module->parent_id,
+            'name'      =>  $module->name,
+            'url'       =>  $module->url,
+            'icon'      =>  $module->icon,
+            'is_show'   =>  $module->is_show,
+            'auth'      =>  $module->auth
+        ];
+    }
 }

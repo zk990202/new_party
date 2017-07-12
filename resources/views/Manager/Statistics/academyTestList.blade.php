@@ -32,7 +32,7 @@
                                     @endif
                                 @endforeach
                             </select>
-                            <input type="submit" name="submit" class="btn btn-success btn-small">
+                            <input type="submit" class="btn btn-success btn-small">
                         </div>
 
                     </div>

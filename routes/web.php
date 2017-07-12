@@ -10,6 +10,7 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
+use App\Models\Module;
 
 Route::get('/', function () {
     return view('welcome');
@@ -149,7 +150,7 @@ Route::group(['namespace' => 'Manager', 'prefix' => 'manager'], function (){
     Route::group(['prefix' => 'notice'], function(){
 
         /**
-         * 党校管理自模块，路由为 /manager/notice/party-school/{action}, 命名空间 \App\Http|Controllers\Manager\
+         * 党校管理子模块，路由为 /manager/notice/party-school/{action}, 命名空间 \App\Http|Controllers\Manager\
          */
         Route::group(['prefix' => 'party-school'], function(){
             Route::get('list/{type}', 'NoticeController@partySchool');
@@ -159,14 +160,21 @@ Route::group(['namespace' => 'Manager', 'prefix' => 'manager'], function (){
             Route::get('{notice_id}/edit', 'NoticeController@editPage');
             Route::post('{notice_id}/edit', 'NoticeController@edit');
 
-            Route::get('add', 'NoticeController@addPage');
-            Route::post('add', 'NoticeController@add');
-
+        });
+        /**
+         * 添加公告子模块，路由为 /manager/notice/add/{action}, 命名空间 \App\Http|Controllers\Manager\
+         */
+        Route::group(['prefix' => 'add'], function(){
+            Route::get('/', 'NoticeController@addPage');
+            Route::post('/', 'NoticeController@add');
         });
     });
 
-    Route::post('file', 'FileController@upload');
+    /**
+     * 文件上传下载控制
+     */
+    Route::group(['prefix' => 'file'], function(){
+        Route::post('/', 'FileController@upload');
+    });
 
 });
-
-
