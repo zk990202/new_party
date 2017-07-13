@@ -39,7 +39,7 @@ class LoginCount extends Model
         $date = date('Y-m-d', $start_time_stamp);
         $res_user_arr = array_reverse($res_user_arr);
 
-        if($res_user_arr[count($res_user_arr) - 1]['login_date'] != date('Y-m-d', strtotime(date('Y-m-d', $current_time_stamp). '-1 day')))
+        if( count($res_user_arr) == 0 || $res_user_arr[count($res_user_arr) - 1]['login_date'] != date('Y-m-d', strtotime(date('Y-m-d', $current_time_stamp). '-1 day')))
             $res_user_arr[] = [
                 'login_date' => date('Y-m-d', strtotime(date('Y-m-d', $current_time_stamp). '-1 day')),
                 'login_num' => 0
