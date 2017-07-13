@@ -170,7 +170,7 @@ Route::group(['namespace' => 'Manager', 'prefix' => 'manager'], function (){
         });
 
         /**
-         * 活动通知模块，路由为 /manager/notice/activity/{action}, 命名空间 \App\Http\Controllers\Manager\
+         * 活动通知子模块，路由为 /manager/notice/activity/{action}, 命名空间 \App\Http\Controllers\Manager\
          */
         Route::group(['prefix' => 'activity'], function (){
             Route::get('list', 'NoticeController@activity');

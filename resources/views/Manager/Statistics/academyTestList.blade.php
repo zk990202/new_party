@@ -19,7 +19,7 @@
             </section>
             <form class="form-horizontal">
                 <div class="control-group">
-                    <div class="controls">
+
                         <div class="input-prepend">
                             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                             <span class="add-on">编号</span>
@@ -32,15 +32,12 @@
                                     @endif
                                 @endforeach
                             </select>
-
-                            <input type="submit" class="btn btn-success btn-small">
-
+                            <button id="changeButton" type="button" class="btn btn-primary">提交</button>
                         </div>
 
-                    </div>
                 </div>
             </form>
-            <button id="changeButton" type="button" class="btn btn-primary">提交</button>
+
 
         </div>
         <!-- Main row -->
@@ -51,7 +48,7 @@
     <script>
         $(function(){
             $.ajax({
-                'url' : '/manager/statistics/academyTestList',
+                'url' : '/manager/statistics/academyTestList/0',
                 'method' : 'get',
                 'success' : function(data){
                     console.log(data);
