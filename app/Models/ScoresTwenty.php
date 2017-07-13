@@ -62,7 +62,7 @@ class ScoresTwenty extends Model
                 }
                 //把得到的日期-课数数据组进行处理，如果某一天无数据，则置为0
                 $date = date('Y-m-d', $start_time_stamp);
-                if($res_20lessons[count($res_20lessons) - 1]['complete_time'] != date('Y-m-d', strtotime(date('Y-m-d', $current_time_stamp). '-1 day'))){
+                if( count($res_20lessons) == 0 || $res_20lessons[count($res_20lessons) - 1]['complete_time'] != date('Y-m-d', strtotime(date('Y-m-d', $current_time_stamp). '-1 day'))){
                     $res_20lessons[] = [
                         'complete_time' => date('Y-m-d', strtotime(date('Y-m-d', $current_time_stamp). '-1 day')),
                         'lessons_number' => 0
