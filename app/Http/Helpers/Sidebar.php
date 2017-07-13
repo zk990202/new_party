@@ -6,20 +6,29 @@ use App\Models\Module;
 use Illuminate\Support\Facades\Request;
 
 /**
+ * 边栏管理类
  * Class Sidebar
  * @package App\Http\Helpers
  */
 class Sidebar
 {
+    // 渲染出的html代码
     protected static $html = "";
 
+    /**
+     * 初始化
+     */
     public static function init(){
 
         self::$html = "";
+
+        // 当前可以展示的边栏
         $modules = Module::where('is_show', 1)->get()->all();
         $modules = array_map(function($module){
             return Resources::Module($module);
         }, $modules);
+
+        // 需要active的边栏
         $activeNodes = self::getActiveNodes($modules) ?? [];
         $map = [];
 
@@ -27,6 +36,8 @@ class Sidebar
             $map[$module['parent_id']][] = $module;
         }
         $modules = self::getNode($map, ['id' => 0]);
+        
+        // 生成html代码
         foreach($modules['children'] as $module){
             self::$html .= self::renderHtml($module, $activeNodes);
         }
@@ -34,10 +45,15 @@ class Sidebar
 
     public static function render(){
         self::init();
-//        dd(self::$html);
+
         return self::$html;
     }
 
+    /**
+     * @param $map
+     * @param $node
+     * @return mixed
+     */
     protected static function getNode($map, $node){
         if(!isset($map[$node['id']]))
             return $node;
@@ -49,8 +65,13 @@ class Sidebar
         }
     }
 
+    /**
+     * @param $node
+     * @param $activeNodes
+     * @return mixed|string
+     */
     protected static function renderHtml($node, $activeNodes){
-//    dd($node);
+
         $active = in_array($node['id'], $activeNodes) ? " active" : "";
         if(isset($node['children'])){
             $beforeStr = "<a href=\"#\"><i class=\"".
@@ -73,10 +94,14 @@ class Sidebar
         }
     }
 
+    /**
+     * @param $modules
+     * @return array|null
+     */
     protected static function getActiveNodes($modules){
         $action = Request::path();
         $module = Module::where('url', $action)->first();
-//        dd($module);
+
         if(!$module)
             return null;
         $module = Resources::Module($module);
@@ -93,4 +118,31 @@ class Sidebar
         return $res;
     }
 
+    /**
+     * @return array
+     */
+    public static function currentNodes(){
+        $modules = Module::where('is_show', 1)->get()->all();
+        $modules = array_map(function($module){
+            return Resources::Module($module);
+        }, $modules);
+        $action = Request::path();
+        $module = Module::where('url', $action)->first();
+
+        if(!$module)
+            return [];
+        $map = [];
+        foreach($modules as $i => $v){
+            $map[$v['id']] = $v;
+        }
+        $module = Resources::Module($module);
+        $moduleId = $module['id'];
+
+        $res = [];
+        while(isset($map[$moduleId])){
+            $res[] = $map[$moduleId];
+            $moduleId = $map[$moduleId]['parent_id'];
+        }
+        return array_reverse($res);
+    }
 }

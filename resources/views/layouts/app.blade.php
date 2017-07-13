@@ -317,12 +317,20 @@
     <div class="content-wrapper">
         <section class="content-header">
             <h1>
-                Dashboard
-                <small>Control panel</small>
+
+                @foreach(\App\Http\Helpers\Sidebar::currentNodes() as $i => $v)
+                    @if($loop->first)
+                        {{ $v['name'] }}
+                    @else
+                        <small>{{ $v['name'] }}</small>
+                    @endif
+                @endforeach
             </h1>
             <ol class="breadcrumb">
-                <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-                <li class="active">Dashboard</li>
+                <li><a href="{{ url('index') }}"><i class="fa fa-dashboard"></i> 主页</a></li>
+                @foreach(\App\Http\Helpers\Sidebar::currentNodes() as $i => $v)
+                    <li class="active"><a href="{{ url($v['url']) }}">{{ $v['name'] }}</a></li>
+                @endforeach
             </ol>
         </section>
         @section('main')

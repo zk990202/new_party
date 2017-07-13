@@ -192,5 +192,7 @@ Route::group(['namespace' => 'Manager', 'prefix' => 'manager'], function (){
     Route::group(['prefix' => 'file'], function(){
         Route::post('/', 'FileController@upload');
     });
-
 });
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');
