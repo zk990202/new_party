@@ -172,7 +172,7 @@ class StatisticsController extends Controller
 
     public function academyTestList($type){
         //默认显示最近一期（这里未完成，待会还要写表单传过来的数据）
-        if($type == null){
+        if($type == 0){
             $test_p = DB::table('twt_academy_testlist')
                 ->where('test_parent', 0)
                 ->orderBy('test_id', 'DESC')

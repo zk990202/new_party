@@ -136,14 +136,14 @@ class ModuleTableSeeder extends Seeder
             'parent_id' => 2,
             'name'      => '活动通知',
             'auth'      => 1,
-            'url'       => 'undefined'
+            'url'       => 'manager/notice/activity/list'
         ]);
         DB::table('twt_manager_modules')->insert([
             'self_id'   => 128,
             'parent_id' => 2,
             'name'      => '发布通知',
             'auth'      => 1,
-            'url'       => 'undefined'
+            'url'       => 'manager/notice/activity/add'
         ]);
 
         /**
