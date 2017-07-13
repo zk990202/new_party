@@ -69,7 +69,7 @@ class Sidebar
             return $contain;
         }
         else{
-            return "<li><a href=\" " . url( $node['url'] ) . " \"><i class=\"". $node['icon'] ."\"></i> " . $node['name'] . "</a></li>";
+            return "<li class='".$active."'><a href=\" " . url( $node['url'] ) . " \"><i class=\"". $node['icon'] ."\"></i> " . $node['name'] . "</a></li>";
         }
     }
 
@@ -77,9 +77,9 @@ class Sidebar
         $action = Request::path();
         $module = Module::where('url', $action)->first();
 //        dd($module);
-        $module = Resources::Module($module);
         if(!$module)
             return null;
+        $module = Resources::Module($module);
         $father = [];
         foreach($modules as $i => $v){
             $father[$v['id']] = $v['parent_id'];
@@ -92,4 +92,5 @@ class Sidebar
         }
         return $res;
     }
+
 }
