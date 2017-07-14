@@ -28,6 +28,11 @@ return [
             'path' => 'files/notification',
             'extensions' => $fileExtensions,
             'disk' => 'public'
+        ],
+        'partyBuildImg' => [
+            'path' => 'images/partyBuild',
+            'extensions' => $imageExtensions,
+            'disk' => 'public'
         ]
     ]
 ];

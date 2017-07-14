@@ -43,6 +43,26 @@ Route::group(['namespace' => 'Manager', 'prefix' => 'manager'], function (){
     });
 
     /**
+     * 党建专项模块， 路由为 /manager/party-build/{action}, 命名空间 \App\Http|Controllers\Manager\
+     */
+    Route::group(['prefix' => 'party-build'], function (){
+        //党建专项新闻列表
+        Route::get('list', 'PartyBuildController@lists');
+
+        //隐藏(显示)、置顶(取消置顶)新闻
+        Route::patch('{id}/hide', 'PartyBuildController@hide');
+        Route::patch('{id}/topUp', 'PartyBuildController@topUp');
+
+        //编辑新闻
+        Route::get('{id}/edit', 'PartyBuildController@editPage');
+        Route::post('{id}/edit', 'PartyBuildController@edit');
+
+        //添加新闻
+        Route::get('add', 'PartyBuildController@addPage');
+        Route::post('add', 'PartyBuildController@add');
+    });
+
+    /**
      * 申请人管理模块，路由为 /manager/applicant/{action}, 命名空间 \App\Http|Controllers\Manager\Applicant
      */
     Route::group(['namespace' => 'Applicant', 'prefix' => 'applicant'], function(){
