@@ -124,7 +124,7 @@
                                 contentType: false,
                                 success: function(data){
                                     if(data.success){
-                                        alert('修改成功');
+                                        alert('添加成功');
                                         window.location.href = '/manager/study-group/list/';
                                     }
                                     else{

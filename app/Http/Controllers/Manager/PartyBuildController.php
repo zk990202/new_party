@@ -124,7 +124,7 @@ class PartyBuildController extends Controller{
         $title = $request->input('title');
         $content = $request->input('content');
         $column = $request->input('column');
-        $img_path = $request->input('imgPath') ?? null;
+        $img_path = $request->input('imgPath') ?? '';
         if(!$title || !$content || !$column){
             return response()->json([
                 'message' => '参数丢失'

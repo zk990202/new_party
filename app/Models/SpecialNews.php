@@ -13,7 +13,7 @@ class SpecialNews extends Model
     //创建时间字段
     const CREATED_AT = 'inserttime';
 
-    protected $fillable = ['title', 'summary', 'content', 'inserttime', 'author', 'type', 'ima_path', 'isdeleted'];
+    protected $fillable = ['title', 'summary', 'content', 'inserttime', 'author', 'type', 'img_path', 'isdeleted'];
 
     public function column(){
         return $this->belongsTo('App\Models\Column', 'type', 'column_id');
