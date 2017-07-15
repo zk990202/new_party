@@ -63,6 +63,26 @@ Route::group(['namespace' => 'Manager', 'prefix' => 'manager'], function (){
     });
 
     /**
+     * 学习小组模块， 路由为 /manager/study-group/{action}, 命名空间 App\Http|Controllers\Manager\
+     */
+    Route::group(['prefix' => 'study-group'], function (){
+        //党建专项新闻列表
+        Route::get('list', 'StudyGroupController@lists');
+
+        //隐藏(显示)、置顶(取消置顶)新闻
+        Route::patch('{id}/hide', 'StudyGroupController@hide');
+        Route::patch('{id}/topUp', 'StudyGroupController@topUp');
+
+        //编辑新闻
+        Route::get('{id}/edit', 'StudyGroupController@editPage');
+        Route::post('{id}/edit', 'StudyGroupController@edit');
+
+        //添加新闻
+        Route::get('add', 'StudyGroupController@addPage');
+        Route::post('add', 'StudyGroupController@add');
+    });
+
+    /**
      * 申请人管理模块，路由为 /manager/applicant/{action}, 命名空间 \App\Http|Controllers\Manager\Applicant
      */
     Route::group(['namespace' => 'Applicant', 'prefix' => 'applicant'], function(){
