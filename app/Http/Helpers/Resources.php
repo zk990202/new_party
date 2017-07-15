@@ -10,6 +10,7 @@ namespace App\Http\Helpers;
 use App\Models\Academy\EntryForm as AcademyEntryForm;
 use App\Models\Academy\TestList as AcademyTestList;
 use App\Models\Notification;
+use App\Models\SpecialNews;
 
 
 class Resources {
@@ -27,6 +28,22 @@ class Resources {
             'authorName'=>  $notification->owner->username ?? '',
             'isHidden'  =>  $notification->notice_ishidden,
             'isDeleted' =>  $notification->notice_isdeleted
+        ];
+    }
+
+    public static function PartyBuild(SpecialNews $partyBuild){
+        return [
+            'id' => $partyBuild->id,
+            'title' => $partyBuild->title,
+            'summary' => $partyBuild->summary,
+            'content' => $partyBuild->content,
+            'time' => $partyBuild->inserttime,
+            'authorName' => $partyBuild->owner->username ?? '',
+            'type' => $partyBuild->type,
+            'typeName' => $partyBuild->column->column_name,
+            'isTop' => $partyBuild->isrecommand,
+            'imgPath' => $partyBuild->img_path,
+            'isHidden' => $partyBuild->isdeleted
         ];
     }
 

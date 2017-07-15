@@ -182,23 +182,23 @@ class ModuleTableSeeder extends Seeder
         DB::table('twt_manager_modules')->insert([
             'self_id'   => 151,
             'parent_id' => 4,
-            'name'      => '普通列表',
+            'name'      => '新闻列表',
             'auth'      => 1,
-            'url'       => 'undefined'
+            'url'       => 'manager/party-build/list'
         ]);
-        DB::table('twt_manager_modules')->insert([
-            'self_id'   => 152,
-            'parent_id' => 4,
-            'name'      => '推荐列表',
-            'auth'      => 1,
-            'url'       => 'undefined'
-        ]);
+//        DB::table('twt_manager_modules')->insert([
+//            'self_id'   => 152,
+//            'parent_id' => 4,
+//            'name'      => '推荐列表',
+//            'auth'      => 1,
+//            'url'       => 'undefined'
+//        ]);
         DB::table('twt_manager_modules')->insert([
             'self_id'   => 153,
             'parent_id' => 4,
             'name'      => '添加新闻',
             'auth'      => 1,
-            'url'       => 'undefined'
+            'url'       => 'manager/party-build/add'
         ]);
 
         /**
@@ -213,23 +213,23 @@ class ModuleTableSeeder extends Seeder
         DB::table('twt_manager_modules')->insert([
             'self_id'   => 161,
             'parent_id' => 5,
-            'name'      => '普通列表',
+            'name'      => '新闻列表',
             'auth'      => 1,
-            'url'       => 'undefined'
+            'url'       => 'manager/study-group/list'
         ]);
-        DB::table('twt_manager_modules')->insert([
-            'self_id'   => 162,
-            'parent_id' => 5,
-            'name'      => '推荐列表',
-            'auth'      => 1,
-            'url'       => 'undefined'
-        ]);
+//        DB::table('twt_manager_modules')->insert([
+//            'self_id'   => 162,
+//            'parent_id' => 5,
+//            'name'      => '推荐列表',
+//            'auth'      => 1,
+//            'url'       => 'undefined'
+//        ]);
         DB::table('twt_manager_modules')->insert([
             'self_id'   => 163,
             'parent_id' => 5,
             'name'      => '添加新闻',
             'auth'      => 1,
-            'url'       => 'undefined'
+            'url'       => 'manager/study-group/add'
         ]);
 
         /**
@@ -238,23 +238,23 @@ class ModuleTableSeeder extends Seeder
         DB::table('twt_manager_modules')->insert([
             'self_id'   => 6,
             'parent_id' => 0,
-            'name'      => '党建专项',
+            'name'      => '党校培训',
             'auth'      => 1,
         ]);
         DB::table('twt_manager_modules')->insert([
             'self_id'   => 171,
             'parent_id' => 6,
-            'name'      => '普通列表',
+            'name'      => '新闻列表',
             'auth'      => 1,
             'url'       => 'undefined'
         ]);
-        DB::table('twt_manager_modules')->insert([
-            'self_id'   => 172,
-            'parent_id' => 6,
-            'name'      => '推荐列表',
-            'auth'      => 1,
-            'url'       => 'undefined'
-        ]);
+//        DB::table('twt_manager_modules')->insert([
+//            'self_id'   => 172,
+//            'parent_id' => 6,
+//            'name'      => '推荐列表',
+//            'auth'      => 1,
+//            'url'       => 'undefined'
+//        ]);
         DB::table('twt_manager_modules')->insert([
             'self_id'   => 173,
             'parent_id' => 6,
