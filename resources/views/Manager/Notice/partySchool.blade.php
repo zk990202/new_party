@@ -41,9 +41,9 @@
                                     <td>{{ $notice['isHidden'] ? '隐藏' : '显示'}}</td>
                                     <td>
                                         @if($notice['isHidden'])
-                                            <button id="show" type="button" class="btn btn-block btn-success btn-xs" value="{{ $notice['id'] }}">显示</button>
+                                            <button type="button" class="btn btn-block btn-success btn-xs"  onclick="showNotice({{ $notice['id'] }});">显示</button>
                                         @else
-                                            <button id="hide" type="button" class="btn btn-block btn-danger btn-xs" value="{{ $notice['id'] }}">隐藏</button>
+                                            <button type="button" class="btn btn-block btn-danger btn-xs" onclick="hideNotice({{ $notice['id'] }});">隐藏</button>
                                         @endif
                                     </td>
                                     <td>
@@ -52,9 +52,9 @@
                                     </td>
                                     <td>
                                         @if($notice['isTop'])
-                                            <button id="down" type="button" class="btn btn-block btn-warning btn-xs" value="{{ $notice['id'] }}">取消</button>
+                                            <button id="down" type="button" class="btn btn-block btn-warning btn-xs" onclick="downNotice({{ $notice['id'] }});">取消</button>
                                         @else
-                                            <button id="topUp" type="button" class="btn btn-block btn-success btn-xs" value="{{ $notice['id'] }}">置顶</button>
+                                            <button id="topUp" type="button" class="btn btn-block btn-success btn-xs" onclick="topUpNotice({{ $notice['id'] }});">置顶</button>
                                         @endif
                                     </td>
                                 </tr>
@@ -93,44 +93,49 @@
 
         $(function () {
             $('#example1').DataTable({
-                "ordering" : false
+                "ordering": false
             });
-            $('#hide').click(function(){
-                $.ajax({
-                    'url' : '/manager/notice/party-school/' + this.value + '/hide',
-                    'method' : 'patch',
-                    'success' : function(data){
-                        window.location.reload();
-                    }
-                });
+        });
+
+        var hideNotice = function hideNotice (noticeId) {
+            $.ajax({
+                'url': '/manager/notice/party-school/' + noticeId + '/hide',
+                'method': 'patch',
+                'success': function (data) {
+                    window.location.reload();
+                }
             });
-            $('#show').click(function(){
-                $.ajax({
-                    'url' : '/manager/notice/party-school/' + this.value + '/hide',
-                    'method' : 'patch',
-                    'success' : function(data){
-                        window.location.reload();
-                    }
-                });
+        };
+
+        var showNotice = function (noticeId) {
+            $.ajax({
+                'url': '/manager/notice/party-school/' + noticeId + '/hide',
+                'method': 'patch',
+                'success': function (data) {
+                    window.location.reload();
+                }
             });
-            $('#topUp').click(function(){
-                $.ajax({
-                    'url' : '/manager/notice/party-school/' + this.value + '/topUp',
-                    'method' : 'patch',
-                    'success' : function(data){
-                        window.location.reload();
-                    }
-                });
+        };
+
+        var topUpNotice = function (noticeId) {
+            $.ajax({
+                'url': '/manager/notice/party-school/' + noticeId + '/topUp',
+                'method': 'patch',
+                'success': function (data) {
+                    window.location.reload();
+                }
             });
-            $('#down').click(function(){
-                $.ajax({
-                    'url' : '/manager/notice/party-school/' + this.value + '/topUp',
-                    'method' : 'patch',
-                    'success' : function(data){
-                        window.location.reload();
-                    }
-                });
+        };
+
+        var downNotice = function (noticeId) {
+            $.ajax({
+                'url': '/manager/notice/party-school/' + noticeId + '/topUp',
+                'method': 'patch',
+                'success': function (data) {
+                    window.location.reload();
+                }
             });
-        })
+        };
+
     </script>
 @endsection

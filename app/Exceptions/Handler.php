@@ -4,6 +4,7 @@ namespace App\Exceptions;
 
 use Exception;
 use Illuminate\Auth\AuthenticationException;
+
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 
 class Handler extends ExceptionHandler
@@ -14,6 +15,7 @@ class Handler extends ExceptionHandler
      * @var array
      */
     protected $dontReport = [
+        \App\Exceptions\AdminAuthenticationException::class,
         \Illuminate\Auth\AuthenticationException::class,
         \Illuminate\Auth\Access\AuthorizationException::class,
         \Symfony\Component\HttpKernel\Exception\HttpException::class,
@@ -62,4 +64,14 @@ class Handler extends ExceptionHandler
 
         return redirect()->guest(route('login'));
     }
+
+    protected function adminUnauthenticated($request, AdminAuthenticationException $exception){
+
+        if ($request->expectsJson()) {
+            return response()->json(['error' => 'AdminUnauthenticated.'], 401);
+        }
+
+        return redirect()->guest(route('adminLogin'));
+    }
+
 }

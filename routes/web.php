@@ -23,7 +23,7 @@ Route::get('/index', function(){
 /**
  * 管理员后台模块，路由为 /manager/{module}, 命名空间 \App\Http|Controllers\Manager
  */
-Route::group(['namespace' => 'Manager', 'prefix' => 'manager'], function (){
+Route::group(['namespace' => 'Manager', 'prefix' => 'manager', 'middleware' => 'auth:admin'], function (){
 
     /**
      * 用户管理模块，路由为 /manager/user/{action}
@@ -192,7 +192,16 @@ Route::group(['namespace' => 'Manager', 'prefix' => 'manager'], function (){
     Route::group(['prefix' => 'file'], function(){
         Route::post('/', 'FileController@upload');
     });
+
 });
-Auth::routes();
+
+Route::group(['prefix' => 'manager/auth', 'namespace' => 'Manager\Auth'], function(){
+    Route::get('login', 'LoginController@loginPage')->name('login');
+    Route::post('login', 'LoginController@login');
+});
 
 Route::get('/home', 'HomeController@index')->name('home');
+
+Route::get('/test', function(){
+    Auth::guard('admin')->logout();
+});
