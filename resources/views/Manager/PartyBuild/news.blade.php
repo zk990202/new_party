@@ -41,9 +41,9 @@
                                     <td>{{ $news['isHidden'] ? '隐藏' : '显示'}}</td>
                                     <td>
                                         @if($news['isHidden'])
-                                            <button type="button" class="btn btn-block btn-success btn-xs"  onclick="showNotice({{ $notice['id'] }});">显示</button>
+                                            <button type="button" class="btn btn-block btn-success btn-xs"  onclick="showNews({{ $news['id'] }});">显示</button>
                                         @else
-                                            <button type="button" class="btn btn-block btn-danger btn-xs" onclick="hideNotice({{ $notice['id'] }});">隐藏</button>
+                                            <button type="button" class="btn btn-block btn-danger btn-xs" onclick="hideNews({{ $news['id'] }});">隐藏</button>
                                         @endif
                                     </td>
                                     <td>
@@ -52,9 +52,9 @@
                                     </td>
                                     <td>
                                         @if($news['isTop'])
-                                            <button id="down" type="button" class="btn btn-block btn-warning btn-xs" onclick="downNotice({{ $news['id'] }})">取消</button>
+                                            <button type="button" class="btn btn-block btn-warning btn-xs" onclick="downNews({{ $news['id'] }})">取消</button>
                                         @else
-                                            <button id="topUp" type="button" class="btn btn-block btn-success btn-xs" onclick="topUpNotice({{ $news['id'] }})">置顶</button>
+                                            <button type="button" class="btn btn-block btn-success btn-xs" onclick="topUpNews({{ $news['id'] }})">置顶</button>
                                         @endif
                                     </td>
                                 </tr>
@@ -95,10 +95,10 @@
             $('#example1').DataTable({
                 "ordering" : false
             });
-        })
-        var hideNotice = function hideNotice (noticeId) {
+        });
+        var hideNews = function hideNews (newsId) {
             $.ajax({
-                'url': '/manager/notice/party-school/' + noticeId + '/hide',
+                'url': '/manager/party-build/' + newsId + '/hide',
                 'method': 'patch',
                 'success': function (data) {
                     window.location.reload();
@@ -106,9 +106,9 @@
             });
         };
 
-        var showNotice = function (noticeId) {
+        var showNews = function (newsId) {
             $.ajax({
-                'url': '/manager/notice/party-school/' + noticeId + '/hide',
+                'url': '/manager/party-build/' + newsId + '/hide',
                 'method': 'patch',
                 'success': function (data) {
                     window.location.reload();
@@ -116,9 +116,9 @@
             });
         };
 
-        var topUpNotice = function (noticeId) {
+        var topUpNews = function (newsId) {
             $.ajax({
-                'url': '/manager/notice/party-school/' + noticeId + '/topUp',
+                'url': '/manager/party-build/' + newsId + '/topUp',
                 'method': 'patch',
                 'success': function (data) {
                     window.location.reload();
@@ -126,9 +126,9 @@
             });
         };
 
-        var downNotice = function (noticeId) {
+        var downNews = function (newsId) {
             $.ajax({
-                'url': '/manager/notice/party-school/' + noticeId + '/topUp',
+                'url': '/manager/party-build/' + newsId + '/topUp',
                 'method': 'patch',
                 'success': function (data) {
                     window.location.reload();

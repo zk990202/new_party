@@ -38,9 +38,9 @@
                                     <td>{{ $news['isHidden'] ? '隐藏' : '显示'}}</td>
                                     <td>
                                         @if($news['isHidden'])
-                                            <button id="show" type="button" class="btn btn-block btn-success btn-xs" value="{{ $news['id'] }}">显示</button>
+                                            <button type="button" class="btn btn-block btn-success btn-xs"  onclick="showNews({{ $news['id'] }});">显示</button>
                                         @else
-                                            <button id="hide" type="button" class="btn btn-block btn-danger btn-xs" value="{{ $news['id'] }}">隐藏</button>
+                                            <button type="button" class="btn btn-block btn-danger btn-xs" onclick="hideNews({{ $news['id'] }});">隐藏</button>
                                         @endif
                                     </td>
                                     <td>
@@ -49,9 +49,9 @@
                                     </td>
                                     <td>
                                         @if($news['isTop'])
-                                            <button id="down" type="button" class="btn btn-block btn-warning btn-xs" value="{{ $news['id'] }}">取消</button>
+                                            <button type="button" class="btn btn-block btn-warning btn-xs" onclick="downNews({{ $news['id'] }})">取消</button>
                                         @else
-                                            <button id="topUp" type="button" class="btn btn-block btn-success btn-xs" value="{{ $news['id'] }}">置顶</button>
+                                            <button type="button" class="btn btn-block btn-success btn-xs" onclick="topUpNews({{ $news['id'] }})">置顶</button>
                                         @endif
                                     </td>
                                 </tr>
@@ -91,42 +91,45 @@
             $('#example1').DataTable({
                 "ordering" : false
             });
-            $('#hide').click(function(){
-                $.ajax({
-                    'url' : '/manager/study-group/' + this.value + '/hide',
-                    'method' : 'patch',
-                    'success' : function(data){
-                        window.location.reload();
-                    }
-                });
+        });
+        var hideNews = function hideNews (newsId) {
+            $.ajax({
+                'url': '/manager/study-group/' + newsId + '/hide',
+                'method': 'patch',
+                'success': function (data) {
+                    window.location.reload();
+                }
             });
-            $('#show').click(function(){
-                $.ajax({
-                    'url' : '/manager/study-group/' + this.value + '/hide',
-                    'method' : 'patch',
-                    'success' : function(data){
-                        window.location.reload();
-                    }
-                });
+        };
+
+        var showNews = function (newsId) {
+            $.ajax({
+                'url': '/manager/study-group/' + newsId + '/hide',
+                'method': 'patch',
+                'success': function (data) {
+                    window.location.reload();
+                }
             });
-            $('#topUp').click(function(){
-                $.ajax({
-                    'url' : '/manager/study-group/' + this.value + '/topUp',
-                    'method' : 'patch',
-                    'success' : function(data){
-                        window.location.reload();
-                    }
-                });
+        };
+
+        var topUpNews = function (newsId) {
+            $.ajax({
+                'url': '/manager/study-group/' + newsId + '/topUp',
+                'method': 'patch',
+                'success': function (data) {
+                    window.location.reload();
+                }
             });
-            $('#down').click(function(){
-                $.ajax({
-                    'url' : '/manager/study-group/' + this.value + '/topUp',
-                    'method' : 'patch',
-                    'success' : function(data){
-                        window.location.reload();
-                    }
-                });
+        };
+
+        var downNews = function (newsId) {
+            $.ajax({
+                'url': '/manager/study-group/' + newsId + '/topUp',
+                'method': 'patch',
+                'success': function (data) {
+                    window.location.reload();
+                }
             });
-        })
+        };
     </script>
 @endsection
