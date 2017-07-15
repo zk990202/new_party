@@ -144,7 +144,7 @@ class NoticeController extends Controller
             'fileName'  =>  $fileName,
             'filePath'  =>  $filePath,
             // 介入登陆后进行调整
-            'author'    =>  Auth::user() ?? '3014218099'
+            'author'    =>  Auth::user()->username ?? '3014218099'
         ]);
         if($res){
             return response()->json([
@@ -156,7 +156,6 @@ class NoticeController extends Controller
             'message' => '添加失败，请联系后台管理员'
         ]);
     }
-
 
     //以下为活动通知专区
     public function activity(){

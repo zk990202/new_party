@@ -124,7 +124,7 @@
                             form.append('filePath', path);
                             form.append('fileName', file_name);
                             $.ajax({
-                                url: '/manager/notice/party-school/add',
+                                url: '/manager/notice/add',
                                 type: 'POST',
                                 data: form,
                                 cache: false,
