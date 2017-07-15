@@ -89,7 +89,7 @@
                     upload: {
                         serverPath: '/manager/file',
                         fileFieldName: 'upload',
-                        usage : 'noticeImg'
+                        usage : 'partyBuildImg'
                     }
                 },
                 autogrow: true
@@ -101,7 +101,7 @@
                     console.log(file);
                     var data = new FormData();
                     data.append('upload', file);
-                    data.append("usage", 'noticeImg');
+                    data.append("usage", 'partyBuildImg');
                     $.ajax({
                         url: '/manager/file',
                         type: 'POST',

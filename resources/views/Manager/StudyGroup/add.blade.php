@@ -20,28 +20,20 @@
 
                         <div class="box-body">
                             <div class="form-group" >
-                                <label for="noticeTitle">公告标题</label>
-                                <input type="text" class="form-control" id="noticeTitle" placeholder="公告标题请尽量简明扼要，不要太长">
+                                <label for="newsesTitle">新闻标题</label>
+                                <input type="text" class="form-control" id="newsesTitle" placeholder="新闻标题请尽量简明扼要，不要太长">
                             </div>
                             <div class="form-group">
-                                <label for="column">所属栏目</label>
-                                <select id="column" class="form-control">
-                                    @foreach($columns as $column)
-                                        <option value="{{ $column['id'] }}">{{ $column['name'] }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label for="editor">公告内容</label>
+                                <label for="editor">新闻内容</label>
                                 <textarea id="editor" name="editor" rows="10" cols="80">
 
                                 </textarea>
                             </div>
                             <div class="form-group">
-                                <label for="inputFile">上传文件</label>
+                                <label for="inputFile">上传图片</label>
                                 <input type="file" id="inputFile" name="file">
 
-                                <p class="help-block">支持rar zip tar </p>
+                                <p class="help-block">支持png jpeg jpg bmp </p>
                             </div>
                         </div>
                         <!-- /.box-body -->
@@ -101,7 +93,7 @@
                     console.log(file);
                     var data = new FormData();
                     data.append('upload', file);
-                    data.append("usage", 'noticeFile');
+                    data.append("usage", 'noticeImg');
                     $.ajax({
                         url: '/manager/file',
                         type: 'POST',
@@ -118,13 +110,12 @@
                             var path = data.file;
                             var file_name = data.info.name;
                             var form = new FormData();
-                            form.append('title', $('#noticeTitle').val());
+                            form.append('title', $('#newsesTitle').val());
                             form.append('content', $('#editor').val());
                             form.append('column', $('#column').val());
-                            form.append('filePath', path);
-                            form.append('fileName', file_name);
+                            form.append('imgPath', path);
                             $.ajax({
-                                url: '/manager/notice/add',
+                                url: '/manager/study-group/add',
                                 type: 'POST',
                                 data: form,
                                 cache: false,
@@ -134,7 +125,7 @@
                                 success: function(data){
                                     if(data.success){
                                         alert('修改成功');
-                                        window.location.href = '/manager/notice/party-school/list/' + data.info.columnId;
+                                        window.location.href = '/manager/study-group/list/';
                                     }
                                     else{
                                         alert(data.message);
@@ -152,11 +143,11 @@
                 }
                 else{
                     var form = new FormData();
-                    form.append('title', $('#noticeTitle').val());
+                    form.append('title', $('#newsesTitle').val());
                     form.append('content', $('#editor').val());
                     form.append('column', $('#column').val());
                     $.ajax({
-                        url: '/manager/notice/add',
+                        url: '/manager/study-group/add',
                         type: 'POST',
                         data: form,
                         cache: false,
@@ -166,7 +157,7 @@
                         success: function(data){
                             if(data.success){
                                 alert('添加成功');
-                                window.location.href = '/manager/notice/party-school/list/' + data.info.columnId;
+                                window.location.href = '/manager/study-group/list/';
                             }
                             else{
                                 alert(data.message);

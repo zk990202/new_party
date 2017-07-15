@@ -23,6 +23,7 @@ class SpecialNews extends Model
         return $this->hasOne('App\Models\User', 'usernumb', 'author');
     }
 
+    /*以下为党建专项模块---------------------------------------------------------------------------------------------------*/
     /**
      * 获取所有新闻
      * @return array
@@ -34,8 +35,8 @@ class SpecialNews extends Model
             ->orderBy('inserttime', 'DESC')
             ->get()->all();
 
-        return array_map(function($partyBuild){
-            return Resources::PartyBuild($partyBuild);
+        return array_map(function($SpecialNews){
+            return Resources::SpecialNews($SpecialNews);
         }, $res_arr);
     }
 
@@ -51,7 +52,7 @@ class SpecialNews extends Model
         $news->content = $data['content'];
         $news->img_path = $data['imgPath'] ?? $news->img_path;
         $res = $news->save();
-        return $res ? Resources::PartyBuild($news) : false;
+        return $res ? Resources::SpecialNews($news) : false;
     }
 
     /**
@@ -69,6 +70,56 @@ class SpecialNews extends Model
             'isrecommand' => 0,
             'isdeleted' => 0
         ]);
-        return $news ? Resources::PartyBuild($news) : false;
+        return $news ? Resources::SpecialNews($news) : false;
+    }
+    
+    /*以下为学习小组模块--------------------------------------------------------------------------------------------*/
+    /**
+     * 获取所有新闻
+     * @return array
+     */
+    public static function getAllNewsStudy(){
+        $res_arr = self::where('type', 1)
+            ->orderBy('isrecommand', 'DESC')
+            ->orderBy('isdeleted', 'ASC')
+            ->orderBy('inserttime', 'DESC')
+            ->get()->all();
+
+        return array_map(function($SpecialNews){
+            return Resources::SpecialNews($SpecialNews);
+        }, $res_arr);
+    }
+
+    /**
+     * 更新
+     * @param $id
+     * @param $data
+     * @return array|bool
+     */
+    public static function updateByIdStudy($id, $data){
+        $news = self::findOrFail($id);
+        $news->title = $data['title'];
+        $news->content = $data['content'];
+        $news->img_path = $data['imgPath'] ?? $news->img_path;
+        $res = $news->save();
+        return $res ? Resources::SpecialNews($news) : false;
+    }
+
+    /**
+     * 添加
+     * @param $data
+     * @return array|bool
+     */
+    public static function addStudy($data){
+        $news = self::create([
+            'type' => 1,
+            'title' => $data['title'],
+            'content' => $data['content'],
+            'img_path' => $data['imgPath'],
+            'author' => $data['author'],
+            'isrecommand' => 0,
+            'isdeleted' => 0
+        ]);
+        return $news ? Resources::SpecialNews($news) : false;
     }
 }

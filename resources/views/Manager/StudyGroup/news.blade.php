@@ -11,7 +11,7 @@
             <div class="col-xs-12">
                 <div class="box">
                     <div class="box-header">
-                        <h3 class="box-title">党建专项</h3>
+                        <h3 class="box-title">学习小组</h3>
                     </div>
                     <!-- /.box-header -->
                     <div class="box-body">
@@ -19,7 +19,6 @@
                             <thead>
                             <tr>
                                 <th>标题</th>
-                                <th>所属类别</th>
                                 <th>发布时间</th>
                                 <th>发布人</th>
                                 <th>备注</th>
@@ -33,28 +32,26 @@
                             @foreach($newses as $news)
                                 <tr>
                                     <td>{{ $news['title'] }}</td>
-                                    <td>{{ $news['typeName'] }}</td>
                                     <td>{{ $news['time'] }}</td>
                                     <td>{{ $news['authorName']}}</td>
                                     <td>{{ $news['imgPath'] ? '有图片' : '无图片' }}</td>
-
                                     <td>{{ $news['isHidden'] ? '隐藏' : '显示'}}</td>
                                     <td>
                                         @if($news['isHidden'])
-                                            <button type="button" class="btn btn-block btn-success btn-xs"  onclick="showNotice({{ $notice['id'] }});">显示</button>
+                                            <button id="show" type="button" class="btn btn-block btn-success btn-xs" value="{{ $news['id'] }}">显示</button>
                                         @else
-                                            <button type="button" class="btn btn-block btn-danger btn-xs" onclick="hideNotice({{ $notice['id'] }});">隐藏</button>
+                                            <button id="hide" type="button" class="btn btn-block btn-danger btn-xs" value="{{ $news['id'] }}">隐藏</button>
                                         @endif
                                     </td>
                                     <td>
-                                        <a href="{{ url('manager/party-build/'.$news['id'].'/edit') }}">
+                                        <a href="{{ url('manager/study-group/'.$news['id'].'/edit') }}">
                                             <button type="button" class="btn btn-block btn-info btn-xs">编辑</button></a>
                                     </td>
                                     <td>
                                         @if($news['isTop'])
-                                            <button id="down" type="button" class="btn btn-block btn-warning btn-xs" onclick="downNotice({{ $news['id'] }})">取消</button>
+                                            <button id="down" type="button" class="btn btn-block btn-warning btn-xs" value="{{ $news['id'] }}">取消</button>
                                         @else
-                                            <button id="topUp" type="button" class="btn btn-block btn-success btn-xs" onclick="topUpNotice({{ $news['id'] }})">置顶</button>
+                                            <button id="topUp" type="button" class="btn btn-block btn-success btn-xs" value="{{ $news['id'] }}">置顶</button>
                                         @endif
                                     </td>
                                 </tr>
@@ -63,7 +60,6 @@
                             <tfoot>
                             <tr>
                                 <th>标题</th>
-                                <th>所属类别</th>
                                 <th>发布时间</th>
                                 <th>发布人</th>
                                 <th>备注</th>
@@ -95,46 +91,42 @@
             $('#example1').DataTable({
                 "ordering" : false
             });
+            $('#hide').click(function(){
+                $.ajax({
+                    'url' : '/manager/study-group/' + this.value + '/hide',
+                    'method' : 'patch',
+                    'success' : function(data){
+                        window.location.reload();
+                    }
+                });
+            });
+            $('#show').click(function(){
+                $.ajax({
+                    'url' : '/manager/study-group/' + this.value + '/hide',
+                    'method' : 'patch',
+                    'success' : function(data){
+                        window.location.reload();
+                    }
+                });
+            });
+            $('#topUp').click(function(){
+                $.ajax({
+                    'url' : '/manager/study-group/' + this.value + '/topUp',
+                    'method' : 'patch',
+                    'success' : function(data){
+                        window.location.reload();
+                    }
+                });
+            });
+            $('#down').click(function(){
+                $.ajax({
+                    'url' : '/manager/study-group/' + this.value + '/topUp',
+                    'method' : 'patch',
+                    'success' : function(data){
+                        window.location.reload();
+                    }
+                });
+            });
         })
-        var hideNotice = function hideNotice (noticeId) {
-            $.ajax({
-                'url': '/manager/notice/party-school/' + noticeId + '/hide',
-                'method': 'patch',
-                'success': function (data) {
-                    window.location.reload();
-                }
-            });
-        };
-
-        var showNotice = function (noticeId) {
-            $.ajax({
-                'url': '/manager/notice/party-school/' + noticeId + '/hide',
-                'method': 'patch',
-                'success': function (data) {
-                    window.location.reload();
-                }
-            });
-        };
-
-        var topUpNotice = function (noticeId) {
-            $.ajax({
-                'url': '/manager/notice/party-school/' + noticeId + '/topUp',
-                'method': 'patch',
-                'success': function (data) {
-                    window.location.reload();
-                }
-            });
-        };
-
-        var downNotice = function (noticeId) {
-            $.ajax({
-                'url': '/manager/notice/party-school/' + noticeId + '/topUp',
-                'method': 'patch',
-                'success': function (data) {
-                    window.location.reload();
-                }
-            });
-        };
-
     </script>
 @endsection
