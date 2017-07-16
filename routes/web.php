@@ -21,9 +21,9 @@ Route::get('/index', function(){
 });
 
 /**
- * 管理员后台模块，路由为 /manager/{module}, 命名空间 \App\Http|Controllers\Manager
+ * 管理员后台模块，路由为 /manager/{module}, 命名空间 \App\Http\Controllers\Manager
  */
-Route::group(['namespace' => 'Manager', 'prefix' => 'manager', 'middleware' => 'auth:admin'], function (){
+Route::group(['namespace' => 'Manager', 'prefix' => 'manager'], function (){
 
     /**
      * 用户管理模块，路由为 /manager/user/{action}
@@ -43,7 +43,7 @@ Route::group(['namespace' => 'Manager', 'prefix' => 'manager', 'middleware' => '
     });
 
     /**
-     * 党建专项模块， 路由为 /manager/party-build/{action}, 命名空间 \App\Http|Controllers\Manager\
+     * 党建专项模块， 路由为 /manager/party-build/{action}, 命名空间 \App\Http\Controllers\Manager\
      */
     Route::group(['prefix' => 'party-build'], function (){
         //党建专项新闻列表
@@ -63,10 +63,10 @@ Route::group(['namespace' => 'Manager', 'prefix' => 'manager', 'middleware' => '
     });
 
     /**
-     * 学习小组模块， 路由为 /manager/study-group/{action}, 命名空间 App\Http|Controllers\Manager\
+     * 学习小组模块， 路由为 /manager/study-group/{action}, 命名空间 App\Http\Controllers\Manager\
      */
     Route::group(['prefix' => 'study-group'], function (){
-        //党建专项新闻列表
+        //新闻列表
         Route::get('list', 'StudyGroupController@lists');
 
         //隐藏(显示)、置顶(取消置顶)新闻
@@ -83,7 +83,27 @@ Route::group(['namespace' => 'Manager', 'prefix' => 'manager', 'middleware' => '
     });
 
     /**
-     * 申请人管理模块，路由为 /manager/applicant/{action}, 命名空间 \App\Http|Controllers\Manager\Applicant
+     * 党校培训模块， 路由为 /manager/party-school/{action}, 命名空间 App\Http\Controllers\Manager
+     */
+    Route::group(['prefix' => 'party-school'], function (){
+        //新闻列表
+        Route::get('list', 'PartySchoolController@lists');
+
+        //隐藏(显示)、置顶(取消置顶)新闻
+        Route::patch('{id}/hide', 'PartySchoolController@hide');
+        Route::patch('{id}/topUp', 'PartySchoolController@topUp');
+
+        //编辑新闻
+        Route::get('{id}/edit', 'PartySchoolController@editPage');
+        Route::post('{id}/edit', 'PartySchoolController@edit');
+
+        //添加新闻
+        Route::get('add', 'PartySchoolController@addPage');
+        Route::post('add', 'PartySchoolController@add'); 
+    });
+
+    /**
+     * 申请人管理模块，路由为 /manager/applicant/{action}, 命名空间 \App\Http\Controllers\Manager\Applicant
      */
     Route::group(['namespace' => 'Applicant', 'prefix' => 'applicant'], function(){
 
@@ -104,7 +124,7 @@ Route::group(['namespace' => 'Manager', 'prefix' => 'manager', 'middleware' => '
     });
 
     /**
-    * 院级积极分子管理模块，路由为 /manager/academy/{action}, 命名空间 \App\Http|Controllers\Manager\Academy
+    * 院级积极分子管理模块，路由为 /manager/academy/{action}, 命名空间 \App\Http\Controllers\Manager\Academy
     */
     Route::group(['namespace' => 'Academy', 'prefix' => 'academy'], function(){
 
@@ -125,7 +145,7 @@ Route::group(['namespace' => 'Manager', 'prefix' => 'manager', 'middleware' => '
     });
 
     /**
-     * 预备党员管理模块，路由为 /manager/probationary/{action}, 命名空间 \App\Http|Controllers\Manager\Probationary
+     * 预备党员管理模块，路由为 /manager/probationary/{action}, 命名空间 \App\Http\Controllers\Manager\Probationary
      */
     Route::group(['namespace' => 'Probationary', 'prefix' => 'probationary'], function(){
 
@@ -146,7 +166,7 @@ Route::group(['namespace' => 'Manager', 'prefix' => 'manager', 'middleware' => '
     });
 
     /**
-     * 党支部管理模块，路由为 /manager/party-branch/{action}, 命名空间 \App\Http|Controllers\Manager\PartyBranch
+     * 党支部管理模块，路由为 /manager/party-branch/{action}, 命名空间 \App\Http\Controllers\Manager\PartyBranch
      */
     Route::group(['namespace' => 'PartyBranch', 'prefix' => 'party-branch'], function(){
 
@@ -158,7 +178,7 @@ Route::group(['namespace' => 'Manager', 'prefix' => 'manager', 'middleware' => '
     });
 
     /**
-     * 数据统计模块，路由为 /manager/statistics/{action}, 命名空间 \App\Http|Controllers\Manager\
+     * 数据统计模块，路由为 /manager/statistics/{action}, 命名空间 \App\Http\Controllers\Manager\
      */
     Route::group(['prefix' => 'statistics'], function(){
 
@@ -185,12 +205,12 @@ Route::group(['namespace' => 'Manager', 'prefix' => 'manager', 'middleware' => '
     });
 
     /**
-     * 通知公告管理模块，路由为 /manager/notice/{action},命名空间 \App\Http|Controllers\Manager\
+     * 通知公告管理模块，路由为 /manager/notice/{action},命名空间 \App\Http\Controllers\Manager\
      */
     Route::group(['prefix' => 'notice'], function(){
 
         /**
-         * 党校管理子模块，路由为 /manager/notice/party-school/{action}, 命名空间 \App\Http|Controllers\Manager\
+         * 党校管理子模块，路由为 /manager/notice/party-school/{action}, 命名空间 \App\Http\Controllers\Manager\
          */
         Route::group(['prefix' => 'party-school'], function(){
             Route::get('list/{type}', 'NoticeController@partySchool');
@@ -204,7 +224,7 @@ Route::group(['namespace' => 'Manager', 'prefix' => 'manager', 'middleware' => '
 
         });
         /**
-         * 添加公告子模块，路由为 /manager/notice/add/{action}, 命名空间 \App\Http|Controllers\Manager\
+         * 添加公告子模块，路由为 /manager/notice/add/{action}, 命名空间 \App\Http\Controllers\Manager\
          */
         Route::group(['prefix' => 'add'], function(){
             Route::get('/', 'NoticeController@addPage');

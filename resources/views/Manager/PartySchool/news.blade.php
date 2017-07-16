@@ -11,7 +11,7 @@
             <div class="col-xs-12">
                 <div class="box">
                     <div class="box-header">
-                        <h3 class="box-title">党建专项</h3>
+                        <h3 class="box-title">党校培训</h3>
                     </div>
                     <!-- /.box-header -->
                     <div class="box-body">
@@ -19,7 +19,6 @@
                             <thead>
                             <tr>
                                 <th>标题</th>
-                                <th>所属类别</th>
                                 <th>发布时间</th>
                                 <th>发布人</th>
                                 <th>备注</th>
@@ -33,11 +32,9 @@
                             @foreach($newses as $news)
                                 <tr>
                                     <td>{{ $news['title'] }}</td>
-                                    <td>{{ $news['typeName'] }}</td>
                                     <td>{{ $news['time'] }}</td>
                                     <td>{{ $news['authorName']}}</td>
                                     <td>{{ $news['imgPath'] ? '有图片' : '无图片' }}</td>
-
                                     <td>{{ $news['isHidden'] ? '隐藏' : '显示'}}</td>
                                     <td>
                                         @if($news['isHidden'])
@@ -47,7 +44,7 @@
                                         @endif
                                     </td>
                                     <td>
-                                        <a href="{{ url('manager/party-build/'.$news['id'].'/edit') }}">
+                                        <a href="{{ url('manager/party-school/'.$news['id'].'/edit') }}">
                                             <button type="button" class="btn btn-block btn-info btn-xs">编辑</button></a>
                                     </td>
                                     <td>
@@ -63,7 +60,6 @@
                             <tfoot>
                             <tr>
                                 <th>标题</th>
-                                <th>所属类别</th>
                                 <th>发布时间</th>
                                 <th>发布人</th>
                                 <th>备注</th>
@@ -98,7 +94,7 @@
         });
         var hideNews = function hideNews (newsId) {
             $.ajax({
-                'url': '/manager/party-build/' + newsId + '/hide',
+                'url': '/manager/party-school/' + newsId + '/hide',
                 'method': 'patch',
                 'success': function (data) {
                     window.location.reload();
@@ -108,7 +104,7 @@
 
         var showNews = function (newsId) {
             $.ajax({
-                'url': '/manager/party-build/' + newsId + '/hide',
+                'url': '/manager/party-school/' + newsId + '/hide',
                 'method': 'patch',
                 'success': function (data) {
                     window.location.reload();
@@ -118,7 +114,7 @@
 
         var topUpNews = function (newsId) {
             $.ajax({
-                'url': '/manager/party-build/' + newsId + '/topUp',
+                'url': '/manager/party-school/' + newsId + '/topUp',
                 'method': 'patch',
                 'success': function (data) {
                     window.location.reload();
@@ -128,13 +124,12 @@
 
         var downNews = function (newsId) {
             $.ajax({
-                'url': '/manager/party-build/' + newsId + '/topUp',
+                'url': '/manager/party-school/' + newsId + '/topUp',
                 'method': 'patch',
                 'success': function (data) {
                     window.location.reload();
                 }
             });
         };
-
     </script>
 @endsection

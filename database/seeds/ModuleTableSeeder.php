@@ -246,7 +246,7 @@ class ModuleTableSeeder extends Seeder
             'parent_id' => 6,
             'name'      => '新闻列表',
             'auth'      => 1,
-            'url'       => 'undefined'
+            'url'       => 'manager/party-school/list'
         ]);
 //        DB::table('twt_manager_modules')->insert([
 //            'self_id'   => 172,
@@ -260,7 +260,7 @@ class ModuleTableSeeder extends Seeder
             'parent_id' => 6,
             'name'      => '添加新闻',
             'auth'      => 1,
-            'url'       => 'undefined'
+            'url'       => 'manager/party-school/add'
         ]);
 
         /**

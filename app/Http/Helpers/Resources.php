@@ -31,7 +31,7 @@ class Resources {
         ];
     }
 
-    public static function PartyBuild(SpecialNews $partyBuild){
+    public static function SpecialNews(SpecialNews $partyBuild){
         return [
             'id' => $partyBuild->id,
             'title' => $partyBuild->title,

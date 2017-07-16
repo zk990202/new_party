@@ -1,20 +1,24 @@
 <?php
+/**
+ * Created by PhpStorm.
+ * User: Kai.Z
+ * Date: 2017/7/16
+ * Time: 10:25
+ */
 
 namespace App\Http\Controllers\Manager;
 
 use App\Http\Controllers\Controller;
 use App\Http\Helpers\Resources;
-use App\Models\Column;
 use App\Models\SpecialNews;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Mockery\Exception;
 
-class PartyBuildController extends Controller{
-
+class PartySchoolController extends Controller{
     protected $imgExtension;
-    protected $imgUsage = "partyBuildImg";
+    protected $imgUsage = "partyBuildImg";//党校培训与党建专项的图片上传一样,在同一个数据表中
 
     public function __construct()
     {
@@ -22,12 +26,12 @@ class PartyBuildController extends Controller{
     }
 
     /**
-     * 列出所有的新闻
+     * 列出所有新闻
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function lists(){
-        $news_arr = SpecialNews::getAllNews();
-        return view('Manager.PartyBuild.news', ['newses' => $news_arr]);
+        $news_arr = SpecialNews::getAllNewsSchool();
+        return view('Manager.PartySchool.news', ['newses' => $news_arr]);
     }
 
     /**
@@ -69,7 +73,7 @@ class PartyBuildController extends Controller{
         $content = $request->input('content');
         $img_path = $request->input('imgPath') ?? null;
         try{
-            $res = SpecialNews::updateById($id, [
+            $res = SpecialNews::updateByIdSchool($id, [
                 // 防止编辑器xss攻击，这里进行编码，同时避免二次编码
                 'content' => htmlspecialchars($content, ENT_COMPAT | ENT_HTML401, ini_get("default_charset") , false) ,
                 'title' => $title,
@@ -101,37 +105,26 @@ class PartyBuildController extends Controller{
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function editPage($id){
-        $news = SpecialNews::findOrFail($id);
+        $news = SpecialNews::FindorFail($id);
         $news = Resources::SpecialNews($news);
-        return view('Manager.PartyBuild.edit', ['newses' => $news]);
+        return view('Manager.PartySchool.edit', ['newses' => $news]);
     }
 
-    /**
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-     */
     public function addPage(){
-        //党建专项所属类别为3
-        $columns = Column::getColumnsByParentId(3);
-        return view('Manager.PartyBuild.add', ['columns' => $columns]);
+        return view('Manager.PartySchool.add');
     }
 
-    /**
-     * 添加新闻
-     * @param Request $request
-     * @return \Illuminate\Http\JsonResponse
-     */
     public function add(Request $request){
         $title = $request->input('title');
         $content = $request->input('content');
-        $column = $request->input('column');
-        $img_path = $request->input('imgPath') ?? '';
-        if(!$title || !$content || !$column){
+        $img_path = $request->input('imgPath') ?? null;
+        if(!$title || !$content){
             return response()->json([
                 'message' => '参数丢失'
             ]);
         }
-        $res = SpecialNews::add([
-            'type' => $column,
+        $res = SpecialNews::addSchool([
+            'type' => 1,
             'title' => $title,
             'content' => $content,
             'imgPath' => $img_path,
@@ -148,5 +141,4 @@ class PartyBuildController extends Controller{
             'message' => '添加失败，请联系后台管理员'
         ]);
     }
-
 }

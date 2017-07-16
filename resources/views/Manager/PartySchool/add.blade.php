@@ -24,14 +24,6 @@
                                 <input type="text" class="form-control" id="newsesTitle" placeholder="新闻标题请尽量简明扼要，不要太长">
                             </div>
                             <div class="form-group">
-                                <label for="column">所属栏目</label>
-                                <select id="column" class="form-control">
-                                    @foreach($columns as $column)
-                                        <option value="{{ $column['id'] }}">{{ $column['name'] }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <div class="form-group">
                                 <label for="editor">新闻内容</label>
                                 <textarea id="editor" name="editor" rows="10" cols="80">
 
@@ -89,7 +81,7 @@
                     upload: {
                         serverPath: '/manager/file',
                         fileFieldName: 'upload',
-                        usage : 'partyBuildImg'
+                        usage : 'noticeImg'
                     }
                 },
                 autogrow: true
@@ -101,7 +93,7 @@
                     console.log(file);
                     var data = new FormData();
                     data.append('upload', file);
-                    data.append("usage", 'partyBuildImg');
+                    data.append("usage", 'noticeImg');
                     $.ajax({
                         url: '/manager/file',
                         type: 'POST',
@@ -123,7 +115,7 @@
                             form.append('column', $('#column').val());
                             form.append('imgPath', path);
                             $.ajax({
-                                url: '/manager/party-build/add',
+                                url: '/manager/party-school/add',
                                 type: 'POST',
                                 data: form,
                                 cache: false,
@@ -133,7 +125,7 @@
                                 success: function(data){
                                     if(data.success){
                                         alert('添加成功');
-                                        window.location.href = '/manager/party-build/list/';
+                                        window.location.href = '/manager/party-school/list/';
                                     }
                                     else{
                                         alert(data.message);
@@ -155,7 +147,7 @@
                     form.append('content', $('#editor').val());
                     form.append('column', $('#column').val());
                     $.ajax({
-                        url: '/manager/party-build/add',
+                        url: '/manager/party-school/add',
                         type: 'POST',
                         data: form,
                         cache: false,
@@ -165,7 +157,7 @@
                         success: function(data){
                             if(data.success){
                                 alert('添加成功');
-                                window.location.href = '/manager/party-build/list/';
+                                window.location.href = '/manager/party-school/list/';
                             }
                             else{
                                 alert(data.message);

@@ -20,31 +20,27 @@
 
                         <div class="box-body">
                             <div class="form-group" >
-                                <label for="newsesTitle">新闻标题</label>
-                                <input type="text" class="form-control" id="newsesTitle" placeholder="新闻标题请尽量简明扼要，不要太长">
+                                <label for="noticeTitle">新闻标题</label>
+                                <input type="text" class="form-control" id="newsesTitle" value="{{ $newses['title'] }}">
                             </div>
                             <div class="form-group">
-                                <label for="column">所属栏目</label>
-                                <select id="column" class="form-control">
-                                    @foreach($columns as $column)
-                                        <option value="{{ $column['id'] }}">{{ $column['name'] }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label for="editor">新闻内容</label>
                                 <textarea id="editor" name="editor" rows="10" cols="80">
-
+                                    {!! htmlspecialchars($newses['content']) !!}
                                 </textarea>
                             </div>
                             <div class="form-group">
                                 <label for="inputFile">上传图片</label>
                                 <input type="file" id="inputFile" name="file">
-
-                                <p class="help-block">支持png jpeg jpg bmp </p>
+                                <p class="help-block">
+                                    @if($newses['imgPath'])
+                                        已有图片：{{ $newses['imgPath'] }}，如不更改请勿重新添加
+                                    @endif
+                                    支持图片格式：png, jpeg, jpg, bmp
+                                </p>
                             </div>
                         </div>
                         <!-- /.box-body -->
+                        <input type="hidden" id="newsesId" value="{{ $newses['id'] }}">
                     </form>
                     <div class="box-footer">
                         <button id="submitButton" type="button" class="btn btn-primary">提交</button>
@@ -120,10 +116,9 @@
                             var form = new FormData();
                             form.append('title', $('#newsesTitle').val());
                             form.append('content', $('#editor').val());
-                            form.append('column', $('#column').val());
                             form.append('imgPath', path);
                             $.ajax({
-                                url: '/manager/party-build/add',
+                                url: '/manager/study-group/' + $('#newsesId').val() + '/edit',
                                 type: 'POST',
                                 data: form,
                                 cache: false,
@@ -132,8 +127,8 @@
                                 contentType: false,
                                 success: function(data){
                                     if(data.success){
-                                        alert('添加成功');
-                                        window.location.href = '/manager/party-build/list/';
+                                        alert('修改成功');
+                                        window.location.href = '/manager/study-group/' + $('#newsesId').val() + '/edit';
                                     }
                                     else{
                                         alert(data.message);
@@ -153,9 +148,8 @@
                     var form = new FormData();
                     form.append('title', $('#newsesTitle').val());
                     form.append('content', $('#editor').val());
-                    form.append('column', $('#column').val());
                     $.ajax({
-                        url: '/manager/party-build/add',
+                        url: '/manager/study-group/' + $('#newsesId').val() + '/edit',
                         type: 'POST',
                         data: form,
                         cache: false,
@@ -164,8 +158,8 @@
                         contentType: false,
                         success: function(data){
                             if(data.success){
-                                alert('添加成功');
-                                window.location.href = '/manager/party-build/list/';
+                                alert('修改成功');
+                                window.location.href = '/manager/study-group/' + $('#newsesId').val() + '/edit';
                             }
                             else{
                                 alert(data.message);
