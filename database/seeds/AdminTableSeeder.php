@@ -14,6 +14,7 @@ class AdminTableSeeder extends Seeder
         //
         DB::table('twt_admin')->insert([
             'username'  =>  'root',
+            'real_name' =>  '超级管理员',
             'password'  =>  bcrypt('admin'),
             'type'      =>  1,
         ]);

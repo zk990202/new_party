@@ -17,6 +17,7 @@ class CreateAdminTable extends Migration
         Schema::create('twt_admin', function (Blueprint $table) {
             $table->increments('id');
             $table->string('username')->unique();
+            $table->string('real_name');
             $table->string('password');
             $table->Integer('type');
             $table->tinyInteger('is_deleted')->default(0);

@@ -17,15 +17,13 @@
     var defaultOptions = {
         serverPath: './src/plugins/upload/trumbowyg.upload.php',
         fileFieldName: 'fileToUpload',
-        usageFieldName: '',
         data: [],                       // Additional data for ajax [{name: 'key', value: 'value'}]
         headers: {},                    // Additional headers
         xhrFields: {},                  // Additional fields
         urlPropertyName: 'file',        // How to get url from the json response (for instance 'url' for {url: ....})
         statusPropertyName: 'success',  // How to get status from the json response 
         success: undefined,             // Success callback: function (data, trumbowyg, $modal, values) {}
-        error: undefined,               // Error callback: function () {}
-        usage: null
+        error: undefined                // Error callback: function () {}
     };
 
     function getDeep(object, propertyParts) {
@@ -54,10 +52,40 @@
                 file: 'File',
                 uploadError: 'Error'
             },
+            sk: {
+                upload: 'Nahrať',
+                file: 'Súbor',
+                uploadError: 'Chyba'
+            },
+            fr: {
+                upload: 'Envoi',
+                file: 'Fichier',
+                uploadError: 'Erreur'
+            },
+            cs: {
+                upload: 'Nahrát obrázek',
+                file: 'Soubor',
+                uploadError: 'Chyba'
+            },
             zh_cn: {
                 upload: '上传',
                 file: '文件',
                 uploadError: '错误'
+            },
+            ru: {
+                upload: 'Загрузка',
+                file: 'Файл',
+                uploadError: 'Ошибка'
+            },
+            ja: {
+                upload: 'アップロード',
+                file: 'ファイル',
+                uploadError: 'エラー'
+            },
+            pt_br: {
+                upload: 'Enviar do local',
+                file: 'Arquivo',
+                uploadError: 'Erro'
             },
         },
         // jshint camelcase:true
@@ -71,9 +99,9 @@
                             trumbowyg.saveRange();
 
                             var file,
-                                usage,
+                                usage = trumbowyg.o.plugins.upload.usage,
                                 prefix = trumbowyg.o.prefix;
-                            usage = trumbowyg.o.plugins.upload.usage;
+
                             var $modal = trumbowyg.openModalInsert(
                                 // Title
                                 trumbowyg.lang.upload,
@@ -97,10 +125,17 @@
                                 function (values) {
                                     var data = new FormData();
                                     data.append(trumbowyg.o.plugins.upload.fileFieldName, file);
+
                                     data.append("usage", usage);
-                                    console.log(usage);
+
                                     trumbowyg.o.plugins.upload.data.map(function (cur) {
                                         data.append(cur.name, cur.value);
+                                    });
+                                    
+                                    $.map(values, function(curr, key){
+                                        if(key !== 'file') { 
+                                            data.append(key, curr);
+                                        }
                                     });
 
                                     if ($('.' + prefix + 'progress', $modal).length === 0) {
@@ -146,10 +181,9 @@
                                                     }, 250);
                                                     trumbowyg.$c.trigger('tbwuploadsuccess', [trumbowyg, data, url]);
                                                 } else {
-                                                    console.log(data);
                                                     trumbowyg.addErrorOnModalField(
                                                         $('input[type=file]', $modal),
-                                                        data.message
+                                                        trumbowyg.lang[data.message]
                                                     );
                                                     trumbowyg.$c.trigger('tbwuploaderror', [trumbowyg, data]);
                                                 }
@@ -157,7 +191,6 @@
                                         },
 
                                         error: trumbowyg.o.plugins.upload.error || function () {
-
                                             trumbowyg.addErrorOnModalField(
                                                 $('input[type=file]', $modal),
                                                 trumbowyg.lang.uploadError
