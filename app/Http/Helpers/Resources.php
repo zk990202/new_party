@@ -9,6 +9,7 @@ namespace App\Http\Helpers;
 
 use App\Models\Academy\EntryForm as AcademyEntryForm;
 use App\Models\Academy\TestList as AcademyTestList;
+use App\Models\CommonFiles;
 use App\Models\Notification;
 use App\Models\SpecialNews;
 
@@ -44,6 +45,18 @@ class Resources {
             'isTop' => $partyBuild->isrecommand,
             'imgPath' => $partyBuild->img_path,
             'isHidden' => $partyBuild->isdeleted
+        ];
+    }
+
+    public static function CommonFiles(CommonFiles $commonFiles){
+        return [
+            'id' => $commonFiles->file_id,
+            'title' => $commonFiles->file_title,
+            'content' => $commonFiles->file_content,
+            'time' => $commonFiles->file_addtime,
+            'type' => $commonFiles->file_type,
+            'filePath' => $commonFiles->file_img,
+            'isHidden' => $commonFiles->file_isdeleted
         ];
     }
 

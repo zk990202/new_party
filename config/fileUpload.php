@@ -33,6 +33,16 @@ return [
             'path' => 'images/partyBuild',
             'extensions' => $imageExtensions,
             'disk' => 'public'
+        ],
+        'importantFilesFile' => [
+            'path' => 'files/importantFiles',
+            'extensions' => $fileExtensions,
+            'disk' => 'public'
+        ],
+        'importantFilesImg' => [
+            'path' => 'images/importantFiles',
+            'extensions' => $imageExtensions,
+            'disk' => 'public'
         ]
     ]
 ];
