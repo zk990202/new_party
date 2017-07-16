@@ -63,6 +63,19 @@ class NoticeController extends Controller
         ]);
     }
 
+    public function getNoticeById($nid){
+        try{
+            $notice = Notification::findOrFail($nid);
+            return response()->json([
+                'success'   => true,
+                'info'      => Resources::Notification($notice)
+            ]);
+        }
+        catch(ModelNotFoundException $e){
+            return response()->json(['message' => 'Notice not found']);
+        }
+    }
+
     /**
      * 更新操作
      * @param Request $request
@@ -78,7 +91,7 @@ class NoticeController extends Controller
         try{
             $res = Notification::updateById($notice_id, [
                 // 防止编辑器xss攻击，这里进行编码，同时避免二次编码
-                'content'   => htmlspecialchars($content, ENT_COMPAT | ENT_HTML401, ini_get("default_charset") , false),
+                'content'   => $content,
                 'title'     => $title,
                 'fileName'  => $file_name,
                 'filePath'  => $file_path
@@ -172,7 +185,7 @@ class NoticeController extends Controller
         try{
             $res = Notification::activityUpdateById($activity_id, [
                 // 防止编辑器xss攻击，这里进行编码，同时避免二次编码
-                'content'   => htmlspecialchars($content, ENT_COMPAT | ENT_HTML401, ini_get("default_charset") , false),
+                'content'   => $content,
                 'title'     => $title,
                 'fileName'  => $file_name,
                 'filePath'  => $file_path

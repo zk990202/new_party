@@ -72,7 +72,7 @@ class FileController extends Controller
 
         return response()->json([
             'success' => true,
-            'file' => config('filesystems.disks.'.$disk.'.url').'/'.$path,
+            'file' => '/storage/'.$path,
             'info' => $file
         ]);
     }

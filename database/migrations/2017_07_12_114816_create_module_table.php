@@ -23,7 +23,6 @@ class CreateModuleTable extends Migration
             $table->string('icon')->default('fa fa-circle-o');
             $table->tinyInteger('is_show')->default(1);
             $table->integer('auth');
-
         });
     }
 

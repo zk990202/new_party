@@ -239,6 +239,8 @@ Route::group(['namespace' => 'Manager', 'prefix' => 'manager'], function (){
             Route::get('{notice_id}/edit', 'NoticeController@editPage');
             Route::post('{notice_id}/edit', 'NoticeController@edit');
 
+            Route::get('{notice_id}', 'NoticeController@getNoticeById');
+
         });
         /**
          * 添加公告子模块，路由为 /manager/notice/add/{action}, 命名空间 \App\Http\Controllers\Manager\
@@ -270,6 +272,10 @@ Route::group(['namespace' => 'Manager', 'prefix' => 'manager'], function (){
      */
     Route::group(['prefix' => 'file'], function(){
         Route::post('/', 'FileController@upload');
+    });
+
+    Route::group(['prefix' => 'auth', 'namespace' => 'Auth'], function(){
+        Route::get('logout', 'LoginController@logout')->name('logout');
     });
 
 });
