@@ -122,4 +122,54 @@ class SpecialNews extends Model
         ]);
         return $news ? Resources::SpecialNews($news) : false;
     }
+
+    /*以下为党校培训模块--------------------------------------------------------------------------------------------*/
+    /**
+     * 获取所有新闻
+     * @return array
+     */
+    public static function getAllNewsSchool(){
+        $res_arr = self::where('type', 2)
+            ->orderBy('isrecommand', 'DESC')
+            ->orderBy('isdeleted', 'ASC')
+            ->orderBy('inserttime', 'DESC')
+            ->get()->all();
+
+        return array_map(function($SpecialNews){
+            return Resources::SpecialNews($SpecialNews);
+        }, $res_arr);
+    }
+
+    /**
+     * 更新
+     * @param $id
+     * @param $data
+     * @return array|bool
+     */
+    public static function updateByIdSchool($id, $data){
+        $news = self::findOrFail($id);
+        $news->title = $data['title'];
+        $news->content = $data['content'];
+        $news->img_path = $data['imgPath'] ?? $news->img_path;
+        $res = $news->save();
+        return $res ? Resources::SpecialNews($news) : false;
+    }
+
+    /**
+     * 添加
+     * @param $data
+     * @return array|bool
+     */
+    public static function addSchool($data){
+        $news = self::create([
+            'type' => 2,
+            'title' => $data['title'],
+            'content' => $data['content'],
+            'img_path' => $data['imgPath'],
+            'author' => $data['author'],
+            'isrecommand' => 0,
+            'isdeleted' => 0
+        ]);
+        return $news ? Resources::SpecialNews($news) : false;
+    }
 }

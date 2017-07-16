@@ -1,4 +1,10 @@
 <?php
+/**
+ * Created by PhpStorm.
+ * User: Kai.Z
+ * Date: 2017/7/16
+ * Time: 10:25
+ */
 
 namespace App\Http\Controllers\Manager;
 
@@ -10,9 +16,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Mockery\Exception;
 
-class StudyGroupController extends Controller{
+class PartySchoolController extends Controller{
     protected $imgExtension;
-    protected $imgUsage = "partyBuildImg";//学习小组与党建专项的图片上传一样,在同一个数据表中
+    protected $imgUsage = "partyBuildImg";//党校培训与党建专项的图片上传一样,在同一个数据表中
 
     public function __construct()
     {
@@ -24,8 +30,8 @@ class StudyGroupController extends Controller{
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function lists(){
-        $news_arr = SpecialNews::getAllNewsStudy();
-        return view('Manager.StudyGroup.news', ['newses' => $news_arr]);
+        $news_arr = SpecialNews::getAllNewsSchool();
+        return view('Manager.PartySchool.news', ['newses' => $news_arr]);
     }
 
     /**
@@ -67,7 +73,7 @@ class StudyGroupController extends Controller{
         $content = $request->input('content');
         $img_path = $request->input('imgPath') ?? null;
         try{
-            $res = SpecialNews::updateByIdStudy($id, [
+            $res = SpecialNews::updateByIdSchool($id, [
                 // 防止编辑器xss攻击，这里进行编码，同时避免二次编码
                 'content' => htmlspecialchars($content, ENT_COMPAT | ENT_HTML401, ini_get("default_charset") , false) ,
                 'title' => $title,
@@ -101,11 +107,11 @@ class StudyGroupController extends Controller{
     public function editPage($id){
         $news = SpecialNews::FindorFail($id);
         $news = Resources::SpecialNews($news);
-        return view('Manager.StudyGroup.edit', ['newses' => $news]);
+        return view('Manager.PartySchool.edit', ['newses' => $news]);
     }
 
     public function addPage(){
-        return view('Manager.StudyGroup.add');
+        return view('Manager.PartySchool.add');
     }
 
     public function add(Request $request){
@@ -117,7 +123,7 @@ class StudyGroupController extends Controller{
                 'message' => '参数丢失'
             ]);
         }
-        $res = SpecialNews::addStudy([
+        $res = SpecialNews::addSchool([
             'type' => 1,
             'title' => $title,
             'content' => $content,
