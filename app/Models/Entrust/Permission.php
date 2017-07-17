@@ -1,7 +1,7 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: liebes
- * Date: 2017/7/16
- * Time: 下午4:39
- */
+namespace App\Models\Entrust;
+use Zizaco\Entrust\EntrustPermission;
+
+class Permission extends EntrustPermission {
+
+}

@@ -269,5 +269,5 @@ Route::group(['prefix' => 'manager/auth', 'namespace' => 'Manager\Auth'], functi
 Route::get('/home', 'HomeController@index')->name('home');
 
 Route::get('/test', function(){
-    Auth::guard('admin')->logout();
+
 });

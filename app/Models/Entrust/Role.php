@@ -1,7 +1,7 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: liebes
- * Date: 2017/7/16
- * Time: 下午4:38
- */
+namespace App\Models\Entrust;
+use Zizaco\Entrust\EntrustRole;
+
+class Role extends EntrustRole {
+
+}
