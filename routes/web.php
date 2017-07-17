@@ -103,6 +103,25 @@ Route::group(['namespace' => 'Manager', 'prefix' => 'manager'], function (){
     });
 
     /**
+     * 重要文件模块， 路由为 /manager/important-files/{action}, 命名空间 App\Http\Controllers\Manager
+     */
+    Route::group(['prefix' => 'important-files'], function (){
+        //新闻列表
+        Route::get('list', 'ImportantFilesController@lists');
+
+        //隐藏(显示)
+        Route::patch('{id}/hide', 'ImportantFilesController@hide');
+
+        //编辑新闻
+        Route::get('{id}/edit', 'ImportantFilesController@editPage');
+        Route::post('{id}/edit', 'ImportantFilesController@edit');
+
+        //添加新闻
+        Route::get('add', 'ImportantFilesController@addPage');
+        Route::post('add', 'ImportantFilesController@add');
+    });
+
+    /**
      * 申请人管理模块，路由为 /manager/applicant/{action}, 命名空间 \App\Http\Controllers\Manager\Applicant
      */
     Route::group(['namespace' => 'Applicant', 'prefix' => 'applicant'], function(){

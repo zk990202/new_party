@@ -100,7 +100,7 @@ class SpecialNews extends Model
         $news = self::findOrFail($id);
         $news->title = $data['title'];
         $news->content = $data['content'];
-        $news->img_path = $data['imgPath'] ?? $news->img_path;
+        $news->img_path = $data['filePath'] ?? $news->img_path;
         $res = $news->save();
         return $res ? Resources::SpecialNews($news) : false;
     }
@@ -115,7 +115,7 @@ class SpecialNews extends Model
             'type' => 1,
             'title' => $data['title'],
             'content' => $data['content'],
-            'img_path' => $data['imgPath'],
+            'img_path' => $data['filePath'],
             'author' => $data['author'],
             'isrecommand' => 0,
             'isdeleted' => 0
@@ -150,7 +150,7 @@ class SpecialNews extends Model
         $news = self::findOrFail($id);
         $news->title = $data['title'];
         $news->content = $data['content'];
-        $news->img_path = $data['imgPath'] ?? $news->img_path;
+        $news->img_path = $data['filePath'] ?? $news->img_path;
         $res = $news->save();
         return $res ? Resources::SpecialNews($news) : false;
     }
@@ -165,7 +165,7 @@ class SpecialNews extends Model
             'type' => 2,
             'title' => $data['title'],
             'content' => $data['content'],
-            'img_path' => $data['imgPath'],
+            'img_path' => $data['filePath'],
             'author' => $data['author'],
             'isrecommand' => 0,
             'isdeleted' => 0

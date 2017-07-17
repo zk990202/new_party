@@ -277,14 +277,14 @@ class ModuleTableSeeder extends Seeder
             'parent_id' => 7,
             'name'      => '文件列表',
             'auth'      => 1,
-            'url'       => 'undefined'
+            'url'       => 'manager/important-files/list'
         ]);
         DB::table('twt_manager_modules')->insert([
             'self_id'   => 182,
             'parent_id' => 7,
             'name'      => '文件添加',
             'auth'      => 1,
-            'url'       => 'undefined'
+            'url'       => 'manager/important-files/add'
         ]);
 
         /**
