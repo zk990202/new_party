@@ -25,7 +25,7 @@
                             </div>
                             <div class="form-group">
                                 <textarea id="editor" name="editor" rows="10" cols="80">
-                                    {!! htmlspecialchars($newses['content']) !!}
+
                                 </textarea>
                             </div>
                             <div class="form-group">
@@ -89,6 +89,25 @@
                     }
                 },
                 autogrow: true
+            });
+
+            $.ajax({
+                url : '/manager/party-school/'+$('#newsesId').val(),
+                type: 'GET',
+                dataType: 'json',
+                success: function(data){
+                    if(data.success){
+                        var content = data.info.content;
+//                        alert(content);
+                        $('#editor').trumbowyg('html', content);
+                    }
+                    else{
+                        alert(data.message);
+                    }
+                },
+                error: function(){
+                    alert('网络不稳，请刷新页面重试');
+                }
             });
 
             $('#submitButton').click(function(){

@@ -56,7 +56,7 @@ class ImportantFilesController extends Controller{
         try{
             $res = CommonFiles::updateById($id, [
                 // 防止编辑器xss攻击，这里进行编码，同时避免二次编码
-                'content' => htmlspecialchars($content, ENT_COMPAT | ENT_HTML401, ini_get("default_charset") , false) ,
+                'content' => $content,
                 'title' => $title,
                 'filePath' => $img_path
             ]);
@@ -122,5 +122,18 @@ class ImportantFilesController extends Controller{
         return response()->json([
             'message' => '添加失败，请联系后台管理员'
         ]);
+    }
+
+    public function getFilesById($id){
+        try{
+            $notice = CommonFiles::findOrFail($id);
+            return response()->json([
+                'success'   => true,
+                'info'      => Resources::CommonFiles($notice)
+            ]);
+        }
+        catch(ModelNotFoundException $e){
+            return response()->json(['message' => 'Files not found']);
+        }
     }
 }

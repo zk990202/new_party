@@ -82,6 +82,8 @@ Route::group(['namespace' => 'Manager', 'prefix' => 'manager'], function (){
         //添加新闻
         Route::get('add', 'StudyGroupController@addPage');
         Route::post('add', 'StudyGroupController@add');
+
+        Route::get('{id}', 'StudyGroupController@getNewsById');
     });
 
     /**
@@ -101,7 +103,9 @@ Route::group(['namespace' => 'Manager', 'prefix' => 'manager'], function (){
 
         //添加新闻
         Route::get('add', 'PartySchoolController@addPage');
-        Route::post('add', 'PartySchoolController@add'); 
+        Route::post('add', 'PartySchoolController@add');
+
+        Route::get('{id}', 'PartySchoolController@getNewsById');
     });
 
     /**
@@ -121,6 +125,8 @@ Route::group(['namespace' => 'Manager', 'prefix' => 'manager'], function (){
         //添加新闻
         Route::get('add', 'ImportantFilesController@addPage');
         Route::post('add', 'ImportantFilesController@add');
+
+        Route::get('{id}', 'ImportantFilesController@getFilesById');
     });
 
     /**
