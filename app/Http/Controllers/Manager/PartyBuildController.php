@@ -71,7 +71,7 @@ class PartyBuildController extends Controller{
         try{
             $res = SpecialNews::updateById($id, [
                 // 防止编辑器xss攻击，这里进行编码，同时避免二次编码
-                'content' => htmlspecialchars($content, ENT_COMPAT | ENT_HTML401, ini_get("default_charset") , false) ,
+                'content' => $content,
                 'title' => $title,
                 'imgPath' => $img_path
             ]);
