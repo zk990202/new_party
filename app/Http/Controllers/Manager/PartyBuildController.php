@@ -147,6 +147,19 @@ class PartyBuildController extends Controller{
         return response()->json([
             'message' => '添加失败，请联系后台管理员'
         ]);
+    }public function getNewsById($id){
+    try{
+        $news = SpecialNews::findOrFail($id);
+        return response()->json([
+            'success'   => true,
+            'info'      => Resources::SpecialNews($news)
+        ]);
     }
+    catch(ModelNotFoundException $e){
+        return response()->json(['message' => 'News not found']);
+    }
+}
+
+
 
 }

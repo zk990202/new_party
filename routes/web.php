@@ -60,6 +60,8 @@ Route::group(['namespace' => 'Manager', 'prefix' => 'manager'], function (){
         //添加新闻
         Route::get('add', 'PartyBuildController@addPage');
         Route::post('add', 'PartyBuildController@add');
+
+        Route::get('{id}', 'PartyBuildController@getNewsById');
     });
 
     /**
@@ -263,6 +265,8 @@ Route::group(['namespace' => 'Manager', 'prefix' => 'manager'], function (){
 
             Route::get('add', 'NoticeController@activityAddPage');
             Route::post('add', 'NoticeController@activityAdd');
+
+            Route::get('{notice_id}', 'NoticeController@getNoticeById');
 
         });
     });
