@@ -44,6 +44,7 @@ class FileController extends Controller
         }
 
         $file = $request->file('upload');
+//        dd($file);
         $size = $file->getSize();
         $extension = $file->extension();
 

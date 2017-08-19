@@ -130,6 +130,50 @@ Route::group(['namespace' => 'Manager', 'prefix' => 'manager'], function (){
     });
 
     /**
+     * 理论学习模块， 路由为 /manger/theory-study/{action}, 命名空间 App\Http\Controllers\Manager
+     */
+    Route::group(['prefix' => 'theory-study'], function (){
+        //内容列表
+        Route::get('list', 'TheoryStudyController@lists');
+
+        //隐藏(显示)
+        Route::patch('{id}/hide', 'TheoryStudyController@hide');
+
+        //编辑
+        Route::group(['prefix' => 'edit'], function (){
+            //视频编辑
+            Route::get('video/{id}', 'TheoryStudyController@editVideoPage');
+            Route::post('video/{id}', 'TheoryStudyController@editVideo');
+
+            //文章编辑
+            Route::get('article/{id}', 'TheoryStudyController@editArticlePage');
+            Route::post('article/{id}', 'TheoryStudyController@editArticle');
+
+            //电子书编辑
+            Route::get('eBook/{id}', 'TheoryStudyController@editEBookPage');
+            Route::post('eBook/{id}', 'TheoryStudyController@editEBook');
+        });
+
+        //添加
+        Route::group(['prefix' => 'add'], function (){
+            //视频添加
+            Route::get('video', 'TheoryStudyController@addVideoPage');
+            Route::post('video', 'TheoryStudyController@addVideo');
+
+            //文章添加
+            Route::get('article', 'TheoryStudyController@addArticlePage');
+            Route::post('article', 'TheoryStudyController@addArticle');
+
+            //电子书添加
+            Route::get('eBook', 'TheoryStudyController@addEBookPage');
+            Route::post('eBook', 'TheoryStudyController@addEBook');
+        });
+
+        Route::get('{id}', 'TheoryStudyController@getContentsById');
+
+    });
+
+    /**
      * 申请人管理模块，路由为 /manager/applicant/{action}, 命名空间 \App\Http\Controllers\Manager\Applicant
      */
     Route::group(['namespace' => 'Applicant', 'prefix' => 'applicant'], function(){

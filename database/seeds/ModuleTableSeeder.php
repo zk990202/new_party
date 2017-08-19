@@ -301,28 +301,28 @@ class ModuleTableSeeder extends Seeder
             'parent_id' => 8,
             'name'      => '内容列表',
             'auth'      => 1,
-            'url'       => 'undefined'
+            'url'       => 'manager/theory-study/list'
         ]);
         DB::table('twt_manager_modules')->insert([
             'self_id'   => 192,
             'parent_id' => 8,
             'name'      => '视频添加',
             'auth'      => 1,
-            'url'       => 'undefined'
+            'url'       => 'manager/theory-study/add/video'
         ]);
         DB::table('twt_manager_modules')->insert([
             'self_id'   => 193,
             'parent_id' => 8,
             'name'      => '文章添加',
             'auth'      => 1,
-            'url'       => 'undefined'
+            'url'       => 'manager/theory-study/add/article'
         ]);
         DB::table('twt_manager_modules')->insert([
             'self_id'   => 194,
             'parent_id' => 8,
             'name'      => '电子书添加',
             'auth'      => 1,
-            'url'       => 'undefined'
+            'url'       => 'manager/theory-study/add/eBook'
         ]);
 
         /**

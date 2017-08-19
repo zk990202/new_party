@@ -15,6 +15,9 @@ $videoExtensions = [
 $fileExtensions = [
     'zip', 'rar', 'tar', 'tar.gz', 'tar.bz2'
 ];
+$eBookExtensions = [
+    'txt', 'chm', 'pdf', 'epub'
+];
 
 return [
     'max_size' => 1024 * 1024 * 5,  // default 5MB
@@ -42,6 +45,17 @@ return [
         'importantFilesImg' => [
             'path' => 'images/importantFiles',
             'extensions' => $imageExtensions,
+            'disk' => 'public'
+        ],
+        'theoryStudyVideo' => [
+            'path' => 'videos/theoryStudy',
+            'extensions' => $videoExtensions,
+            'disk' => 'public',
+            'max_size' => 1024 * 1024 * 60
+        ],
+        'theoryStudyEBook' => [
+            'path' => 'eBook/theoryStudy',
+            'extensions' => $eBookExtensions,
             'disk' => 'public'
         ]
     ]
