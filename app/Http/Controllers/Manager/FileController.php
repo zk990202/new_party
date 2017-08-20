@@ -44,10 +44,9 @@ class FileController extends Controller
         }
 
         $file = $request->file('upload');
-//        dd($file);
+       // dd($file);
         $size = $file->getSize();
         $extension = $file->extension();
-
         if(!$this->checkExtension($extension, $usage)){
             return response()->json([
                 'message' => '文件类型不符'.$extension
