@@ -174,22 +174,85 @@ Route::group(['namespace' => 'Manager', 'prefix' => 'manager'], function (){
     });
 
     /**
+     * 消息管理模块， 路由为 /manager/message/{action}, 命名空间 App\Http\Controllers\Manager
+     */
+    Route::group(['prefix' => 'message'], function (){
+        //收信箱
+       Route::get('receive', 'MessageController@receive');
+
+       //发信箱
+       Route::get('send', 'MessageController@send');
+
+       //查看信件详情
+       Route::get('watch/{id}', 'MessageController@watch');
+
+       //写信
+       Route::get('write', 'MessageController@writePage');
+       Route::post('write', 'MessageController@write');
+    });
+
+    /**
      * 申请人管理模块，路由为 /manager/applicant/{action}, 命名空间 \App\Http\Controllers\Manager\Applicant
      */
     Route::group(['namespace' => 'Applicant', 'prefix' => 'applicant'], function(){
-
-        // 课程控制
+        // 课程设置
         Route::group(['prefix' => 'course'], function(){
+            //课程列表
+            Route::get('/', 'ApplicantController@courseList');
+            //课程详情
+            Route::get('{id}/detail', 'ApplicantController@courseDetail');
+            //课程编辑
+            Route::get('{id}/edit', 'ApplicantController@courseEditPage');
+            Route::post('{id}/edit', 'ApplicantController@courseEdit');
+            //隐藏(显示)
+            Route::patch('{id}/hide', 'ApplicantController@courseHide');
 
+            Route::get('{id}', 'ApplicantController@getCourseById');
+        });
+
+        //文章设置
+        Route::group(['prefix' => 'article'], function (){
+            //文章列表
+            Route::get('/', 'ApplicantController@articleList');
+            //文章添加
+            Route::get('{course_id}/add', 'ApplicantController@articleAddPage');
+            Route::post('{course_id}/add', 'ApplicantController@articleAdd');
+            //文章编辑
+            Route::get('{id}/edit', 'ApplicantController@articleEditPage');
+            Route::post('{id}/edit', 'ApplicantController@articleEdit');
+            //隐藏(显示)
+            Route::patch('{id}/hide', 'ApplicantController@articleHide');
+            //删除
+            Route::post('{id}/delete', 'ApplicantController@articleDelete');
+
+            Route::get('{id}', 'ApplicantController@getArticleById');
+        });
+
+        //题目管理
+        Route::group(['prefix' => 'exercise'], function (){
+            //题目列表
+            Route::get('/', 'ApplicantController@exerciseList');
+            //题目添加
+            Route::get('{course_id}/add', 'ApplicantController@exerciseAddPage');
+            Route::post('{course_id}/add', 'ApplicantController@exerciseAdd');
+            //题目编辑
+            Route::get('{id}/edit', 'ApplicantController@exerciseEditPage');
+            Route::post('{id}/edit', 'ApplicantController@exerciseEdit');
+            //隐藏(显示)
+            Route::patch('{id}/hide', 'ApplicantController@exerciseHide');
+            //删除
+            Route::post('{id}/delete', 'ApplicantController@exerciseDelete');
+
+            Route::get('{id}', 'ApplicantController@getExerciseById');
         });
 
         // 考试管理
-        Route::group(['prefix' => 'train'], function(){
+        Route::group(['prefix' => 'exam'], function(){
 
         });
 
         // 申诉管理
-        Route::group(['prefix' => 'train'], function(){
+        Route::group(['prefix' => 'appeal'], function(){
 
         });
     });

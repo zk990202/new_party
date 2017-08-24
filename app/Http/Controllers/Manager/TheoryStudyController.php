@@ -13,6 +13,7 @@ use App\Http\Helpers\Resources;
 use App\Models\CommonFiles;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
+use Mockery\Exception;
 
 class TheoryStudyController extends Controller{
 
@@ -33,7 +34,7 @@ class TheoryStudyController extends Controller{
      */
     public function lists(){
         $contents_arr = CommonFiles::getAllContents();
-        return view('manager.TheoryStudy.all', ['contents' => $contents_arr]);
+        return view('Manager.TheoryStudy.all', ['contents' => $contents_arr]);
     }
 
     /**
@@ -62,7 +63,7 @@ class TheoryStudyController extends Controller{
         $img_path = $request->input('filePath') ?? null;
         try{
             $res = CommonFiles::updateById($id, [
-                // 防止编辑器xss攻击，这里进行编码，同时避免二次编码
+
                 'content' => $content,
                 'title' => $title,
                 'filePath' => $img_path

@@ -9,6 +9,9 @@ namespace App\Http\Helpers;
 
 use App\Models\Academy\EntryForm as AcademyEntryForm;
 use App\Models\Academy\TestList as AcademyTestList;
+use App\Models\Applicant\ArticleList;
+use App\Models\Applicant\CourseList;
+use App\Models\Applicant\ExerciseList;
 use App\Models\CommonFiles;
 use App\Models\Notification;
 use App\Models\SpecialNews;
@@ -16,6 +19,8 @@ use App\Models\SpecialNews;
 
 class Resources {
     public static function Notification(Notification $notification){
+//        dd($notification->column);
+//        exit;
         return [
             'id'        =>  $notification->notice_id,
             'columnId'  =>  $notification->column_id,
@@ -57,6 +62,51 @@ class Resources {
             'type' => $commonFiles->file_type,
             'filePath' => $commonFiles->file_img,
             'isHidden' => $commonFiles->file_isdeleted
+        ];
+    }
+
+    public static function CourseList(CourseList $courseList){
+       // dd($courseList);
+        return [
+            'id' => $courseList->course_id,
+            'courseName' => $courseList->course_name,
+            'detail' => $courseList->course_detail,
+            'priority' => $courseList->course_priority,
+            'time' => $courseList->course_inserttime,
+            'isHidden' => $courseList->course_ishidden,
+            'isDeleted' => $courseList->course_isdeleted
+        ];
+    }
+
+    public static function ArticleList(ArticleList $articleList){
+//        dd($articleList->courseList->course_name) ;
+//        exit;
+        return [
+            'id' => $articleList->article_id,
+            'courseId' => $articleList->course_id,
+            'articleName' => $articleList->article_name,
+            'courseName' =>$articleList->courseList->course_name ?? "",
+            'content' => $articleList->article_content,
+            'isHidden' => $articleList->article_ishidden,
+            'isDeleted' => $articleList->article_isdeleted
+        ];
+    }
+
+    public static function ExerciseList(ExerciseList $exerciseList){
+        return [
+            'id' => $exerciseList->exercise_id,
+            'courseId' => $exerciseList->course_id,
+            'courseName' => $exerciseList->courseList->course_name ?? "",
+            'type' => $exerciseList->exercise_type,
+            'content' => $exerciseList->exercise_content,
+            'optionA' => $exerciseList->exercise_optionA,
+            'optionB' => $exerciseList->exercise_optionB,
+            'optionC' => $exerciseList->exercise_optionC,
+            'optionD' => $exerciseList->exercise_optionD,
+            'optionE' => $exerciseList->exercise_optionE,
+            'answer' => $exerciseList->exercise_answer,
+            'isHidden' => $exerciseList->exercise_ishidden,
+            'isDeleted' => $exerciseList->exercise_isdeleted
         ];
     }
 
