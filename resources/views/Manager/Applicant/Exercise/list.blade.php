@@ -21,6 +21,7 @@
                                 <th>题干</th>
                                 <th>所属课程</th>
                                 <th>类型</th>
+                                <th>答案</th>
                                 <th>状态</th>
                                 <th>操作</th>
                                 <th>操作</th>
@@ -31,13 +32,48 @@
                             @foreach($exercises as $exercise)
                                 <tr>
                                     <td>{!! $exercise['content'] !!}</td>
-                                    <td>{{ $exercise['courseId'] }}</td>
+                                    <td>{{ $exercise['courseName'] }}</td>
                                     <td>
                                         @if($exercise['type'] == 0)
                                             单选
                                         @else
                                             多选
                                         @endif
+                                    </td>
+                                    <td>
+                                        {{--@if($exercise['answerNumber'] == 1)A--}}
+                                        {{--@elseif($exercise['answerNumber'] ==  2)B--}}
+                                        {{--@elseif($exercise['answerNumber'] ==  4)C--}}
+                                        {{--@elseif($exercise['answerNumber'] ==  8)D--}}
+                                        {{--@elseif($exercise['answerNumber'] == 16)E--}}
+                                        {{--@elseif($exercise['answerNumber'] ==  3)AB--}}
+                                        {{--@elseif($exercise['answerNumber'] ==  5)AC--}}
+                                        {{--@elseif($exercise['answerNumber'] ==  9)AD--}}
+                                        {{--@elseif($exercise['answerNumber'] == 17)AE--}}
+                                        {{--@elseif($exercise['answerNumber'] ==  6)BC--}}
+                                        {{--@elseif($exercise['answerNumber'] == 10)BD--}}
+                                        {{--@elseif($exercise['answerNumber'] == 18)BE--}}
+                                        {{--@elseif($exercise['answerNumber'] == 12)CD--}}
+                                        {{--@elseif($exercise['answerNumber'] == 20)CE--}}
+                                        {{--@elseif($exercise['answerNumber'] == 24)DE--}}
+                                        {{--@elseif($exercise['answerNumber'] ==  7)ABC--}}
+                                        {{--@elseif($exercise['answerNumber'] == 11)ABD--}}
+                                        {{--@elseif($exercise['answerNumber'] == 19)ABE--}}
+                                        {{--@elseif($exercise['answerNumber'] == 13)ACD--}}
+                                        {{--@elseif($exercise['answerNumber'] == 21)ACE--}}
+                                        {{--@elseif($exercise['answerNumber'] == 25)ADE--}}
+                                        {{--@elseif($exercise['answerNumber'] == 14)BCD--}}
+                                        {{--@elseif($exercise['answerNumber'] == 22)BCE--}}
+                                        {{--@elseif($exercise['answerNumber'] == 26)BDE--}}
+                                        {{--@elseif($exercise['answerNumber'] == 28)CDE--}}
+                                        {{--@elseif($exercise['answerNumber'] == 15)ABCD--}}
+                                        {{--@elseif($exercise['answerNumber'] == 23)ABCE--}}
+                                        {{--@elseif($exercise['answerNumber'] == 27)ABDE--}}
+                                        {{--@elseif($exercise['answerNumber'] == 29)ACDE--}}
+                                        {{--@elseif($exercise['answerNumber'] == 30)BCDE--}}
+                                        {{--@elseif($exercise['answerNumber'] == 31)ABCDE--}}
+                                        {{--@endif--}}
+                                        {{ $exercise['answerLetter'] }}
                                     </td>
                                     <td>{{ $exercise['isHidden'] ? '隐藏' : '显示'}}</td>
                                     <td>
@@ -62,6 +98,7 @@
                                 <th>题干</th>
                                 <th>所属课程</th>
                                 <th>类型</th>
+                                <th>答案</th>
                                 <th>状态</th>
                                 <th>操作</th>
                                 <th>操作</th>

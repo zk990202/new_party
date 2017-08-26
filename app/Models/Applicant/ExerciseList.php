@@ -18,12 +18,19 @@ class ExerciseList extends Model
     protected $table = "twt_applicant_exerciselist";
     protected $primaryKey = 'exercise_id';
 
+    //创建时间字段
+    const CREATED_AT = 'created_at';
+
     protected $fillable = ['course_id', 'exercise_type', 'exercise_content', 'exercise_optionA', 'exercise_optionB',
         'exercise_optionC', 'exercise_optionC', 'exercise_optionD', 'exercise_optionE', 'exercise_answer',
         'exercise_ishidden', 'exercise_isdeleted'];
 
     public function courseList(){
         return $this->belongsTo('App\Models\Applicant\CourseList', 'course_id', 'course_id');
+    }
+
+    public function exerciseAnswerTransform(){
+        return $this->belongsTo('App\Models\Applicant\ExerciseAnswerTransform', 'exercise_answer', 'exercise_answer_number');
     }
 
     /**
@@ -42,6 +49,20 @@ class ExerciseList extends Model
     }
 
     /**
+     * 根据课程id获取文章
+     * @param $id
+     * @return array
+     */
+    public static function getExerciseById($id){
+        $exercises = self::where('course_id', $id)
+            ->where('exercise_isdeleted', 0)
+            ->get()->all();
+        return array_map(function ($exercise){
+            return Resources::ExerciseList($exercise);
+        }, $exercises);
+    }
+
+    /**
      * 更新题目
      * @param $id
      * @param $data
@@ -49,6 +70,7 @@ class ExerciseList extends Model
      */
     public static function updateById($id, $data){
         $exercise = self::findOrFail($id);
+        $exercise->course_id = $data['courseId'];
         $exercise->exercise_type = $data['type'];
         $exercise->exercise_content = $data['content'];
         $exercise->exercise_optionA = $data['optionA'];
@@ -56,9 +78,7 @@ class ExerciseList extends Model
         $exercise->exercise_optionC = $data['optionC'];
         $exercise->exercise_optionD = $data['optionD'];
         $exercise->exercise_optionE = $data['optionE'];
-        $exercise->exercise_answer = $data['answer'];
-        $exercise->exercise_ishidden = $data['isHidden'];
-        $exercise->exercise_isdeleted = $data['isDeleted'];
+        $exercise->exercise_answer = $data['answerNumber'];
 
         $res = $exercise->save();
         return $res ? Resources::ExerciseList($exercise) : false;
@@ -80,7 +100,7 @@ class ExerciseList extends Model
             'exercise_optionC' => $data['optionC'],
             'exercise_optionD' => $data['optionD'],
             'exercise_optionE' => $data['optionE'],
-            'exercise_answer' => $data['answer'],
+            'exercise_answer' => $data['answerNumber'],
             'exercise_ishidden' => 0,
             'exercise_isdeleted' => 0
         ]);

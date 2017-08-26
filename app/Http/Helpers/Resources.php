@@ -11,6 +11,7 @@ use App\Models\Academy\EntryForm as AcademyEntryForm;
 use App\Models\Academy\TestList as AcademyTestList;
 use App\Models\Applicant\ArticleList;
 use App\Models\Applicant\CourseList;
+use App\Models\Applicant\ExerciseAnswerTransform;
 use App\Models\Applicant\ExerciseList;
 use App\Models\CommonFiles;
 use App\Models\Notification;
@@ -104,9 +105,18 @@ class Resources {
             'optionC' => $exerciseList->exercise_optionC,
             'optionD' => $exerciseList->exercise_optionD,
             'optionE' => $exerciseList->exercise_optionE,
-            'answer' => $exerciseList->exercise_answer,
+            'answerNumber' => $exerciseList->exercise_answer,
+            'answerLetter' => $exerciseList->exerciseAnswerTransform->exercise_answer_letter ?? "",
             'isHidden' => $exerciseList->exercise_ishidden,
             'isDeleted' => $exerciseList->exercise_isdeleted
+        ];
+    }
+
+    public static function ExerciseAnswerTransform(ExerciseAnswerTransform $exerciseAnswerTransform){
+        return [
+            'id' => $exerciseAnswerTransform->id,
+            'answerNumber' => $exerciseAnswerTransform->exercise_answer_number,
+            'answerLetter' => $exerciseAnswerTransform->exercise_answer_letter
         ];
     }
 

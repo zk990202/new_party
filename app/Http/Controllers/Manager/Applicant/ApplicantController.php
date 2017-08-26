@@ -12,6 +12,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Helpers\Resources;
 use App\Models\Applicant\ArticleList;
 use App\Models\Applicant\CourseList;
+use App\Models\Applicant\ExerciseAnswerTransform;
 use App\Models\Applicant\ExerciseList;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
@@ -44,7 +45,12 @@ class ApplicantController extends Controller{
     }
 
     public function courseDetail($id){
-
+        $course = CourseList::getCourseById($id);
+//        dd($course);
+        $article = ArticleList::getArticleById($id);
+//        dd($article);
+        $exercise = ExerciseList::getExerciseById($id);
+        return view('Manager.Applicant.Course.detail', ['courses' => $course, 'articles' => $article, 'exercises' => $exercise]);
     }
 
     /**
@@ -189,7 +195,7 @@ class ApplicantController extends Controller{
         $article = ArticleList::findOrFail($id);
         $article = Resources::ArticleList($article);
         $course = CourseList::getCourse();
-        return view('Manager.Applicant.Article.edit', ['articles' => $article]);
+        return view('Manager.Applicant.Article.edit', ['articles' => $article, 'courses' => $course]);
     }
 
     /**
@@ -252,5 +258,159 @@ class ApplicantController extends Controller{
     public function exerciseList(){
         $exercise_arr = ExerciseList::getAll();
         return view('Manager.Applicant.Exercise.list', ['exercises' => $exercise_arr]);
+    }
+
+    /**
+     * 隐藏(显示)题目
+     * @param $id
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function exerciseHide($id){
+        $exerciseList = ExerciseList::findOrFail($id);
+        $exerciseList->exercise_ishidden = $exerciseList->exercise_ishidden ^ 1;
+        $exerciseList->save();
+        return response()->json([
+            'status' => 'success'
+        ]);
+    }
+
+    /**
+     * 删除题目
+     * @param $id
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function exerciseDelete($id){
+        $exerciseList = ExerciseList::findOrFail($id);
+        $exerciseList->isdeleted = 1;
+        $exerciseList->save();
+        return response()->json([
+            'status' => 'success'
+        ]);
+    }
+
+    /**
+     * 更新题目
+     * @param Request $request
+     * @param $id
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function exerciseEdit(Request $request, $id){
+        $courseId = $request->input('courseId');
+        $type = $request->input('type');
+        $content = $request->input('content');
+        $optionA = $request->input('optionA');
+        $optionB = $request->input('optionB');
+        $optionC = $request->input('optionC');
+        $optionD = $request->input('optionD');
+        $optionE = $request->input('optionE');
+        $answerNumber = $request->input('answerNumber');
+        try{
+            $res = ExerciseList::updateById($id, [
+                'courseId' => $courseId,
+                'type' => $type,
+                'content' => $content,
+                'optionA' => $optionA,
+                'optionB' => $optionB,
+                'optionC' => $optionC,
+                'optionD' => $optionD,
+                'optionE' => $optionE,
+                'answerNumber' => $answerNumber
+            ]);
+            if($res){
+                return response()->json([
+                    'info' => $res,
+                    'success' => true
+                ]);
+            }
+            else{
+                return response()->json([
+                    'message' => '更新失败，请联系后台管理员'
+                ]);
+            }
+        }catch (ModelNotFoundException $e){
+            return response()->json([
+                'message' => 'id有误，未找到'
+            ]);
+        }catch (Exception $e){
+            return response()->json([
+                'message' => '更新失败'
+            ]);
+        }
+    }
+
+    /**
+     * @param $id
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function exerciseEditPage($id){
+        $exercise = ExerciseList::findOrFail($id);
+        $exercise = Resources::ExerciseList($exercise);
+        $course = CourseList::getCourse();
+        $answer = ExerciseAnswerTransform::getAnswer();
+        return view('Manager.Applicant.Exercise.edit', ['exercises' => $exercise, 'courses' => $course, 'answers' => $answer]);
+    }
+
+    /**
+     * 添加题目
+     * @param Request $request
+     * @param $course_id
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function exerciseAdd(Request $request, $course_id){
+        $type = $request->input('type');
+        $content = $request->input('content');
+        $optionA = $request->input('optionA');
+        $optionB = $request->input('optionB');
+        $optionC = $request->input('optionC');
+        $optionD = $request->input('optionD');
+        $optionE = $request->input('optionE');
+        $answerNumber = $request->input('answerNumber');
+        if(!$type || !$content || !$optionA || !$optionB|| !$optionC || !$optionD){
+            return response()->json([
+                'message' => '参数丢失(注意：A、B、C、D选项不可为空，E选项可为空)'
+            ]);
+        }
+        $res = ExerciseList::add($course_id, [
+            'type' => $type,
+            'content' => $content,
+            'optionA' => $optionA,
+            'optionB' => $optionB,
+            'optionC' => $optionC,
+            'optionD' => $optionD,
+            'optionE' => $optionE,
+            'answerNumber' => $answerNumber
+        ]);
+        if($res){
+            return response()->json([
+                'success' => true,
+                'info' => $res
+            ]);
+        }
+        return response()->json([
+            'message' => '添加失败，请联系后台管理员'
+        ]);
+    }
+
+    /**
+     * @param $course_id
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function exerciseAddPage($course_id){
+        $course = CourseList::getCourseById($course_id);
+        $answer = ExerciseAnswerTransform::getAnswer();
+        return view('Manager.Applicant.Exercise.add', ['courses' => $course, 'answers' => $answer]);
+    }
+
+    public function getExerciseById($id)
+    {
+        try {
+            $exercise = ExerciseList::findOrFail($id);
+            return response()->json([
+                'success' => true,
+                'info' => Resources::ExerciseList($exercise)
+            ]);
+        } catch (ModelNotFoundException $e) {
+            return response()->json(['message' => 'Exercise not found']);
+        }
     }
 }

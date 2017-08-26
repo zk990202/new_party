@@ -41,6 +41,20 @@ class ArticleList extends Model
     }
 
     /**
+     * 根据课程id获取文章
+     * @param $id
+     * @return array
+     */
+    public static function getArticleById($id){
+        $articles = self::where('course_id', $id)
+            ->where('article_isdeleted', 0)
+            ->get()->all();
+        return array_map(function ($article){
+            return Resources::ArticleList($article);
+        }, $articles);
+    }
+
+    /**
      * 更新文章
      * @param $id
      * @param $data

@@ -28,7 +28,7 @@
                             @foreach($courses as $course)
                                 <tr>
                                     <td>
-                                        <a href="{{ url('manager/applicant/course/{id}/detail') }}">
+                                        <a href="{{ url('manager/applicant/course/'.$course['id'].'/detail') }}">
                                             {{ $course['courseName'] }}
                                         </a>
                                     </td>
