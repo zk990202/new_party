@@ -11,8 +11,11 @@ use App\Models\Academy\EntryForm as AcademyEntryForm;
 use App\Models\Academy\TestList as AcademyTestList;
 use App\Models\Applicant\ArticleList;
 use App\Models\Applicant\CourseList;
+use App\Models\Applicant\EntryForm;
 use App\Models\Applicant\ExerciseAnswerTransform;
 use App\Models\Applicant\ExerciseList;
+use App\Models\Applicant\TestList;
+use App\Models\Cert;
 use App\Models\CommonFiles;
 use App\Models\Notification;
 use App\Models\SpecialNews;
@@ -117,6 +120,82 @@ class Resources {
             'id' => $exerciseAnswerTransform->id,
             'answerNumber' => $exerciseAnswerTransform->exercise_answer_number,
             'answerLetter' => $exerciseAnswerTransform->exercise_answer_letter
+        ];
+    }
+
+    public static function TestList(TestList $testList){
+        return [
+            'id' => $testList->test_id,
+            'name' => $testList->test_name,
+            'time' => $testList->test_begintime,
+            'attention' => $testList->test_attention,
+            'fileName' => $testList->test_filename,
+            'filePath' => $testList->test_filepath,
+            'status' => $testList->test_status,
+            'isDeleted' => $testList->test_isdeleted
+        ];
+    }
+
+    public static function EntryForm(EntryForm $entryForm){
+        return [
+            'id' => $entryForm->entry_id,
+            'testId' => $entryForm->test_id,
+            'sno' => $entryForm->sno,
+            'academyId' => $entryForm->studentInfo->academy_id,
+            'academyName' => $entryForm->studentInfo->college->shortname,
+            'majorName' => $entryForm->userInfo->major->majorname ?? '',
+            'studentName' => $entryForm->user->username ?? '',
+            'time' => $entryForm->entry_time,
+            'practiceGrade' => $entryForm->entry_practicegrade,
+            'articleGrade' => $entryForm->entry_articlegrade,
+            'isLastAdded' => $entryForm->entry_islastadded,
+            'isSystemAdd' => $entryForm->is_systemadd,
+            'isPassed' => $entryForm->entry_ispassed,
+            'status' => $entryForm->entry_status,
+            'certIsGrant' => $entryForm->cert_isgrant,
+            'campus' => $entryForm->campus
+        ];
+    }
+
+    public static function Cert(Cert $cert){
+        return [
+            'id' => $cert->cert_id,
+            'sno' => $cert->sno,
+            'studentName' => $cert->user->username ?? '',
+            'academyId' => $cert->studentInfo->academy_id,
+            'academyName' => $cert->studentInfo->college->shortname,
+            'majorName' => $cert->userInfo->major->majorname ?? '',
+            'entryId' => $cert->entry_id,
+            'certNumber' => $cert->cert_no,
+            'type' => $cert->cert_type,
+            'time' => $cert->cert_time,
+            'getPerson' => $cert->cert_getperson,
+            'place' => $cert->cert_place,
+            'isLost' => $cert->cert_islost,
+            'isDeleted' => $cert->isdeleted,
+            'practiceGrade' => $cert->entryForm->entry_practicegrade,
+            'articleGrade' => $cert->entryForm->entry_articlegrade
+        ];
+    }
+
+    public static function CertLost($certLost){
+        return [
+            'lostId' => $certLost->lost_id,
+            'sno' => $certLost->cert->sno,
+            'testName' => $certLost->cert->entryForm->testList->test_name ?? '',
+            'studentName' => $certLost->cert->user->username ?? '',
+            'academyName' => $certLost->cert->studentInfo->college->shortname,
+            'majorName' => $certLost->cert->userInfo->major->majorname ?? '',
+            'certId' => $certLost->cert_id,
+            'certType' => $certLost->cert->cert_type,
+            'title' => $certLost->title,
+            'content' => $certLost->content,
+            'time' => $certLost->time,
+            'dealStatus' => $certLost->deal_status,
+            'dealWord' => $certLost->deal_word,
+            'isDeleted' => $certLost->isdeleted,
+            'getPerson' => $certLost->cert->cert_getperson,
+            'place' => $certLost->cert->cert_place
         ];
     }
 

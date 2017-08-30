@@ -44,7 +44,7 @@
                                             <button type="button" class="btn btn-block btn-info btn-xs">编辑</button></a>
                                     </td>
                                     <td>
-                                        <button type="button" class="btn btn-block btn-info btn-xs" onclick="if(confirm('确认要执行该项操作?此操作是不可恢复操作,是否继续?')) deleteArticle({{ $article['id'] }})">删除</button>
+                                        <button type="button" class="btn btn-block btn-success btn-xs" onclick="if(confirm('确认要执行该项操作?此操作是不可恢复操作,是否继续?')) deleteArticle({{ $article['id'] }})">删除</button>
                                     </td>
                                 </tr>
                             @endforeach

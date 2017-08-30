@@ -412,56 +412,76 @@ class ModuleTableSeeder extends Seeder
             'parent_id' => 10,
             'name'      => '结业成绩查询',
             'auth'      => 1,
-            'url'       => 'manager/applicant/graduate-grade'
+            'url'       => 'manager/applicant/grade-list'
         ]);
         DB::table('twt_manager_modules')->insert([
             'self_id'   => 218,
             'parent_id' => 10,
             'name'      => '成绩统计',
             'auth'      => 1,
-            'url'       => 'manager/applicant/grade-statistics'
+            'url'       => 'manager/applicant/grade-count'
         ]);
         DB::table('twt_manager_modules')->insert([
             'self_id'   => 219,
             'parent_id' => 10,
             'name'      => '证书管理',
             'auth'      => 1,
-            'url'       => 'manager/applicant/certificate'
         ]);
         DB::table('twt_manager_modules')->insert([
             'self_id'   => 220,
-            'parent_id' => 10,
-            'name'      => '申诉管理',
+            'parent_id' => 219,
+            'name'      => '发放详情',
             'auth'      => 1,
-            'url'       => 'manager/applicant/appeal'
+            'url'       => 'manager/applicant/certificate/list'
         ]);
         DB::table('twt_manager_modules')->insert([
             'self_id'   => 221,
+            'parent_id' => 219,
+            'name'      => '证书发放',
+            'auth'      => 1,
+            'url'       => 'manager/applicant/certificate/grant'
+        ]);
+        DB::table('twt_manager_modules')->insert([
+            'self_id'   => 222,
+            'parent_id' => 219,
+            'name'      => '证书补发',
+            'auth'      => 1,
+            'url'       => 'manager/applicant/certificate/last-grant'
+        ]);
+        DB::table('twt_manager_modules')->insert([
+            'self_id'   => 223,
+            'parent_id' => 10,
+            'name'      => '申诉管理',
+            'auth'      => 1,
+            'url'       => 'manager/applicant/complain'
+        ]);
+        DB::table('twt_manager_modules')->insert([
+            'self_id'   => 224,
             'parent_id' => 10,
             'name'      => '作弊+违纪',
             'auth'      => 1,
             'url'       => 'manager/applicant/cheat'
         ]);
         DB::table('twt_manager_modules')->insert([
-            'self_id'   => 222,
+            'self_id'   => 225,
             'parent_id' => 10,
             'name'      => '被锁人员名单',
             'auth'      => 1,
-            'url'       => 'manager/applicant/lock'
+            'url'       => 'manager/applicant/locked'
         ]);
         DB::table('twt_manager_modules')->insert([
-            'self_id'   => 223,
+            'self_id'   => 226,
             'parent_id' => 10,
-            'name'      => '20课被清名单',
+            'name'      => '被清人员名单',
             'auth'      => 1,
-            'url'       => 'manager/applicant/clear'
+            'url'       => 'manager/applicant/clear20'
         ]);
-        DB::table('twt_manager_modules')->insert([
-            'self_id'   => 224,
-            'parent_id' => 10,
-            'name'      => '20课成绩查询',
-            'auth'      => 1,
-            'url'       => 'manager/applicant/grade-inquire'
-        ]);
+//        DB::table('twt_manager_modules')->insert([
+//            'self_id'   => 224,
+//            'parent_id' => 10,
+//            'name'      => '20课成绩查询',
+//            'auth'      => 1,
+//            'url'       => 'manager/applicant/grade20'
+//        ]);
     }
 }

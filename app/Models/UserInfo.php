@@ -8,4 +8,8 @@ class UserInfo extends Model
 {
     //
     protected $table = "b_userinfo";
+
+    public function major(){
+        return $this->belongsTo('App\Models\Major', 'major', 'majorid');
+    }
 }

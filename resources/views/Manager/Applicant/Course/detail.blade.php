@@ -10,7 +10,7 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="box box-primary">
-                    <form role="form" enctype="multipart/form-data">
+
 
                         <div class="box-header with-border">
                             <h3 class="box-title">课程详情</h3>
@@ -71,10 +71,8 @@
                         {{--</div>--}}
                         <!-- /.box-body -->
                         <input type="hidden" id="coursesId" value="{{ $courses[0]['id'] }}">
-                    </form>
-                    <div class="box-footer">
-                        <button id="submitButton" type="button" class="btn btn-primary">提交</button>
-                    </div>
+
+
                 </div>
             </div>
         </div>

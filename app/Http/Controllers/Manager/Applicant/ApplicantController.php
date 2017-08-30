@@ -12,13 +12,26 @@ use App\Http\Controllers\Controller;
 use App\Http\Helpers\Resources;
 use App\Models\Applicant\ArticleList;
 use App\Models\Applicant\CourseList;
+use App\Models\Applicant\EntryForm;
 use App\Models\Applicant\ExerciseAnswerTransform;
 use App\Models\Applicant\ExerciseList;
+use App\Models\Applicant\TestList;
+use App\Models\Cert;
+use App\Models\CertLost;
+use App\Models\College;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Mockery\Exception;
 
 class ApplicantController extends Controller{
+
+    protected $fileExtensions;
+    protected $fileUsage = "applicantFile";
+
+    public function __construct()
+    {
+        $this->fileExtensions = config('fileUpload');
+    }
 
     //----------------------以下是课程设置部分--------------------------------------------------------------
     /**
@@ -411,6 +424,342 @@ class ApplicantController extends Controller{
             ]);
         } catch (ModelNotFoundException $e) {
             return response()->json(['message' => 'Exercise not found']);
+        }
+    }
+
+    //---------------------以下是题目管理部分--------------------------------------------------------------
+
+    /**
+     * 考试列表
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function examList(){
+        $exams = TestList::getAll();
+        return view('Manager.Applicant.Exam.list', ['exams' => $exams]);
+    }
+
+    /**
+     * 考试详情
+     * @param $id
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function examDetail($id){
+        $exam = TestList::getExamById($id);
+        return view('Manager.Applicant.Exam.detail', ['exam' => $exam]);
+    }
+
+    /**
+     * 删除考试
+     * @param $id
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function examDelete($id){
+        $testList = TestList::findOrFail($id);
+        $testList->test_isdeleted = 1;
+        $testList->save();
+        return response()->json([
+            'status' => 'success'
+        ]);
+    }
+
+    /**
+     * 附件下载
+     * @param $id
+     * @return \Symfony\Component\HttpFoundation\BinaryFileResponse
+     */
+    public function examDownload($id){
+        $exam = TestList::getExamById($id);
+        $fileName = $exam[0]['fileName'];
+        $filePath = $exam[0]['filePath'];
+        $res = realpath(base_path($filePath)) . DIRECTORY_SEPARATOR . $fileName;
+        return response()->download($res);
+    }
+
+    /**
+     * 修改考试
+     * @param Request $request
+     * @param $id
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function examEdit(Request $request, $id){
+        $name = $request->input('name');
+        $time = $request->input('time');
+        $attention = $request->input('attention');
+        $fileName = $request->input('fileName');
+        $filePath = $request->input('filePath');
+        try{
+            $res = TestList::updateById($id, [
+                'name' => $name,
+                'time' => $time,
+                'attention' => $attention,
+                'fileName' => $fileName,
+                'filePath' => $filePath
+            ]);
+            if($res){
+                return response()->json([
+                    'info' => $res,
+                    'success' => true
+                ]);
+            }
+            else{
+                return response()->json([
+                    'message' => '更新失败，请联系后台管理员'
+                ]);
+            }
+        }catch (ModelNotFoundException $e){
+            return response()->json([
+                'message' => 'id有误，未找到'
+            ]);
+        }catch (Exception $e){
+            return response()->json([
+                'message' => '更新失败'
+            ]);
+        }
+    }
+
+    /**
+     * @param $id
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function examEditPage($id){
+        $exam = TestList::findOrFail($id);
+        $exam = Resources::TestList($exam);
+        return view('Manager.Applicant.Exam.edit', ['exam' => $exam]);
+    }
+
+    /**
+     * 添加考试
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function examAdd(Request $request){
+        $name = $request->input('name');
+        $time = $request->input('time');
+        $attention = $request->input('attention');
+        $fileName = $request->input('fileName') ?? '';
+        $filePath = $request->input('filePath') ?? '';
+        if(!$name || !$time){
+            return response()->json([
+                'message' => '参数丢失'
+            ]);
+        }
+        $res = TestList::add([
+            'name' => $name,
+            'time' => $time,
+            'attention' => $attention,
+            'fileName' => $fileName,
+            'filePath' => $filePath
+        ]);
+        if($res){
+            return response()->json([
+                'success' => true,
+                'info' => $res
+            ]);
+        }
+        return response()->json([
+            'message' => '添加失败，请了联系后台管理员'
+        ]);
+    }
+
+    /**
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function examAddPage(){
+        return view('Manager.Applicant.Exam.add');
+    }
+
+    public function getExamById($id){
+        try{
+            $exam = TestList::findOrFail($id);
+            return response()->json([
+                'success' => true,
+                'info' => Resources::TestList($exam)
+            ]);
+        }catch (ModelNotFoundException $e){
+            return response()->json(['message' => 'Exam not found']);
+        }
+
+    }
+
+    //--------------------以下是结业成绩统计模块--------------------------------------------------
+
+    /**
+     * 成绩筛选界面
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function gradeListPage(){
+        $exams = TestList::getAll();
+        $colleges = College::getAll();
+        return view('Manager.Applicant.Grade.listPage', ['exams' => $exams, 'colleges' => $colleges]);
+    }
+
+    /**
+     * 筛选结果
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function gradeList(Request $request){
+        $testId = $request->input('testId');
+        $college = $request->input('college');
+//        dd($college);
+        $res = EntryForm::getGrade($testId, $college);
+//        dd($res);
+        return view('Manager.Applicant.Grade.list', ['grades' => $res]);
+    }
+
+    //------------------------证书管理------------------------------------------------------------------
+
+    /**
+     * 证书筛选界面
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function certificateListPage(){
+        $exams = TestList::getAll();
+        $colleges = College::getAll();
+        return view('Manager.Applicant.Certificate.listPage', ['exams' => $exams, 'colleges' => $colleges]);
+    }
+
+    /**
+     * 证书筛选结果
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function certificateList(Request $request){
+        $testId = $request->input('testId');
+        $college = $request->input('college');
+        $max = EntryForm::getMaxEntryId($testId);
+        $min = EntryForm::getMinEntryId($testId);
+        $res = Cert::getCert($max, $min, $college);
+//        dd($res);
+        return view('Manager.Applicant.Certificate.list', ['certificates' => $res]);
+    }
+
+    /**
+     * 筛选考试合格但未发放证书的学生
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function certificateGrantPage(){
+        $exams = TestList::getAll();
+        $colleges = College::getAll();
+        return view('Manager.Applicant.Certificate.grantPage', ['exams' => $exams, 'colleges' => $colleges]);
+    }
+
+    /**
+     * 筛选结果
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function certificateGrant(Request $request){
+        $testId = $request->input('testId');
+        $college = $request->input('college');
+        $res = EntryForm::getCert($testId, $college);
+//        dd($res);
+        return view('Manager.Applicant.Certificate.grant', ['certificates' => $res]);
+    }
+
+    /**
+     * 结果展示页
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function certificateGrantResult(Request $request){
+        $sno = $request->input('sno');
+//        dd($sno);
+        $entryId = EntryForm::getEntryId($sno);
+//        dd($entryId[0]['entry_id']);
+        $getPerson = $request->input('getPerson');
+        $place = $request->input('place');
+
+        //查询结果分类
+        for($i = 0; $i < count($sno); $i++){
+            Cert::addCert($sno, $entryId, $getPerson, $place, $i);
+            $res = EntryForm::updateCert($sno, $i);
+        }
+        if(!$sno || !$getPerson || !$place){
+            $res_type = 0;
+        }
+        else{
+            $res_type = 1;
+        }
+        return view('Manager.Applicant.Certificate.grantResult', ['res_type' => $res_type]);
+    }
+
+    /**
+     * 申请补办证书的列表
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function certificateLastGrant(){
+        $certLost = CertLost::getCertLost();
+        return view('Manager.Applicant.Certificate.lastGrant', ['certLosts' => $certLost]);
+    }
+
+    public function certificateLastGrantDetailPage($id){
+        $certLost = CertLost::getCertLostById($id);
+        return view('Manager.Applicant.Certificate.lastGrantDetail', ['certLost' => $certLost]);
+    }
+
+    /**
+     * 通过补办
+     * @param Request $request
+     * @param $id
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function certificateLastGrantDetail(Request $request, $id){
+        $dealWord = $request->input('dealWord');
+        $sno = $request->input('sno');
+        $entryId = EntryForm::getEntryId($sno);
+        $getPerson = $request->input('getPerson');
+        $place = $request->input('place');
+        $certType = $request->input('certType');
+        Cert::addLastCert($sno, $entryId, $getPerson, $place, $certType);
+        $res = CertLost::updateCertLost($id, $dealWord);
+        if($res){
+            return response()->json([
+                'success' => true,
+                'info' => $res
+            ]);
+        }
+        else{
+            return response()->json([
+                'message' => '补办失败'
+            ]);
+        }
+    }
+
+    /**
+     * 驳回补办
+     * @param Request $request
+     * @param $id
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function certificateLastGrantReject(Request $request, $id){
+        $dealWord = $request->input('dealWord');
+        $res = CertLost::updateCertLostReject($id, $dealWord);
+        if ($res){
+            return response()->json([
+                'success' => true,
+                'info' => $res
+            ]);
+        }
+        else{
+            return response()->json([
+                'message' => '驳回失败'
+            ]);
+        }
+    }
+
+
+    public function getCertificateById($id){
+        try{
+            $certLost = CertLost::findOrFail($id);
+            return response()->json([
+                'success' => true,
+                'info' => Resources::CertLost($certLost)
+            ]);
+        }catch (ModelNotFoundException $e){
+            return response()->json([
+                'message' => 'CertLost Not Found'
+            ]);
         }
     }
 }

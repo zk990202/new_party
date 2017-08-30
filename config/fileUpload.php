@@ -13,7 +13,7 @@ $videoExtensions = [
     'mp4', 'avi', 'wmv', 'png', 'jpeg', 'gif', 'jpg', 'bmp', 'mov'
 ];
 $fileExtensions = [
-    'zip', 'rar', 'tar', 'tar.gz', 'tar.bz2'
+    'zip', 'rar', 'tar', 'tar.gz', 'tar.bz2', 'doc', 'docx'
 ];
 $eBookExtensions = [
     'txt', 'chm', 'pdf', 'epub'
@@ -56,6 +56,11 @@ return [
         'theoryStudyEBook' => [
             'path' => 'eBook/theoryStudy',
             'extensions' => $eBookExtensions,
+            'disk' => 'public'
+        ],
+        'applicantFile' => [
+            'path' => 'files/applicant',
+            'extensions' => $fileExtensions,
             'disk' => 'public'
         ]
     ]
