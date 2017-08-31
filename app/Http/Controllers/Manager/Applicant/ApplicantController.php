@@ -19,6 +19,7 @@ use App\Models\Applicant\TestList;
 use App\Models\Cert;
 use App\Models\CertLost;
 use App\Models\College;
+use App\Models\Complain;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Mockery\Exception;
@@ -471,8 +472,10 @@ class ApplicantController extends Controller{
         $exam = TestList::getExamById($id);
         $fileName = $exam[0]['fileName'];
         $filePath = $exam[0]['filePath'];
-        $res = realpath(base_path($filePath)) . DIRECTORY_SEPARATOR . $fileName;
-        return response()->download($res);
+//        $res = base_path($filePath);
+//        $res = realpath(base_path($filePath));
+        $res = $filePath;
+        return response()->download($res, $fileName);
     }
 
     /**
@@ -759,6 +762,76 @@ class ApplicantController extends Controller{
         }catch (ModelNotFoundException $e){
             return response()->json([
                 'message' => 'CertLost Not Found'
+            ]);
+        }
+    }
+
+    //--------------------以下是申诉管理部分--------------------------------------------------------------
+    /**
+     * 申诉列表
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function complainList(){
+        $complains = Complain::getAll();
+        return view('Manager.Applicant.Complain.list', ['complains' => $complains]);
+    }
+
+    /**
+     * 展示未回复的页面
+     * @param $id
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function complainDetailPage($id){
+        $complain = Complain::getComplainById($id);
+        $sno = $complain[0]['fromSno'];
+        $testId = $complain[0]['testId'];
+        $grade = EntryForm::getGradeBySnoAndTestId($sno, $testId);
+//        dd($grade);
+        return view('Manager.Applicant.Complain.detail', ['complain' => $complain, 'grade' => $grade]);
+    }
+
+    public function complainDetailPage_1($id){
+        $complain = Complain::getComplainById($id);
+        $sno = $complain[0]['fromSno'];
+        $testId = $complain[0]['testId'];
+        $grade = EntryForm::getGradeBySnoAndTestId($sno, $testId);
+        $reply = Complain::getReply($id);
+        return view('Manager.Applicant.Complain.detail_1', ['complain' => $complain, 'grade' => $grade, 'reply' => $reply]);
+    }
+
+    /**
+     * 回复申诉
+     * @param Request $request
+     * @param $id
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function complainDetail(Request $request, $id){
+        $title = $request->input('title');
+        $content = $request->input('content');
+        $sno = $request->input('sno');
+        $res = Complain::addReply($id, $sno, $title, $content);
+        if($res){
+            return response()->json([
+                'success' => true,
+                'info' => $res
+            ]);
+        }else{
+            return response()->json([
+                'message' => '回复失败'
+            ]);
+        }
+    }
+
+    public function getComplainById($id){
+        try{
+            $complain = Complain::findOrFail($id);
+            return response()->json([
+                'success' => true,
+                'info' => Resources::Complain($complain)
+            ]);
+        }catch (ModelNotFoundException $e){
+            return response()->json([
+                'message' => 'Complaint Not Found'
             ]);
         }
     }

@@ -199,6 +199,25 @@ class Resources {
         ];
     }
 
+    public static function Complain($complain){
+        return [
+            'id' => $complain->id,
+            'fromSno' => $complain->from_sno,
+            'toSno' => $complain->to_sno,
+            'studentName' => $complain->user->username ?? '',
+            'academyId' => $complain->collegeid,
+            'academyName' => $complain->userInfo->college->shortname ?? '',
+            'testId' => $complain->test_id,
+            'title' => $complain->title,
+            'content' => $complain->content,
+            'type' => $complain->type,
+            'time' => $complain->time,
+            'isRead' => $complain->isread,
+            'isReply' => $complain->isreplay,
+            'testName' => $complain->testList->test_name ?? ''
+        ];
+    }
+
     public static function File($file){
         return [
             'id'    => $file->id,

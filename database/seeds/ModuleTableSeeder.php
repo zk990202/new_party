@@ -414,13 +414,13 @@ class ModuleTableSeeder extends Seeder
             'auth'      => 1,
             'url'       => 'manager/applicant/grade-list'
         ]);
-        DB::table('twt_manager_modules')->insert([
-            'self_id'   => 218,
-            'parent_id' => 10,
-            'name'      => '成绩统计',
-            'auth'      => 1,
-            'url'       => 'manager/applicant/grade-count'
-        ]);
+//        DB::table('twt_manager_modules')->insert([
+//            'self_id'   => 218,
+//            'parent_id' => 10,
+//            'name'      => '成绩统计',
+//            'auth'      => 1,
+//            'url'       => 'manager/applicant/grade-count'
+//        ]);
         DB::table('twt_manager_modules')->insert([
             'self_id'   => 219,
             'parent_id' => 10,

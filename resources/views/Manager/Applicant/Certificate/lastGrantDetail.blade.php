@@ -131,60 +131,64 @@
                 }
             });
             $('#submitButtonPass').click(function () {
-                var form = new FormData();
-                form.append('sno', $('#sno').val());
-                form.append('certType', $('#certType').val());
-                form.append('getPerson', $('#getPerson').val());
-                form.append('place', $('#place').val());
-                form.append('lostId', $('#lostId').val());
-                form.append('dealWord', $('#editor').val());
-                $.ajax({
-                    url: '/manager/applicant/certificate/last-grant/' + $('#lostId').val() + '/detail',
-                    type: 'POST',
-                    data: form,
-                    cache: false,
-                    dataType: 'json',
-                    processData: false,
-                    contentType: false,
-                    success: function(data){
-                        if(data.success){
-                            alert('补办成功');
-                            window.location.href = '/manager/applicant/certificate/last-grant';
+                if(confirm('是否确认通过补办？')){
+                    var form = new FormData();
+                    form.append('sno', $('#sno').val());
+                    form.append('certType', $('#certType').val());
+                    form.append('getPerson', $('#getPerson').val());
+                    form.append('place', $('#place').val());
+                    form.append('lostId', $('#lostId').val());
+                    form.append('dealWord', $('#editor').val());
+                    $.ajax({
+                        url: '/manager/applicant/certificate/last-grant/' + $('#lostId').val() + '/detail',
+                        type: 'POST',
+                        data: form,
+                        cache: false,
+                        dataType: 'json',
+                        processData: false,
+                        contentType: false,
+                        success: function(data){
+                            if(data.success){
+                                alert('补办成功');
+                                window.location.href = '/manager/applicant/certificate/last-grant';
+                            }
+                            else{
+                                alert(data.message);
+                            }
+                        },
+                        error: function(){
+                            alert(data.statusText);
                         }
-                        else{
-                            alert(data.message);
-                        }
-                    },
-                    error: function(){
-                        alert(data.statusText);
-                    }
-                });
+                    });
+                }
             });
             $('#submitButtonReject').click(function () {
-                var form = new FormData();
-                form.append('lostId', $('#lostId').val());
-                form.append('dealWord', $('#editor').val());
-                $.ajax({
-                    url: '/manager/applicant/certificate/last-grant/' + $('#lostId').val() + '/reject',
-                    type: 'POST',
-                    data: form,
-                    cache: false,
-                    dataType: 'json',
-                    processData: false,
-                    contentType: false,
-                    success: function (data) {
-                        if (data.success) {
-                            alert('驳回成功');
-                            window.location.href = '/manager/applicant/certificate/last-grant';
+                if(confirm('是否确认驳回补办？')){
+                    var form = new FormData();
+                    form.append('lostId', $('#lostId').val());
+                    form.append('dealWord', $('#editor').val());
+                    $.ajax({
+                        url: '/manager/applicant/certificate/last-grant/' + $('#lostId').val() + '/reject',
+                        type: 'POST',
+                        data: form,
+                        cache: false,
+                        dataType: 'json',
+                        processData: false,
+                        contentType: false,
+                        success: function (data) {
+                            if (data.success) {
+                                alert('驳回成功');
+                                window.location.href = '/manager/applicant/certificate/last-grant';
+                            }
+                            else {
+                                alert(data.message);
+                            }
+                        },
+                        error: function () {
+                            alert(data.statusText);
                         }
-                        else {
-                            alert(data.message);
-                        }
-                    },
-                    error: function () {
-                        alert(data.statusText);
-                    }
-                })
+                    })
+                }
             });
 
         });

@@ -107,6 +107,15 @@ class EntryForm extends Model
         return $res;
     }
 
+    public static function getGradeBySnoAndTestId($sno, $testId){
+        $res = self::where('sno', $sno)
+            ->where('test_id', $testId)
+            ->get()->all();
+        return array_map(function ($entryForm){
+            return Resources::EntryForm($entryForm);
+        }, $res);
+    }
+
     public static function updateCert($sno, $i){
         $res = self::where('sno', $sno[$i])
             ->update(['cert_isgrant' => 1]);

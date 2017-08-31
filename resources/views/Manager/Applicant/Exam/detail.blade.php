@@ -59,7 +59,10 @@
                                 <th>附件</th>
                                 <td>
                                     @if($exam[0]['fileName'])
-                                        <a href="{{ url('manager/applicant/exam/'.$exam[0]['id'].'/download') }}">{{ $exam[0]['fileName'] }}</a>
+                                        {{--<a href="{{ url('manager/applicant/exam/'.$exam[0]['id'].'/download') }}">{{ $exam[0]['fileName'] }}</a>--}}
+                                        <a href="{{ $exam[0]['filePath'] }}">{{ $exam[0]['fileName'] }}</a>
+                                    @else
+                                        无附件
                                     @endif
                                 </td>
                             </tr>

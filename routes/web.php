@@ -297,7 +297,13 @@ Route::group(['namespace' => 'Manager', 'prefix' => 'manager'], function (){
 
         // 申诉管理
         Route::group(['prefix' => 'complain'], function(){
-
+            //证书列表
+            Route::get('/', 'ApplicantController@complainList');
+            //申诉回复
+            Route::get('{id}/detail', 'ApplicantController@complainDetailPage');
+            Route::get('{id}/detail_1', 'ApplicantController@complainDetailPage_1');
+            Route::post('{id}/detail', 'ApplicantController@complainDetail');
+            Route::get('{id}', 'ApplicantController@getComplainById');
         });
     });
 

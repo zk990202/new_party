@@ -12,4 +12,8 @@ class UserInfo extends Model
     public function major(){
         return $this->belongsTo('App\Models\Major', 'major', 'majorid');
     }
+
+    public function college(){
+        return $this->belongsTo('App\Models\College', 'collegeid', 'id');
+    }
 }
