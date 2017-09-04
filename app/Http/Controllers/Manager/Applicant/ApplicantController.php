@@ -20,8 +20,11 @@ use App\Models\Cert;
 use App\Models\CertLost;
 use App\Models\College;
 use App\Models\Complain;
+use App\Models\ScoresTwenty;
+use App\Models\StudentInfo;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Mockery\Exception;
 
 class ApplicantController extends Controller{
@@ -155,14 +158,14 @@ class ApplicantController extends Controller{
      * @param $id
      * @return \Illuminate\Http\JsonResponse
      */
-    public function articleDelete($id){
+   public function articleDelete($id){
         $articleList = articleList::findOrFail($id);
         $articleList->article_isdeleted = 1;
         $articleList->save();
         return response()->json([
             'status' => 'success'
         ]);
-    }
+   }
 
     /**
      * 更新文章
@@ -428,7 +431,7 @@ class ApplicantController extends Controller{
         }
     }
 
-    //---------------------以下是题目管理部分--------------------------------------------------------------
+    //---------------------以下是考试控制部分--------------------------------------------------------------
 
     /**
      * 考试列表
@@ -475,8 +478,10 @@ class ApplicantController extends Controller{
 //        $res = base_path($filePath);
 //        $res = realpath(base_path($filePath));
         $res = $filePath;
+        dd(base_path($filePath));
+        dd(realpath(base_path('public/js')));
         return response()->download($res, $fileName);
-    }
+}
 
     /**
      * 修改考试
@@ -584,8 +589,91 @@ class ApplicantController extends Controller{
 
     }
 
-    //--------------------以下是结业成绩统计模块--------------------------------------------------
+    //-------------------------------以下是报名情况模块-----------------------------------------------------
+    /**
+     * 报名列表
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function signList(){
+        $signs = EntryForm::getAllSign();
+        return view('Manager.Applicant.Sign.list', ['signs' => $signs]);
+    }
 
+    /**
+     * 退考列表
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function signExit(){
+        $signs = EntryForm::getSignExit();
+        return view('Manager.Applicant.Sign.exit', ['signs' => $signs]);
+    }
+
+    /**
+     * 补考报名页面
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function signMakeupPage(){
+        $signs = EntryForm::getAllSign();
+        return view('Manager.Applicant.Sign.makeup', ['signs' => $signs]);
+    }
+
+    /**
+     * 补考报名后台逻辑
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function signMakeup(Request $request){
+        $id = $request->input('id');
+        $testId = $request->input('testId');
+        $sno = $request->input('sno');
+        if($testId && $sno){
+            //这里看一下是否已经通过了申请人结业考试
+            $isPass = EntryForm::makeupIsPass($sno);
+            if(!$isPass){
+                //这里再看一下是否已经参加过本次考试
+                $isEntry = EntryForm::makeupIsEntry($sno, $testId);
+                if(!$isEntry){
+                    //这里还要再看一下20课是否已经通过了
+                    $isPass20 = StudentInfo::makeupIsPass20($sno);
+                    if($isPass20){
+                        $res = EntryForm::makeup($id, $sno, $testId);
+                        if($res){
+                            return response()->json([
+                                'success' => true,
+                            ]);
+                        }
+                        else{
+                            return response()->json([
+                                'message' => '补考报名失败，请联系后台管理员'
+                            ]);
+                        }
+                    }
+                    else{
+                        return response()->json([
+                            'message' => '该学生还没有通过20课的学习,不可报名申请人党校结业考试!'
+                        ]);
+                    }
+                }
+                else{
+                    return response()->json([
+                        'message' => '不好意思，该同学已经参加过本期考试的报名了！'
+                    ]);
+                }
+            }
+            else{
+                return response()->json([
+                    'message' => '不好意思，该同学已经通过了申请人结业考试！无需再补考报名！'
+                ]);
+            }
+        }
+        else{
+            return response()->json([
+                'message' => '不好意思，请录入学号'
+            ]);
+        }
+    }
+
+    //--------------------以下是结业成绩统计模块--------------------------------------------------
     /**
      * 成绩筛选界面
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
@@ -610,8 +698,28 @@ class ApplicantController extends Controller{
         return view('Manager.Applicant.Grade.list', ['grades' => $res]);
     }
 
-    //------------------------证书管理------------------------------------------------------------------
+    //------------------------以下是成绩录入页面---------------------------------------------------------
+    public function gradeInputPage(){
+        $test = TestList::gradeInput();
+        $testId = $test[0]['id'];
+        $entries = EntryForm::gradeInput($testId);
+        return view('Manager.Applicant.gradeInput.GradeInput', ['test' => $test, 'entries' => $entries]);
+    }
 
+    public function gradeInput(Request $request){
+        $id = $request->input('id');
+        $sno = $request->input('sno');
+        $practiceGrade = $request->input('practiceGrade');
+        $articleGrade = $request->input('articleGrade');
+        $testId = $request->input('testId');
+        $status = $request->input('status');
+        for ($i = 0; $i < count($id); $i++){
+            EntryForm::gradeInputUpdate($i, $id, $practiceGrade, $articleGrade, $status);
+        }
+        return view('Manager.Applicant.GradeInput.result');
+    }
+
+    //------------------------证书管理------------------------------------------------------------------
     /**
      * 证书筛选界面
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
@@ -834,5 +942,59 @@ class ApplicantController extends Controller{
                 'message' => 'Complaint Not Found'
             ]);
         }
+    }
+
+    //---------------------------作弊+违纪--------------------------------------------------------------------------
+    public function cheatListPage(){
+        $exams = TestList::getAll();
+        return view('Manager.Applicant.Cheat.listPage', ['exams' => $exams]);
+    }
+
+    public function cheatList(Request $request){
+        $testId = $request->input('testId');
+        $cheats = EntryForm::getInCheat($testId);
+        return view('Manager.Applicant.Cheat.list', ['cheats' => $cheats]);
+    }
+
+    //----------------------------被锁人员---------------------------------------------------------------------
+    /**
+     * 被锁人员列表
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function lockedList(){
+        $locks = StudentInfo::getLocked();
+        return view('Manager.Applicant.Locked.list', ['locks' => $locks]);
+    }
+
+    /**
+     * 解锁
+     * @param $id
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function unlock($id){
+        $studentInfo = StudentInfo::findOrFail($id);
+        $studentInfo->applicant_islocked = 0;
+        $studentInfo->save();
+        return response()->json([
+            'status' => 'success'
+        ]);
+    }
+
+    //-----------------------------被清人员---------------------------------------------------------------------------
+    public function clearList(){
+        $clears = StudentInfo::getClear();
+        return view('Manager.Applicant.Clear.list', ['clears' => $clears]);
+    }
+
+    public function unclear($id){
+        $studentInfo = StudentInfo::findOrFail($id);
+        $studentInfo->is_clear20 = 0;
+        $studentInfo->is_pass20 = 1;
+        $studentInfo->save();
+//        ScoresTwenty::unclear20($sno);
+        //对20scores表的操作还未完成
+        return response()->json([
+            'status' => 'success'
+        ]);
     }
 }

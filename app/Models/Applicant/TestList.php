@@ -83,4 +83,17 @@ class TestList extends Model {
         ]);
         return $exam ? Resources::TestList($exam) : false;
     }
+
+    /**
+     * 取出状态处于成绩录入的考试
+     * @return array
+     */
+    public static function gradeInput(){
+        $test = self::where('test_status', 3)
+            ->where('test_isdeleted', 0)
+            ->get()->all();
+        return array_map(function ($testList){
+            return Resources::TestList($testList);
+        }, $test);
+    }
 }

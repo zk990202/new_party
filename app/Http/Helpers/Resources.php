@@ -140,9 +140,10 @@ class Resources {
         return [
             'id' => $entryForm->entry_id,
             'testId' => $entryForm->test_id,
+            'testName' => $entryForm->testList->test_name,
             'sno' => $entryForm->sno,
-            'academyId' => $entryForm->studentInfo->academy_id,
-            'academyName' => $entryForm->studentInfo->college->shortname,
+            'academyId' => $entryForm->studentInfo->academy_id ?? '',
+            'academyName' => $entryForm->studentInfo->college->shortname ?? '',
             'majorName' => $entryForm->userInfo->major->majorname ?? '',
             'studentName' => $entryForm->user->username ?? '',
             'time' => $entryForm->entry_time,
@@ -153,6 +154,7 @@ class Resources {
             'isPassed' => $entryForm->entry_ispassed,
             'status' => $entryForm->entry_status,
             'certIsGrant' => $entryForm->cert_isgrant,
+            'isExit' => $entryForm->isexit,
             'campus' => $entryForm->campus
         ];
     }
@@ -215,6 +217,46 @@ class Resources {
             'isRead' => $complain->isread,
             'isReply' => $complain->isreplay,
             'testName' => $complain->testList->test_name ?? ''
+        ];
+    }
+
+    public static function StudentInfo($studentInfo){
+        return [
+            'id' => $studentInfo->info_id,
+            'sno' => $studentInfo->sno,
+            'academyId' => $studentInfo->academy_id,
+            'partyBranchId' => $studentInfo->partybranch_id,
+            'isPassed' => $studentInfo->is_pass20,
+            'pass20Time' => $studentInfo->pass20_time,
+            'isClear20' => $studentInfo->is_clear20,
+            'lockedTestId' => $studentInfo->locked_test_id,
+            'applicantIsLocked' => $studentInfo->applicant_islocked,
+            'applicantFailedTimes' => $studentInfo->applicant_failedtimes,
+            'captionOfGroup' => $studentInfo->captain_ofgroup,
+            'applyGroupTime' => $studentInfo->apply_grouptime,
+            'activeRoleTime' => $studentInfo->active_roletime,
+            'groupExecTime' => $studentInfo->group_exectime,
+            'developTargetTime' => $studentInfo->develop_targettime,
+            'allTrainTime' => $studentInfo->all_traintime,
+            'dataCompleteTime' => $studentInfo->data_completetime,
+            'reportTime' => $studentInfo->report_time,
+            'devShowStartTime' => $studentInfo->dev_show_starttime,
+            'votePassTime' => $studentInfo->vote_passtime,
+            'talkPassTime' => $studentInfo->talk_passtime,
+            'probPassedTime' => $studentInfo->prob_passedtime,
+            'activityPassedTime' => $studentInfo->activity_passetime,
+            'realShowStartTime' => $studentInfo->real_show_starttime,
+            'turnRealMeetingTime' => $studentInfo->turn_real_meetingtime,
+            'approvePassedTime' => $studentInfo->approve_passedtime,
+            'partyMemberTime' => $studentInfo->partymember_time,
+            'thoughtReportCount' => $studentInfo->thought_reportcount,
+            'personalReportCount' => $studentInfo->personal_reportcount,
+            'mainStatus' => $studentInfo->main_status,
+            'isInit' => $studentInfo->is_init,
+            'studentName' => $studentInfo->user->username ?? '',
+            'academyName' => $studentInfo->college->shortname ?? '',
+            'majorName' => $studentInfo->userInfo->major->majorname ?? '',
+            'testName' => $studentInfo->testList->test_name ?? ''
         ];
     }
 

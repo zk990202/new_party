@@ -269,7 +269,18 @@ Route::group(['namespace' => 'Manager', 'prefix' => 'manager'], function (){
         //报名情况
         Route::group(['prefix' => 'sign'], function (){
             //报名列表
-            Route::get('/', 'ApplicantController@signList');
+            Route::get('/list', 'ApplicantController@signList');
+            //退考人员
+            Route::get('/exit', 'ApplicantController@signExit');
+            //补考报名
+            Route::get('/makeup', 'ApplicantController@signMakeupPage');
+            Route::post('/makeup', 'ApplicantController@signMakeup');
+        });
+
+        //成绩录入
+        Route::group(['prefix' => 'grade-input'], function (){
+            Route::get('/', 'ApplicantController@gradeInputPage');
+            Route::post('/', 'ApplicantController@gradeInput');
         });
 
         //结业成绩查询
@@ -305,6 +316,22 @@ Route::group(['namespace' => 'Manager', 'prefix' => 'manager'], function (){
             Route::post('{id}/detail', 'ApplicantController@complainDetail');
             Route::get('{id}', 'ApplicantController@getComplainById');
         });
+
+        // 作弊+违纪
+        Route::group(['prefix' => 'cheat'], function (){
+            Route::get('/', 'ApplicantController@cheatListPage');
+            Route::post('/', 'ApplicantController@cheatList');
+        });
+
+        // 被锁人员名单
+        Route::get('locked', 'ApplicantController@lockedList');
+        // 解锁
+        Route::post('locked/{id}/unlock', 'ApplicantController@unlock');
+
+        // 被清人员名单
+        Route::get('clear20', 'ApplicantController@clearList');
+        // 解除清除
+        Route::post('clear20/{id}/unclear', 'ApplicantController@unclear');
     });
 
     /**
