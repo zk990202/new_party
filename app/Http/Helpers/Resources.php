@@ -220,6 +220,22 @@ class Resources {
         ];
     }
 
+    public static function AcademyTestList(AcademyTestList $testList){
+        return [
+            'id' => $testList->test_id,
+            'name' => $testList->test_name,
+            'parent' => $testList->test_parent,
+            'trainName' => $testList->testList->test_name ?? '',
+            'academyId' => $testList->test_of_academy,
+            'academyName' => $testList->college->collegename ?? '',
+            'time' => $testList->test_begintime,
+            'introduction' => $testList->test_introduction,
+            'attention' => $testList->test_attention,
+            'status' => $testList->test_status,
+            'isDeleted' => $testList->test_isdeleted
+        ];
+    }
+
     public static function StudentInfo($studentInfo){
         return [
             'id' => $studentInfo->info_id,

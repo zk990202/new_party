@@ -192,9 +192,9 @@ Route::group(['namespace' => 'Manager', 'prefix' => 'manager'], function (){
     });
 
     /**
-     * 申请人管理模块，路由为 /manager/applicant/{action}, 命名空间 \App\Http\Controllers\Manager\Applicant
+     * 申请人管理模块，路由为 /manager/applicant/{action}, 命名空间 \App\Http\Controllers\Manager
      */
-    Route::group(['namespace' => 'Applicant', 'prefix' => 'applicant'], function(){
+    Route::group(['prefix' => 'applicant'], function(){
         // 课程设置
         Route::group(['prefix' => 'course'], function(){
             //课程列表
@@ -335,13 +335,38 @@ Route::group(['namespace' => 'Manager', 'prefix' => 'manager'], function (){
     });
 
     /**
-    * 院级积极分子管理模块，路由为 /manager/academy/{action}, 命名空间 \App\Http\Controllers\Manager\Academy
+    * 院级积极分子管理模块，路由为 /manager/academy/{action}, 命名空间 \App\Http\Controllers\Manager
     */
-    Route::group(['namespace' => 'Academy', 'prefix' => 'academy'], function(){
+    Route::group(['prefix' => 'academy'], function(){
+        // 总培训控制
+        Route::group(['prefix' => 'train-list'], function(){
+            //总培训列表
+            Route::get('/', 'AcademyController@trainList');
+            //关闭总培训
+            Route::patch('{id}/close', 'AcademyController@trainClose');
+            //添加总培训
+            Route::get('add', 'AcademyController@trainAddPage');
+            Route::post('add', 'AcademyController@trainAdd');
+        });
 
-        // 培训控制
-        Route::group(['prefix' => 'train'], function(){
+        // 子培训控制
+        Route::group(['prefix' => 'test-list'], function (){
+            //子培训列表
+            Route::get('/', 'AcademyController@testList');
+            //子培训详情
+            Route::get('{id}/detail', 'AcademyController@testDetail');
+            //添加子培训
+            Route::get('add', 'AcademyController@testAddPage');
+            Route::post('add', 'AcademyController@testAdd');
+            //编辑子培训
+            Route::get('{id}/edit', 'AcademyController@testEditPage');
+            Route::post('{id}/edit', 'AcademyController@testEdit');
+            //删除
+            Route::patch('{id}/delete', 'AcademyController@testDelete');
+            //状态改变
+            Route::patch('{id}/change/{status}', 'AcademyController@testChange');
 
+            Route::get('{id}', 'AcademyController@getTestById');
         });
 
         // 考试管理

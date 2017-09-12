@@ -6,7 +6,7 @@
  * Time: 9:48
  */
 
-namespace App\Http\Controllers\Manager\Applicant;
+namespace App\Http\Controllers\Manager;
 
 use App\Http\Controllers\Controller;
 use App\Http\Helpers\Resources;
@@ -240,7 +240,7 @@ class ApplicantController extends Controller{
             ]);
         }
         return response()->json([
-            'message' => '添加失败，请练习后台管理员'
+            'message' => '添加失败，请联系后台管理员'
         ]);
     }
 
