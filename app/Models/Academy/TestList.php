@@ -121,6 +121,11 @@ class TestList extends Model
 //        }
     }
 
+    /**
+     * 添加子培训
+     * @param $data
+     * @return array|bool
+     */
     public static function TestAdd($data){
         $test = self::create([
             'test_parent' => $data['id'],
@@ -133,5 +138,36 @@ class TestList extends Model
             'test_isdeleted' => 0
         ]);
         return $test ? Resources::AcademyTestList($test) : false;
+    }
+
+    /**
+     * 获取最近一期的所有培训
+     * @param $id
+     * @return array
+     */
+    public static function getLatestTest($id){
+        $res_all = self::where('test_parent', $id)
+            ->where('test_status', '>', 0)
+            ->where('test_status', '<', 4)
+//            ->where('test_of_academy', $academyId) 接入院级管理员权限后调试
+            ->where('test_isdeleted', 0)
+            ->orderBy('test_id', 'desc')
+            ->get()->all();
+        return array_map(function ($testList){
+            return Resources::AcademyTestList($testList);
+        }, $res_all);
+    }
+
+    /**
+     * 取出状态处于成绩录入的考试
+     * @return array
+     */
+    public static function gradeInput(){
+        $test = self::where('test_status', 3)
+            ->where('test_isdeleted', 0)
+            ->get()->all();
+        return array_map(function ($testList){
+            return Resources::AcademyTestList($testList);
+        }, $test);
     }
 }

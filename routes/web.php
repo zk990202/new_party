@@ -369,6 +369,21 @@ Route::group(['namespace' => 'Manager', 'prefix' => 'manager'], function (){
             Route::get('{id}', 'AcademyController@getTestById');
         });
 
+        // 报名情况
+        Route::group(['prefix' => 'sign'], function (){
+            //报名列表
+            Route::get('/', 'AcademyController@signList');
+            //院级补报名
+            Route::get('makeup', 'AcademyController@signMakeupPage');
+            Route::post('makeup', 'AcademyController@signMakeup');
+        });
+
+        // 成绩录入
+        Route::group(['prefix' => 'grade-input'], function (){
+            Route::get('/', 'AcademyController@gradeInputPage');
+            Route::post('/', 'AcademyController@gradeInput');
+        });
+
         // 考试管理
         Route::group(['prefix' => 'exam'], function(){
 

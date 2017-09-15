@@ -30,7 +30,7 @@ class EntryForm extends Model
     }
 
     public function userInfo(){
-        return $this->belongsTo('App\Models\Userinfo','sno','usernumb');
+        return $this->belongsTo('App\Models\UserInfo','sno','usernumb');
     }
 
     public function user(){
@@ -219,7 +219,6 @@ class EntryForm extends Model
      */
     public static function gradeInput($testId){
         $entries = self::where('test_id', $testId)
-            ->where('isexit', 0)
             ->orderBy('sno', 'ASC')
             ->get()->all();
         return array_map(function ($entryForm){

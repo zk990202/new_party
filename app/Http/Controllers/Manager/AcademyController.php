@@ -10,6 +10,7 @@ namespace App\Http\Controllers\Manager;
 
 use App\Http\Controllers\Controller;
 use App\Http\Helpers\Resources;
+use App\Models\Academy\EntryForm;
 use App\Models\Academy\TestList;
 use App\Models\College;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -82,6 +83,16 @@ class AcademyController extends Controller {
                 ]);
             }
         }
+    }
+
+    /**
+     * 获取最近一期的test_id
+     * @return mixed
+     */
+    public function getLatestTrain(){
+        $trains = TestList::getAllTrain();
+        $latest_test_id = $trains[0]['id'];
+        return $latest_test_id;
     }
 
     //------------------------------------以下是子培训控制部分------------------------------------------------------------
@@ -221,6 +232,11 @@ class AcademyController extends Controller {
         return view('Manager.Academy.Test.add', ['train' => $train, 'colleges' => $colleges]);
     }
 
+    /**
+     * 子培训添加后台功能
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function TestAdd(Request $request){
         $id = $request->input('id');
         $name = $request->input('name');
@@ -266,5 +282,110 @@ class AcademyController extends Controller {
                 'message' => 'Test Not Found'
             ]);
         }
+    }
+
+    //----------------------------------以下是报名情况部分----------------------------------------------
+    /**
+     * 最近一期报名列表
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function signList(){
+        $testId = $this->getLatestTrain();
+        $entries = EntryForm::getLatest($testId);
+        return view('Manager.Academy.Sign.list', ['entries' => $entries]);
+    }
+
+    /**
+     * 院级补报名页面
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function signMakeupPage(){
+        $testId = $this->getLatestTrain();
+        $tests = TestList::getLatestTest($testId);
+        $signs = EntryForm::getLatest($testId);
+        return view('Manager.Academy.Sign.makeup', ['tests' => $tests]);
+    }
+
+    /**
+     * 院级补报名后台逻辑
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function signMakeup(Request $request){
+        $testId = $request->input('testId');
+        $sno = $request->input('sno');
+        if($testId && $sno){
+            //查看申请人结业是否通过,不通过则没有报名资格
+            $isPass = \App\Models\Applicant\EntryForm::makeupIsPass($sno);
+            if($isPass){
+                //查看是否已经报名..这里的报名包括退选的名单
+                $isEntry = EntryForm::makeupIsEntry($sno, $testId);
+                if(!$isEntry){
+                    $res = EntryForm::makeup($sno, $testId);
+//                    $res = DB::table('twt_academy_entryform')
+//                        ->where('sno', $sno)
+//                        ->where('test_id', $testId)
+//                        ->update(['entry_islastadded' => 1])
+//                        ->update(['entry_time' => date('Y-m-d H:i:s')]);
+                    if ($res){
+                        return response()->json([
+                            'success' => true
+                        ]);
+                    }else{
+                        return response()->json([
+                            'message' => '补考报名失败，请联系后台管理员'
+                        ]);
+                    }
+                }else{
+                    return response()->json([
+                        'message' => '不好意思，该同学已经参加过本期考试的报名了！'
+                    ]);
+                }
+            }else{
+                return response()->json([
+                    'message' => '不好意思,该同学不符合报名条件,申请人结业考试没有通过,请先去参加申请人结业考试!'
+                ]);
+            }
+        }else{
+            return response()->json([
+                'message' => '请录入学号，或选择考试期数'
+            ]);
+        }
+    }
+
+    //----------------------------------以下是成绩录入部分---------------------------------------------
+    /**
+     * 成绩录入页面
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function gradeInputPage(){
+        $test = TestList::gradeInput();
+        $entries = array();
+        for ($i = 0; $i < count($test); $i++){
+            $testId = $test[$i]['id'];
+            $entries[$i] = EntryForm::gradeInput($testId);
+        }
+        $count = count($test);
+//        dd($entries);
+        return view('Manager.Academy.GradeInput.gradeInput', ['entries' => $entries, 'count' => $count]);
+    }
+
+    /**
+     * 成绩录入后台逻辑
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function gradeInput(Request $request){
+        $id = $request->input('id');
+//        dd($id);
+        $sno = $request->input('sno');
+        $practiceGrade = $request->input('practiceGrade');
+        $articleGrade = $request->input('articleGrade');
+        $testGrade = $request->input('testGrade');
+        $testId = $request->input('testId');
+        for ($i = 0; $i < count($id); $i++){
+            EntryForm::gradeInputUpdate($i, $id, $practiceGrade, $articleGrade, $testGrade);
+        }
+        return view('Manager.Academy.GradeInput.result');
     }
 }

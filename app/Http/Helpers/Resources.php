@@ -236,6 +236,29 @@ class Resources {
         ];
     }
 
+    public static function AcademyEntryForm(AcademyEntryForm $entryForm){
+        return [
+            'id' => $entryForm->entry_id,
+            'testId' => $entryForm->test_id,
+            'testName' => $entryForm->testList->test_name,
+            'sno' => $entryForm->sno,
+            'academyId' => $entryForm->studentInfo->academy_id ?? '',
+            'academyName' => $entryForm->studentInfo->college->shortname ?? '',
+            'majorName' => $entryForm->userInfo->major->majorname ?? '',
+            'studentName' => $entryForm->user->username ?? '',
+            'time' => $entryForm->entry_time,
+            'practiceGrade' => $entryForm->entry_practicegrade,
+            'articleGrade' => $entryForm->entry_articlegrade,
+            'testGrade' => $entryForm->entry_testgrade,
+            'isLastAdded' => $entryForm->entry_islastadded,
+            'isSystemAdd' => $entryForm->is_systemadd,
+            'isPassed' => $entryForm->entry_ispassed,
+            'status' => $entryForm->entry_status,
+            'certIsGrant' => $entryForm->cert_isgrant,
+            'isExit' => $entryForm->isexit,
+        ];
+    }
+
     public static function StudentInfo($studentInfo){
         return [
             'id' => $studentInfo->info_id,

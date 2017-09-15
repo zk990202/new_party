@@ -2,6 +2,7 @@
 
 namespace App\Models\Academy;
 
+use App\Http\Helpers\Resources;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -14,5 +15,115 @@ class EntryForm extends Model
 {
     //
     protected $table = 'twt_academy_entryform';
-    
+    protected $primaryKey = 'entry_id';
+
+    const CREATED_AT = 'entry_time';
+    protected $fillable = ['sno', 'test_id', 'entry_time', 'entry_practicegrade', 'entry_articlegrade',
+        'entry_testgrade', 'entry_status', 'entry_ispassed', 'is_systemadd', 'entry_islastadded',
+        'cert_isgrant', 'isexit'];
+
+    public function testList(){
+        return $this->belongsTo('App\Models\Academy\TestList', 'test_id', 'test_id');
+    }
+
+    public function studentInfo(){
+        return $this->belongsTo('App\Models\StudentInfo', 'sno', 'sno');
+    }
+
+    public function userInfo(){
+        return $this->belongsTo('App\Models\UserInfo','sno','usernumb');
+    }
+
+    public function user(){
+        return $this->belongsTo('App\Models\User', 'sno', 'usernumb');
+    }
+
+    /**
+     * 获取最近一期的学生报名信息
+     * @param $id
+     * @return array
+     */
+    public static function getLatest($id){
+        $res_all = self::where('isexit', 0)
+            ->leftJoin('twt_academy_testlist', 'twt_academy_entryform.test_id', '=', 'twt_academy_testlist.test_id')
+            ->where('twt_academy_testlist.test_parent', $id)
+            ->where('test_status', '<', 5)
+            ->where('test_isdeleted', 0)
+            ->orderBy('sno', 'asc')
+            ->get()->all();
+        return array_map(function ($entryForm){
+            return Resources::AcademyEntryForm($entryForm);
+        }, $res_all);
+    }
+
+    /**
+     * 补考报名时判断是否已经报名
+     * @param $sno
+     * @param $testId
+     * @return bool
+     */
+    public static function makeupIsEntry($sno, $testId){
+        $isEntry = self::where('sno', $sno)
+            ->where('test_id', $testId)
+            ->get()->all();
+        if($isEntry)
+            return true;
+        else
+            return false;
+    }
+
+    /**
+     * 院级补报名
+     * @param $sno
+     * @param $testId
+     * @return bool"
+     */
+    public static function makeup($sno, $testId){
+        $entry = self::where('sno', $sno)
+            ->where('test_id', $testId)
+            ->update(['entry_islastadded' => 1])
+            ->update(['entry_time' => date('Y-m-d H:i:s')])
+            ->save();
+        if ($entry)
+            return true;
+        else
+            return false;
+    }
+
+    /**
+     * 成绩录入界面
+     * @param $testId
+     * @return array
+     */
+    public static function gradeInput($testId){
+        $entries = self::leftJoin('twt_academy_testlist', 'twt_academy_entryform.test_id', '=', 'twt_academy_testlist.test_id')
+            ->where('test_status', 3)
+            ->where('test_isdeleted', 0)
+//            ->where('test_of_academy', $acdemyId)
+            ->where('twt_academy_entryform.test_id', $testId)
+            ->where('isexit', 0)
+            ->orderBy('sno', 'desc')
+            ->get()->all();
+        return array_map(function ($entryForm){
+            return Resources::AcademyEntryForm($entryForm);
+        }, $entries);
+    }
+
+    public static function gradeInputUpdate($i, $id, $practiceGrade, $articleGrade, $testGrade){
+        $isPass[$i] = 0;
+        if($practiceGrade[$i] >= 60 && $articleGrade[$i] >= 60 && $testGrade[$i] >= 60){
+            $isPass[$i] = 1;
+        }
+        else if ($practiceGrade[$i] >= 80 && $articleGrade[$i] >= 80 && $testGrade[$i] >= 80){
+            $isPass[$i] = 2;
+        }
+        $entry = self::findOrFail($id[$i]);
+        $entry->entry_practicegrade = $practiceGrade[$i];
+        $entry->entry_articlegrade = $articleGrade[$i];
+        $entry->entry_testgrade = $testGrade[$i];
+        $entry->entry_ispassed = $isPass[$i];
+        $res = $entry->save();
+
+        return $res ? Resources::AcademyEntryForm($entry) : false;
+    }
 }

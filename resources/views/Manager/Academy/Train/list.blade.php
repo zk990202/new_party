@@ -30,6 +30,7 @@
                                     <td>{{ $train['name'] }}</td>
                                     <td>{{ $train['time'] }}</td>
                                     <td>
+                                        {{--{{ $train['status']}}--}}
                                         @if(!$train['status'])
                                             开启
                                         @else
