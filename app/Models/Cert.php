@@ -32,6 +32,17 @@ class Cert extends Model
         return $this->belongsTo('App\Models\Applicant\EntryForm', 'entry_id', 'entry_id');
     }
 
+    public function entryFormAcademy(){
+        return $this->belongsTo('App\Models\Academy\EntryForm', 'entry_id', 'entry_id');
+    }
+
+    /**
+     * 申请人结业考试--获取证书
+     * @param $max
+     * @param $min
+     * @param $college
+     * @return array
+     */
     public static function getCert($max, $min, $college){
         $res_all = self::whereBetween('entry_id', [$min, $max])
             ->where('isdeleted', 0)
@@ -82,4 +93,22 @@ class Cert extends Model
         ]);
         return $cert ? Resources::Cert($cert) : false;
     }
+
+    //-----------------院级积极分子培训-----------------------
+    /**
+     * 院级积极分子培训--获取证书
+     * @param $max
+     * @param $min
+     * @return array
+     */
+    public static function getCertAcademy($max, $min){
+        $res_all = self::whereBetween('entry_id', [$min, $max])
+            ->where('isdeleted', 0)
+            ->where('cert_type', 2)
+            ->get()->all();
+        return array_map(function ($cert){
+            return Resources::AcademyCert($cert);
+        }, $res_all);
+    }
+
 }

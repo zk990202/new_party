@@ -259,6 +259,28 @@ class Resources {
         ];
     }
 
+    public static function AcademyCert(Cert $cert){
+        return [
+            'id' => $cert->cert_id,
+            'sno' => $cert->sno,
+            'studentName' => $cert->user->username ?? '',
+            'academyId' => $cert->studentInfo->academy_id,
+            'academyName' => $cert->studentInfo->college->shortname,
+            'majorName' => $cert->userInfo->major->majorname ?? '',
+            'entryId' => $cert->entry_id,
+            'certNumber' => $cert->cert_no,
+            'type' => $cert->cert_type,
+            'time' => $cert->cert_time,
+            'getPerson' => $cert->cert_getperson,
+            'place' => $cert->cert_place,
+            'isLost' => $cert->cert_islost,
+            'isDeleted' => $cert->isdeleted,
+            'practiceGrade' => $cert->entryFormAcademy->entry_practicegrade,
+            'articleGrade' => $cert->entryFormAcademy->entry_articlegrade,
+            'testGrade' => $cert->entryFormAcademy->entry_testgrade
+        ];
+    }
+
     public static function StudentInfo($studentInfo){
         return [
             'id' => $studentInfo->info_id,

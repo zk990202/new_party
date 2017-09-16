@@ -203,13 +203,24 @@ class EntryForm extends Model
      * @param $id
      * @param $sno
      * @param $testId
+     * @return bool
      */
     public static function makeup($id ,$sno, $testId){
-        $entry = self::findOrFail($id);
-        $entry->sno = $sno;
-        $entry->test_id = $testId;
-        $entry->entry_islastadded = 1;
-        $entry->entry_time = date('Y-m-d H:i:s');
+//        $entry = self::findOrFail($id);
+//        $entry->sno = $sno;
+//        $entry->test_id = $testId;
+//        $entry->entry_islastadded = 1;
+//        $entry->entry_time = date('Y-m-d H:i:s');
+        $entry = self::where('sno', $sno)
+            ->where('test_id', $testId)
+            ->update([
+                'entry_islastadded' => 1,
+                'entry_time' => date('Y-m-d H:i:s')
+            ]);
+        if ($entry)
+            return true;
+        else
+            return false;
     }
 
     /**

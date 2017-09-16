@@ -12,6 +12,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Helpers\Resources;
 use App\Models\Academy\EntryForm;
 use App\Models\Academy\TestList;
+use App\Models\Cert;
 use App\Models\College;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
@@ -322,11 +323,6 @@ class AcademyController extends Controller {
                 $isEntry = EntryForm::makeupIsEntry($sno, $testId);
                 if(!$isEntry){
                     $res = EntryForm::makeup($sno, $testId);
-//                    $res = DB::table('twt_academy_entryform')
-//                        ->where('sno', $sno)
-//                        ->where('test_id', $testId)
-//                        ->update(['entry_islastadded' => 1])
-//                        ->update(['entry_time' => date('Y-m-d H:i:s')]);
                     if ($res){
                         return response()->json([
                             'success' => true
@@ -387,5 +383,49 @@ class AcademyController extends Controller {
             EntryForm::gradeInputUpdate($i, $id, $practiceGrade, $articleGrade, $testGrade);
         }
         return view('Manager.Academy.GradeInput.result');
+    }
+
+    //----------------------------------以下是结业成绩查询部分------------------------------------------
+    /**
+     * 成绩筛选页面
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function gradeListPage(){
+        $tests = TestList::getAllTest();
+        return view('Manager.Academy.Grade.listPage', ['tests' => $tests]);
+    }
+
+    /**
+     * 筛选结果
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function gradeList(Request $request){
+        $testId = $request->input('testId');
+        $grades = EntryForm::getGrade($testId);
+        return view('Manager.Academy.Grade.list', ['grades' => $grades]);
+    }
+
+    //---------------------------------以下是证书管理部分------------------------------------------------
+    /**
+     * 证书筛选界面
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function certificateListPage(){
+        $tests = TestList::getAllTest();
+        return view('Manager.Academy.Certificate.listPage', ['tests' => $tests]);
+    }
+
+    /**
+     * 筛选结果
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function certificateList(Request $request){
+        $testId = $request->input('testId');
+        $max = EntryForm::getMaxEntryId($testId);
+        $min = EntryForm::getMinEntryId($testId);
+        $certs = Cert::getCertAcademy($max, $min);
+        return view('Manager.Academy.Certificate.list', ['certificates' => $certs]);
     }
 }

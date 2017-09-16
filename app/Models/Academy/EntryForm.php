@@ -81,9 +81,8 @@ class EntryForm extends Model
     public static function makeup($sno, $testId){
         $entry = self::where('sno', $sno)
             ->where('test_id', $testId)
-            ->update(['entry_islastadded' => 1])
-            ->update(['entry_time' => date('Y-m-d H:i:s')])
-            ->save();
+            ->update(['entry_islastadded' => 1, 'entry_time' => date('Y-m-d H:i:s')])
+        ;
         if ($entry)
             return true;
         else
@@ -109,6 +108,15 @@ class EntryForm extends Model
         }, $entries);
     }
 
+    /**
+     * 更新成绩
+     * @param $i
+     * @param $id
+     * @param $practiceGrade
+     * @param $articleGrade
+     * @param $testGrade
+     * @return array|bool
+     */
     public static function gradeInputUpdate($i, $id, $practiceGrade, $articleGrade, $testGrade){
         $isPass[$i] = 0;
         if($practiceGrade[$i] >= 60 && $articleGrade[$i] >= 60 && $testGrade[$i] >= 60){
@@ -125,5 +133,40 @@ class EntryForm extends Model
         $res = $entry->save();
 
         return $res ? Resources::AcademyEntryForm($entry) : false;
+    }
+
+    /**
+     * 获取对应考试期数学生的成绩
+     * @param $testId
+     * @return array
+     */
+    public static function getGrade($testId){
+        $res_all = self::where('test_id', $testId)
+            ->get()->all();
+        return array_map(function ($entryForm){
+            return Resources::AcademyEntryForm($entryForm);
+        }, $res_all);
+    }
+
+    /**
+     * 某一考试中考生的最大id
+     * @param $testId
+     * @return mixed
+     */
+    public static function getMaxEntryId($testId){
+        $max = self::where('test_id', $testId)
+            ->max('entry_id');
+        return $max;
+    }
+
+    /**
+     * 某一考试中考生的最大id
+     * @param $testId
+     * @return mixed
+     */
+    public static function getMinEntryId($testId){
+        $min = self::where('test_id', $testId)
+            ->min('entry_id');
+        return $min;
     }
 }

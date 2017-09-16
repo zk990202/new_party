@@ -303,6 +303,7 @@ Route::group(['namespace' => 'Manager', 'prefix' => 'manager'], function (){
             Route::get('last-grant/{id}/detail', 'ApplicantController@certificateLastGrantDetailPage');
             Route::post('last-grant/{id}/detail', 'ApplicantController@certificateLastGrantDetail');
             Route::post('last-grant/{id}/reject', 'ApplicantController@certificateLastGrantReject');
+            
             Route::get('last-grant/{id}', 'ApplicantController@getCertificateById');
         });
 
@@ -384,6 +385,30 @@ Route::group(['namespace' => 'Manager', 'prefix' => 'manager'], function (){
             Route::post('/', 'AcademyController@gradeInput');
         });
 
+        // 结业成绩
+        Route::group(['prefix' => 'grade-list'], function (){
+            Route::get('/', 'AcademyController@gradeListPage');
+            Route::post('/', 'AcademyController@gradeList');
+        });
+
+        // 证书管理
+        Route::group(['prefix' => 'certificate'], function (){
+            //发放详情
+            Route::get('list', 'AcademyController@certificateListPage');
+            Route::post('list', 'AcademyController@certificateList');
+            //证书发放
+            Route::get('grant', 'AcademyController@certificateGrantPage');
+            Route::post('grant', 'AcademyController@certificateGrant');
+            Route::post('grant-result', 'AcademyController@certificateGrantResult');
+            //证书补办
+            Route::get('last-grant', 'AcademyController@certificateLastGrant');
+            Route::get('last-grant/{id}/detail', 'AcademyController@certificateLastGrantDetailPage');
+            Route::post('last-grant/{id}/detail', 'AcademyController@certificateLastGrantDetail');
+            Route::post('last-grant/{id}/reject', 'AcademyController@certificateLastGrantReject');
+
+            Route::get('last-grant/{id}', 'AcademyController@getCertificateById');
+        });
+        
         // 考试管理
         Route::group(['prefix' => 'exam'], function(){
 
