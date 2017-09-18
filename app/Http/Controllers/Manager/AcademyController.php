@@ -571,6 +571,11 @@ class AcademyController extends Controller {
         $complains = Complain::getAllAcademy();
         return view('Manager.Academy.Complain.list', ['complains' => $complains]);
     }
+    /*
+     * 新党建因为部分逻辑修改，可能会导致部分已回复的申诉显示为未回复，只需再提交一次即可解决
+     * 新提交的回复内容不会覆盖原来回复的内容
+     * 最终显示的回复内容仍然是之前所回复的
+     */
 
     /**
      * 展示申诉还未回复的页面，含编辑器
