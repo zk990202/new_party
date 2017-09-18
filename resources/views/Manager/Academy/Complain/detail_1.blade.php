@@ -66,29 +66,30 @@
                             </tr>
                             <tr>
                                 <th>内容</th>
-                                <td>{{ $complain[0]['content'] }}</td>
+                                <td>{!! $complain[0]['content'] !!}</td>
                             </tr>
                         </table>
-                        <div class="box-body">
-                            <label for="title">回复标题</label>
-                            <input type="text" class="form-control" id="title">
-                        </div>
-                        <div class="box-body">
-                            <label for="dealWord">回复内容</label>
-                            <div class="form-group">
-                                <textarea id="editor" name="editor" rows="10" cols="80">
-
-                                </textarea>
-                            </div>
-                        </div>
-                        <!-- /.box-body -->
-                        <input type="hidden" id="id" value="{{ $complain[0]['id'] }}">
-                        <input type="hidden" id="sno" value="{{ $complain[0]['fromSno'] }}">
-                        <input type="hidden" id="type" value="{{ $complain[0]['type'] }}">
                     </form>
-                    <div class="box-footer">
-                        <button id="submitButton" type="button"  class="btn btn-success">提交</button>
+                </div>
+
+                <div class="box-body">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">回复详情</h3>
                     </div>
+                    <table class="table table-striped table-bordered table-condensed">
+                        <tr>
+                            <th>回复标题</th>
+                            <td>{{ $reply[0]['title'] }}</td>
+                        </tr>
+                        <tr>
+                            <th>回复时间</th>
+                            <td>{{ $reply[0]['time'] }}</td>
+                        </tr>
+                        <tr>
+                            <th>回复内容</th>
+                            <td>{!! $reply[0]['content'] !!}</td>
+                        </tr>
+                    </table>
                 </div>
             </div>
         </div>
@@ -136,7 +137,7 @@
             });
 
 //            $.ajax({
-//                url : '/manager/applicant/complain/'+$('#id').val(),
+//                url : '/manager/academy/complain/'+$('#id').val(),
 //                type: 'GET',
 //                dataType: 'json',
 //                success: function(data){
@@ -153,35 +154,6 @@
 //                    alert('网络不稳，请刷新页面重试');
 //                }
 //            });
-            $('#submitButton').click(function () {
-                var form = new FormData();
-                form.append('sno', $('#sno').val());
-                form.append('id', $('#id').val());
-                form.append('title', $('#title').val());
-                form.append('content', $('#editor').val());
-                form.append('type', $('#type').val());
-                $.ajax({
-                    url: '/manager/applicant/complain/' + $('#id').val() + '/detail',
-                    type: 'POST',
-                    data: form,
-                    cache: false,
-                    dataType: 'json',
-                    processData: false,
-                    contentType: false,
-                    success: function(data){
-                        if(data.success){
-                            alert('回复成功');
-                            window.location.href = '/manager/applicant/complain';
-                        }
-                        else{
-                            alert(data.message);
-                        }
-                    },
-                    error: function(){
-                        alert(data.statusText);
-                    }
-                });
-            });
 
         });
     </script>

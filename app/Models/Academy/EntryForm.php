@@ -169,4 +169,48 @@ class EntryForm extends Model
             ->min('entry_id');
         return $min;
     }
+
+    /**
+     * 获取考试合格但未发放证书的学生列表
+     * @param $testId
+     * @return array
+     */
+    public static function getCert($testId){
+        $res = self::where('test_id', $testId)
+            ->where('cert_isgrant', 0)
+            ->whereIn('entry_ispassed', [1, 2])
+            ->where('entry_status', 1)
+            ->where('isexit', 0)
+            ->get()->all();
+        return array_map(function ($entryForm){
+            return Resources::AcademyEntryForm($entryForm);
+        }, $res);
+    }
+
+    /**
+     * 根据学号获取entry_id
+     * @param $sno
+     * @return mixed
+     */
+    public static function getEntryId($sno){
+        $res = self::where('sno', $sno)
+            ->select('entry_id')
+            ->get()->toArray();
+        return $res[0];
+    }
+
+    public static function updateCert($sno, $i){
+        $res = self::where('sno', $sno[$i])
+            ->update(['cert_isgrant' => 1]);
+        return $res;
+    }
+
+    public static function getGradeBySnoAndTestId($sno, $testId){
+        $res = self::where('sno', $sno)
+            ->where('test_id', $testId)
+            ->get()->all();
+        return array_map(function ($entryForm){
+            return Resources::AcademyEntryForm($entryForm);
+        }, $res);
+    }
 }

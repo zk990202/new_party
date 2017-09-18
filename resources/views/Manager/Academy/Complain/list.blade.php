@@ -31,17 +31,17 @@
                                     <td>
                                         {{--这里进行判断，如果toSno不为空，则申诉已被回复，显示的页面不含有文本框--}}
                                         @if($complain['toSno'])
-                                            <a href="{{ url('manager/applicant/complain/'.$complain['id'].'/detail_1') }}">
+                                            <a href="{{ url('manager/academy/complain/'.$complain['id'].'/detail_1') }}">
                                                 {{ $complain['title'] }}
                                             </a>
                                             {{--未被回复的页面，含有编辑器--}}
                                         @else
-                                            <a href="{{ url('manager/applicant/complain/'.$complain['id'].'/detail') }}">
+                                            <a href="{{ url('manager/academy/complain/'.$complain['id'].'/detail') }}">
                                                 {{ $complain['title'] }}
                                             </a>
                                         @endif
                                     </td>
-                                    <td>申请人党校</td>
+                                    <td>院级积极分子党校</td>
                                     <td>{{ $complain['testName']}}</td>
                                     <td>{{ $complain['fromSno'] }}</td>
                                     <td>{{ $complain['studentName'] }}</td>

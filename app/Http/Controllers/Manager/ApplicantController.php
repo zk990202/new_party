@@ -769,14 +769,17 @@ class ApplicantController extends Controller{
     }
 
     /**
-     * 结果展示页
+     * 进行证书发放的后台逻辑操作
      * @param Request $request
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function certificateGrantResult(Request $request){
         $sno = $request->input('sno');
 //        dd($sno);
-        $entryId = EntryForm::getEntryId($sno);
+        $entryId = array();
+        for ($i = 0; $i < count($sno); $i++){
+            $entryId[$i] = EntryForm::getEntryId($sno[$i]);
+        }
 //        dd($entryId[0]['entry_id']);
         $getPerson = $request->input('getPerson');
         $place = $request->input('place');
@@ -885,7 +888,7 @@ class ApplicantController extends Controller{
     }
 
     /**
-     * 展示未回复的页面
+     * 展示申诉还未回复的页面，含编辑器
      * @param $id
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
@@ -898,12 +901,18 @@ class ApplicantController extends Controller{
         return view('Manager.Applicant.Complain.detail', ['complain' => $complain, 'grade' => $grade]);
     }
 
+    /**
+     * 展示申诉已回复的页面
+     * @param $id
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function complainDetailPage_1($id){
         $complain = Complain::getComplainById($id);
         $sno = $complain[0]['fromSno'];
         $testId = $complain[0]['testId'];
         $grade = EntryForm::getGradeBySnoAndTestId($sno, $testId);
         $reply = Complain::getReply($id);
+        dd($reply);
         return view('Manager.Applicant.Complain.detail_1', ['complain' => $complain, 'grade' => $grade, 'reply' => $reply]);
     }
 
@@ -917,7 +926,8 @@ class ApplicantController extends Controller{
         $title = $request->input('title');
         $content = $request->input('content');
         $sno = $request->input('sno');
-        $res = Complain::addReply($id, $sno, $title, $content);
+        $type = $request->input('type');
+        $res = Complain::addReply($id, $sno, $title, $content, $type);
         if($res){
             return response()->json([
                 'success' => true,

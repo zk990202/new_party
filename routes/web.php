@@ -316,6 +316,11 @@ Route::group(['namespace' => 'Manager', 'prefix' => 'manager'], function (){
             Route::get('{id}/detail_1', 'ApplicantController@complainDetailPage_1');
             Route::post('{id}/detail', 'ApplicantController@complainDetail');
             Route::get('{id}', 'ApplicantController@getComplainById');
+            /*
+             * 新党建因为部分逻辑修改，可能会导致部分已回复的申诉显示为未回复，只需再提交一次即可解决
+             * 新提交的回复内容不会覆盖原来回复的内容
+             * 最终显示的回复内容仍然是之前所回复的
+             */
         });
 
         // 作弊+违纪
@@ -408,15 +413,21 @@ Route::group(['namespace' => 'Manager', 'prefix' => 'manager'], function (){
 
             Route::get('last-grant/{id}', 'AcademyController@getCertificateById');
         });
-        
-        // 考试管理
-        Route::group(['prefix' => 'exam'], function(){
-
-        });
 
         // 申诉管理
-        Route::group(['prefix' => 'appeal'], function(){
-
+        Route::group(['prefix' => 'complain'], function(){
+            //证书列表
+            Route::get('/', 'AcademyController@complainList');
+            //申诉回复
+            Route::get('{id}/detail', 'AcademyController@complainDetailPage');
+            Route::get('{id}/detail_1', 'AcademyController@complainDetailPage_1');
+            Route::post('{id}/detail', 'AcademyController@complainDetail');
+            Route::get('{id}', 'AcademyController@getComplainById');
+            /*
+             * 新党建因为部分逻辑修改，可能会导致部分已回复的申诉显示为未回复，只需再提交一次即可解决
+             * 新提交的回复内容不会覆盖原来回复的内容
+             * 最终显示的回复内容仍然是之前所回复的
+             */
         });
     });
 

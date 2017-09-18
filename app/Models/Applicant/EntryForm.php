@@ -83,7 +83,7 @@ class EntryForm extends Model
      */
     public static function getCert($testId, $college){
         $res = self::where('test_id', $testId)
-//            ->where('cert_isgrant', 0)
+            ->where('cert_isgrant', 0)
             ->whereIn('entry_ispassed', [1, 2])
             ->where('entry_status', 1)
             ->where('isexit', 0)
@@ -104,7 +104,7 @@ class EntryForm extends Model
         $res = self::where('sno', $sno)
             ->select('entry_id')
             ->get()->toArray();
-        return $res;
+        return $res[0];
     }
 
     public static function getGradeBySnoAndTestId($sno, $testId){

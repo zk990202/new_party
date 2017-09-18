@@ -80,10 +80,19 @@ class Cert extends Model
         return $cert ? Resources::Cert($cert) : false;
     }
 
+    /**
+     * 补办证书 (此方法为所有证书类型共用)
+     * @param $sno
+     * @param $entryId
+     * @param $getPerson
+     * @param $place
+     * @param $certType
+     * @return array|bool
+     */
     public static function addLastCert($sno, $entryId, $getPerson, $place, $certType){
         $cert = self::create([
             'sno' => $sno,
-            'entry_id' => $entryId[0]['entry_id'],
+            'entry_id' => $entryId['entry_id'],
             'cert_no' => date('ymdHis'),
             'cert_type' => $certType,
             'cert_time' => date('Y-m-d H:i:s'),
@@ -109,6 +118,31 @@ class Cert extends Model
         return array_map(function ($cert){
             return Resources::AcademyCert($cert);
         }, $res_all);
+    }
+
+    /**
+     * 批量发放证书
+     * @param $sno
+     * @param $entryId
+     * @param $getPerson
+     * @param $place
+     * @param $i
+     * @return array|bool
+     */
+    public static function addCertAcademy($sno, $entryId, $getPerson, $place, $i){
+        $cert = self::create([
+            'sno' => $sno[$i],
+            'entry_id' => $entryId[$i]['entry_id'],
+            'cert_no' => date('ymdHis') + $i,
+            'cert_type' => 2,
+            'cert_time' => date('Y-m-d H:i:s'),
+            'cert_getperson' => $getPerson,
+            'cert_place' => $place,
+            'cert_islost' => 0,
+            'isdeleted' => 0
+        ]);
+
+        return $cert ? Resources::AcademyCert($cert) : false;
     }
 
 }

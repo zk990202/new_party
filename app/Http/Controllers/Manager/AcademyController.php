@@ -13,7 +13,9 @@ use App\Http\Helpers\Resources;
 use App\Models\Academy\EntryForm;
 use App\Models\Academy\TestList;
 use App\Models\Cert;
+use App\Models\CertLost;
 use App\Models\College;
+use App\Models\Complain;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -427,5 +429,211 @@ class AcademyController extends Controller {
         $min = EntryForm::getMinEntryId($testId);
         $certs = Cert::getCertAcademy($max, $min);
         return view('Manager.Academy.Certificate.list', ['certificates' => $certs]);
+    }
+
+    /**
+     * 筛选考试合格但未发放证书的学生
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function certificateGrantPage(){
+        $tests = TestList::getAllTest();
+        return view('Manager.Academy.Certificate.grantPage', ['tests' => $tests]);
+    }
+
+    /**
+     * 筛选结果
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function certificateGrant(Request $request){
+        $testId = $request->input('testId');
+        $certs = EntryForm::getCert($testId);
+        return view('Manager.Academy.Certificate.grant', ['certificates' => $certs]);
+    }
+
+    /**
+     * 进行证书发放的后台逻辑操作
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function certificateGrantResult(Request $request){
+        $sno = $request->input('sno');
+        $entryId = array();
+        for ($i = 0; $i < count($sno); $i++){
+            $entryId[$i] = EntryForm::getEntryId($sno[$i]);
+        }
+        $getPerson = $request->input('getPerson');
+        $place = $request->input('place');
+
+        //查询结果分类
+        for($i = 0; $i < count($sno); $i++){
+            Cert::addCertAcademy($sno, $entryId, $getPerson, $place, $i);
+            $res = EntryForm::updateCert($sno, $i);
+        }
+        if(!$sno || !$getPerson || !$place){
+            $res_type = 0;
+        }
+        else{
+            $res_type = 1;
+        }
+        return view('Manager.Academy.Certificate.grantResult', ['res_type' => $res_type]);
+    }
+
+    /**
+     * 申请补办证书的列表
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function certificateLastGrant(){
+        $certLost = CertLost::getCertLostAcademy();
+        return view('Manager.Academy.Certificate.lastGrant', ['certLosts' => $certLost]);
+    }
+
+    /**
+     * 补办详情页面
+     * @param $id
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function certificateLastGrantDetailPage($id){
+        $certLost = CertLost::getCertLostByIdAcademy($id);
+        return view('Manager.Academy.Certificate.lastGrantDetail', ['certLost' => $certLost]);
+    }
+
+    /**
+     * 通过补办
+     * @param Request $request
+     * @param $id
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function certificateLastGrantDetail(Request $request, $id){
+        $dealWord = $request->input('dealWord');
+        $sno = $request->input('sno');
+        $entryId = EntryForm::getEntryId($sno);
+        $getPerson = $request->input('getPerson');
+        $place = $request->input('place');
+        $certType = $request->input('certType');
+        Cert::addLastCert($sno, $entryId, $getPerson, $place, $certType);
+        $res = CertLost::updateCertLost($id, $dealWord);
+        if($res){
+            return response()->json([
+                'success' => true,
+                'info' => $res
+            ]);
+        }
+        else{
+            return response()->json([
+                'message' => '补办失败'
+            ]);
+        }
+    }
+
+    /**
+     * 驳回补办
+     * @param Request $request
+     * @param $id
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function certificateLastGrantReject(Request $request, $id){
+        $dealWord = $request->input('dealWord');
+        $res = CertLost::updateCertLostReject($id, $dealWord);
+        if ($res){
+            return response()->json([
+                'success' => true,
+                'info' => $res
+            ]);
+        }
+        else{
+            return response()->json([
+                'message' => '驳回失败'
+            ]);
+        }
+    }
+
+    public function getCertificateById($id){
+        try{
+            $certLost = CertLost::findOrFail($id);
+            return response()->json([
+                'success' => true,
+                'info' => Resources::CertLost($certLost)
+            ]);
+        }catch (ModelNotFoundException $e){
+            return response()->json([
+                'message' => 'CertLost Not Found'
+            ]);
+        }
+    }
+
+    //--------------------------以下是申诉管理部分-------------------------------------------
+    /**
+     * 申诉列表
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function complainList(){
+        $complains = Complain::getAllAcademy();
+        return view('Manager.Academy.Complain.list', ['complains' => $complains]);
+    }
+
+    /**
+     * 展示申诉还未回复的页面，含编辑器
+     * @param $id
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function complainDetailPage($id){
+        $complain = Complain::getComplainById($id);
+        $sno = $complain[0]['fromSno'];
+        $testId = $complain[0]['testId'];
+        $grade = EntryForm::getGradeBySnoAndTestId($sno, $testId);
+        return view('Manager.Academy.Complain.detail', ['complain' => $complain, 'grade' => $grade]);
+    }
+
+    /**
+     * 展示申诉已回复的页面
+     * @param $id
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function complainDetailPage_1($id){
+        $complain = Complain::getComplainById($id);
+        $sno = $complain[0]['fromSno'];
+        $testId = $complain[0]['testId'];
+        $grade = EntryForm::getGradeBySnoAndTestId($sno, $testId);
+        $reply = Complain::getReply($id);
+        return view('Manager.Academy.Complain.detail_1', ['complain' => $complain, 'grade' => $grade, 'reply' => $reply]);
+    }
+
+    /**
+     * 回复申诉
+     * @param Request $request
+     * @param $id
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function complainDetail(Request $request, $id){
+        $title = $request->input('title');
+        $content = $request->input('content');
+        $sno = $request->input('sno');
+        $type = $request->input('type');
+        $res = Complain::addReply($id, $sno, $title, $content, $type);
+        if($res){
+            return response()->json([
+                'success' => true,
+                'info' => $res
+            ]);
+        }else{
+            return response()->json([
+                'message' => '回复失败'
+            ]);
+        }
+    }
+
+    public function getComplainById($id){
+        try{
+            $complain = Complain::findOrFail($id);
+            return response()->json([
+                'success' => true,
+                'info' => Resources::Complain($complain)
+            ]);
+        }catch (ModelNotFoundException $e){
+            return response()->json([
+                'message' => 'Complaint Not Found'
+            ]);
+        }
     }
 }

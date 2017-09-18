@@ -17,6 +17,8 @@ class CertLost extends Model
         return $this->belongsTo('App\Models\Cert', 'cert_id', 'cert_id');
     }
 
+
+    //---------------------------入党申请人相关-----------------------------------------------
     /**
      * 获取申请补办证书的列表
      * @return array
@@ -73,5 +75,36 @@ class CertLost extends Model
         $certLost->deal_status = 2;
         $res = $certLost->save();
         return $res ? Resources::CertLost($certLost) : false;
+    }
+
+    //---------------------院级积极分子相关------------------------------------------
+    /**
+     * 获取申请补办证书的列表
+     * @return array
+     */
+    public static function getCertLostAcademy(){
+        $res = self::where('twt_certlost.isdeleted', 0)
+            ->leftJoin('twt_cert', 'twt_certlost.cert_id', '=', 'twt_cert.cert_id')
+            ->where('cert_type', 2)
+            ->get()->all();
+        return array_map(function ($certLost){
+            return Resources::CertLost($certLost);
+        }, $res);
+    }
+
+    /**
+     * 根据id取出指定的数据
+     * @param $id
+     * @return array
+     */
+    public static function getCertLostByIdAcademy($id){
+        $res = self::where('twt_certlost.isdeleted', 0)
+            ->where('lost_id', $id)
+            ->leftJoin('twt_cert', 'twt_certlost.cert_id', '=', 'twt_cert.cert_id')
+            ->where('cert_type', 2)
+            ->get()->all();
+        return array_map(function ($certLost){
+            return Resources::CertLost($certLost);
+        }, $res);
     }
 }

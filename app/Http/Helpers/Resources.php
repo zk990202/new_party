@@ -175,8 +175,9 @@ class Resources {
             'place' => $cert->cert_place,
             'isLost' => $cert->cert_islost,
             'isDeleted' => $cert->isdeleted,
-            'practiceGrade' => $cert->entryForm->entry_practicegrade,
-            'articleGrade' => $cert->entryForm->entry_articlegrade
+            'practiceGrade' => $cert->entryForm->entry_practicegrade ?? '',
+            'articleGrade' => $cert->entryForm->entry_articlegrade ?? '',
+            'testGrade' => $cert->entryForm->entry_testgrade ?? ''
         ];
     }
 

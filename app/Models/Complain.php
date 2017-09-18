@@ -30,13 +30,14 @@ class Complain extends Model
         return $this->belongsTo('App\Models\College', 'collegeid', 'id');
     }
 
+    //-------------------------------以下是申请人结业模块-------------------------------------------
     /**
      * 获取所有申诉
      * @return array
      */
     public static function getAll(){
         $res_all = self::where('type', 1)
-            ->where('isreplay', 0)
+            ->where('isreplay', 0)  //其实应该是reply，数据库里字段拼写错了
             ->orderBy('time', 'DESC')
             ->get()->all();
         return array_map(function ($complain){
@@ -45,7 +46,7 @@ class Complain extends Model
     }
 
     /**
-     * 根据id取出指定的申诉并将阅读状态更新为已读
+     * 根据id取出指定的申诉并将阅读状态更新为已读 (此方法为三种类型的申诉所共用)
      * @param $id
      * @return array
      */
@@ -69,7 +70,7 @@ class Complain extends Model
      * @param $content
      * @return array|bool
      */
-    public static function addReply($id, $sno, $title, $content){
+    public static function addReply($id, $sno, $title, $content, $type){
         $res = self::create([
             'from_sno' => $id,
             'to_sno' => $sno,
@@ -77,7 +78,7 @@ class Complain extends Model
             'test_id' => 0,
             'title' => $title,
             'content' => $content,
-            'type' => 1,
+            'type' => $type,
             'time' =>date('Y-m-d H:i:s'),
             'isread' => 0,
             'isreplay' => 1
@@ -102,5 +103,20 @@ class Complain extends Model
         return array_map(function($complain){
             return Resources::Complain($complain);
         }, $res);
+    }
+
+    //------------------------以下是院级积极分子模块----------------------------------------------
+    /**
+     * 获取所有申诉
+     * @return array
+     */
+    public static function getAllAcademy(){
+        $res_all = self::where('type', 2)
+            ->where('isreplay', 0)  //其实应该是reply，数据库里字段拼写错了
+            ->orderBy('time', 'DESC')
+            ->get()->all();
+        return array_map(function ($complain){
+            return Resources::Complain($complain);
+        }, $res_all);
     }
 }

@@ -58,7 +58,7 @@
                             </tr>
                             <tr>
                                 <th>所属类别</th>
-                                <td>申请人党校</td>
+                                <td>院级积极分子党校</td>
                             </tr>
                             <tr>
                                 <th>时间</th>
@@ -136,7 +136,7 @@
             });
 
 //            $.ajax({
-//                url : '/manager/applicant/complain/'+$('#id').val(),
+//                url : '/manager/academy/complain/'+$('#id').val(),
 //                type: 'GET',
 //                dataType: 'json',
 //                success: function(data){
@@ -161,7 +161,7 @@
                 form.append('content', $('#editor').val());
                 form.append('type', $('#type').val());
                 $.ajax({
-                    url: '/manager/applicant/complain/' + $('#id').val() + '/detail',
+                    url: '/manager/academy/complain/' + $('#id').val() + '/detail',
                     type: 'POST',
                     data: form,
                     cache: false,
@@ -171,14 +171,11 @@
                     success: function(data){
                         if(data.success){
                             alert('回复成功');
-                            window.location.href = '/manager/applicant/complain';
+                            window.location.href = '/manager/academy/complain';
                         }
                         else{
                             alert(data.message);
                         }
-                    },
-                    error: function(){
-                        alert(data.statusText);
                     }
                 });
             });
