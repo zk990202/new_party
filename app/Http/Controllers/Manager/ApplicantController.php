@@ -917,7 +917,6 @@ class ApplicantController extends Controller{
         $testId = $complain[0]['testId'];
         $grade = EntryForm::getGradeBySnoAndTestId($sno, $testId);
         $reply = Complain::getReply($id);
-        dd($reply);
         return view('Manager.Applicant.Complain.detail_1', ['complain' => $complain, 'grade' => $grade, 'reply' => $reply]);
     }
 
