@@ -91,5 +91,16 @@ class CommonFiles extends Model{
         return $files ? Resources::CommonFiles($files) : false;
     }
 
+    /**
+     * 添加选修课的文件
+     * @return array
+     */
+    public static function getAddElective(){
+        $files = self::where('file_isdeleted', 0)
+            ->get()->all();
+        return array_map(function ($commonFiles){
+            return Resources::CommonFiles($commonFiles);
+        }, $files);
+    }
 
 }

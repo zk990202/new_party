@@ -432,13 +432,63 @@ Route::group(['namespace' => 'Manager', 'prefix' => 'manager'], function (){
     });
 
     /**
-     * 预备党员管理模块，路由为 /manager/probationary/{action}, 命名空间 \App\Http\Controllers\Manager\Probationary
+     * 预备党员管理模块，路由为 /manager/probationary/{action}, 命名空间 \App\Http\Controllers\Manager
      */
-    Route::group(['namespace' => 'Probationary', 'prefix' => 'probationary'], function(){
-
-        // 培训控制
+    Route::group(['prefix' => 'probationary'], function(){
+        // 培训设置
         Route::group(['prefix' => 'train'], function(){
+            //培训列表
+            Route::get('list', 'ProbationaryController@trainList');
+            //添加培训
+            Route::get('add', 'ProbationaryController@trainAddPage');
+            Route::post('add', 'ProbationaryController@trainAdd');
+            //培训详情
+            Route::get('{id}/detail', 'ProbationaryController@trainDetail');
+            //编辑考试
+            Route::get('{id}/edit', 'ProbationaryController@trainEditPage');
+            Route::post('{id}/edit', 'ProbationaryController@trainEdit');
+            //修改状态
+            Route::get('{id}/status', 'ProbationaryController@trainStatusPage');
+            Route::post('{id}/entryStatus', 'ProbationaryController@trainEntryStatus');
+            Route::post('{id}/netChooseStatus', 'ProbationaryController@trainNetChooseStatus');
+            Route::post('{id}/gradeSearchStatus', 'ProbationaryController@trainGradeSearchStatus');
+            Route::post('{id}/endListShow', 'ProbationaryController@trainEndListShow');
+            Route::post('{id}/goodMemberShow', 'ProbationaryController@trainGoodMemberShow');
+            Route::post('{id}/isEnd', 'ProbationaryController@trainIsEnd');
+            //结业成绩录入
+            Route::post('{id}/open', 'ProbationaryController@trainOpen');
+            Route::post('{id}/close', 'ProbationaryController@trainClose');
 
+            Route::get('{id}', 'ProbationaryController@getTrainById');
+        });
+
+        // 课程管理
+        Route::group(['prefix' => 'course'], function (){
+            //课程列表
+            Route::get('list', 'ProbationaryController@courseListPage');
+            Route::post('list', 'ProbationaryController@courseList');
+            //课程详情
+            Route::get('{id}/detail/compulsory', 'ProbationaryController@courseCompulsoryDetail');
+            Route::get('{id}/detail/elective', 'ProbationaryController@courseElectiveDetail');
+            //编辑必修课
+            Route::get('{id}/edit/compulsory', 'ProbationaryController@courseCompulsoryEditPage');
+            Route::post('{id}/edit/compulsory', 'ProbationaryController@courseCompulsoryEdit');
+            //编辑选修课
+            Route::get('{id}/edit/elective', 'ProbationaryController@courseElectiveEditPage');
+            Route::post('{id}/edit/elective', 'ProbationaryController@courseElectiveEdit');
+            //删除课程
+            Route::post('{id}/delete', 'ProbationaryController@courseDelete');
+            //开启(关闭)成绩录入
+            Route::post('{id}/open', 'ProbationaryController@courseOpen');
+            Route::post('{id}/close', 'ProbationaryController@courseClose');
+            //添加必修课
+            Route::get('add/compulsory', 'ProbationaryController@courseAddCompulsoryPage');
+            Route::post('add/compulsory', 'ProbationaryController@courseAddCompulsory');
+            //添加选修课
+            Route::get('add/elective', 'ProbationaryController@courseAddElectivePage');
+            Route::post('add/elective', 'ProbationaryController@courseAddElective');
+
+            Route::get('{id}', 'ProbationaryController@getCourseById');
         });
 
         // 考试管理

@@ -282,6 +282,85 @@ class Resources {
         ];
     }
 
+    public static function ProbationaryTrainList($trainList){
+        return [
+            'id' => $trainList->train_id,
+            'name' => $trainList->train_name,
+            'time' => $trainList->train_begintime,
+            'fileName' => $trainList->train_filename,
+            'filePath' => $trainList->train_filepath,
+            'detail' => $trainList->train_detail,
+            'entryStatus' => $trainList->train_entry_status,
+            'netChooseStatus' => $trainList->train_netchoose_status,
+            'gradeSearchStatus' => $trainList->train_gradesearch_status,
+            'endListShow' => $trainList->train_endlist_show,
+            'goodMemberShow' => $trainList->train_goodmember_show,
+            'endInsert' => $trainList->train_endinsert,
+            'isEndInsert' => $trainList->train_isendinsert,
+            'isEnd' => $trainList->train_isend,
+            'isDeleted' => $trainList->train_isdeleted,
+//            'courseCanInsert' => $trainList->CouresList->course_caninsert ?? '',
+//            'courseIsInserted' => $trainList->CouresList->course_isinserted ?? ''
+        ];
+    }
+
+    public static function ProbationaryCourseList($courseList){
+        return [
+            'id' => $courseList->course_id,
+            'trainId' => $courseList->train_id,
+            'trainName' => $courseList->trainList->train_name,
+            'name' => $courseList->course_name,
+            'type' => $courseList->course_type,
+            'movieId' => $courseList->movie_id,
+            'movieName' => $courseList->commonFiles->file_title,
+            'introduction' => $courseList->course_introduction,
+            'requirement' => $courseList->course_requirement,
+            'time' => $courseList->course_begintime,
+            'speaker' => $courseList->course_speaker,
+            'place' => $courseList->course_place,
+            'limitNum' => $courseList->course_limitnum,
+            'canInsert' => $courseList->course_caninsert,
+            'isInserted' => $courseList->course_isinserted,
+            'isDeleted' => $courseList->course_isdeleted,
+            'number' => $courseList->course_number
+        ];
+    }
+
+    public static function ProbationaryEntryForm($entryForm){
+        return [
+            'id' => $entryForm->entry_id,
+            'sno' => $entryForm->sno,
+            'trainId' => $entryForm->train_id,
+            'practiceGrade' => $entryForm->entry_practicegrade,
+            'articleGrade' => $entryForm->entry_articlegrade,
+            'time' => $entryForm->entry_time,
+            'isLastAdded' => $entryForm->entry_islastadded,
+            'status' => $entryForm->entry_status,
+            'isAllPassed' => $entryForm->entry_isallpassed,
+            'isSystemAdd' => $entryForm->is_systemadd,
+            'certIsGrant' => $entryForm->cert_isgrant,
+            'passCompulsory' => $entryForm->pass_must,
+            'passElective' => $entryForm->pass_choose,
+            'exitCount' => $entryForm->exitcount,
+            'lastTrainId' => $entryForm->last_trainid,
+            'isExit' => $entryForm->isexit,
+            'countCheat' => $entryForm->count_zuobi
+        ];
+    }
+
+    public static function ProbationaryChildEntryForm($childEntryForm){
+        return [
+            'id' => $childEntryForm->entry_id,
+            'childId' => $childEntryForm->child_entryid,
+            'sno' => $childEntryForm->child_sno,
+            'courseId' => $childEntryForm->child_courseid,
+            'entryTime' => $childEntryForm->child_entrytime,
+            'status' => $childEntryForm->child_status,
+            'grade' => $childEntryForm->child_grade,
+            'isExit' => $childEntryForm->isexit
+        ];
+    }
+
     public static function StudentInfo($studentInfo){
         return [
             'id' => $studentInfo->info_id,

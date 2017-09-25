@@ -62,6 +62,16 @@ return [
             'path' => 'files/applicant',
             'extensions' => $fileExtensions,
             'disk' => 'public'
+        ],
+        'probationaryImg' => [
+            'path' => 'images/probationary',
+            'extensions' => $imageExtensions,
+            'disk' => 'public'
+        ],
+        'probationaryFile' => [
+            'path' => 'files/probationary',
+            'extensions' => $fileExtensions,
+            'disk' => 'public'
         ]
     ]
 ];
