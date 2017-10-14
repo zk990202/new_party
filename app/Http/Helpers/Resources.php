@@ -70,7 +70,7 @@ class Resources {
     }
 
     public static function CourseList(CourseList $courseList){
-       // dd($courseList);
+        // dd($courseList);
         return [
             'id' => $courseList->course_id,
             'courseName' => $courseList->course_name,
@@ -331,6 +331,10 @@ class Resources {
             'id' => $entryForm->entry_id,
             'sno' => $entryForm->sno,
             'trainId' => $entryForm->train_id,
+            'academyId' => $entryForm->studentInfo->academy_id ?? '',
+            'academyName' => $entryForm->studentInfo->college->shortname ?? '',
+            'majorName' => $entryForm->userInfo->major->majorname ?? '',
+            'studentName' => $entryForm->user->username ?? '',
             'practiceGrade' => $entryForm->entry_practicegrade,
             'articleGrade' => $entryForm->entry_articlegrade,
             'time' => $entryForm->entry_time,
@@ -344,7 +348,8 @@ class Resources {
             'exitCount' => $entryForm->exitcount,
             'lastTrainId' => $entryForm->last_trainid,
             'isExit' => $entryForm->isexit,
-            'countCheat' => $entryForm->count_zuobi
+            'countCheat' => $entryForm->count_zuobi,
+            'isDeleted' => $entryForm->isdeleted
         ];
     }
 

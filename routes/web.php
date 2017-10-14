@@ -178,17 +178,17 @@ Route::group(['namespace' => 'Manager', 'prefix' => 'manager'], function (){
      */
     Route::group(['prefix' => 'message'], function (){
         //收信箱
-       Route::get('receive', 'MessageController@receive');
+        Route::get('receive', 'MessageController@receive');
 
-       //发信箱
-       Route::get('send', 'MessageController@send');
+        //发信箱
+        Route::get('send', 'MessageController@send');
 
-       //查看信件详情
-       Route::get('watch/{id}', 'MessageController@watch');
+        //查看信件详情
+        Route::get('watch/{id}', 'MessageController@watch');
 
-       //写信
-       Route::get('write', 'MessageController@writePage');
-       Route::post('write', 'MessageController@write');
+        //写信
+        Route::get('write', 'MessageController@writePage');
+        Route::post('write', 'MessageController@write');
     });
 
     /**
@@ -303,7 +303,7 @@ Route::group(['namespace' => 'Manager', 'prefix' => 'manager'], function (){
             Route::get('last-grant/{id}/detail', 'ApplicantController@certificateLastGrantDetailPage');
             Route::post('last-grant/{id}/detail', 'ApplicantController@certificateLastGrantDetail');
             Route::post('last-grant/{id}/reject', 'ApplicantController@certificateLastGrantReject');
-            
+
             Route::get('last-grant/{id}', 'ApplicantController@getCertificateById');
         });
 
@@ -341,8 +341,8 @@ Route::group(['namespace' => 'Manager', 'prefix' => 'manager'], function (){
     });
 
     /**
-    * 院级积极分子管理模块，路由为 /manager/academy/{action}, 命名空间 \App\Http\Controllers\Manager
-    */
+     * 院级积极分子管理模块，路由为 /manager/academy/{action}, 命名空间 \App\Http\Controllers\Manager
+     */
     Route::group(['prefix' => 'academy'], function(){
         // 总培训控制
         Route::group(['prefix' => 'train-list'], function(){
@@ -489,6 +489,22 @@ Route::group(['namespace' => 'Manager', 'prefix' => 'manager'], function (){
             Route::post('add/elective', 'ProbationaryController@courseAddElective');
 
             Route::get('{id}', 'ProbationaryController@getCourseById');
+        });
+
+        // 报名管理
+        Route::group(['prefix' => 'sign'], function (){
+            //报名列表
+            Route::get('list', 'ProbationaryController@signList');
+            //退出(恢复)选课
+            Route::post('{id}/inCourseChoose', 'ProbationaryController@signInCourseChoose');
+            Route::post('{id}/exitCourseChoose', 'ProbationaryController@signExitCourseChoose');
+            //删除
+            Route::post('{id}/delete', 'ProbationaryController@signDelete');
+            //退报名名单
+            Route::get('exit-list', 'ProbationaryController@signExitList');
+            //后台补报名
+            Route::get('makeup-sign', 'ProbationaryController@signMakeupPage');
+            Route::post('makeup-sign', 'ProbationaryController@signMakeup');
         });
 
         // 考试管理
