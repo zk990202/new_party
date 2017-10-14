@@ -491,6 +491,22 @@ Route::group(['namespace' => 'Manager', 'prefix' => 'manager'], function (){
             Route::get('{id}', 'ProbationaryController@getCourseById');
         });
 
+        // 报名管理
+        Route::group(['prefix' => 'sign'], function (){
+            //报名列表
+            Route::get('list', 'ProbationaryController@signList');
+            //退出(恢复)选课
+            Route::post('{id}/inCourseChoose', 'ProbationaryController@signInCourseChoose');
+            Route::post('{id}/exitCourseChoose', 'ProbationaryController@signExitCourseChoose');
+            //删除
+            Route::post('{id}/delete', 'ProbationaryController@signDelete');
+            //退报名名单
+            Route::get('exit-list', 'ProbationaryController@signExitList');
+            //后台补报名
+            Route::get('makeup-sign', 'ProbationaryController@signMakeupPage');
+            Route::post('makeup-sign', 'ProbationaryController@signMakeup');
+        });
+
         // 考试管理
         Route::group(['prefix' => 'exam'], function(){
 

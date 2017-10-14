@@ -112,4 +112,18 @@ class TrainList extends Model
         ]);
         return $train ? Resources::ProbationaryTrainList($train) : false;
     }
+
+    /**
+     * 获取还未结束的考试， is_end = 1表示还未结束
+     * @return array
+     */
+    public static function getTrainNotEnd(){
+        $train = self::where('train_isend', 1)
+            ->where('train_isdeleted', 0)
+            ->orderBy('train_id', 'desc')
+            ->get()->all();
+        return array_map(function ($trainList){
+            return Resources::ProbationaryTrainList($trainList);
+        }, $train);
+    }
 }

@@ -15,6 +15,7 @@ use App\Models\Probationary\ChildEntryForm;
 use App\Models\Probationary\CourseList;
 use App\Models\Probationary\EntryForm;
 use App\Models\Probationary\TrainList;
+use App\Models\StudentInfo;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Mockery\Exception;
@@ -677,4 +678,147 @@ class ProbationaryController extends Controller{
         }
     }
 
+
+    //---------------------------------以下是报名管理部分-----------------------------------------------
+    /**
+     * 报名列表
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function signList(){
+        $train = TrainList::getNotEndTrain();
+        $signs = array();
+        if(count($train) == 1){
+            $signs = EntryForm::getAllSign($train[0]['id']);
+        }
+        return view('Manager.Probationary.Sign.list', ['signs' => $signs, 'train' => $train]);
+    }
+
+    /**
+     * 报名列表
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function signExitList(){
+        $train = TrainList::getNotEndTrain();
+        $signs = array();
+        if(count($train) == 1){
+            $signs = EntryForm::getExitSign($train[0]['id']);
+        }
+        return view('Manager.Probationary.Sign.exitList', ['signs' => $signs, 'train' => $train]);
+    }
+
+    /**
+     * 恢复选课
+     * @param $id
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function signInCourseChoose($id){
+        $sign = EntryForm::findOrFail($id);
+        $sign->isexit = 0;
+        $res = $sign->save();
+        if ($res){
+            return response()->json([
+                'success' => true
+            ]);
+        }else{
+            return response()->json([
+                'message' => '操作失败'
+            ]);
+        }
+    }
+
+    /**
+     * 退出选课
+     * @param $id
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function signExitCourseChoose($id){
+        $sign = EntryForm::findOrFail($id);
+        $sign->isexit = 1;
+        $res = $sign->save();
+        if ($res){
+            return response()->json([
+                'success' => true
+            ]);
+        }else{
+            return response()->json([
+                'message' => '操作失败'
+            ]);
+        }
+    }
+
+    /**
+     * 删除
+     * @param $id
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function signDelete($id){
+        $sign = EntryForm::findOrFail($id);
+        $sign->isdeleted = 1;
+        $res = $sign->save();
+        if ($res){
+            return response()->json([
+                'success' => true
+            ]);
+        }else{
+            return response()->json([
+                'message' => '操作失败'
+            ]);
+        }
+    }
+
+    /**
+     * 补考报名前端
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function signMakeupPage(){
+        $train = TrainList::getNotEndTrain();
+        return view('Manager.Probationary.Sign.makeup', ['trains' => $train]);
+    }
+
+    /**
+     * 补报名后台逻辑
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function signMakeup(Request $request){
+        $sno = $request->input('sno');
+        $trainId = $request->input('trainId');
+        $studentInfo = StudentInfo::getStudentInfo($sno);
+        if ($studentInfo){
+            if ($sno && $trainId){
+                $isPass = EntryForm::isAllPassed($sno);
+                if (!$isPass){
+                    //判断该用户是否符合要求....
+                    if ($studentInfo[0]['mainStatus'] > 9 && $studentInfo[0]['mainStatus'] < 12){
+                        $res = EntryForm::add($sno, $trainId);
+                        if ($res){
+                            return response()->json([
+                                'success' => true
+                            ]);
+                        }else{
+                            return response()->json([
+                                'message' => '未知错误，请联系后台管理员'
+                            ]);
+                        }
+                    }else{
+                        return response()->json([
+                            'message' => '该同学没有报名预备党员的权限'
+                        ]);
+                    }
+                }else{
+                    return response()->json([
+                        'message' => '该同学已经通过了预备党员结业考试，无需报名'
+                    ]);
+                }
+            }else{
+                return response()->json([
+                    'message' => '培训期数和学号不能为空'
+                ]);
+            }
+        }else{
+            return response()->json([
+                'message' => '没有找到学号所对应的学生'
+            ]);
+        }
+    }
 }

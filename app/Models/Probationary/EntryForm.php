@@ -26,6 +26,18 @@ class EntryForm extends Model
     const CREATED_AT = 'entry_time';
     const UPDATED_AT = 'updated_at';
 
+    public function studentInfo(){
+        return $this->belongsTo('App\Models\StudentInfo', 'sno', 'sno');
+    }
+
+    public function userInfo(){
+        return $this->belongsTo('App\Models\UserInfo','sno','usernumb');
+    }
+
+    public function user(){
+        return $this->belongsTo('App\Models\User', 'sno', 'usernumb');
+    }
+
     /**
      * 判断报名是否已经退出
      * @param $id
@@ -126,6 +138,69 @@ class EntryForm extends Model
         return array_map(function ($entryForm){
             return Resources::ProbationaryEntryForm($entryForm);
         }, $res);
+    }
+
+    /**
+     * 根据培训id获取所有报名信息
+     * @param $id
+     * @return array
+     */
+    public static function getAllSign($id){
+        $signs = self::where('train_id', $id)
+            ->where('isdeleted', 0)
+            ->orderBy('entry_id', 'desc')
+            ->get()->all();
+        return array_map(function ($entryForm){
+            return Resources::ProbationaryEntryForm($entryForm);
+        }, $signs);
+    }
+
+    /**
+     * 根据培训id获取退报名信息
+     * @param $id
+     * @return array
+     */
+    public static function getExitSign($id){
+        $signs = self::where('train_id', $id)
+            ->where('isdeleted', 0)
+            ->where('isexit', 1)
+            ->orderBy('entry_id', 'desc')
+            ->get()->all();
+        return array_map(function ($entryForm){
+            return Resources::ProbationaryEntryForm($entryForm);
+        }, $signs);
+    }
+
+    /**
+     * 判断学号对应学生是否全部通过
+     * @param $sno
+     * @return bool
+     */
+    public static function isAllPassed($sno){
+        $sign = self::where('sno', $sno)
+            ->where('entry_isallpassed', 1)
+            ->get()->toArray();
+        if ($sign){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    /**
+     * 添加报名信息
+     * @param $sno
+     * @param $trainId
+     * @return array|bool
+     */
+    public static function add($sno, $trainId){
+        $res = self::create([
+            'sno' => $sno,
+            'train_id' => $trainId,
+            'entry_islastadded' => 1,
+            'entry_time' =>date("Y-m-d H:i:s")
+        ]);
+        return $res ? Resources::ProbationaryEntryForm($res) : false;
     }
 
 }
