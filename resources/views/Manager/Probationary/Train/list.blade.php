@@ -23,8 +23,8 @@
                                 <th>培训状态</th>
                                 <th>操作</th>
                                 <th>操作</th>
-                                <th>操作</th>
-                                <th>操作</th>
+                                {{--<th>操作</th>--}}
+                                {{--<th>操作</th>--}}
                                 <th>结业成绩录入</th>
                             </tr>
                             </thead>
@@ -55,16 +55,16 @@
                                             <button type="button" class="btn btn-block btn-info btn-xs">修改状态</button>
                                         </a>
                                     </td>
-                                    <td>
-                                        <a href="#">
-                                            <button type="button" class="btn btn-block btn-info btn-xs">必修课添加</button>
-                                        </a>
-                                    </td>
-                                    <td>
-                                        <a href="#">
-                                            <button type="button" class="btn btn-block btn-info btn-xs">选修课添加</button>
-                                        </a>
-                                    </td>
+                                    {{--<td>--}}
+                                        {{--<a href="#">--}}
+                                            {{--<button type="button" class="btn btn-block btn-info btn-xs">必修课添加</button>--}}
+                                        {{--</a>--}}
+                                    {{--</td>--}}
+                                    {{--<td>--}}
+                                        {{--<a href="#">--}}
+                                            {{--<button type="button" class="btn btn-block btn-info btn-xs">选修课添加</button>--}}
+                                        {{--</a>--}}
+                                    {{--</td>--}}
                                     <td>
                                         @if($train['endInsert'])
                                             {{--<a href="{{ url('Manager/Probationary/train/'.$train['id'].'/open') }}">--}}
@@ -85,8 +85,8 @@
                                 <th>培训状态</th>
                                 <th>操作</th>
                                 <th>操作</th>
-                                <th>操作</th>
-                                <th>操作</th>
+                                {{--<th>操作</th>--}}
+                                {{--<th>操作</th>--}}
                                 <th>结业成绩录入</th>
                             </tr>
                             </tfoot>

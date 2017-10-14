@@ -167,7 +167,6 @@ class EntryForm extends Model
 
     /**
      * 补考报名时判断是否已经通过考试
-     * @param $testId
      * @param $sno
      * @return bool
      */

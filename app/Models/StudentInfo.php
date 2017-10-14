@@ -72,6 +72,20 @@ class StudentInfo extends Model
         else
             return false;
     }
+
+    /**
+     * 获取学生信息
+     * @param $sno
+     * @return array
+     */
+    public static function getStudentInfo($sno){
+        $studentInfo = self::where('sno', $sno)
+            ->get()->all();
+        return array_map(function ($studentInfo){
+            return Resources::StudentInfo($studentInfo);
+        }, $studentInfo);
+    }
+
 //    /**
 //     * 恢复20课的清除
 //     * @param $sno
