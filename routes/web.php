@@ -522,6 +522,27 @@ Route::group(['namespace' => 'Manager', 'prefix' => 'manager'], function (){
             Route::post('makeup', 'ProbationaryController@chooseCourseMakeup');
         });
 
+        // 课程成绩录入
+        Route::group(['prefix' => 'course-gradeInput'], function (){
+            //成绩录入前对课程的筛选页面
+            Route::get('/', 'ProbationaryController@courseGradeInputPage1');
+            //筛选后的页面，显示成绩录入表单
+            Route::post('filter', 'ProbationaryController@courseGradeInputPage');
+            //录入成绩的后台操作
+            Route::post('/', 'ProbationaryController@courseGradeInput');
+        });
+
+        // 结业成绩
+        Route::group(['prefix' => 'graduation'], function (){
+            //录入
+            Route::get('input', 'ProbationaryController@graduationGradeInputPage');
+            Route::post('input', 'ProbationaryController@graduationGradeInput');
+            //调整
+            Route::get('change', 'ProbationaryController@graduationGradeChangePage1');
+            Route::post('change1', 'ProbationaryController@graduationGradeChangePage');
+            Route::post('change', 'ProbationaryController@graduationGradeChange');
+        });
+
         // 考试管理
         Route::group(['prefix' => 'exam'], function(){
 

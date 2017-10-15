@@ -38,12 +38,17 @@ class EntryForm extends Model
         return $this->belongsTo('App\Models\User', 'sno', 'usernumb');
     }
 
+    public function trainList(){
+        return $this->belongsTo('App\Models\Probationary\TrainList', 'train_id', 'train_id');
+    }
+
     /**
      * 判断报名是否已经退出
+     * 根据trainId获取
      * @param $id
      * @return array
      */
-    public static function isExit($id){
+    public static function getByTrainId($id){
         $res = self::where('train_id', $id)
             ->where('isexit', 0)
             ->get()->all();
@@ -51,6 +56,8 @@ class EntryForm extends Model
             return Resources::ProbationaryEntryForm($entryForm);
         }, $res);
     }
+
+
 
     /**
      * 判断是否作弊，并更新字段
@@ -220,4 +227,66 @@ class EntryForm extends Model
         return $res ? Resources::ProbationaryEntryForm($res) : false;
     }
 
+    /**
+     * 更新多个学生成绩和状态
+     * @param $data
+     * @param $i
+     * @return array|bool
+     */
+    public static function updateGradeAndStatus($data, $i){
+        $entry = self::findOrFail($data['id'][$i]);
+        $entry->entry_practicegrade = $data['practiceGrade'][$i];
+        $entry->entry_articlegrade = $data['articleGrade'][$i];
+        $entry->entry_status = $data['status'][$i];
+        $res = $entry->save();
+        return $res ? Resources::ProbationaryEntryForm($entry) : false;
+    }
+
+    /**
+     * 更新一个学生成绩和状态
+     * @param $data
+     * @return array|bool
+     */
+    public static function updateOneGradeAndStatus($data){
+        $entry = self::findOrFail($data['entryFormId']);
+        $entry->entry_practicegrade = $data['practiceGrade'];
+        $entry->entry_articlegrade = $data['articleGrade'];
+        $entry->entry_status = $data['status'];
+        $entry->pass_must = $data['passCompulsory'];
+        $entry->pass_choose = $data['passElective'];
+        $entry->entry_isallpassed = $data['isAllPassed'];
+        $entry->count_zuobi = $data['countCheat'];
+        $res = $entry->save();
+        return $res ? Resources::ProbationaryEntryForm($entry) : false;
+    }
+
+    /**
+     * 根据学号获取
+     * @param $sno
+     * @return array
+     */
+    public static function getBySno($sno){
+        $entry = self::where('sno', $sno)
+            ->orderBy('entry_id', 'desc')
+            ->limit(1)
+            ->get()->all();
+        return array_map(function ($childEntryForm){
+            return Resources::ProbationaryEntryForm($childEntryForm);
+        }, $entry);
+    }
+
+    /**
+     * 根据trainId和学号获取
+     * @param $trainId
+     * @param $sno
+     * @return array
+     */
+    public static function getByTrainIdAndSno($trainId, $sno){
+        $entry = self::where('train_id', $trainId)
+            ->where('sno', $sno)
+            ->get()->all();
+        return array_map(function ($childEntryForm){
+            return Resources::ProbationaryEntryForm($childEntryForm);
+        }, $entry);
+    }
 }

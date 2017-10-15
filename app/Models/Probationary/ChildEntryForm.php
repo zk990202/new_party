@@ -116,8 +116,45 @@ class ChildEntryForm extends Model
     public static function getByCourseId($courseId){
         $res = self::where('child_courseid', $courseId)
             ->where('isexit', 0)
-            ->get()->toArray();
-        return $res;
+            ->get()->all();
+        return array_map(function ($childEntryForm){
+            return Resources::ProbationaryChildEntryForm($childEntryForm);
+        }, $res);
     }
 
+    /**
+     * 成绩录入后更新字段
+     * @param $data
+     * @param $i
+     * @return array|bool
+     */
+    public static function updateSome($data, $i){
+        $childEntry = self::findOrFail($data['id'][$i]);
+        $childEntry->child_grade = $data['grade'][$i];
+        $childEntry->child_status = $data['status'][$i];
+        $res = $childEntry->save();
+        return $res ? Resources::ProbationaryChildEntryForm($childEntry) : false;
+    }
+
+    public static function updateSome1($data, $i){
+        $childEntry = self::findOrFail($data['childEntryId'][$i]);
+        $childEntry->child_grade = $data['grade'][$i];
+        $childEntry->child_status = $data['status'][$i];
+        $res = $childEntry->save();
+        return $res ? Resources::ProbationaryChildEntryForm($childEntry) : false;
+    }
+
+
+    /**
+     * 根据entryId获得
+     * @param $entryId
+     * @return array
+     */
+    public static function getByEntryId($entryId){
+        $childEntry = self::where('child_entryid', $entryId)
+            ->get()->all();
+        return array_map(function ($childEntryForm){
+            return Resources::ProbationaryChildEntryForm($childEntryForm);
+        }, $childEntry);
+    }
 }

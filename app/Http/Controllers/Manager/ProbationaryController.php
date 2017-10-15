@@ -240,7 +240,7 @@ class ProbationaryController extends Controller{
             $res = $train->save();
             if ($res){
                 //判断报名是否已经退出
-                $isExit = EntryForm::isExit($id);
+                $isExit = EntryForm::getByTrainId($id);
                 if ($isExit){
                     //报名未退出
                     for ($i = 0; $i < count($isExit); $i++){
@@ -1010,5 +1010,141 @@ class ProbationaryController extends Controller{
                 'message' => '学号和课程不能为空！'
             ]);
         }
+    }
+
+    //----------------------------以下是课程成绩录入模块-----------------------------------------
+    /**
+     * 课程成绩录入前对课程进行筛选
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function courseGradeInputPage1(){
+        $train = TrainList::getNotEndTrain();
+        $courses = CourseList::getByTrainId($train[0]['id']);
+        return view('Manager.Probationary.CourseGradeInput.inputPage', ['train' => $train,'courses' => $courses]);
+    }
+
+    /**
+     * 课程成绩录入表单显示页面
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function courseGradeInputPage(Request $request){
+        $train = TrainList::getNotEndTrain();
+        $courseId  = $request->input('courseId');
+        $entries = ChildEntryForm::getByCourseId($courseId);
+        return view('Manager.Probationary.CourseGradeInput.input', ['train' => $train ,'entries' => $entries]);
+    }
+
+    /**
+     * 课程成绩录入后台逻辑
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function courseGradeInput(Request $request){
+        $data = $request->all();
+        for ($i = 0; $i < count($data['id']); $i++){
+            ChildEntryForm::updateSome($data, $i);
+        }
+        return view('Manager.Probationary.CourseGradeInput.result');
+    }
+
+    //-----------------------以下是结业成绩模块--------------------------------------------
+    /**
+     * 结业成绩录入前端页面
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function graduationGradeInputPage(){
+        $train = TrainList::getNotEndTrain();
+        $entries = [];
+        if ($train[0]['endInsert']){
+            $entries = EntryForm::getByTrainId($train[0]['id']);
+        }
+        return view('Manager.Probationary.Graduation.GradeInput', ['train' => $train ,'entries' => $entries]);
+    }
+
+    /**
+     * 结业成绩录入后台逻辑
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function graduationGradeInput(Request $request){
+        $data = $request->all();
+        for ($i = 0; $i < count($data['id']); $i++){
+            EntryForm::updateGradeAndStatus($data, $i);
+        }
+        return view('Manager.Probationary.Graduation.GradeInputResult');
+    }
+
+    /**
+     * 结业成绩调整前的学号筛选
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function graduationGradeChangePage1(){
+        $train = TrainList::getNotEndTrain();
+        return view('Manager.Probationary.Graduation.GradeChangePage', ['train' => $train]);
+    }
+
+    /**
+     * 结业成绩调整筛选出的学生信息
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function graduationGradeChangePage(Request $request){
+        $train = TrainList::getNotEndTrain();
+        $sno = $request->input('sno');
+        $entry = EntryForm::getBySno($sno);
+        $lastTrainEntry = [];
+        $children = [];
+        if ($entry){
+            //这里,我们需要确定是否是继承自上期培训
+            if ($entry[0]['lastTrainId']){
+                $lastTrainEntry = EntryForm::getByTrainIdAndSno($entry[0]['lastTrainId'], $sno);
+            }
+            $children = ChildEntryForm::getByEntryId($entry[0]['id']);
+        }
+        return view('Manager.Probationary.Graduation.GradeChange', ['train' => $train ,'lastTrainEntry' => $lastTrainEntry, 'entry' => $entry, 'children' => $children]);
+    }
+
+    /**
+     * 结业成绩调整后台逻辑
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function graduationGradeChange(Request $request){
+        $data = $request->all();
+//        dd($data);
+        if ($data['sno'] && $data['entryFormId']){
+            if ($data['status'] == 2){
+                //作弊
+                $data['countCheat']++;
+                $data['practiceGrade'] = 0;
+                $data['articleGrade'] = 0;
+            }else if ($data['status'] == 3){
+                //缺考
+                $data['practiceGrade'] = 0;
+                $data['articleGrade'] = 0;
+            }
+            $res2 = [];
+            for ($i = 0; $i < count($data['childEntryId']); $i++){
+                if ($data['status'][$i] == 2){
+                    //作弊
+                    $data['countCheat']++;
+                    $data['grade'][$i] = 0;
+                }else if ($data['status'][$i] == 3){
+                    //缺考
+                    $data['grade'][$i] = 0;
+                }
+                $res2 = ChildEntryForm::updateSome1($data, $i);
+            }
+            $res1 = EntryForm::updateOneGradeAndStatus($data);
+            if ($res1 && $res2){
+                $result = '结业成绩调整成功！';
+            }else{
+                $result = '调整失败！';
+            }
+        }else{
+            $result = '重要信息丢失！';
+        }
+        return view('Manager.Probationary.Graduation.GradeChangeResult', ['result' => $result]);
     }
 }
