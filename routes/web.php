@@ -507,6 +507,21 @@ Route::group(['namespace' => 'Manager', 'prefix' => 'manager'], function (){
             Route::post('makeup-sign', 'ProbationaryController@signMakeup');
         });
 
+        // 选课管理
+        Route::group(['prefix' => 'choose-course'], function (){
+            //报名列表
+            Route::get('list', 'ProbationaryController@chooseCourseListPage');
+            Route::post('list', 'ProbationaryController@chooseCourseList');
+            //退出(恢复)选课
+            Route::post('{id}/inCourseChoose', 'ProbationaryController@chooseCourseInCourseChoose');
+            Route::post('{id}/exitCourseChoose', 'ProbationaryController@chooseCourseExitCourseChoose');
+            //删除
+            Route::post('{id}/delete', 'ProbationaryController@chooseCourseDelete');
+            //补选课
+            Route::get('makeup', 'ProbationaryController@chooseCourseMakeupPage');
+            Route::post('makeup', 'ProbationaryController@chooseCourseMakeup');
+        });
+
         // 考试管理
         Route::group(['prefix' => 'exam'], function(){
 

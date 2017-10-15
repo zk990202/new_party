@@ -10,6 +10,7 @@ namespace App\Http\Controllers\Manager;
 
 use App\Http\Controllers\Controller;
 use App\Http\Helpers\Resources;
+use App\Models\College;
 use App\Models\CommonFiles;
 use App\Models\Probationary\ChildEntryForm;
 use App\Models\Probationary\CourseList;
@@ -19,6 +20,7 @@ use App\Models\StudentInfo;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Mockery\Exception;
+use phpDocumentor\Reflection\Types\Null_;
 
 class ProbationaryController extends Controller{
     protected $fileExtension;
@@ -690,11 +692,14 @@ class ProbationaryController extends Controller{
         if(count($train) == 1){
             $signs = EntryForm::getAllSign($train[0]['id']);
         }
+        if ($train == null){
+            $train = [['name' => '无']];
+        }
         return view('Manager.Probationary.Sign.list', ['signs' => $signs, 'train' => $train]);
     }
 
     /**
-     * 报名列表
+     * 退报名列表
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function signExitList(){
@@ -702,6 +707,9 @@ class ProbationaryController extends Controller{
         $signs = array();
         if(count($train) == 1){
             $signs = EntryForm::getExitSign($train[0]['id']);
+        }
+        if ($train == null){
+            $train = [['name' => '无']];
         }
         return view('Manager.Probationary.Sign.exitList', ['signs' => $signs, 'train' => $train]);
     }
@@ -786,6 +794,7 @@ class ProbationaryController extends Controller{
         $studentInfo = StudentInfo::getStudentInfo($sno);
         if ($studentInfo){
             if ($sno && $trainId){
+                //判断是否通过全部课程
                 $isPass = EntryForm::isAllPassed($sno);
                 if (!$isPass){
                     //判断该用户是否符合要求....
@@ -818,6 +827,187 @@ class ProbationaryController extends Controller{
         }else{
             return response()->json([
                 'message' => '没有找到学号所对应的学生'
+            ]);
+        }
+    }
+
+    //-------------------------------以下是选课管理部分------------------------------------------
+    /**
+     * 选课管理筛选页面
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function chooseCourseListPage(){
+        $train = TrainList::getNotEndTrain();
+        $courses = CourseList::getByTrainId($train[0]['id']);
+        $colleges = College::getAll();
+        return view('Manager.Probationary.ChooseCourse.listPage', ['courses' => $courses, 'colleges' => $colleges]);
+    }
+
+    /**
+     * 选课管理筛选结果
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function chooseCourseList(Request $request){
+        $train = TrainList::getNotEndTrain();
+        if ($train == null){
+            $train = [['name' => '无']];
+        }
+        $data = $request->all();
+        $res = ChildEntryForm::getByCourseAndCollege($data);
+        return view('Manager.Probationary.ChooseCourse.list', ['entries' => $res, 'train' => $train]);
+    }
+
+    /**
+     * 恢复选课
+     * @param $id
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function chooseCourseInCourseChoose($id){
+        $sign = ChildEntryForm::findOrFail($id);
+        $sign->isexit = 0;
+        $res = $sign->save();
+        if ($res){
+            return response()->json([
+                'success' => true
+            ]);
+        }else{
+            return response()->json([
+                'message' => '操作失败'
+            ]);
+        }
+    }
+
+    /**
+     * 退出选课
+     * @param $id
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function chooseCourseExitCourseChoose($id){
+        $sign = ChildEntryForm::findOrFail($id);
+        $sign->isexit = 1;
+        $res = $sign->save();
+        if ($res){
+            return response()->json([
+                'success' => true
+            ]);
+        }else{
+            return response()->json([
+                'message' => '操作失败'
+            ]);
+        }
+    }
+
+    /**
+     * 删除
+     * @param $id
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function chooseCourseDelete($id){
+        $sign = ChildEntryForm::findOrFail($id);
+        $sign->isdeleted = 1;
+        $res = $sign->save();
+        if ($res){
+            return response()->json([
+                'success' => true
+            ]);
+        }else{
+            return response()->json([
+                'message' => '操作失败'
+            ]);
+        }
+    }
+
+    /**
+     * 补选课页面
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function chooseCourseMakeupPage(){
+        $train = TrainList::getNotEndTrain();
+        $courses = CourseList::getByTrainId($train[0]['id']);
+        return view('Manager.Probationary.ChooseCourse.makeup', ['train' => $train, 'courses' => $courses]);
+    }
+
+    //补选课后台逻辑
+    public function chooseCourseMakeup(Request $request){
+        $train = TrainList::getNotEndTrain();
+        $trainId = $train[0]['id'];
+        $sno = $request->input('sno');
+        $courseId = $request->input('courseId');
+        if ($sno && $courseId){
+            //判断是否通过全部课程
+            $isPass = EntryForm::isAllPassed($sno);
+            if (!$isPass){
+                //查看是否已经参加过本期考试
+                $isEntry = EntryForm::isEntry($sno, $trainId);
+                if ($isEntry){
+                    //这里需要判断一下,该课程是否已经录入成绩完毕了
+                    $endCourse = CourseList::getCourseById($courseId);
+                    $courseType = $endCourse[0]['type'];
+                    $pass = ChildEntryForm::getBySnoAndTrainId($sno, $trainId, $courseType);
+
+                    $left = 0;
+                    $courseStr = '';
+                    if ($endCourse['type']){
+                        $left = 1 - $isEntry['passElective'];
+                        $courseStr = '选修课';
+                    }else{
+                        $left = 3 - $isEntry['passCompulsory'];
+                        $courseStr = '必修课';
+                    }
+                    if (count($endCourse) >= $left){
+                        return response()->json([
+                            '添加失败，该学生'.$courseStr.'已经修完'
+                        ]);
+                    }
+
+                    $entryId = $isEntry[0]['id'];
+                    if (!($endCourse['canInsert'] || $endCourse['isInserted'])){
+                        $isChoose = ChildEntryForm::isChoose($courseId, $entryId);
+                        if (!$isChoose){
+                            $res = ChildEntryForm::add($sno, $entryId, $courseId);
+                            if ($res){
+                                //这里还有一些操作.将该用户的课程数++
+                                //这里需要做一个操作..就是如果搜索到的记录大于limit人数,则limit加1
+                                $rs = ChildEntryForm::getByCourseId($courseId);
+                                if (count($rs) > $endCourse['limitNum'] && !$endCourse['type']){
+                                    //这里是报考的人数大于限制的人数了.同时是必修课
+                                    $update = CourseList::updateWhenChooseCourse($courseId, count($rs));
+                                    if ($update){
+                                        return response()->json([
+                                            'success' => true
+                                        ]);
+                                    }else{
+                                        return response()->json([
+                                            'message' => '未知错误'
+                                        ]);
+                                    }
+                                }
+                            }else{
+                                return response()->json([
+                                    'message' => '补选失败，未知错误'
+                                ]);
+                            }
+                        }else{
+                            return response()->json([
+                                'message' => '该同学已经选择了该课程，不可重复选课'
+                            ]);
+                        }
+                    }
+
+                }else{
+                    return response()->json([
+                        'message' => '该同学还未报名该考试！'
+                    ]);
+                }
+            }else{
+                return response()->json([
+                    'message' => '该同学已经通过了预备党员结业考试，无需再补考报名，补选课'
+                ]);
+            }
+        }else{
+            return response()->json([
+                'message' => '学号和课程不能为空！'
             ]);
         }
     }

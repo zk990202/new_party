@@ -75,7 +75,7 @@
                             </div>
                             <div class="form-group" >
                                 <label for="isEnd">培训状态-></label>
-                                @if(!$train['isEnd'])
+                                @if($train['isEnd'])
                                     进行中
                                     <button type="button" class="btn btn-danger" onclick="isEnd({{ $train['id'] }});">关闭</button>
                                 @else

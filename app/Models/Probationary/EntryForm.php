@@ -188,6 +188,23 @@ class EntryForm extends Model
     }
 
     /**
+     * 查看是否已经参加过本期考试
+     * @param $sno
+     * @param $train_id
+     * @return bool
+     */
+    public static function isEntry($sno, $train_id){
+        $res = self::where('sno', $sno)
+            ->where('train_id', $train_id)
+            ->get()->all();
+        if ($res){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    /**
      * 添加报名信息
      * @param $sno
      * @param $trainId

@@ -14,7 +14,7 @@ class College extends Model
             ->where('code', '!=', 220)
             ->where('code', '>=', 201)
             ->where('code', '<=', 231)
-            ->get()->all();
+            ->get()->toArray();
         return $res;
     }
 }

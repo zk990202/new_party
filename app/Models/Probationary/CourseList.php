@@ -68,6 +68,15 @@ class CourseList extends Model
         }
     }
 
+    public static function getByTrainId($trainId){
+        $courses = self::where('train_id', $trainId)
+            ->where('course_isdeleted', 0)
+            ->get()->all();
+        return array_map(function ($courseList){
+            return Resources::ProbationaryCourseList($courseList);
+        }, $courses);
+    }
+
     /**
      * 根据id获取某一课程
      * @param $id
@@ -140,5 +149,21 @@ class CourseList extends Model
             'course_isinserted' => 1
         ]);
         return $course ? Resources::ProbationaryCourseList($course) : false;
+    }
+
+    /**
+     * 后台补选课后更新limitNum字段
+     * @param $courseId
+     * @param $count
+     * @return bool
+     */
+    public static function updateWhenChooseCourse($courseId, $count){
+        $res = where('course_id', $courseId)
+            ->update(['course_limitnum' => $count]);
+        if ($res){
+            return true;
+        }else{
+            return false;
+        }
     }
 }

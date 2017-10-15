@@ -87,9 +87,9 @@
                             <th>是否结束</th>
                             <td style="text-align:left;padding-left:10px;">
                                 @if($train[0]['isEnd'])
-                                    是
+                                    未结束
                                 @else
-                                    否
+                                    已结束
                                 @endif
                             </td>
                         </tr>
