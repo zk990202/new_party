@@ -543,6 +543,12 @@ Route::group(['namespace' => 'Manager', 'prefix' => 'manager'], function (){
             Route::post('change', 'ProbationaryController@graduationGradeChange');
         });
 
+        // 成绩查询
+        Route::group(['prefix' => 'grade-search'], function (){
+            Route::get('/', 'ProbationaryController@gradeSearchPage');
+            Route::post('/', 'ProbationaryController@gradeSearch');
+        });
+
         // 考试管理
         Route::group(['prefix' => 'exam'], function(){
 
