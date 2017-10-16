@@ -29,7 +29,7 @@
     <script>
         $(function () {
             $.ajax({
-                'url' : '/manager/statistics/partyBranch/3',
+                'url' : '/manager/statistics/party-branch/3',
                 'method' : 'get',
                 'success' : function(data){
                     console.log(data);

@@ -114,7 +114,7 @@
 
         var topUpNews = function (newsId) {
             $.ajax({
-                'url': '/manager/party-school/' + newsId + '/topUp',
+                'url': '/manager/party-school/' + newsId + '/top-up',
                 'method': 'patch',
                 'success': function (data) {
                     window.location.reload();
@@ -124,7 +124,7 @@
 
         var downNews = function (newsId) {
             $.ajax({
-                'url': '/manager/party-school/' + newsId + '/topUp',
+                'url': '/manager/party-school/' + newsId + '/top-up',
                 'method': 'patch',
                 'success': function (data) {
                     window.location.reload();

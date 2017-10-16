@@ -28,7 +28,7 @@
 @section('func')
     <script>
         $.ajax({
-            'url' : '/manager/statistics/partyBranch/1',
+            'url' : '/manager/statistics/party-branch/1',
             'method' : 'get',
             'success' : function(data){
                 console.log(data);

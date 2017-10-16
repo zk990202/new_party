@@ -32,7 +32,7 @@
     <script>
         $(function () {
             $.ajax({
-                'url' : '/manager/statistics/twentyLessons',
+                'url' : '/manager/statistics/twenty-lessons',
                 'method' : 'get',
                 'success' : function(data){
                     console.log(data);

@@ -26,7 +26,7 @@
 @section('func')
     <script>
         $.ajax({
-            'url' : '/manager/statistics/applicantTestList',
+            'url' : '/manager/statistics/applicant-test-list',
             'method' : 'get',
             'success' : function(data){
                 console.log(data);
