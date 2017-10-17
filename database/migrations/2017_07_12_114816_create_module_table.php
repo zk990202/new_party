@@ -20,9 +20,10 @@ class CreateModuleTable extends Migration
             $table->integer('parent_id');
             $table->string('name');
             $table->string('url')->default('#');
+            $table->string('route')->defalut('#');
             $table->string('icon')->default('fa fa-circle-o');
             $table->tinyInteger('is_show')->default(1);
-            $table->integer('auth');
+//            $table->integer('auth');
         });
     }
 
