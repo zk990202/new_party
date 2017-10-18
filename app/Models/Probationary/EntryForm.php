@@ -42,6 +42,10 @@ class EntryForm extends Model
         return $this->belongsTo('App\Models\Probationary\TrainList', 'train_id', 'train_id');
     }
 
+    public function childEntryForm(){
+        return $this->belongsTo('App\Models\Probationary\ChildEntryForm', 'entry_id', 'child_entryid');
+    }
+
     /**
      * 判断报名是否已经退出
      * 根据trainId获取
@@ -289,4 +293,40 @@ class EntryForm extends Model
             return Resources::ProbationaryEntryForm($childEntryForm);
         }, $entry);
     }
+
+    /**
+     * 根据trainId和学院获取
+     * @param $data
+     * @return array
+     */
+    public static function getByTrainIdAndCollege($data){
+        $entry = self::where('train_id', $data['trainId'])
+//            ->where('twt_probationary_entryform.sno', '<>', 3014201052)
+            ->leftJoin('twt_student_info', 'twt_probationary_entryform.sno', '=', 'twt_student_info.sno')
+            ->where('academy_id', $data['academyId'])
+            ->orderBy('entry_isallpassed', 'desc')
+            ->get()->all();
+        return array_map(function ($entryForm){
+            return Resources::ProbationaryEntryForm($entryForm);
+        }, $entry);
+    }
+
+    /**
+     * 根据trainId和学院,学生结业状态获取
+     * @param $data
+     * @return array
+     */
+    public static function getByTrainIdAndCollegeAndStatus($data){
+        $entry = self::where('train_id', $data['trainId'])
+//            ->where('twt_probationary_entryform.sno', '<>', 3014201052)
+            ->where('isAllPassed', $data['entryIsAllPassed'])
+            ->leftJoin('twt_student_info', 'twt_probationary_entryform.sno', '=', 'twt_student_info.sno')
+            ->where('academy_id', $data['academyId'])
+            ->orderBy('entry_isallpassed', 'desc')
+            ->get()->all();
+        return array_map(function ($entryForm){
+            return Resources::ProbationaryEntryForm($entryForm);
+        }, $entry);
+    }
+
 }

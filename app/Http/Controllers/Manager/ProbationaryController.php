@@ -1147,4 +1147,47 @@ class ProbationaryController extends Controller{
         }
         return view('Manager.Probationary.Graduation.GradeChangeResult', ['result' => $result]);
     }
+
+    //------------------------以下是成绩查询模块-----------------------------------------
+    /**
+     * 成绩查询前的筛选页面
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function gradeSearchPage(){
+        $trains = TrainList::getAll();
+        $colleges = College::getAll();
+        return view('Manager.Probationary.GradeSearch.searchPage', ['trains' => $trains, 'colleges' => $colleges]);
+    }
+
+    /**
+     * 成绩查询展示页面
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function gradeSearch(Request $request){
+        $data = $request->all();
+//        $entries = [];
+        $children = [];
+        if ($data['entryIsAllPassed'] != null){
+            $entries = EntryForm::getByTrainIdAndCollegeAndStatus($data);
+        }else{
+            $entries = EntryForm::getByTrainIdAndCollege($data);
+        }
+        for ($i = 0; $i < count($entries); $i++){
+            $children = ChildEntryForm::getCourseInformation($entries[$i]['id']);
+            if ($children == null){
+                array_push($children, ['grade' => 0], ['grade' => 0], ['grade' => 0], ['grade' => 0]);
+            } elseif (count($children) == 1){
+                array_push($children, ['grade' => 0], ['grade' => 0], ['grade' => 0]);
+            } elseif (count($children) == 2){
+                array_push($children, ['grade' => 0], ['grade' => 0]);
+            } elseif (count($children) == 3){
+                array_push($children, ['grade' => 0]);
+            }
+            $entries[$i]['children'] = $children;
+        }
+
+        return view('Manager.Probationary.GradeSearch.search', ['entries' => $entries, 'children' => $children]);
+    }
+
 }

@@ -5,6 +5,13 @@ namespace App\Models\Probationary;
 use App\Http\Helpers\Resources;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * 该表相当于twt_probationary_entryform的子表，存储父表中对应学生的课程信息
+ * 每个学生在该表中有四条数据----必修课1~3，选修课
+ * Class ChildEntryForm
+ * @package App\Models\Probationary
+ */
+
 class ChildEntryForm extends Model
 {
     //
@@ -156,5 +163,19 @@ class ChildEntryForm extends Model
         return array_map(function ($childEntryForm){
             return Resources::ProbationaryChildEntryForm($childEntryForm);
         }, $childEntry);
+    }
+
+    /**
+     * 获取某个学生的课程详细信息
+     * @param $entryId
+     * @return array
+     */
+    public static function getCourseInformation($entryId){
+        $childEntries = self::where('child_entryid', $entryId)
+            ->orderBy('child_courseid', 'asc')
+            ->get()->all();
+        return array_map(function ($childEntryForm){
+            return Resources::ProbationaryChildEntryForm($childEntryForm);
+        }, $childEntries);
     }
 }
