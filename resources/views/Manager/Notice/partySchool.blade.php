@@ -30,6 +30,7 @@
                             </tr>
                             </thead>
                             <tbody>
+
                             @foreach($notices as $notice)
                                 <tr>
                                     <td>{{ $notice['title'] }}</td>
@@ -59,6 +60,7 @@
                                     </td>
                                 </tr>
                             @endforeach
+
                             </tbody>
                             <tfoot>
                             <tr>
@@ -87,6 +89,7 @@
 @endsection
 
 @section('func')
+
     <script src="/AdminLTE/bower_components/datatables.net/js/jquery.dataTables.min.js"></script>
     <script src="/AdminLTE/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
     <script>
@@ -119,7 +122,7 @@
 
         var topUpNotice = function (noticeId) {
             $.ajax({
-                'url': '/manager/notice/party-school/' + noticeId + '/topUp',
+                'url': '/manager/notice/party-school/' + noticeId + '/top-up',
                 'method': 'patch',
                 'success': function (data) {
                     window.location.reload();
@@ -129,7 +132,7 @@
 
         var downNotice = function (noticeId) {
             $.ajax({
-                'url': '/manager/notice/party-school/' + noticeId + '/topUp',
+                'url': '/manager/notice/party-school/' + noticeId + '/top-up',
                 'method': 'patch',
                 'success': function (data) {
                     window.location.reload();

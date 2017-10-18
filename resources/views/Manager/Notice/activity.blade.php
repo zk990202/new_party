@@ -115,7 +115,7 @@
 
         var topUpNotice = function (noticeId) {
             $.ajax({
-                'url': '/manager/notice/activity/' + noticeId + '/topUp',
+                'url': '/manager/notice/activity/' + noticeId + '/top-up',
                 'method': 'patch',
                 'success': function (data) {
                     window.location.reload();
@@ -125,7 +125,7 @@
 
         var downNotice = function (noticeId) {
             $.ajax({
-                'url': '/manager/notice/activity/' + noticeId + '/topUp',
+                'url': '/manager/notice/activity/' + noticeId + '/top-up',
                 'method': 'patch',
                 'success': function (data) {
                     window.location.reload();

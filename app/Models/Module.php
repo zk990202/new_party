@@ -11,5 +11,9 @@ class Module extends Model
     protected $fillable = ['parent_id', 'icon', 'name', 'url', 'is_show', 'auth'];
     public $timestamps = false;
 
+    public function route()
+    {
+        return $this->belongsTo('App\Models\Routes', 'route_id');
+    }
     
 }

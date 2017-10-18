@@ -7,6 +7,7 @@ use App\Models\Column;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Routing\Route;
 use Mockery\Exception;
 use Symfony\Component\Routing\Exception\InvalidParameterException;
 use App\Models\Notification;
@@ -252,4 +253,9 @@ class NoticeController extends Controller
         ]);
     }
 
+
+    public function test(Request $request){
+
+        return \Illuminate\Support\Facades\Route::currentRouteName();
+    }
 }

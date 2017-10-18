@@ -104,7 +104,6 @@ class ModuleTableSeeder extends Seeder
             'parent_id' => 121,
             'name'      => '积极分子党校',
             'route'      => 'manager-notice-party-school-list-academy',
-            'url'       => 'manager/notice/party-school/list/71'
         ]);
         DB::table('twt_manager_modules')->insert([
             'self_id'   => 124,

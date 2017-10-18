@@ -284,7 +284,7 @@
                                     <a href="#" class="btn btn-default btn-flat">Profile</a>
                                 </div>
                                 <div class="pull-right">
-                                    <a href="{{ route('logout') }}" class="btn btn-default btn-flat">Sign out</a>
+                                    <a href="{{ route('manager-auth-logout') }}" class="btn btn-default btn-flat">Sign out</a>
                                 </div>
                             </li>
                         </ul>
@@ -316,10 +316,15 @@
             </h1>
             <ol class="breadcrumb">
                 <li><a href="{{ url('index') }}"><i class="fa fa-dashboard"></i> 主页</a></li>
+
                 @foreach(\App\Http\Helpers\Sidebar::currentNodes() as $i => $v)
+                    {{--{{ dd($v) }}--}}
                     <li class="active"><a href="{{ url($v['url']) }}">{{ $v['name'] }}</a></li>
+
                 @endforeach
+
             </ol>
+
         </section>
         @section('main')
         @show

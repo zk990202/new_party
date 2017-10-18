@@ -18,6 +18,7 @@ use App\Models\Applicant\TestList;
 use App\Models\Cert;
 use App\Models\CommonFiles;
 use App\Models\Notification;
+use App\Models\RouteGroups;
 use App\Models\SpecialNews;
 
 
@@ -453,14 +454,45 @@ class Resources {
         ];
     }
     public static function Module($module){
+
+//        dd($module);
+        $route = $module->route_id ? self::Routes($module->route) : null;
         return [
             'id'        =>  $module->self_id,
             'parent_id' =>  $module->parent_id,
             'name'      =>  $module->name,
             'url'       =>  $module->url,
+            'route'     =>  $route,
             'icon'      =>  $module->icon,
             'is_show'   =>  $module->is_show,
             'auth'      =>  $module->auth
+        ];
+    }
+
+    public static  function RouteGroups($group){
+        $subRoutes = $group->subRoutes->all();
+        return [
+            'id'        =>  $group->id,
+            'parentId'  =>  $group->parent_id,
+            'options'   => json_decode($group->options),
+            'desc'      =>  $group->desc,
+            'subRoutes' =>  empty($subRoutes) ? null : array_map(function($route){
+//                dd($route);
+                return self::Routes($route);
+            }, $subRoutes),
+            'subGroups' =>  null
+        ];
+    }
+
+    public static function Routes($route){
+//        dd($route);
+        return [
+            'id'        =>  $route->id,
+            'groupId'   =>  $route->group_id,
+            'url'       =>  json_decode($route->url),
+            'method'    =>  $route->method,
+            'action'    =>  $route->action,
+            'desc'      =>  $route->desc,
         ];
     }
 }

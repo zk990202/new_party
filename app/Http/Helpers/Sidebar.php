@@ -4,6 +4,7 @@ namespace App\Http\Helpers;
 
 use App\Models\Module;
 use Illuminate\Support\Facades\Request;
+use Illuminate\Support\Facades\Route;
 
 /**
  * 边栏管理类
@@ -29,14 +30,14 @@ class Sidebar
         }, $modules);
 
         // 需要active的边栏
-        $activeNodes = self::getActiveNodes($modules) ?? [];
+//        $activeNodes = self::getActiveNodes($modules) ?? [];
+        $activeNodes = [];
         $map = [];
-
         foreach($modules as $module){
             $map[$module['parent_id']][] = $module;
         }
         $modules = self::getNode($map, ['id' => 0]);
-        
+
         // 生成html代码
         foreach($modules['children'] as $module){
             self::$html .= self::renderHtml($module, $activeNodes);
@@ -45,7 +46,6 @@ class Sidebar
 
     public static function render(){
         self::init();
-
         return self::$html;
     }
 
@@ -85,12 +85,23 @@ class Sidebar
             foreach($node['children'] as $child){
                 $childStr .= self::renderHtml($child, $activeNodes);
             }
+
             $afterStr = str_replace('__ITEM__', $childStr, $afterStr);
             $contain = str_replace('__ITEM__', $beforeStr.$afterStr, $contain);
             return $contain;
         }
         else{
-            return "<li class='".$active."'><a href=\" " . url( $node['url'] ) . " \"><i class=\"". $node['icon'] ."\"></i> " . $node['name'] . "</a></li>";
+            if($node['url']){
+                $url = url( $node['url'] );
+            }
+            else if(isset($node['route'])){
+                $nodeId = $node['route']['id'];
+                $url = Routes::getRouteAction($nodeId);
+            }
+            else{
+                $url = "#";
+            }
+            return "<li class='".$active."'><a href=\" " . $url . " \"><i class=\"". $node['icon'] ."\"></i> " . $node['name'] . "</a></li>";
         }
     }
 
@@ -126,7 +137,10 @@ class Sidebar
         $modules = array_map(function($module){
             return Resources::Module($module);
         }, $modules);
+//        dd($modules);
         $action = Request::path();
+        $route_name = Route::current()->action['as'];
+//        dd($route_name);
         $module = Module::where('url', $action)->first();
 
         if(!$module)
