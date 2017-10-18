@@ -375,7 +375,9 @@ Route::group(['namespace' => 'Manager', 'prefix' => 'manager'], function (){
             //证书列表
             Route::get('/', ['as' => 'manager-applicant-complain-list', 'uses' => 'ApplicantController@complainList']);
             //申诉回复
+            //展示申诉还未回复的页面,含编辑器
             Route::get('{id}/detail', ['as' => 'manager-applicant-complain-detail-page', 'uses' => 'ApplicantController@complainDetailPage']);
+            //展示申诉已回复的页面
             Route::get('{id}/detail_1', ['as' => 'manager-applicant-complain-detail-1-page', 'uses' => 'ApplicantController@complainDetailPage_1']);
             Route::post('{id}/detail', ['as' => 'manager-applicant-complain-detail', 'uses' => 'ApplicantController@complainDetail']);
             Route::get('{id}', ['as' => 'manager-applicant-complain', 'uses' => 'ApplicantController@getComplainById']);
@@ -482,7 +484,9 @@ Route::group(['namespace' => 'Manager', 'prefix' => 'manager'], function (){
             //申诉列表
             Route::get('/', ['as' => 'manager-academy-complain', 'uses' => 'AcademyController@complainList']);
             //申诉回复
+            //展示申诉还未回复的页面,含编辑器
             Route::get('{id}/detail', ['as' => 'manager-academy-complain-detail-page', 'uses' => 'AcademyController@complainDetailPage']);
+            //展示申诉已回复的页面
             Route::get('{id}/detail_1', ['as' => 'manager-academy-complain-detail-page-1', 'uses' => 'AcademyController@complainDetailPage_1']);
             Route::post('{id}/detail', ['as' => 'manager-academy-complain-detail', 'uses' => 'AcademyController@complainDetail']);
             Route::get('{id}', ['as' => 'manager-academy-complain', 'uses' => 'AcademyController@getComplainById']);
@@ -635,7 +639,9 @@ Route::group(['namespace' => 'Manager', 'prefix' => 'manager'], function (){
             //申诉列表
             Route::get('/', ['as' => 'manager-probationary-complain', 'uses' => 'ProbationaryController@complainList']);
             //申诉回复
+            //展示申诉还未回复的页面,含编辑器
             Route::get('{id}/detail', ['as' => 'manager-probationary-complain-detail-page', 'uses' => 'ProbationaryController@complainDetailPage']);
+            //展示申诉已回复的页面
             Route::get('{id}/detail_1', ['as' => 'manager-probationary-complain-detail-page-1', 'uses' => 'ProbationaryController@complainDetailPage_1']);
             Route::post('{id}/detail', ['as' => 'manager-probationary-complain-detail', 'uses' => 'ProbationaryController@complainDetail']);
             Route::get('{id}', ['as' => 'manager-probationary-complain', 'uses' => 'ProbationaryController@getComplainById']);

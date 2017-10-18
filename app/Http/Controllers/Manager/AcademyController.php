@@ -457,24 +457,27 @@ class AcademyController extends Controller {
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function certificateGrantResult(Request $request){
-        $sno = $request->input('sno');
-        $entryId = array();
-        for ($i = 0; $i < count($sno); $i++){
-            $entryId[$i] = EntryForm::getEntryId($sno[$i]);
-        }
-        $getPerson = $request->input('getPerson');
-        $place = $request->input('place');
+        $data = $request->all();
+        $res_type = 1;
+        if (array_key_exists('sno', $data)){
+            $sno = $request->input('sno');
+            $entryId = array();
+            for ($i = 0; $i < count($sno); $i++){
+                $entryId[$i] = EntryForm::getEntryId($sno[$i]);
+            }
+            $getPerson = $request->input('getPerson');
+            $place = $request->input('place');
 
-        //查询结果分类
-        for($i = 0; $i < count($sno); $i++){
-            Cert::addCertAcademy($sno, $entryId, $getPerson, $place, $i);
-            $res = EntryForm::updateCert($sno, $i);
-        }
-        if(!$sno || !$getPerson || !$place){
+            for($i = 0; $i < count($sno); $i++){
+                Cert::addCertAcademy($sno, $entryId, $getPerson, $place, $i);
+                EntryForm::updateCert($sno, $i);
+            }
+            //查询结果分类
+            if(!$sno || !$getPerson || !$place){
+                $res_type = 0;
+            }
+        }else{
             $res_type = 0;
-        }
-        else{
-            $res_type = 1;
         }
         return view('Manager.Academy.Certificate.grantResult', ['res_type' => $res_type]);
     }

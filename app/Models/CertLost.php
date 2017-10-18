@@ -107,4 +107,35 @@ class CertLost extends Model
             return Resources::CertLost($certLost);
         }, $res);
     }
+
+    //--------------------------预备党员相关--------------------------------------
+    /**
+     * 获取申请补办证书的列表
+     * @return array
+     */
+    public static function getCertLostProbationary(){
+        $res = self::where('twt_certlost.isdeleted', 0)
+            ->leftJoin('twt_cert', 'twt_certlost.cert_id', '=', 'twt_cert.cert_id')
+            ->where('cert_type', 3)
+            ->get()->all();
+        return array_map(function ($certLost){
+            return Resources::CertLost($certLost);
+        }, $res);
+    }
+
+    /**
+     * 根据id取出指定的数据
+     * @param $id
+     * @return array
+     */
+    public static function getCertLostByIdProbationary($id){
+        $res = self::where('twt_certlost.isdeleted', 0)
+            ->where('lost_id', $id)
+            ->leftJoin('twt_cert', 'twt_certlost.cert_id', '=', 'twt_cert.cert_id')
+            ->where('cert_type', 3)
+            ->get()->all();
+        return array_map(function ($certLost){
+            return Resources::CertLost($certLost);
+        }, $res);
+    }
 }

@@ -329,4 +329,72 @@ class EntryForm extends Model
         }, $entry);
     }
 
+    /**
+     * 某一考试中考生的最大id
+     * @param $trainId
+     * @return mixed
+     */
+    public static function getMaxEntryId($trainId){
+        $max = self::where('train_id', $trainId)
+            ->max('entry_id');
+        return $max;
+    }
+
+    /**
+     * 某一考试中考生的最大id
+     * @param $trainId
+     * @return mixed
+     */
+    public static function getMinEntryId($trainId){
+        $min = self::where('train_id', $trainId)
+            ->min('entry_id');
+        return $min;
+    }
+
+    /**
+     * 获取考试合格但未发放证书的学生列表
+     * @param $trainId
+     * @param $academyId
+     * @return array
+     */
+    public static function getCert($trainId, $academyId){
+        $res = self::where('train_id', $trainId)
+            ->where('cert_isgrant', 0)
+            ->whereIn('entry_isallpassed', [1, 2])
+            ->where('entry_status', 1)
+            ->where('isexit', 0)
+            ->leftJoin('twt_student_info', 'twt_probationary_entryform.sno', '=', 'twt_student_info.sno')
+            ->where('academy_id', $academyId)
+            ->get()->all();
+        return array_map(function ($entryForm){
+            return Resources::ProbationaryEntryForm($entryForm);
+        }, $res);
+    }
+
+    /**
+     * 根据学号获取entry_id
+     * @param $sno
+     * @return mixed
+     */
+    public static function getEntryId($sno){
+        $res = self::where('sno', $sno)
+            ->select('entry_id')
+            ->get()->toArray();
+        return $res[0];
+    }
+
+    public static function updateCert($sno, $i){
+        $res = self::where('sno', $sno[$i])
+            ->update(['cert_isgrant' => 1]);
+        return $res;
+    }
+
+    public static function getGradeBySnoAndTestId($sno, $trainId){
+        $res = self::where('sno', $sno)
+            ->where('train_id', $trainId)
+            ->get()->all();
+        return array_map(function ($entryForm){
+            return Resources::ProbationaryEntryForm($entryForm);
+        }, $res);
+    }
 }

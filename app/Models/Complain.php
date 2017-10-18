@@ -119,4 +119,19 @@ class Complain extends Model
             return Resources::Complain($complain);
         }, $res_all);
     }
+
+    //------------------------以下是预备党员模块------------------------------------------
+    /**
+     * 获取所有申诉
+     * @return array
+     */
+    public static function getAllProbationary(){
+        $res_all = self::where('type', 3)
+            ->where('isreplay', 0)  //其实应该是reply，数据库里字段拼写错了
+            ->orderBy('time', 'DESC')
+            ->get()->all();
+        return array_map(function ($complain){
+            return Resources::Complain($complain);
+        }, $res_all);
+    }
 }

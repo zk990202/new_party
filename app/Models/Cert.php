@@ -36,6 +36,10 @@ class Cert extends Model
         return $this->belongsTo('App\Models\Academy\EntryForm', 'entry_id', 'entry_id');
     }
 
+    public function entryFormProbationary(){
+        return $this->belongsTo('App\Models\Probationary\EntryForm', 'entry_id', 'entry_id');
+    }
+
     /**
      * 申请人结业考试--获取证书
      * @param $max
@@ -116,7 +120,7 @@ class Cert extends Model
             ->where('cert_type', 2)
             ->get()->all();
         return array_map(function ($cert){
-            return Resources::AcademyCert($cert);
+            return Resources::ProbationaryCert($cert);
         }, $res_all);
     }
 
@@ -143,6 +147,48 @@ class Cert extends Model
         ]);
 
         return $cert ? Resources::AcademyCert($cert) : false;
+    }
+
+    //------------------预备党员培训------------------------------------
+    /**
+     * 预备党员培训--获取证书
+     * @param $max
+     * @param $min
+     * @param $academyId
+     * @return array
+     */
+    public static function getCertProbationary($max, $min, $academyId){
+        $res_all = self::whereBetween('entry_id', [$min, $max])
+            ->leftJoin('twt_student_info', 'twt_cert.sno', '=', 'twt_student_info.sno')
+            ->where('academy_id', $academyId)
+            ->where('isdeleted', 0)
+            ->where('cert_type', 3)
+            ->get()->all();
+        return array_map(function ($cert){
+            return Resources::ProbationaryCert($cert);
+        }, $res_all);
+    }
+
+    /**
+     * 批量发放证书
+     * @param $data
+     * @param $i
+     * @return array|bool
+     */
+    public static function addCertProbationary($data, $i){
+        $cert = self::create([
+            'sno' => $data['sno'][$i],
+            'entry_id' => $data['entryId'][$i]['entry_id'],
+            'cert_no' => date('ymdHis') + $i,
+            'cert_type' => 2,
+            'cert_time' => date('Y-m-d H:i:s'),
+            'cert_getperson' => $data['getPerson'],
+            'cert_place' => $data['place'],
+            'cert_islost' => 0,
+            'isdeleted' => 0
+        ]);
+
+        return $res ? Resources::ProbationaryCert($cert) : false;
     }
 
 }

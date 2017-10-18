@@ -276,9 +276,9 @@ class Resources {
             'place' => $cert->cert_place,
             'isLost' => $cert->cert_islost,
             'isDeleted' => $cert->isdeleted,
-            'practiceGrade' => $cert->entryFormAcademy->entry_practicegrade,
-            'articleGrade' => $cert->entryFormAcademy->entry_articlegrade,
-            'testGrade' => $cert->entryFormAcademy->entry_testgrade
+            'practiceGrade' => $cert->entryFormAcademy->entry_practicegrade ?? '',
+            'articleGrade' => $cert->entryFormAcademy->entry_articlegrade ?? '',
+            'testGrade' => $cert->entryFormAcademy->entry_testgrade ?? ''
         ];
     }
 
@@ -369,6 +369,28 @@ class Resources {
             'status' => $childEntryForm->child_status,
             'grade' => $childEntryForm->child_grade,
             'isExit' => $childEntryForm->isexit
+        ];
+    }
+
+    public static function ProbationaryCert(Cert $cert){
+        return [
+            'id' => $cert->cert_id,
+            'sno' => $cert->sno,
+            'studentName' => $cert->user->username ?? '',
+            'academyId' => $cert->studentInfo->academy_id,
+            'academyName' => $cert->studentInfo->college->shortname,
+            'majorName' => $cert->userInfo->major->majorname ?? '',
+            'entryId' => $cert->entry_id,
+            'certNumber' => $cert->cert_no,
+            'type' => $cert->cert_type,
+            'time' => $cert->cert_time,
+            'getPerson' => $cert->cert_getperson,
+            'place' => $cert->cert_place,
+            'isLost' => $cert->cert_islost,
+            'isDeleted' => $cert->isdeleted,
+            'practiceGrade' => $cert->entryFormProbationary->entry_practicegrade,
+            'articleGrade' => $cert->entryFormProbationary->entry_articlegrade,
+            'testGrade' => $cert->entryFormProbationary->entry_testgrade
         ];
     }
 
