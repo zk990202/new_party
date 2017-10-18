@@ -15,30 +15,30 @@ class CreateRoutesTable extends Migration
     {
         //
 
-        Schema::create('route_groups', function (Blueprint $table) {
-            $table->increments('id');
-            $table->integer('parent_id')->unsigned()->default(0);
-            $table->string('options')->nullable();
-            $table->string('desc')->nullable();
-        });
-
-        Schema::create('routes', function (Blueprint $table) {
-            $table->increments('id');
-            $table->integer('group_id')->unsigned();
-            $table->foreign('group_id')->references('id')->on('route_groups')
-                ->onUpdate('cascade')->onDelete('cascade');
-            $table->string('name');
-            $table->string('url');
-            $table->string('method');
-            $table->string('action');
-            $table->string('desc');
-        });
+//        Schema::create('route_groups', function (Blueprint $table) {
+//            $table->increments('id');
+//            $table->integer('parent_id')->unsigned()->default(0);
+//            $table->string('options')->nullable();
+//            $table->string('desc')->nullable();
+//        });
+//
+//        Schema::create('routes', function (Blueprint $table) {
+//            $table->increments('id');
+//            $table->integer('group_id')->unsigned();
+//            $table->foreign('group_id')->references('id')->on('route_groups')
+//                ->onUpdate('cascade')->onDelete('cascade');
+//            $table->string('name');
+//            $table->string('url');
+//            $table->string('method');
+//            $table->string('action');
+//            $table->string('desc');
+//        });
 
         Schema::create('twt_manager_modules', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('self_id')->unique();
             $table->integer('parent_id');
-            $table->integer('route_id')->unsigned()->default(0);
+            $table->string('route_name')->nullable();
             $table->string('url')->nullable();
             $table->string('name');
             $table->string('icon')->default('fa fa-circle-o');
@@ -58,7 +58,5 @@ class CreateRoutesTable extends Migration
         //
         //
         Schema::dropIfExists('twt_manager_modules');
-        Schema::dropIfExists('routes');
-        Schema::dropIfExists('route_groups');
     }
 }

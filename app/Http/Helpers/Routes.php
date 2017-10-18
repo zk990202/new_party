@@ -12,16 +12,6 @@ use App\Models\RouteGroups;
 use App\Models\Routes as Route;
 
 class Routes {
-    public static function welcome(){
-        $welcome = array(
-            'word'  =>  "welcome"
-        );
-        $hello = ['word' => "hello"];
-        $hi = "hi";
-        echo $welcome['word'];
-        echo $hello['word'];
-        echo $hi;
-    }
 
     public static function generate(){
 

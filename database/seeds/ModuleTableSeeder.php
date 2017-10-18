@@ -30,7 +30,7 @@ class ModuleTableSeeder extends Seeder
             'self_id'   => 102,
             'parent_id' => 1,
             'name'      => '20课',
-            'route_id'  => 30
+            'route'     => "manager-party-build-list"
         ]);
         DB::table('twt_manager_modules')->insert([
             'self_id'   => 103,
