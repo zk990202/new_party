@@ -13,7 +13,10 @@ $videoExtensions = [
     'mp4', 'avi', 'wmv', 'png', 'jpeg', 'gif', 'jpg', 'bmp', 'mov'
 ];
 $fileExtensions = [
-    'zip', 'rar', 'tar', 'tar.gz', 'tar.bz2'
+    'zip', 'rar', 'tar', 'tar.gz', 'tar.bz2', 'doc', 'docx'
+];
+$eBookExtensions = [
+    'txt', 'chm', 'pdf', 'epub'
 ];
 
 return [
@@ -42,6 +45,32 @@ return [
         'importantFilesImg' => [
             'path' => 'images/importantFiles',
             'extensions' => $imageExtensions,
+            'disk' => 'public'
+        ],
+        'theoryStudyVideo' => [
+            'path' => 'videos/theoryStudy',
+            'extensions' => $videoExtensions,
+            'disk' => 'public',
+            'max_size' => 1024 * 1024 * 60
+        ],
+        'theoryStudyEBook' => [
+            'path' => 'eBook/theoryStudy',
+            'extensions' => $eBookExtensions,
+            'disk' => 'public'
+        ],
+        'applicantFile' => [
+            'path' => 'files/applicant',
+            'extensions' => $fileExtensions,
+            'disk' => 'public'
+        ],
+        'probationaryImg' => [
+            'path' => 'images/probationary',
+            'extensions' => $imageExtensions,
+            'disk' => 'public'
+        ],
+        'probationaryFile' => [
+            'path' => 'files/probationary',
+            'extensions' => $fileExtensions,
             'disk' => 'public'
         ]
     ]

@@ -67,4 +67,40 @@ class CommonFiles extends Model{
         return $files ? Resources::CommonFiles($files) : false;
     }
 
+
+    //以下是理论学习模块
+    public static function getAllContents(){
+        $res_arr = self::whereBetween('file_type', [7, 9])
+            ->orderBy('file_isdeleted', 'ASC')
+            ->orderBy('file_type', 'ASC')
+            ->orderBy('file_id', 'DESC')
+            ->get()->all();
+
+        return array_map(function ($CommonFiles){
+            return Resources::CommonFiles($CommonFiles);
+        }, $res_arr);
+    }
+
+    public static function addVideo($data){
+        $files = self::create([
+            'file_type' => $data['type'],
+            'file_title' => $data['title'],
+            'file_img' => $data['filePath'],
+            'file_isdeleted' => 0
+        ]);
+        return $files ? Resources::CommonFiles($files) : false;
+    }
+
+    /**
+     * 添加选修课的文件
+     * @return array
+     */
+    public static function getAddElective(){
+        $files = self::where('file_isdeleted', 0)
+            ->get()->all();
+        return array_map(function ($commonFiles){
+            return Resources::CommonFiles($commonFiles);
+        }, $files);
+    }
+
 }

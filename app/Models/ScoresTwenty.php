@@ -115,4 +115,14 @@ class ScoresTwenty extends Model
 
     }
 
+    /**
+     * @param $sno
+     */
+    public static function unclear20($sno){
+        $res = self::where('student_id', $sno)
+            ->groupBy('course_id')
+            ->max('id');
+        dd($res);
+    }
+
 }

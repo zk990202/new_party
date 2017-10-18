@@ -141,4 +141,17 @@ class PartySchoolController extends Controller{
             'message' => '添加失败，请联系后台管理员'
         ]);
     }
+
+    public function getNewsById($id){
+        try{
+            $notice = SpecialNews::findOrFail($id);
+            return response()->json([
+                'success'   => true,
+                'info'      => Resources::SpecialNews($notice)
+            ]);
+        }
+        catch(ModelNotFoundException $e){
+            return response()->json(['message' => 'News not found']);
+        }
+    }
 }

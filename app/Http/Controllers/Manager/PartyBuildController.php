@@ -149,4 +149,19 @@ class PartyBuildController extends Controller{
         ]);
     }
 
+    public function getNewsById($id){
+    try{
+        $news = SpecialNews::findOrFail($id);
+        return response()->json([
+            'success'   => true,
+            'info'      => Resources::SpecialNews($news)
+        ]);
+    }
+    catch(ModelNotFoundException $e){
+        return response()->json(['message' => 'News not found']);
+    }
+}
+
+
+
 }
