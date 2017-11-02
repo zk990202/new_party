@@ -13,9 +13,10 @@ class DatabaseSeeder extends Seeder
     {
         // $this->call(UsersTableSeeder::class);
         $this->call(AdminTableSeeder::class);
+        $this->call(ModuleTableSeeder::class);
         $this->call(RoleTableSeeder::class);
 //        $this->call(RouteGroupsTableSeeder::class);
 //        $this->call(RoutesTableSeeder::class);
-        $this->call(ModuleTableSeeder::class);
+
     }
 }

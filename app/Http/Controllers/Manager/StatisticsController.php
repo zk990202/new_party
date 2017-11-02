@@ -228,53 +228,53 @@ class StatisticsController extends Controller
      * 支部统计,分别按学院、年级、类型分类
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function partyBranchPage($type){
-        if($type == 1){
-            return view('Manager.Statistics.partyBranchCollege');
-        }else if($type == 2){
-            return view('Manager.Statistics.partyBranchGrade');
-        }else{
-            return view('Manager.Statistics.partyBranchCategory');
-        }
+    public function partyBranchPage1(){
+        return view('Manager.Statistics.partyBranchCollege');
     }
 
-    public function partyBranch($type){
-        if($type == 1){
-            //按照学院排列
-            $college = DB::table('b_college')
-                ->where('state', 'ok')
-                ->where('code', '!=', 220)
-                ->where('code', '>=', 201)
-                ->where('code', '<=', 231)
-                ->get()->toArray();
-            $res_college = PartyBranch::college($college);
-            //dd($res_college);
-            return response()->json([
-                'res_college' => $res_college
-            ]);
-        }
+    public function partyBranchPage2(){
+        return view('Manager.Statistics.partyBranchGrade');
+    }
 
-        else if($type == 2){
-            //按照年级排列
+    public function partyBranchPage3(){
+        return view('Manager.Statistics.partyBranchCategory');
+    }
+
+    public function partyBranch1(){
+        //按照学院排列
+        $college = DB::table('b_college')
+            ->where('state', 'ok')
+            ->where('code', '!=', 220)
+            ->where('code', '>=', 201)
+            ->where('code', '<=', 231)
+            ->get()->toArray();
+        $res_college = PartyBranch::college($college);
+        //dd($res_college);
+        return response()->json([
+            'res_college' => $res_college
+        ]);
+    }
+
+    public function partyBranch2(){
+        //按照年级排列
 //            $grade = DB::table('b_class')
 //                ->where('grade', '!=', 0)
 //                ->where('grade', '>', 2005)
 //                ->orderBy('grade', 'DESC')
 //                ->distinct('grade')->get()->toArray();
-            $grade = DB::select('select distinct grade from b_class where grade <>0 and grade >2005 order by grade desc');
-            $res_grade = PartyBranch::grade($grade);
-            return response()->json([
-                'res_grade' => $res_grade
-            ]);
-        }
+        $grade = DB::select('select distinct grade from b_class where grade <>0 and grade >2005 order by grade desc');
+        $res_grade = PartyBranch::grade($grade);
+        return response()->json([
+            'res_grade' => $res_grade
+        ]);
+    }
 
-        else{
-            //按照类型排列
-            $res_category = PartyBranch::category();
-             return response()->json([
-                'res_category' => $res_category
-            ]);
-        }
+    public function partyBranch3(){
+        //按照类型排列
+        $res_category = PartyBranch::category();
+        return response()->json([
+            'res_category' => $res_category
+        ]);
     }
 
 }

@@ -806,5 +806,45 @@ class ModuleTableSeeder extends Seeder
             'route'      => 'manager-probationary-complain',
             'url'       => 'manager/probationary/complain'
         ]);
+
+        /**
+         * 支部管理  父模块13， 子模块311-320
+         */
+        DB::table('twt_manager_modules')->insert([
+            'self_id'   => 13,
+            'parent_id' => 0,
+            'name'      => '支部管理',
+            'route'      => '#'
+        ]);
+        DB::table('twt_manager_modules')->insert([
+            'self_id'   => 311,
+            'parent_id' => 13,
+            'name'      => '支部列表',
+            'route'     => 'manager-party-branch-list',
+            'url'       => 'manager/party-branch/list'
+        ]);
+        DB::table('twt_manager_modules')->insert([
+            'self_id'   => 312,
+            'parent_id' => 13,
+            'name'      => '支部查询',
+            'route'     => 'manager-party-branch-search',
+            'url'       => 'manager/party-branch/search'
+        ]);
+        DB::table('twt_manager_modules')->insert([
+            'self_id'   => 313,
+            'parent_id' => 13,
+            'name'      => '支部组建',
+            'route'     => 'manager-party-branch-add',
+            'url'       => 'manager/party-branch/add'
+        ]);
+        DB::table('twt_manager_modules')->insert([
+            'self_id'   => 314,
+            'parent_id' => 13,
+            'name'      => '支部统计',
+            'route'     => 'manager-party-branch-statistics',
+            'url'       => 'manager/party-branch/statistics'
+        ]);
     }
+
+
 }

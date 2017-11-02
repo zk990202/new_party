@@ -39,12 +39,12 @@ Route::group(['namespace' => 'Manager', 'prefix' => 'manager'], function (){
         Route::get('academyTestList/{type?}', ['as' => 'manager-statistics-academy-test-list', 'uses' => 'StatisticsController@academyTestList']);
 
         //支部统计(类型为1/2/3)
-        Route::get('partyBranchPage/1', ['as' => 'manager-statistics-party-branch-page-1', 'uses' => 'StatisticsController@partyBranchPage']);
-        Route::get('partyBranch/1', ['as' => 'manager-statistics-party-branch-1', 'uses' => 'StatisticsController@partyBranch']);
-        Route::get('partyBranchPage/2', ['as' => 'manager-statistics-party-branch-page-2', 'uses' => 'StatisticsController@partyBranchPage']);
-        Route::get('partyBranch/2', ['as' => 'manager-statistics-party-branch-2', 'uses' => 'StatisticsController@partyBranch']);
-        Route::get('partyBranchPage/3', ['as' => 'manager-statistics-party-branch-page-3', 'uses' => 'StatisticsController@partyBranchPage']);
-        Route::get('partyBranch/3', ['as' => 'manager-statistics-party-branch-3', 'uses' => 'StatisticsController@partyBranch']);
+        Route::get('partyBranchPage/1', ['as' => 'manager-statistics-party-branch-page-1', 'uses' => 'StatisticsController@partyBranchPage1']);
+        Route::get('partyBranch/1', ['as' => 'manager-statistics-party-branch-1', 'uses' => 'StatisticsController@partyBranch1']);
+        Route::get('partyBranchPage/2', ['as' => 'manager-statistics-party-branch-page-2', 'uses' => 'StatisticsController@partyBranchPage2']);
+        Route::get('partyBranch/2', ['as' => 'manager-statistics-party-branch-2', 'uses' => 'StatisticsController@partyBranch2']);
+        Route::get('partyBranchPage/3', ['as' => 'manager-statistics-party-branch-page-3', 'uses' => 'StatisticsController@partyBranchPage3']);
+        Route::get('partyBranch/3', ['as' => 'manager-statistics-party-branch-3', 'uses' => 'StatisticsController@partyBranch3']);
 
     });
 
@@ -658,27 +658,40 @@ Route::group(['namespace' => 'Manager', 'prefix' => 'manager'], function (){
             Route::post('/', 'ProbationaryController@gradeSearch');
         });
 
-        // 考试管理
-        Route::group(['prefix' => 'exam'], function(){
-
-        });
-
-        // 申诉管理
-        Route::group(['prefix' => 'appeal'], function(){
-
-        });
     });
 
     /**
      * 支部管理模块，路由为 /manager/party-branch/{action}, 命名空间 \App\Http\Controllers\Manager\PartyBranch
      */
-    Route::group(['namespace' => 'PartyBranch', 'prefix' => 'party-branch'], function(){
-
-        //
-        Route::group([], function(){
-
-        });
-
+    Route::group([ 'prefix' => 'party-branch'], function(){
+        // 支部列表--每个学院及支部总数
+        Route::get('list', ['as' => 'manager-party-branch-list', 'uses' => 'PartyBranchController@pList']);
+        // 支部列表--列出每个的所有支部
+        Route::get('r-list/{id}', ['as' => 'manager-party-branch-c-list', 'uses' => 'PartyBranchController@cList']);
+        // 支部管理--主页面
+        Route::get('{id}/manager', ['as' => 'manager-party-branch-manager', 'uses' => 'PartyBranchController@manager']);
+        // 支部管理--添加支部书记、组织委员、宣传委员
+        Route::get('{id}/add-cadre/{type}', ['as' => 'manager-party-branch-add-cadre-page', 'uses' => 'PartyBranchController@addCadrePage']);
+        Route::post('{id}/add-cadre/{type}', ['as' => 'manager-party-branch-add-cadre', 'uses' => 'PartyBranchController@addCadre']);
+        // 支部管理--删除支部书记、组织委员、宣传委员
+        Route::patch('{id}/delete-cadre/{type}', ['as' => 'manager-party-branch-delete-cadre', 'uses' => 'PartyBranchController@deleteCadre']);
+        // 支部管理--成员列表
+        Route::get('{id}/member-list', ['as' => 'manager-party-branch-member-list', 'uses' => 'PartyBranchController@memberList']);
+        // 支部管理--成员添加
+        Route::get('{id}/member-add', ['as' => 'manager-party-branch-member-add-page', 'uses' => 'PartyBranchController@memberAddPage']);
+        Route::post('{id}/member-add', ['as' => 'manager-party-branch-member-add', 'uses' => 'PartyBranchController@memberAdd']);
+        // 支部管理--成员添加-混合党支部类型
+        Route::get('{id}/member-add-mix-preview', ['as' => 'manager-party-branch-member-add-mix-preview-page', 'uses' => 'PartyBranchController@memberAddMixPreviewPage']);
+        Route::get('{id}/member-add-mix', ['as' => 'manager-party-branch-member-add-mix-page', 'uses' => 'PartyBranchController@memberAddMixPage']);
+        Route::post('{id}/member-add-mix', ['as' => 'manager-party-branch-member-add-mix', 'uses' => 'PartyBranchController@memberAddMix']);
+        // 支部管理--成员删除
+        Route::get('{id}/member-delete', ['as' => 'manager-party-branch-member-delete-page', 'uses' => 'PartyBranchController@memberDeletePage']);
+        Route::post('{id}/member-delete', ['as' => 'manager-party-branch-member-delete', 'uses' => 'PartyBranchController@memberDelete']);
+        // 编辑
+        Route::get('{id}/edit', ['as' => 'manager-party-branch-edit-page', 'uses' => 'PartyBranchController@editPage']);
+        Route::post('{id}/edit', ['as' => 'manager-party-branch-edit', 'uses' => 'PartyBranchController@edit']);
+        // 删除支部
+        Route::post('{id}/delete', ['as' => 'manager-party-branch-delete', 'uses' => 'PartyBranchController@deleteBranch']);
     });
 
     /**
@@ -689,7 +702,7 @@ Route::group(['namespace' => 'Manager', 'prefix' => 'manager'], function (){
     });
 
     Route::group(['prefix' => 'auth', 'namespace' => 'Auth'], function(){
-        Route::get('logout', ['as' => 'logout', 'uses' => 'LoginController@logout']);
+        Route::get('logout', ['as' => 'manager-auth-logout', 'uses' => 'LoginController@logout']);
     });
 
 });

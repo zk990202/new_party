@@ -395,6 +395,31 @@ class Resources {
         ];
     }
 
+    public static function PartyBranch($partyBranch){
+        return [
+            'id' => $partyBranch->partybranch_id,
+            'name' => $partyBranch->partybranch_name,
+            'secretary' => $partyBranch->partybranch_secretary,
+            'secretaryName' => $partyBranch->user_secretary->username ?? '',
+            'organizer' => $partyBranch->partybranch_organizer,
+            'organizerName' => $partyBranch->user_organizer->username ?? '',
+            'propagator' => $partyBranch->partybranch_propagator,
+            'propagatorName' => $partyBranch->user_propagator->username ?? '',
+            'academy' => $partyBranch->partybranch_academy,
+            'academyName' => $partyBranch->college_->collegename,
+            'academyShortName' => $partyBranch->college_->shortname,
+            'type' => $partyBranch->partybranch_type,
+            'schoolYear' => $partyBranch->partybranch_schoolyear,
+            'establishTime' => $partyBranch->partybranch_establishtime,
+            'isHidden' => $partyBranch->partybranch_ishidden,
+            'isDeleted' => $partyBranch->partybranch_isdeleted,
+            'totalScore' => $partyBranch->partybranch_total_score,
+            'totalReply' => $partyBranch->partybranch_total_reply,
+            'totalTopic' => $partyBranch->partybranch_total_topic,
+            'totalAct' => $partyBranch->partybranch_total_act
+        ];
+    }
+
     public static function StudentInfo($studentInfo){
         return [
             'id' => $studentInfo->info_id,

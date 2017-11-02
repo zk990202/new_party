@@ -86,6 +86,301 @@ class StudentInfo extends Model
         }, $studentInfo);
     }
 
+    /**
+     * 查询支部全部人员
+     * @param $branch_id
+     * @return array
+     */
+    public static function allMembers($branch_id){
+        $res = self::where('partybranch_id', $branch_id)
+            ->get()->all();
+        return array_map(function ($studentInfo){
+            return Resources::StudentInfo($studentInfo);
+        }, $res);
+    }
+
+    /**
+     * 查询支部正式党员数
+     * @param $branch_id
+     * @return array
+     */
+    public static function real($branch_id){
+        $res = self::where('partybranch_id', $branch_id)
+            ->where('main_status', 15)
+            ->get()->all();
+        return array_map(function ($studentInfo){
+            return Resources::StudentInfo($studentInfo);
+        }, $res);
+    }
+
+    /**
+     * 查询支部预备党员数
+     * @param $branch_id
+     * @return array
+     */
+    public static function ready($branch_id){
+        $res = self::where('partybranch_id', $branch_id)
+            ->whereBetween('main_status', [10, 15])
+            ->get()->all();
+        return array_map(function ($studentInfo){
+            return Resources::StudentInfo($studentInfo);
+        }, $res);
+    }
+
+    /**
+     * 查询支部发展对象
+     * @param $branch_id
+     * @return array
+     */
+    public static function develop($branch_id){
+        $res = self::where('partybranch_id', $branch_id)
+            ->whereBetween('main_status', [3, 9])
+            ->get()->all();
+        return array_map(function ($studentInfo){
+            return Resources::StudentInfo($studentInfo);
+        }, $res);
+    }
+
+    /**
+     * 查询支部团推优+积极分子
+     * @param $branch_id
+     * @return array
+     */
+    public static function excellentAndAcademy($branch_id){
+        $res = self::where('partybranch', $branch_id)
+            ->where('main_status', 23)
+            ->get()->all();
+        return array_map(function ($studentInfo){
+            return Resources::StudentInfo($studentInfo);
+        }, $res);
+    }
+
+    /**
+     * 查询支部积极分子
+     * @param $branch_id
+     * @return array
+     */
+    public static function academy($branch_id){
+        $res = self::where('partybranch_id', $branch_id)
+            ->where('main_status', 1)
+            ->get()->all();
+        return array_map(function ($studentInfo){
+            return Resources::StudentInfo($studentInfo);
+        }, $res);
+    }
+
+    /**
+     * 查询支部团推优
+     * @param $branch_id
+     * @return array
+     */
+    public static function excellent($branch_id){
+        $res = self::where('partybranch_id', $branch_id)
+            ->where('main_status', 2)
+            ->get()->all();
+        return array_map(function ($studentInfo){
+            return Resources::StudentInfo($studentInfo);
+        }, $res);
+    }
+
+    /**
+     * 查询支部申请人+非申请人
+     * @param $branch_id
+     * @return array
+     */
+    public static function apply($branch_id){
+        $res = self::where('partybranch_id', $branch_id)
+            ->where('main_status', 0)
+            ->get()->all();
+        return array_map(function ($studentInfo){
+            return Resources::StudentInfo($studentInfo);
+        }, $res);
+    }
+
+    /**
+     * 不是支部成员的所有学生
+     * @param $academy_id
+     * @param $school_year
+     * @return array
+     */
+    public static function noneMemberAll($academy_id, $school_year){
+        $res = self::where('partybranch_id', '<', 1)
+            ->where('academy_id', $academy_id)
+            ->where('main_status', 0)
+            ->where('sno', 'like', "__$school_year%______")
+            ->get()->all();
+        return array_map(function ($studentInfo){
+            return Resources::StudentInfo($studentInfo);
+        }, $res);
+    }
+
+    /**
+     * 不是支部成员的所有学生(未选年级)
+     * @param $academy_id
+     * @return array
+     */
+    public static function noneMemberAllNotYear($academy_id){
+        $res = self::where('partybranch_id', '<', 1)
+            ->where('academy_id', $academy_id)
+            ->where('main_status', 0)
+            ->get()->all();
+        return array_map(function ($studentInfo){
+            return Resources::StudentInfo($studentInfo);
+        }, $res);
+    }
+
+    /**
+     * 不是支部成员的本科生及高职生
+     * @param $academy_id
+     * @param $school_year
+     * @return array
+     */
+    public static function noneMembersUndergraduate($academy_id, $school_year){
+        $res = self::where('partybranch_id', '<', 1)
+            ->where('academy_id', $academy_id)
+            ->where('main_status', 0)
+//            ->where('sno', 'like', "3_$school_year%")
+            ->where(function ($query) use($school_year){
+                $query->where('sno', 'like', "3_$school_year%")
+                    ->orWhere('sno', 'like', "4_$school_year%");
+            })
+            ->get()->all();
+        return array_map(function ($studentInfo){
+            return Resources::StudentInfo($studentInfo);
+        }, $res);
+    }
+
+    /**
+     * 不是支部成员的本科生及高职生(未选年级)
+     * @param $academy_id
+     * @return array
+     */
+    public static function noneMembersUndergraduateNotYear($academy_id){
+        $res = self::where('partybranch_id', '<', 1)
+            ->where('academy_id', $academy_id)
+            ->where('main_status', 0)
+//            ->where('sno', 'like', "3_$school_year%")
+            ->where(function ($query){
+                $query->where('sno', 'like', "30%")
+                    ->orWhere('sno', 'like', "40%");
+            })
+            ->get()->all();
+        return array_map(function ($studentInfo){
+            return Resources::StudentInfo($studentInfo);
+        }, $res);
+    }
+
+    /**
+     * 不是支部成员的硕士生
+     * @param $academy_id
+     * @param $school_year
+     * @return array
+     */
+    public static function noneMembersMaster($academy_id, $school_year){
+        $res = self::where('partybranch_id', '<', 1)
+            ->where('academy_id', $academy_id)
+            ->where('main_status', 0)
+            ->where('sno', 'like', "2_$school_year%")
+            ->get()->all();
+        return array_map(function ($studentInfo){
+            return Resources::StudentInfo($studentInfo);
+        }, $res);
+    }
+
+    /**
+     * 不是支部成员的硕士生(未选年级)
+     * @param $academy_id
+     * @return array
+     */
+    public static function noneMembersMasterNotYear($academy_id){
+        $res = self::where('partybranch_id', '<', 1)
+            ->where('academy_id', $academy_id)
+            ->where('main_status', 0)
+            ->where('sno', 'like', "20%")
+            ->get()->all();
+        return array_map(function ($studentInfo){
+            return Resources::StudentInfo($studentInfo);
+        }, $res);
+    }
+
+    /**
+     * 不是支部成员的博士生
+     * @param $academy_id
+     * @param $school_year
+     * @return array
+     */
+    public static function noneMembersDoctor($academy_id, $school_year){
+        $res = self::where('partybranch_id', '<', 1)
+            ->where('academy_id', $academy_id)
+            ->where('main_status', 0)
+            ->where('sno', 'like', "1_$school_year%")
+            ->get()->all();
+        return array_map(function ($studentInfo){
+            return Resources::StudentInfo($studentInfo);
+        }, $res);
+    }
+
+    /**
+     * 不是支部成员的博士生(未选年级)
+     * @param $academy_id
+     * @return array
+     */
+    public static function noneMembersDoctorNotYear($academy_id){
+        $res = self::where('partybranch_id', '<', 1)
+            ->where('academy_id', $academy_id)
+            ->where('main_status', 0)
+            ->where('sno', 'like', "10%")
+            ->get()->all();
+        return array_map(function ($studentInfo){
+            return Resources::StudentInfo($studentInfo);
+        }, $res);
+    }
+
+    /**
+     * 添加学生所在支部
+     * @param $sno
+     * @param $branch_id
+     * @return bool
+     */
+    public static function updatePartyBranch($sno, $branch_id){
+        $res = self::where('sno', $sno)
+            ->update(['partybranch_id' => $branch_id]);
+        if ($res){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    /**
+     * 将学生从所在党支部删除
+     * @param $sno
+     * @param $branch_id
+     * @return bool
+     */
+    public static function deletePartyBranch($sno, $branch_id){
+        $res = self::where('sno', $sno)
+            ->update(['partybranch_id' => 0]);
+        if ($res){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    /**
+     * 根据branch_id获取学生信息
+     * @param $branch_id
+     * @return array
+     */
+    public static function getByBranchId($branch_id){
+        $res = self::where('partybranch_id', $branch_id)
+            ->get()->all();
+        return array_map(function ($studentInfo){
+            return Resources::StudentInfo($studentInfo);
+        }, $res);
+    }
+
 //    /**
 //     * 恢复20课的清除
 //     * @param $sno
