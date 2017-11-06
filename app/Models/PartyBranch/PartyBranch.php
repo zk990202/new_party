@@ -17,9 +17,11 @@ class PartyBranch extends Model
     protected $table = "twt_partybranch";
     protected $primaryKey = 'partybranch_id';
     protected $fillable = ['partybranch_name', 'partybranch_secretary', 'partybranch_organizer', 'partybranch_propagator',
-        'partybranch_academy', 'partybranch_type', 'partybranch_schoolyear', 'partybranch_establishtime',
+        'partybranch_academy', 'partybranch_type', 'partybranch_schoolyearyear', 'partybranch_establishtime',
         'partybranch_ishidden', 'partybranch_isdeleted', 'partybranch_total_score', 'partybranch_total_reply',
         'partybranch_total_topic', 'partybranch_total_act'];
+
+    public $timestamps = true;
 
     const CREATED_AT = 'partybranch_establishtime';
 
@@ -97,7 +99,7 @@ class PartyBranch extends Model
             //本科生
             $undergraduate = self::where('partybranch_ishidden', 0)
                 ->where('partybranch_isdeleted', 0)
-                ->where('partybranch_schoolyear', $v->grade)
+                ->where('partybranch_schoolyearyear', $v->grade)
                 ->where('partybranch_type', 1)
                 ->get();
             $num_undergraduate = count($undergraduate);
@@ -106,7 +108,7 @@ class PartyBranch extends Model
             //硕士生
             $master = self::where('partybranch_ishidden', 0)
                 ->where('partybranch_isdeleted', 0)
-                ->where('partybranch_schoolyear', $v->grade)
+                ->where('partybranch_schoolyearyear', $v->grade)
                 ->where('partybranch_type', 2)
                 ->get();
             $num_master = count($master);
@@ -115,7 +117,7 @@ class PartyBranch extends Model
             //博士生
             $doctor = self::where('partybranch_ishidden', 0)
                 ->where('partybranch_isdeleted', 0)
-                ->where('partybranch_schoolyear', $v->grade)
+                ->where('partybranch_schoolyearyear', $v->grade)
                 ->where('partybranch_type', 3)
                 ->get();
             $num_doctor = count($doctor);
@@ -190,6 +192,7 @@ class PartyBranch extends Model
     public static function getAll($academy_id){
         $res = self::where('partybranch_academy', $academy_id)
             ->where('partybranch_isdeleted', 0)
+            ->where('partybranch_ishidden', 0)
             ->orderBy('partybranch_id', 'desc')
             ->get()->all();
         return array_map(function ($partyBranch){
@@ -291,6 +294,97 @@ class PartyBranch extends Model
     public static function deleteBranch($branch_id){
         $res = self::where('partybranch_id', $branch_id)
             ->update(['partybranch_isdeleted' => 1]);
+        return $res ? true : false;
+    }
+
+    /**
+     * 支部查询
+     * @param $academyId
+     * @param $schoolYear
+     * @param $type
+     * @return array
+     */
+    public static function searchBranch($academyId, $schoolYear, $type){
+        $res = [];
+        if ($academyId && $schoolYear && $type){
+            $res = self::where('partybranch_academy', $academyId)
+                ->where('partybranch_schoolyear', $schoolYear)
+                ->where('partybranch_type', $type)
+                ->where('partybranch_isdeleted', 0)
+                ->where('partybranch_ishidden', 0)
+                ->get()->all();
+        }elseif ($academyId && $schoolYear && !$type){
+            $res = self::where('partybranch_academy', $academyId)
+                ->where('partybranch_schoolyear', $schoolYear)
+                ->where('partybranch_isdeleted', 0)
+                ->where('partybranch_ishidden', 0)
+                ->get()->all();
+        }elseif ($academyId && !$schoolYear && $type){
+            $res = self::where('partybranch_academy', $academyId)
+                ->where('partybranch_type', $type)
+                ->where('partybranch_isdeleted', 0)
+                ->where('partybranch_ishidden', 0)
+                ->get()->all();
+        }elseif (!$academyId && $schoolYear && $type){
+            $res = self::where('partybranch_schoolyear', $schoolYear)
+                ->where('partybranch_type', $type)
+                ->where('partybranch_isdeleted', 0)
+                ->where('partybranch_ishidden', 0)
+                ->get()->all();
+        }elseif ($academyId && !$schoolYear && !$type){
+            $res = self::where('partybranch_academy', $academyId)
+                ->where('partybranch_isdeleted', 0)
+                ->where('partybranch_ishidden', 0)
+                ->get()->all();
+        }elseif (!$academyId && $schoolYear && !$type){
+            $res = self::where('partybranch_schoolyear', $schoolYear)
+                ->where('partybranch_isdeleted', 0)
+                ->where('partybranch_ishidden', 0)
+                ->get()->all();
+        }elseif (!$academyId && !$schoolYear && $type){
+            $res = self::where('partybranch_type', $type)
+                ->where('partybranch_isdeleted', 0)
+                ->where('partybranch_ishidden', 0)
+                ->get()->all();
+        }elseif (!$academyId && !$schoolYear && !$type){
+            $res = self::where('partybranch_isdeleted', 0)
+                ->where('partybranch_ishidden', 0)
+                ->get()->all();
+        }
+        return array_map(function ($partyBranch){
+            return Resources::PartyBranch($partyBranch);
+        }, $res);
+    }
+
+    /**
+     * 组建混合党支部
+     * @param $data
+     * @param $branchName
+     * @return bool
+     */
+    public static function addMixBranch($data, $branchName){
+        $res = self::create([
+            'partybranch_name'	=>	$branchName ,
+            'partybranch_academy'	=>	$data['academyId'] ,
+            'partybranch_schoolyear' => '',
+            'partybranch_type'	=>	4,
+        ]);
+        return $res ? true : false;
+    }
+
+    /**
+     * 组建支部(本科，硕士，博士)
+     * @param $data
+     * @param $branchName
+     * @return bool
+     */
+    public static function addBranch($data, $branchName){
+        $res = self::create([
+            'partybranch_name'	=>	$branchName ,
+            'partybranch_academy'	=>	$data['academyId'] ,
+            'partybranch_schoolyear' => $data['schoolYear'],
+            'partybranch_type'	=>	$data['type'],
+        ]);
         return $res ? true : false;
     }
 

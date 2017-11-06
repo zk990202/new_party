@@ -593,4 +593,109 @@ class PartyBranchController extends Controller {
             ]);
         }
     }
+
+    /**
+     * 支部查询前的筛选条件
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function searchPreview(){
+        $colleges = College::getAll();
+        $grades1 = Classes::getGrades();
+        $grades = [];
+        for ($i = 0; $i < count($grades1); $i++){
+            $grades[$i] = $grades1[$i]['grade'];
+        }
+        return view('Manager.PartyBranch.searchPreview', [
+            'colleges' => $colleges,
+            'grades' => $grades,
+            ]);
+    }
+
+    /**
+     * 支部查询
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function search(Request $request){
+        $data = $request->all();
+        $branches = PartyBranch::searchBranch($data['academyId'], $data['schoolYear'], $data['type']);
+        return view('Manager.PartyBranch.cList', ['branches' => $branches]);
+    }
+
+    /**
+     * 支部组建--页面
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function addPage(){
+        $colleges = College::getAll();
+        $grades1 = Classes::getGrades();
+        $grades = [];
+        for ($i = 0; $i < count($grades1); $i++){
+            $grades[$i] = $grades1[$i]['grade'];
+        }
+        return view('Manager.PartyBranch.add', ['colleges' => $colleges, 'grades' => $grades]);
+    }
+
+    public function add(Request $request){
+        $data = $request->all();
+        if (!$data['academyId']){
+            return response()->json([
+                'message' => '请选择学院'
+            ]);
+        }
+        if (!$data['type']){
+            return response()->json([
+                'message' => '请选择类型'
+            ]);
+        }
+        if ($data['type'] != 4 && !$data['schoolYear']){
+            return response()->json([
+                'message' => '请选择年级'
+            ]);
+        }
+        $college = College::getById($data['academyId']);
+        // 先根据子名称拼接出新的支部名称
+        $academyShortName = $college[0]['shortname'];
+        $type = '';
+        if ($data['type'] == 1){
+            $type = '本科生';
+        }elseif ($data['type'] == 2){
+            $type = '硕士生';
+        }elseif ($data['type'] == 3) {
+            $type = '博士生';
+        }elseif ($data['type'] == 4){
+            $type = '混合';
+        }
+        if ($data['childName']){
+            $branchName = $academyShortName.$data['schoolYear'].'级'.$type.$data['childName'].'党支部';
+            //判断是否重名
+            //添加的支部id一定不会与之前相同，所以判断时就和0比了
+            $branch_id = 0;
+            $ifExist = PartyBranch::ifNameExist($branch_id, $branchName);
+            if (!$ifExist){
+                if ($data['type'] == 4){
+                    $res = PartyBranch::addMixBranch($data, $branchName);
+                }else{
+                    $res = PartyBranch::addBranch($data, $branchName);
+                }
+                if ($res){
+                    return response()->json([
+                        'success' => true
+                    ]);
+                }else{
+                    return response()->json([
+                        'message' => '更新失败，请联系管理员'
+                    ]);
+                }
+            }else{
+                return response()->json([
+                    'message' => '该支部名称已经存在!'
+                ]);
+            }
+        }else{
+            return response()->json([
+                'message' => '未修改请勿提交！'
+            ]);
+        }
+    }
 }

@@ -827,8 +827,8 @@ class ModuleTableSeeder extends Seeder
             'self_id'   => 312,
             'parent_id' => 13,
             'name'      => '支部查询',
-            'route'     => 'manager-party-branch-search',
-            'url'       => 'manager/party-branch/search'
+            'route'     => 'manager-party-branch-search-preview',
+            'url'       => 'manager/party-branch/search-preview'
         ]);
         DB::table('twt_manager_modules')->insert([
             'self_id'   => 313,
@@ -843,6 +843,13 @@ class ModuleTableSeeder extends Seeder
             'name'      => '支部统计',
             'route'     => 'manager-party-branch-statistics',
             'url'       => 'manager/party-branch/statistics'
+        ]);
+        DB::table('twt_manager_modules')->insert([
+            'self_id'   => 315,
+            'parent_id' => 13,
+            'name'      => '支部隐藏',
+            'route'     => 'manager-party-branch-hide',
+            'url'       => 'manager/party-branch/hide'
         ]);
     }
 

@@ -692,6 +692,12 @@ Route::group(['namespace' => 'Manager', 'prefix' => 'manager'], function (){
         Route::post('{id}/edit', ['as' => 'manager-party-branch-edit', 'uses' => 'PartyBranchController@edit']);
         // 删除支部
         Route::post('{id}/delete', ['as' => 'manager-party-branch-delete', 'uses' => 'PartyBranchController@deleteBranch']);
+        // 支部查询
+        Route::get('search-preview', ['as' => 'manager-party-branch-search-preview', 'uses' => 'PartyBranchController@searchPreview']);
+        Route::get('search', ['as' => 'manager-party-branch-search', 'uses' => 'PartyBranchController@search']);
+        // 支部组建
+        Route::get('add', ['as' => 'manager-party-branch-add-page', 'uses' => 'PartyBranchController@addPage']);
+        Route::post('add', ['as' => 'manager-party-branch-add', 'uses' => 'PartyBranchController@add']);
     });
 
     /**

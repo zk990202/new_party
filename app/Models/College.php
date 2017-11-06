@@ -17,4 +17,15 @@ class College extends Model
             ->get()->toArray();
         return $res;
     }
+
+    public static function getById($id){
+        $res = self::where('state', 'ok')
+            ->where('code', '!=', 220)
+            ->where('code', '>=', 201)
+            ->where('code', '<=', 231)
+            ->where('id', $id)
+            ->get()->toArray();
+        return $res;
+    }
+
 }
