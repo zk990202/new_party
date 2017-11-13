@@ -388,4 +388,34 @@ class PartyBranch extends Model
         return $res ? true : false;
     }
 
+    /**
+     * 获取所有已隐藏的支部
+     * @return array
+     */
+    public static function getAllHidedBranch(){
+        $res = self::where('partybranch_ishidden', 1)
+            ->where('partybranch_isdeleted', 0)
+            ->orderBy('partybranch_id', 'desc')
+            ->get()->all();
+        return array_map(function ($partyBranch){
+            return Resources::PartyBranch($partyBranch);
+        }, $res);
+    }
+
+    /**
+     * 按学院获取已隐藏的支部
+     * @param $academyId
+     * @return array
+     */
+    public static function getHidedBranchByAcademy($academyId){
+        $res = self::where('partybranch_ishidden', 1)
+            ->where('partybranch_academy', $academyId)
+            ->where('partybranch_isdeleted', 0)
+            ->orderBy('partybranch_id', 'desc')
+            ->get()->all();
+        return array_map(function ($partyBranch){
+            return Resources::PartyBranch($partyBranch);
+        }, $res);
+    }
+
 }

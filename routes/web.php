@@ -698,6 +698,12 @@ Route::group(['namespace' => 'Manager', 'prefix' => 'manager'], function (){
         // 支部组建
         Route::get('add', ['as' => 'manager-party-branch-add-page', 'uses' => 'PartyBranchController@addPage']);
         Route::post('add', ['as' => 'manager-party-branch-add', 'uses' => 'PartyBranchController@add']);
+        // 支部隐藏
+        Route::get('hide-preview', ['as' => 'manager-party-branch-hide-preview', 'uses' => 'PartyBranchController@hidePreview']);
+        Route::get('hide', ['as' => 'manager-party-branch-hide-page', 'uses' => 'PartyBranchController@hidePage']);
+        Route::patch('{id}/hide', ['as' => 'manger-party-branch-hide', 'uses' => 'PartyBranchController@hide']);
+        Route::get('hided-list-preview', ['as' => 'manager-party-branch-hided-list-preview', 'uses' => 'PartyBranchController@hidedListPreview']);
+        Route::get('hided-list', ['as' => 'manager-party-branch-hided-list', 'uses' => 'PartyBranchController@hidedList']);
     });
 
     /**

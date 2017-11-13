@@ -636,6 +636,11 @@ class PartyBranchController extends Controller {
         return view('Manager.PartyBranch.add', ['colleges' => $colleges, 'grades' => $grades]);
     }
 
+    /**
+     * 支部组建--逻辑
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function add(Request $request){
         $data = $request->all();
         if (!$data['academyId']){
@@ -697,5 +702,72 @@ class PartyBranchController extends Controller {
                 'message' => '未修改请勿提交！'
             ]);
         }
+    }
+
+    /**
+     * 支部隐藏--筛选条件
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View'
+     */
+    public function hidePreview(){
+        $colleges = College::getAll();
+        $grades1 = Classes::getGrades();
+        $grades = [];
+        for ($i = 0; $i < count($grades1); $i++){
+            $grades[$i] = $grades1[$i]['grade'];
+        }
+        return view('Manager.PartyBranch.hidePreview', [
+            'colleges' => $colleges,
+            'grades' => $grades,
+        ]);
+    }
+
+    /**
+     * 支部隐藏--列表
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function hidePage(Request $request){
+        $data = $request->all();
+        $branches = PartyBranch::searchBranch($data['academyId'], $data['schoolYear'], $data['type']);
+        return view('Manager.PartyBranch.canHideList', ['branches' => $branches]);
+    }
+
+    /**
+     * 支部隐藏--隐藏操作
+     * @param $id
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function hide($id){
+        $branch = PartyBranch::findOrFail($id);
+        $branch->partybranch_ishidden = 1;
+        $res = $branch->save();
+        if ($res){
+            return response()->json([
+                'success' => true
+            ]);
+        }else{
+            return response()->json([
+                'message' => '隐藏失败！'
+            ]);
+        }
+    }
+
+    /**
+     * 查看已隐藏的支部--筛选
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function hidedListPreview(){
+        $colleges = College::getAll();
+        return view('Manager.PartyBranch.hidedListPreview', ['colleges' => $colleges,]);
+    }
+
+    public function hidedList(Request $request){
+        $academyId = $request->input('academyId');
+        if (!$academyId){
+            $branches = PartyBranch::getAllHidedBranch();
+        }else{
+            $branches = PartyBranch::getHidedBranchByAcademy($academyId);
+        }
+        return view('Manager.PartyBranch.hidedList', ['branches' => $branches]);
     }
 }

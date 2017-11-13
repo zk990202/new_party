@@ -848,8 +848,8 @@ class ModuleTableSeeder extends Seeder
             'self_id'   => 315,
             'parent_id' => 13,
             'name'      => '支部隐藏',
-            'route'     => 'manager-party-branch-hide',
-            'url'       => 'manager/party-branch/hide'
+            'route'     => 'manager-party-branch-hide-preview',
+            'url'       => 'manager/party-branch/hide-preview'
         ]);
     }
 
