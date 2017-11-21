@@ -21,4 +21,16 @@ class Column extends Model
             return Resources::Column($column);
         }, $columns);
     }
+
+    //以下是前台模块了！！！
+    /**
+     * 前台首页--党建专项--获取党建专项的id
+     * @return mixed
+     */
+    public static function getSpecialId(){
+        $res = self::where('column_pid', 3)
+            ->where('column_isdeleted', 0)
+            ->get()->toArray();
+        return $res;
+    }
 }

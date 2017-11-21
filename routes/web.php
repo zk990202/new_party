@@ -12,6 +12,10 @@
 */
 use Illuminate\Support\Facades\Route;
 
+//Route::group(['namespace' => 'Api', 'prefix' => 'api'], function (){
+//    Route::get('index', 'IndexController@index');
+//});
+
 /**
  * 管理员后台模块，路由为 /manager/{module}, 命名空间 \App\Http\Controllers\Manager
  */
@@ -58,13 +62,13 @@ Route::group(['namespace' => 'Manager', 'prefix' => 'manager'], function (){
          */
         Route::group(['prefix' => 'party-school'], function(){
             //列表--申请人党校
-            Route::get('list/70', ['as' => 'manager-notice-party-school-list-applicant', 'uses' => 'NoticeController@partySchool']);
+            Route::get('list/70', ['as' => 'manager-notice-party-school-list-applicant', 'uses' => 'NoticeController@partySchoolApplicant']);
             //列表--院级积极分子党校
-            Route::get('list/71', ['as' => 'manager-notice-party-school-list-academy', 'uses' => 'NoticeController@partySchool']);
+            Route::get('list/71', ['as' => 'manager-notice-party-school-list-academy', 'uses' => 'NoticeController@partySchoolAcademy']);
             //列表--预备党员党校
-            Route::get('list/72', ['as' => 'manager-notice-party-school-list-probationary', 'uses' => 'NoticeController@partySchool']);
+            Route::get('list/72', ['as' => 'manager-notice-party-school-list-probationary', 'uses' => 'NoticeController@partySchoolProbationary']);
             //列表--党支部书记党校
-            Route::get('list/73', ['as' => 'manager-notice-party-school-list-secretary', 'uses' => 'NoticeController@partySchool']);
+            Route::get('list/73', ['as' => 'manager-notice-party-school-list-secretary', 'uses' => 'NoticeController@partySchoolSecretary']);
 
             //隐藏(显示)
             Route::patch('{notice_id}/hide', ['as' => 'manager-notice-party-school-hide', 'uses' =>'NoticeController@hide']);
@@ -158,7 +162,7 @@ Route::group(['namespace' => 'Manager', 'prefix' => 'manager'], function (){
 
         //隐藏(显示)、置顶(取消置顶)新闻
         Route::patch('{id}/hide', ['as' => 'manager-party-school-hide', 'uses' => 'PartySchoolController@hide']);
-        Route::patch('{id}/topUp', ['as' => 'manager-party-school-top-up', 'uses' => 'PartySchoolController@topUp']);
+        Route::patch('{id}/top-up', ['as' => 'manager-party-school-top-up', 'uses' => 'PartySchoolController@topUp']);
 
         //编辑新闻
         Route::get('{id}/edit', ['as' => 'manager-party-school-edit-page', 'uses' => 'PartySchoolController@editPage']);
@@ -726,6 +730,43 @@ Route::group(['prefix' => 'manager/auth', 'namespace' => 'Manager\Auth'], functi
 
 Route::get('/home', 'HomeController@index')->name('home');
 
-Route::get('/test', function(){
+//前台用户登录
+Route::get('/login', ['as' => 'login', 'uses' => 'Api\LoginController@login']);
 
+
+
+Route::get('/index', function(\Illuminate\Http\Request $request){
+//    $request->session()->regenerate();
+//    session(['data' =>  123]);
+//    $request->session()->put('data', 123);
+    $user = session('data');
+//    return response()->json([
+//        'msg'   =>  'hehe'
+//    ]);
+    dd($user);
+});
+
+Route::get('test/{token}', function(\Illuminate\Http\Request $request, $token){
+    $app_key = "Usm82MC00HRpbB5JKL0S";
+    $app_id = 1;
+    $sso = new \App\Http\Helpers\sso($app_id, $app_key, false);
+    $userinfo = $sso->getUserInfo($token);
+
+    if ($userinfo->status) {
+        $result = $userinfo->result;
+//            dd($result);
+        $data['user_number'] = $result->user_number;
+        $data['twt_name'] = $result->twt_name;
+//            Usr::add($data);
+        $data['token'] = $token;
+//            dd($data)
+        session(['data' => $data]);
+//        dd(session('data'));
+        return "123";
+    }
+
+});
+
+Route::get('session', function(\Illuminate\Http\Request $request){
+    dd(session('data'));
 });

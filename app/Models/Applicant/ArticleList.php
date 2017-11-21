@@ -55,6 +55,20 @@ class ArticleList extends Model
     }
 
     /**
+     * 根据文章id获取一篇文章的信息
+     * @param $id
+     * @return array
+     */
+    public static function getOneArticle($id){
+        $res = self::where('article_id', $id)
+            ->where('article_isdeleted', 0)
+            ->get()->all();
+        return array_map(function ($articleList){
+            return Resources::ArticleList($articleList);
+        }, $res);
+    }
+
+    /**
      * 更新文章
      * @param $id
      * @param $data

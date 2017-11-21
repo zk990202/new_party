@@ -381,6 +381,19 @@ class StudentInfo extends Model
         }, $res);
     }
 
+    /**
+     * 判断用户是否存在于student_info表中
+     * @param $usernumb
+     * @return array
+     */
+    public static function isExist($usernumb){
+        $res = self::where('sno', $usernumb)
+            ->get()->all();
+        return array_map(function ($studentInfo){
+            return Resources::StudentInfo($studentInfo);
+        }, $res)[0];
+    }
+
 //    /**
 //     * 恢复20课的清除
 //     * @param $sno

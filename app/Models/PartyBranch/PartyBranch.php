@@ -418,4 +418,35 @@ class PartyBranch extends Model
         }, $res);
     }
 
+    //以下就是前台模块了！！！
+
+    /**
+     * 前台首页--支部风采，取出6条数据
+     * @return array
+     */
+    public static function getIndexData(){
+        $res = self::where('partybranch_isdeleted', 0)
+            ->where('partybranch_ishidden', 0)
+            ->orderBy('partybranch_id', 'desc')
+            ->limit(6)
+            ->get()->all();
+        return array_map(function ($partyBranch){
+            return Resources::PartyBranch($partyBranch);
+        }, $res);
+    }
+
+    /**
+     * 判断一个老师是不是支部干部
+     * @param $usernumb
+     * @return array
+     */
+    public static function isProbationary($usernumb){
+        $res = self::where('partybranch_secretary', $usernumb)
+            ->orWhere('partybranch_organizer', $usernumb)
+            ->orWhere('partybranch_propagator', $usernumb)
+            ->get()->all();
+        return array_map(function ($partyBranch){
+            return Resources::PartyBranch($partyBranch);
+        }, $res)[0];
+    }
 }

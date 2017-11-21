@@ -108,4 +108,56 @@ class Notification extends Model
         return $notice ? Resources::Notification($notice) : false;
     }
 
+    //以下是前台模块了！！
+
+    /**
+     * 前台首页--取出最新4条通知
+     * @return array
+     */
+    public static function getIndexData(){
+        $res = self::where('notice_isdeleted', 0)
+            ->orderBy('notice_istop', 'desc')
+            ->orderBy('notice_time', 'desc')
+            ->limit(4)
+            ->get()->all();
+        return array_map(function($notification){
+            return Resources::Notification($notification);
+        }, $res);
+    }
+
+    /**
+     * 根据id取出通知
+     * @param $id
+     * @return array
+     */
+    public static function getById($id){
+        $res = self::where('notice_id', $id)
+            ->get()->all();
+        return array_map(function($notification){
+            return Resources::Notification($notification);
+        }, $res);
+    }
+
+    /**
+     * 取出所有通知--带分页
+     * @param $type
+     * @return mixed
+     */
+    public static function getAllNoticeWithPage($type){
+        $res_arr = self::where('column_id', $type)->where('notice_isdeleted', 0)
+            ->orderBy('notice_istop', 'desc')->orderBy('notice_ishidden', 'asc')->orderBy('notice_time', 'desc')
+            ->paginate(6);
+        return $res_arr;
+    }
+
+    /**
+     * 取出所有活动通知--带分页
+     * @return mixed
+     */
+    public static function activityGetAllNoticeWithPage(){
+        $res_arr = self::where('column_id', 2)->where('notice_isdeleted', 0)
+            ->orderBy('notice_istop', 'desc')->orderBy('notice_ishidden', 'asc')->orderBy('notice_time', 'desc')
+            ->paginate(6);
+        return $res_arr;
+    }
 }

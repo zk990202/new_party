@@ -837,19 +837,57 @@ class ModuleTableSeeder extends Seeder
             'route'     => 'manager-party-branch-add',
             'url'       => 'manager/party-branch/add'
         ]);
-        DB::table('twt_manager_modules')->insert([
-            'self_id'   => 314,
-            'parent_id' => 13,
-            'name'      => '支部统计',
-            'route'     => 'manager-party-branch-statistics',
-            'url'       => 'manager/party-branch/statistics'
-        ]);
+//        DB::table('twt_manager_modules')->insert([
+//            'self_id'   => 314,
+//            'parent_id' => 13,
+//            'name'      => '支部统计',
+//            'route'     => 'manager-party-branch-statistics',
+//            'url'       => 'manager/party-branch/statistics'
+//        ]);
         DB::table('twt_manager_modules')->insert([
             'self_id'   => 315,
             'parent_id' => 13,
             'name'      => '支部隐藏',
             'route'     => 'manager-party-branch-hide-preview',
             'url'       => 'manager/party-branch/hide-preview'
+        ]);
+
+        /**
+         * 学生信息管理 父模块14， 子模块321-330
+         */
+        DB::table('twt_manager_modules')->insert([
+            'self_id'   => 14,
+            'parent_id' => 0,
+            'name'      => '学生信息管理',
+            'route'     => '#'
+        ]);
+        DB::table('twt_manager_modules')->insert([
+            'self_id'   => 321,
+            'parent_id' => 14,
+            'name'      => '状态初始化',
+            'route'     => 'manager-student-info-init-preview',
+            'url'       => 'manager/student-info/init-preview'
+        ]);
+        DB::table('twt_manager_modules')->insert([
+            'self_id'   => 322,
+            'parent_id' => 14,
+            'name'      => '初始化状态查看',
+            'route'     => 'manager-student-info-init-status',
+            'url'       => 'manager/student-info/init-status'
+        ]);
+        DB::table('twt_manager_modules')->insert([
+            'self_id'   => 323,
+            'parent_id' => 14,
+            'name'      => '状态查看',
+            'route'     => 'manager-student-info-status-watch-preview',
+            'url'       => 'manager/student-info/status-watch-preview'
+        ]);
+        DB::table('twt_manager_modules')->insert([
+            'self_id'   => 324,
+            'parent_id' => 14,
+            'name'      => '状态微调',
+            'route'     => 'manager-student-info-status-change-preview',
+            'url'       => 'manager/student-info/status-change-preview'
         ]);
     }
 

@@ -8,6 +8,44 @@ class LoginCount extends Model
 {
     //
     protected $table = "twt_logincount";
+    protected $fillable = ['login_num', 'login_date', 'type'];
+
+    /**
+     * 根据日期获取登陆信息
+     * @param $date
+     * @return mixed
+     */
+    public static function getByDate($date){
+        $res = self::where('login_date', $date)
+            ->where('type', 1)
+            ->get()->toArray();
+        return $res;
+    }
+
+    /**
+     * 更新登陆数
+     * @param $id
+     * @return bool
+     */
+    public static function updateCount($id){
+        $res = self::where('id', $id)
+            ->increment('login_num');
+        return $res ? true : false;
+    }
+
+    /**
+     * 添加一条登陆记录
+     * @param $data
+     * @return bool
+     */
+    public static function addCount($data){
+        $res = self::create([
+            'login_num' => 1,
+            'login_date' => $data,
+            'type' => 1
+        ]);
+        return $res ? true : false;
+    }
 
     /**
      * 获取过去一段时间（给定时间范围）的访问量，左闭右开

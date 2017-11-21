@@ -172,4 +172,46 @@ class SpecialNews extends Model
         ]);
         return $news ? Resources::SpecialNews($news) : false;
     }
+
+    //下面为前台的模块了！！
+
+    /**
+     * 前台首页--获取6条党建专项数据
+     * @param $type
+     * @return array
+     */
+    public static function getIndexDataPartyBuild($type){
+        $res = self::whereIn('type', $type)
+            ->where('isdeleted', 0)
+            ->orderBy('inserttime', 'desc')
+            ->limit(6)
+            ->get()->all();
+        return array_map(function ($specialNews){
+            return Resources::SpecialNews($specialNews);
+        }, $res);
+    }
+
+    /**
+     * 前台首页--获取5条党校培训数据
+     * @return array
+     */
+    public static function getIndexDataPartySchool(){
+        $res = self::where('type', 2)
+            ->where('isrecommand', 1)
+            ->where('isdeleted', 0)
+            ->orderBy('inserttime', 'desc')
+            ->limit(5)
+            ->get()->all();
+        return array_map(function ($specialNews){
+            return Resources::SpecialNews($specialNews);
+        }, $res);
+    }
+
+//    public static function getIndexDataStudyGroup(){
+//        $res = self::where('type', 1)
+//            ->where('isrecommand',  1)
+//            ->where('isdeleted', 0)
+//            ->orderBy('inserttime', 'desc')
+//            ->limit()
+//    }
 }

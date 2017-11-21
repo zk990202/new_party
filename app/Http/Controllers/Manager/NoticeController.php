@@ -24,15 +24,35 @@ class NoticeController extends Controller
     }
 
     //以下为党校公告专区
-    /**
-     * @param $type [70|71|72|73]
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-     */
-    public function partySchool($type){
-        if(!in_array($type, [70, 71, 72, 73])){
-            throw new InvalidParameterException();
-        }
-        $notice_arr = Notification::getAllNotice($type);
+//    /**
+//     * @param $type [70|71|72|73]
+//     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+//     */
+//    public function partySchool($type){
+//        if(!in_array($type, [70, 71, 72, 73])){
+//            throw new InvalidParameterException();
+//        }
+//        $notice_arr = Notification::getAllNotice($type);
+//        return view('Manager/Notice/partySchool', ['notices' => $notice_arr]);
+//    }
+
+    public function partySchoolApplicant(){
+        $notice_arr = Notification::getAllNotice(70);
+        return view('Manager/Notice/partySchool', ['notices' => $notice_arr]);
+    }
+
+    public function partySchoolAcademy(){
+        $notice_arr = Notification::getAllNotice(71);
+        return view('Manager/Notice/partySchool', ['notices' => $notice_arr]);
+    }
+
+    public function partySchoolProbationary(){
+        $notice_arr = Notification::getAllNotice(72);
+        return view('Manager/Notice/partySchool', ['notices' => $notice_arr]);
+    }
+
+    public function partySchoolSecretary(){
+        $notice_arr = Notification::getAllNotice(73);
         return view('Manager/Notice/partySchool', ['notices' => $notice_arr]);
     }
 

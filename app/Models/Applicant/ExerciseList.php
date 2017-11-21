@@ -49,7 +49,7 @@ class ExerciseList extends Model
     }
 
     /**
-     * 根据课程id获取文章
+     * 根据课程id获取题目
      * @param $id
      * @return array
      */
