@@ -48,9 +48,11 @@ Route::group(['middleware' => 'Access'], function (){
         Route::get('/{id}/course', ['as' => 'api-applicant-course', 'uses' => 'ApplicantController@course']);
         //文章详情
         Route::get('/{id}/article', ['api-applicant-article', 'uses' => 'ApplicantController@article']);
+        // 20课成绩
+        Route::get('/twenty-courses-score', ['api-applicant-twenty-courses-score', 'uses' => 'ApplicantController@twentyCoursesScore'])->middleware('HasToken');
         //课程对应的题目
-        Route::get('/{id}/exercise', ['api-applicant-exercise-page', 'uses' => 'ApplicantController@exercisePage']);
-        Route::post('{id}/exercise', ['api-applicant-exercise', 'uses' => 'ApplicantController@exercise']);
+        Route::get('/{id}/exercise', ['api-applicant-exercise-page', 'uses' => 'ApplicantController@exercisePage'])->middleware('HasToken');
+        Route::post('/{id}/exercise', ['api-applicant-exercise', 'uses' => 'ApplicantController@exercise'])->middleware('HasToken');
     });
 
 });

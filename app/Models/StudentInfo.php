@@ -394,16 +394,20 @@ class StudentInfo extends Model
         }, $res)[0];
     }
 
-//    /**
-//     * 恢复20课的清除
-//     * @param $sno
-//     * @return mixed
-//     */
-//    public static function unclear($sno){
-//        $res = self::where('sno', $sno)
-//            ->update(['is_clear20' => 0])
-//            ->update(['is_pass20' => 1]);
-//        return $res;
-//    }
+    // 下面就是前台的了！！！
+
+    /**
+     * 更新20课通过状态
+     * @param $sno
+     * @return mixed
+     */
+    public static function updatePassTwenty($sno){
+        $res = self::where('sno', $sno)
+            ->update([
+                'is_pass20' => 1,
+                'pass20_time' => date('Y-m-d')
+            ]);
+        return $res;
+    }
 
 }

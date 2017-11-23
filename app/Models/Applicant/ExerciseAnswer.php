@@ -13,4 +13,5 @@ class ExerciseAnswer extends Model
 {
     //
     protected $table = "twt_applicant_exerciseanswer";
+
 }

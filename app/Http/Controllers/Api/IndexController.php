@@ -10,6 +10,8 @@ use App\Models\PartyBranch\PartyBranch;
 use App\Models\SpecialNews;
 use App\Models\StudentInfo;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Redis;
 
 /**
  * Created by PhpStorm.
@@ -22,10 +24,15 @@ class IndexController extends Controller{
     public function index(Request $request){
         //这里判断用户登录信息..
         $mainStatus = '';
+        $userInfo = [];
         if ($request->has('token')){
             $token = $request->input('token');
             $userInfo = Log::userInfo($token);
             $userNumb = $userInfo['user_number'];
+
+            // 缓存10分钟
+            Cache::put('userInfo', $userInfo, 10);
+
             $date = date('Y-m-d');
             $result = LoginCount::getByDate($date);
             if ($result){
@@ -76,7 +83,8 @@ class IndexController extends Controller{
                 'notice'      => $notices,
                 'partySchool' => $partySchool,
                 'branchActivity'      => $branchActivity,
-                'mainStatus'  => $mainStatus
+                'mainStatus'  => $mainStatus,
+                'userInfo'    => $userInfo
             ]);
         }else{
             return response()->json([

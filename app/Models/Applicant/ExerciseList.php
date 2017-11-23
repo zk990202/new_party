@@ -49,18 +49,22 @@ class ExerciseList extends Model
     }
 
     /**
-     * 根据课程id获取题目
+     * 根据课程id随机获取20道题目(不带答案)
      * @param $id
      * @return array
      */
     public static function getExerciseById($id){
         $exercises = self::where('course_id', $id)
             ->where('exercise_isdeleted', 0)
+            ->where('exercise_ishidden', 0)
+            ->inRandomOrder()
+            ->limit(20)
             ->get()->all();
         return array_map(function ($exercise){
             return Resources::ExerciseList($exercise);
         }, $exercises);
     }
+
 
     /**
      * 更新题目

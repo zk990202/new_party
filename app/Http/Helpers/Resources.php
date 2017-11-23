@@ -116,6 +116,21 @@ class Resources {
         ];
     }
 
+    public static function ExerciseListHideAnswer($e){
+        return [
+            'id' => $e['id'],
+            'courseId' => $e['courseId'],
+            'courseName' => $e['courseName'],
+            'type' => $e['type'],
+            'content' => $e['content'],
+            'optionA' => $e['optionA'],
+            'optionB' => $e['optionB'],
+            'optionC' => $e['optionC'],
+            'optionD' => $e['optionD'],
+            'optionE' => $e['optionE'],
+        ];
+    }
+
     public static function ExerciseAnswerTransform(ExerciseAnswerTransform $exerciseAnswerTransform){
         return [
             'id' => $exerciseAnswerTransform->id,

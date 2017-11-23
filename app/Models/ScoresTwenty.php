@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Http\Helpers\Resources;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -14,6 +15,10 @@ class ScoresTwenty extends Model
 {
     //
     protected $table = 'twt_20scores';
+    protected $fillable = ['student_id', 'course_id','score', 'complete_time', 'is_systemadd', 'isdeleted'];
+
+    const UPDATED_AT = 'complete_time';
+    const CREATED_AT = 'complete_time';
 
     public static function scoresTwenty($start_time_stamp, $current_time_stamp = null, $group = "day"){
         // set default time stamp
@@ -114,6 +119,84 @@ class ScoresTwenty extends Model
         return ['twenty_lessons' => $res_20lessons_final];
 
     }
+
+    /**
+     * 获取20课成绩
+     * @param $sno
+     * @return mixed
+     */
+    public static function getTwentyCoursesScore($sno){
+        $res = self::leftJoin('twt_applicant_courselist', 'twt_applicant_courselist.course_id', '=', 'twt_20scores.course_id')
+            ->where('student_id', $sno)
+            ->where('twt_20scores.isdeleted', 0)
+            ->orderBy('twt_applicant_courselist.course_id', 'desc')
+            ->get()->toArray();
+        return $res;
+    }
+
+    /**
+     * 是否通过课程
+     * @param $course_id
+     * @param $sno
+     * @return mixed
+     */
+    public static function ifPassCourse($course_id, $sno){
+        $res = self::where('course_id', $course_id)
+            ->where('student_id', $sno)
+            ->where('isdeleted', 0)
+            ->get()->toArray();
+        return $res;
+    }
+
+    /**
+     * 更新20课分数
+     * @param $course_id
+     * @param $sno
+     * @param $score
+     * @return mixed
+     */
+    public static function updateScore($course_id, $sno, $score){
+        $res = self::where('course_id', $course_id)
+            ->where('student_id', $sno)
+            ->update([
+                'score' => $score,
+                'is_systemadd' => 0
+            ]);
+        return $res;
+    }
+
+    /**
+     * 添加20课分数
+     * @param $course_id
+     * @param $sno
+     * @param $score
+     * @return mixed
+     */
+    public static function addScore($course_id, $sno, $score){
+        $res = self::create([
+            'student_id' => $sno,
+            'course_id'  => $course_id,
+            'score'      => $score,
+            'is_systemadd' => 0
+        ]);
+        return $res;
+    }
+
+    /**
+     * 分数是否已经存在
+     * @param $course_id
+     * @param $sno
+     * @return mixed
+     */
+    public static function ifExistScore($course_id, $sno){
+        $res = self::where('course_id', $course_id)
+            ->where('student_id', $sno)
+            ->where('isdeleted', 0)
+            ->get()->toArray();
+        return $res;
+    }
+
+
 
     /**
      * @param $sno
