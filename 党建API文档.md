@@ -2,7 +2,7 @@
 
 #一、首页
 
-````
+````json
 /api/index [GET]
 首页
 参数列表:
@@ -42,7 +42,7 @@ token // 可选参数
             }
         }
     ]
-	"partySchool": [ // 数组，包含全部返回的党校培训内容
+    "partySchool": [ // 数组，包含全部返回的党校培训内容
         {
             "id": 269, // 文章id
             "title": "小组展示现风采，培训结束情谊深", // 文章标题
@@ -61,7 +61,7 @@ token // 可选参数
             "isHidden": 0 // 是否隐藏
         }
     ]
-	"branchActivity": [ // 数组， 包含全部返回的支部风采的内容
+    "branchActivity": [ // 数组， 包含全部返回的支部风采的内容
         {
             "id": 2394, // 支部id
             "name": "材料学院级博士生高分子第一党支部",	// 支部名
@@ -113,14 +113,14 @@ token // 可选参数
 {
   	"success": 1,
 	"notice": {
-        "current_page": 1 // 当前页
-      	"data":[ // 数组， 包含全部的返回的内容
-        	{
-        		"notice_id": 323, // 通知id
-                "column_id": 70, // 所属类型id
-                "notice_title": "第五十三期入党申请人培训结业考试成绩查询通知", // 通知标题
-    		}
-      	]
+	    "current_page": 1 // 当前页
+	  	"data":[ // 数组， 包含全部的返回的内容
+	    	{
+	    		"notice_id": 323, // 通知id
+	            "column_id": 70, // 所属类型id
+	            "notice_title": "第五十三期入党申请人培训结业考试成绩查询通知", // 通知标题
+			}
+	  	]
   		"last_page": 25, // 最后一页
         "next_page_url": "http://127.0.0.1:1024/api/notice/party-school/list/applicant?page=2", // 下一页链接
         "path": "http://127.0.0.1:1024/api/notice/party-school/list/applicant",
@@ -249,7 +249,7 @@ token // 必选参数，无该参数跳转至登录页面
         "course_id": 43, // 课程id
    	    "score": 100, // 课程得分
         "complete_time": "2013-10-23 10:31:05", // 完成课程测试时间
-	    "course_name": "第三课 第一次国共合作和大革命的爆发", // 课程名
+        "course_name": "第三课 第一次国共合作和大革命的爆发", // 课程名
     ]
 }
 
@@ -283,14 +283,14 @@ choose[] // 数组，按题号顺序存储用户提交的答案
 返回的json
   请求成功
 	{
-    	"success": 1,
-    	"message": "答题成功",
-    	"score": 75 // 分数
+		"success": 1,
+		"message": "答题成功",
+		"score": 75 // 分数
 	}	
   请求失败
 	{
-      	"message": "不好意思,你没有通过考试",
-      	"score": 45 // 请求失败也要让同学们自己得了多少分吗
-     }
-````
+	  	"message": "不好意思,你没有通过考试",
+	  	"score": 45 // 请求失败也要让同学们自己得了多少分吗
+	}
 
+````

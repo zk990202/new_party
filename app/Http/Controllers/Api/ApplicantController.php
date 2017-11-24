@@ -151,7 +151,8 @@ class ApplicantController extends Controller {
                 }else {
                     // 随机获取20道题
                     $exercises = ExerciseList::getExerciseById($course_id);
-                    Cache::put('exercises', $exercises, 30);
+                    // 将题目答案缓存
+                    Cache::put('exercises', $exercises, 60);
                     $exercisesHideAnswer = [];
                     for ($i = 0; $i < count($exercises); $i++){
                         $exercisesHideAnswer[$i]['id'] = $exercises[$i]['id'];
@@ -236,6 +237,8 @@ class ApplicantController extends Controller {
                 $score+=5;
             }
         }
+        // 从缓存中一出题目答案
+        Cache::forget('exercises');
         if ($score >= 60){
             //表示通过考试...然后我们要做一下判断...
             //一,看数据库中是否有该课程的成绩...
