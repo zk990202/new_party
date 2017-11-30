@@ -96,4 +96,16 @@ class TestList extends Model {
             return Resources::TestList($testList);
         }, $test);
     }
+
+
+    /**
+     * 判断考试是否开启报名
+     * @return bool
+     */
+    public static function ifOpen(){
+        $res = self::where('test_status', 1)
+            ->where('test_isdeleted', 0)
+            ->get()->toArray();
+        return $res ? true : false;
+    }
 }

@@ -53,6 +53,13 @@ Route::group(['middleware' => 'Access'], function (){
         //课程对应的题目
         Route::get('/{id}/exercise', ['api-applicant-exercise-page', 'uses' => 'ApplicantController@exercisePage'])->middleware('HasToken');
         Route::post('/{id}/exercise', ['api-applicant-exercise', 'uses' => 'ApplicantController@exercise'])->middleware('HasToken');
+        //报名
+        Route::get('/sign', ['as' => 'api-applicant-sign-page', 'uses' => 'ApplicantController@signPage'])->middleware('HasToken');
+        Route::post('/sign', ['as' => 'api-applicant-sign', 'uses' => 'ApplicantController@sign'])->middleware('HasToken');
+        //报名结果
+        Route::get('/sign-result', ['as' => 'api-applicant-sign-result', 'uses' => 'ApplicantController@signResult'])->middleware('HasToken');
+        //退出报名
+        Route::get('/{id}/sign-exit', ['as' => 'api-applicant-sign-exit', 'uses' => 'ApplicantController@signExit'])->middleware('HasToken');
     });
 
 });

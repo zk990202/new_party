@@ -14,8 +14,10 @@ use App\Http\Helpers\Log;
 use App\Http\Helpers\Resources;
 use App\Models\Applicant\ArticleList;
 use App\Models\Applicant\CourseList;
+use App\Models\Applicant\EntryForm;
 use App\Models\Applicant\ExerciseForTwenty;
 use App\Models\Applicant\ExerciseList;
+use App\Models\Applicant\TestList;
 use App\Models\ScoresTwenty;
 use App\Models\StudentFiles;
 use App\Models\StudentInfo;
@@ -311,6 +313,189 @@ class ApplicantController extends Controller {
             return response()->json([
                 'message' => '不好意思,你没有通过考试',
                 'score'   => $score
+            ]);
+        }
+    }
+
+    /**
+     * 报名页面
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function signPage(Request $request){
+        $test = TestList::getAll();
+        //获取当前考试的id
+        $testId = $test[0]['id'];
+
+        //获取用户信息
+        if (Cache::has('userInfo')){
+            $userInfo = Cache::get('userInfo');
+        }else{
+            $token = $request->input('token');
+            $userInfo = Log::userInfo($token);
+            // 缓存10分钟
+            Cache::put('userInfo', $userInfo, 10);
+        }
+
+        if ($userInfo['is_teacher']){
+            return response()->json([
+                'message' => '老师，不好意思，您不能报名参加考试'
+            ]);
+        }else{
+            $sno = $userInfo['user_number'];
+            //判断学生是否通过20课考试
+            $isPass20 = StudentInfo::isPass20($sno);
+            if ($isPass20[0]['isPassed']){
+                //判断学生账号是否被锁
+                if (!$isPass20[0]['applicantIsLocked']){
+                    //判断是否已经通过申请人结业考试
+                    $isPass = EntryForm::isPass($sno);
+                    if (!$isPass){
+                        //判断是否有考试开启
+                        $isOpen = TestList::ifOpen();
+                        if ($isOpen){
+                            //查看该期考试是否已经报名
+                            $isSign = EntryForm::isEntry($sno, $testId);
+                            if (!$isSign){
+                                return response()->json([
+                                    'success' => 1
+                                ]);
+                            }else{
+                                return response()->json([
+                                    'message' => '您已经参加过本期考试的报名了!到[报名结果中进行查看吧]!'
+                                ]);
+                            }
+                        }else{
+                            return response()->json([
+                                'message' => '不好意思,暂时还没有考试处于报名开启状态!'
+                            ]);
+                        }
+                    }else{
+                        return response()->json([
+                            'message' => '不好意思,您已经通过申请人结业考试,无需报名!'
+                        ]);
+                    }
+                }else{
+                    return response()->json([
+                        'message' => '不好意思,您的账号已经被锁住,无法进行报名.请联系超管请求解锁'
+                    ]);
+                }
+            }else{
+                return response()->json([
+                    'message' => '不好意思,您还没有通过20课的学习,无法参加结业考试!'
+                ]);
+            }
+        }
+    }
+
+    /**
+     * 报名逻辑
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function sign(Request $request){
+        $test = TestList::getAll();
+        //获取当前考试的id
+        $testId = $test[0]['id'];
+
+        //获取用户信息
+        if (Cache::has('userInfo')){
+            $userInfo = Cache::get('userInfo');
+        }else{
+            $token = $request->input('token');
+            $userInfo = Log::userInfo($token);
+            // 缓存10分钟
+            Cache::put('userInfo', $userInfo, 10);
+        }
+
+        $campus = '';
+        if ($request->has('campus')){
+            $campus = $request->input('campus');
+        }
+
+        $sno = $userInfo['user_number'];
+        $isSign = EntryForm::isEntry($sno, $testId);
+        //判断是否已经报名，避免重复报名
+        if (!$isSign){
+            $sign = EntryForm::signAdd($sno, $testId, $campus);
+            if ($sign){
+                return response()->json([
+                    'success' => 1,
+                ]);
+            }else{
+                return response()->json([
+                    'message' => '报名失败，遇到了一个错误，请重新提交'
+                ]);
+            }
+        }else{
+            return response()->json([
+                'message' => '不好意思,您已经报名了,不要重复刷新本页,对您没有半点好处!'
+            ]);
+        }
+    }
+
+    /**
+     * 报名结果
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function signResult(Request $request){
+        //获取用户信息
+        if (Cache::has('userInfo')){
+            $userInfo = Cache::get('userInfo');
+        }else{
+            $token = $request->input('token');
+            $userInfo = Log::userInfo($token);
+            // 缓存10分钟
+            Cache::put('userInfo', $userInfo, 10);
+        }
+
+        if ($userInfo['is_teacher']){
+            return response()->json([
+                'message' => '老师，不好意思，您不能查看报名结果'
+            ]);
+        }else{
+            $sno = $userInfo['user_number'];
+            $result = EntryForm::getSignResult($sno);
+            if ($result){
+                return response()->json([
+                    'success' => 1,
+                    'result' => $result[0]
+                ]);
+            }else{
+                return response()->json([
+                    'message' => '暂无报名结果'
+                ]);
+            }
+        }
+    }
+
+    /**
+     * 退出报名
+     * @param Request $request
+     * @param $entry_id
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function signExit(Request $request, $entry_id){
+        //获取用户信息
+        if (Cache::has('userInfo')){
+            $userInfo = Cache::get('userInfo');
+        }else{
+            $token = $request->input('token');
+            $userInfo = Log::userInfo($token);
+            // 缓存10分钟
+            Cache::put('userInfo', $userInfo, 10);
+        }
+
+        $exit = EntryForm::signExit($entry_id);
+        if ($exit){
+            return response()->json([
+                'success' => 1,
+                'message' => '恭喜,您已经退出本期考试的报名,不能再参加本期考试了.!'
+            ]);
+        }else{
+            return response()->json([
+                'message' => '不好意思，退出报名失败'
             ]);
         }
     }

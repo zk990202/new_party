@@ -280,17 +280,92 @@ token // 必选参数，无该参数跳转至登录页面
 20课考试，提交答案
 参数列表
 choose[] // 数组，按题号顺序存储用户提交的答案
+token // 必选参数，无该参数跳转至登录页面
 返回的json
-  请求成功
+	请求成功
 	{
 		"success": 1,
 		"message": "答题成功",
 		"score": 75 // 分数
 	}	
-  请求失败
+  	请求失败
 	{
 	  	"message": "不好意思,你没有通过考试",
-	  	"score": 45 // 请求失败也要让同学们自己得了多少分吗
+	  	"score": 45 // 请求失败也要让同学们自己得了多少分
 	}
+	
+/api/applicant/sign [GET]
+报名结业考试
+参数列表
+token // 必选参数，无该参数跳转至登录页面
+返回的json
+	请求成功
+	{
+		"success": 0
+	}
+	请求失败
+	{
+      	"message": "" // 提示信息
+    }
 
+/api/applicant/sign [POST]
+报名结业考试，提交表单
+参数列表
+token // 必选参数，无该参数跳转至登录页面
+campus // 校区
+返回的json
+	请求成功
+	{
+      	"success": 0
+    }
+	请求失败
+	{
+      	"message": "" // 提示信息
+    }
+
+/api/applicant/sign-result [GET]
+报名结果
+参数列表
+token // 必选参数，无该参数跳转至登录页面
+返回的json
+	请求成功
+	{
+    	"success": 1,
+    	"result": {
+        	"id": 352384, // 报名信息id
+        	"testId": 464,  // 考试id
+        	"testName": "第五十三期入党申请人培训结业考试", // 考试期数
+        	"sno": "3016218103",
+        	"academyId": 16,
+        	"academyName": "软件学院", 
+       		"majorName": "",
+        	"studentName": "",
+        	"time": {
+            	"date": "2017-11-30 02:55:11.000000", // 报名时间
+            	"timezone_type": 3,
+            	"timezone": "UTC"
+        	},
+        	"campus": ""
+    	}
+	}
+	请求失败
+	{
+      	"message": ""
+    }
+
+/api/applicant/{entry_id}/sign-exit [GET]
+退出报名
+参数列表
+entry_id // 报名信息id，即 /api/applicant/sign-result [GET] 返回json中的 result['id']
+token // 必选参数，无该参数跳转至登录页面
+返回的json
+	请求成功
+	{
+    	"success": 1,
+    	"message": "恭喜,您已经退出本期考试的报名,不能再参加本期考试了.!"
+	}
+	请求失败
+	{
+  		"message": ""
+	}
 ````

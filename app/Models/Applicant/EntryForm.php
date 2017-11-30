@@ -262,4 +262,75 @@ class EntryForm extends Model
 
         return $res ? Resources::EntryForm($entry) : false;
     }
+
+    // ---下面就是前台了！！！
+
+    /**
+     * 是否通过申请人结业考试
+     * @param $sno
+     * @return bool
+     */
+    public static function isPass($sno){
+        $res = self::where('sno', $sno)
+            ->where('entry_ispassed', 1)
+            ->get()->toArray();
+        return $res ? true : false;
+    }
+
+    /**
+     * 是否已经报名
+     * @param $sno
+     * @param $test_id
+     * @return array
+     */
+    public static function isEntry($sno, $test_id){
+        $res = self::where('sno', $sno)
+            ->where('test_id', $test_id)
+            ->get()->all();
+        return array_map(function ($entryForm){
+            return Resources::EntryForm($entryForm);
+        }, $res);
+    }
+
+    /**
+     * 报名结业考试
+     * @param $sno
+     * @param $test_id
+     * @param $campus
+     * @return bool
+     */
+    public static function signAdd($sno, $test_id, $campus){
+        $res = self::create([
+            'sno' => $sno,
+            'test_id' => $test_id,
+            'campus' => $campus
+        ]);
+        return $res ? true : false;
+    }
+
+    /**
+     * 报名结果
+     * @param $sno
+     * @return array
+     */
+    public static function getSignResult($sno){
+        $res = self::leftJoin('twt_applicant_testlist', 'twt_applicant_entryform.test_id', '=', 'twt_applicant_testlist.test_id')
+            ->where('test_status', '<', 5)
+            ->where('sno', $sno)
+            ->get()->all();
+        return array_map(function ($entryForm){
+            return Resources::EntryForm($entryForm);
+        }, $res);
+    }
+
+    /**
+     * 退出报名
+     * @param $entry_id
+     * @return bool
+     */
+    public static function signExit($entry_id){
+        $res = self::where('entry_id', $entry_id)
+            ->update(['isexit' => 1]);
+        return $res ? true : false;
+    }
 }

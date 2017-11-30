@@ -59,6 +59,21 @@ class StudentInfo extends Model
     }
 
     /**
+     * 判断是否通过20课
+     * @param $sno
+     * @return bool
+     */
+    public static function isPass20($sno){
+        $isPass20 = self::where('sno', $sno)
+            ->where('is_pass20', 1)
+            ->get()->all();
+        if ($isPass20)
+            return true;
+        else
+            return false;
+    }
+
+    /**
      * 补考报名时判断是否通过20课
      * @param $sno
      * @return bool
@@ -408,6 +423,19 @@ class StudentInfo extends Model
                 'pass20_time' => date('Y-m-d')
             ]);
         return $res;
+    }
+
+    /**
+     * 根据学号获取用户信息
+     * @param $sno
+     * @return array
+     */
+    public static function getBySno($sno){
+        $res = self::where('sno', $sno)
+            ->get()->all();
+        return array_map(function ($studentInfo){
+            return Resources::StudentInfo($studentInfo);
+        }, $res);
     }
 
 }
