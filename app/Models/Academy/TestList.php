@@ -170,4 +170,33 @@ class TestList extends Model
             return Resources::AcademyTestList($testList);
         }, $test);
     }
+
+    //--------------下面就是前台的东西了----------------
+
+    /**
+     * 根据学院获取所有课程
+     * @param $college_id
+     * @return mixed
+     */
+    public static function allCourse($college_id){
+        $res = self::where('test_of_academy', $college_id)
+            ->where('test_isdeleted', 0)
+            ->orderBy('test_id', 'desc')
+            ->paginate(15);
+        return $res;
+    }
+
+    /**
+     * 考试是否开启
+     * @param $college_id
+     * @return bool
+     */
+    public static function isOpen($college_id){
+        $res = self::where('test_of_academy', $college_id)
+            ->where('test_status', 1)
+            ->where('test_isdeleted', 0)
+            ->get()->toArray();
+        return $res;
+    }
+
 }

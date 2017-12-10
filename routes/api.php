@@ -42,9 +42,9 @@ Route::group(['middleware' => 'Access'], function (){
 
     //网上党校--申请人党校
     Route::group(['prefix' => 'applicant', 'namespace' => 'Api'], function (){
-        //课程学习
+        //课程学习--所有课程
         Route::get('/course', ['as' => 'api-applicant-all-course', 'uses' => 'ApplicantController@allCourse']);
-        //课程对应的几篇文章
+        //课程详情--对应的几篇文章
         Route::get('/{id}/course', ['as' => 'api-applicant-course', 'uses' => 'ApplicantController@course']);
         //文章详情
         Route::get('/{id}/article', ['api-applicant-article', 'uses' => 'ApplicantController@article']);
@@ -65,7 +65,18 @@ Route::group(['middleware' => 'Access'], function (){
         //证书查询
         Route::get('/{entry_id}/certificate-check', ['as' => 'api-applicant-certificate-check', 'uses' => 'ApplicantController@certificateCheck'])->middleware('HasToken');
         //账号状态
-        Route::get('/account-status', ['as' => 'api-applicant-account-status', 'uses' => 'ApplicantController@accountStatus']);
+        Route::get('/account-status', ['as' => 'api-applicant-account-status', 'uses' => 'ApplicantController@accountStatus'])->middleware('HasToken');
+    });
+
+    //网上党校--院级积极分子培训
+    Route::group(['prefix' => 'academy', 'namespace' => 'Api'], function (){
+        //课程学习--所有课程
+        Route::get('/course', ['as' => 'api-academy-all-course', 'uses' => 'AcademyController@allCourse'])->middleware('HasToken');
+        //课程详情
+        Route::get('/{test_id}/course-detail', ['as' => 'api-academy-course-detail', 'uses' => 'AcademyController@courseDetail']);
+        //考试报名
+        Route::get('/sign', ['as' => 'api-academy-sign-page', 'uses' => 'AcademyController@signPage'])->middleware('HasToken');
+        Route::post('/sign', ['as' => 'api-academy-sign', 'uses' => 'AcademyController@sign'])->middleware('HasToken');
     });
 
 });

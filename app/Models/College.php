@@ -28,4 +28,15 @@ class College extends Model
         return $res;
     }
 
+    /**
+     * 学院代号的转换
+     * @param $code
+     * @return mixed
+     */
+    public static function codeToId($code){
+        $res = self::where('code', $code)
+            ->get()->toArray();
+        return $res[0]['id'];
+    }
+
 }

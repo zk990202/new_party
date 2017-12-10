@@ -213,4 +213,46 @@ class EntryForm extends Model
             return Resources::AcademyEntryForm($entryForm);
         }, $res);
     }
+
+    //--------------下面就是前台咯1111111111111111
+
+    /**
+     * 是否已经报名
+     * @param $sno
+     * @param $test_id
+     * @return mixed
+     */
+    public static function isSign($sno, $test_id){
+        $res = self::where('sno', $sno)
+            ->where('test_id', $test_id)
+            ->get()->toArray();
+        return $res;
+    }
+
+    /**
+     * 是否已经通过考试
+     * @param $sno
+     * @return bool
+     */
+    public static function isPass($sno){
+        $res = self::where('sno', $sno)
+            ->where('isexit', 0)
+            ->whereIn('entry_ispassed', [1, 2])
+            ->get()->toArray();
+        return $res ? true : false;
+    }
+
+    /**
+     * 报名--添加数据
+     * @param $sno
+     * @param $test_id
+     * @return bool
+     */
+    public static function sign($sno, $test_id){
+        $res = self::create([
+            'sno' => $sno,
+            'test_id' => $test_id
+        ]);
+        return $res ? true : false;
+    }
 }

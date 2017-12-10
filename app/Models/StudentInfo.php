@@ -438,4 +438,15 @@ class StudentInfo extends Model
         }, $res);
     }
 
+    /**
+     * 申请人培训是否被锁
+     * @param $sno
+     * @return bool
+     */
+    public static function applicantIsLocked($sno){
+        $res = self::where('sno', $sno)
+            ->where('applicant_islocked', 1)
+            ->get()->toArray();
+        return $res ? true : false;
+    }
 }

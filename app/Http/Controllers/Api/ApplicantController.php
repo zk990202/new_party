@@ -1,5 +1,6 @@
 <?php
 /**
+ * 网上党校--申请人培训
  * Created by PhpStorm.
  * User: Kai.Z
  * Date: 2017/11/16
@@ -7,7 +8,6 @@
  */
 
 namespace App\Http\Controllers\Api;
-
 
 use App\Http\Controllers\Controller;
 use App\Http\Helpers\Log;
@@ -27,8 +27,6 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Redis;
 
 class ApplicantController extends Controller {
-
-    protected static $exercises = [];
 
     /**
      * 课程学习
@@ -240,7 +238,7 @@ class ApplicantController extends Controller {
                 $score+=5;
             }
         }
-        // 从缓存中一出题目答案
+        // 从缓存中删除题目答案
         Cache::forget('exercises');
         if ($score >= 60){
             //表示通过考试...然后我们要做一下判断...
@@ -613,7 +611,7 @@ class ApplicantController extends Controller {
                 return response()->json([
                     'success' => 1,
                     'basicInfo' => $userInfo,
-                    'studentInfo' => $studentInfo,
+                    'studentInfo' => $studentInfo[0],
                     'status' => $status
                  ]);
             }else{

@@ -445,17 +445,97 @@ token // 必选参数，无该参数跳转至登录页面
         "major": "软件工程",
         "twt_name": "zk990202"
     },
-    "studentInfo": [ // 数组，只有第一项
-        {
-            "id": 115823,
-            "sno": "3016218103",
-            "academyId": 16,
-            "partyBranchId": 1220,
-            "isPassed": 0, // 20课是否通过，通过为1，否则为0
-            "isClear20": 0, // 20课是否被清楚，被清为1 
-            "applicantIsLocked": 0, // 申请人结业培训是否被锁，被锁为1
-        }
-    ],
+    "studentInfo": { 
+         "id": 115823,
+         "sno": "3016218103",
+         "academyId": 16,
+         "partyBranchId": 1220,
+         "isPassed": 0, // 20课是否通过，通过为1，否则为0
+         "isClear20": 0, // 20课是否被清楚，被清为1 
+         "applicantIsLocked": 0, // 申请人结业培训是否被锁，被锁为1 
+    },
     "status": 0 // 申请人结业考试状态，通过为1
 }
+
+所有请求成功都会返回success => 1，请求失败会返回报错信息message
 ````
+
+## 2.院级积极分子培训
+
+````json
+/api/academy/course [GET]
+院级积极分子培训首页/院级积极分子培训下的课程学习
+参数列表
+token // 必选参数，无该参数跳转至登录页面
+返回的json
+{
+  	"success": 1,
+	"notice": {
+	    "current_page": 1 // 当前页
+	  	"data":[ // 数组， 包含全部的返回的内容
+	    	{
+                "test_id": 599, // 培训id
+                "test_parent": 584, // 所属总培训
+                "test_name": "软件学院第十七期院级积极分子党校", // 培训名称
+            }
+	  	]
+  		"last_page": 25, // 最后一页
+        "next_page_url": "", // 下一页链接
+        "per_page": 6, 
+        "total": 150 // 总数据条数
+    }
+}
+
+/api/academy/{test_id}/course-detail [GET]
+课程详情
+参数列表
+test_id // 课程id，即/api/academy/course [GET] 回json中的notice['data'][i]['test_id']
+返回的json
+{
+    "success": 1,
+    "test": {
+        "id": 599,
+        "name": "软件学院第十七期院级积极分子党校", // 课程名称
+        "parent": 584,
+        "trainName": "第十七期积极分子培训",
+        "academyId": "16",
+        "academyName": "软件学院",
+        "time": {
+            "date": "2017-04-06 00:00:00.000000",
+            "timezone_type": 3,
+            "timezone": "UTC"
+        },
+        "introduction": "", // 课程介绍
+        "attention": "", // 课程要求
+    }
+}
+
+/api/academy/sign [GET]
+报名考试
+参数列表
+token // 必选参数，无该参数跳转至登录页面
+返回的json
+{
+    "success": 1,
+    "test": {
+        "test_id": 530,
+        "test_parent": 517,
+        "test_name": "软件学院第十四期院级积极分子党校",
+        "test_of_academy": "16",
+        "test_begintime": "2015-11-12 00:00:00",
+        "test_introduction": "<p>", // 课程介绍
+        "test_attention": "", // 课程要求
+    }
+}
+
+/api/academy/sign [POST]
+报名考试——提交
+参数列表
+token // 必选参数，无该参数跳转至登录页面
+返回的json
+{
+    "success": 1,
+    "message": "恭喜您,报名成功!"
+}
+````
+
