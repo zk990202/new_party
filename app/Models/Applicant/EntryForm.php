@@ -333,4 +333,51 @@ class EntryForm extends Model
             ->update(['isexit' => 1]);
         return $res ? true : false;
     }
+
+    /**
+     * 成绩查询
+     * @param $sno
+     * @return array
+     */
+    public static function gradeCheck($sno){
+        $res = self::leftJoin('twt_applicant_testlist', 'twt_applicant_entryform.test_id', '=', 'twt_applicant_testlist.test_id')
+            ->where('sno', $sno)
+            ->where('twt_applicant_testlist.test_status', '>=', 4)
+            ->get()->all();
+        return array_map(function ($entryForm){
+            return Resources::EntryForm($entryForm);
+        }, $res);
+    }
+
+    /**
+     * 证书查询
+     * @param $sno
+     * @return array
+     */
+    public static function certificateCheck($sno){
+        $res = self::leftJoin('twt_applicant_testlist', 'twt_applicant_entryform.test_id', '=', 'twt_applicant_testlist.test_id')
+            ->where('sno', $sno)
+            ->where('entry_ispassed', '>', 0)
+            ->where('cert_isgrant', 1)
+            ->get()->all();
+        return array_map(function ($entryForm){
+            return Resources::EntryForm($entryForm);
+        }, $res);
+    }
+
+    /**
+     * 账号状态
+     * @param $sno
+     * @return array
+     */
+    public static function accountStatus($sno){
+        $res = self::where('sno', $sno)
+            ->where('isexit', 0)
+            ->where('entry_status', 1)
+            ->whereIn('entry_ispassed', [1, 2])
+            ->get()->all();
+        return array_map(function ($entryForm){
+            return Resources::EntryForm($entryForm);
+        }, $res);
+    }
 }

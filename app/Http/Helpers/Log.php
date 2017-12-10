@@ -27,6 +27,9 @@ class Log{
             $result = $userinfo->result;
             $usernumb = $result->user_number;
             $data['user_number'] = $usernumb;
+            $data['real_name'] = $result->user_info->username;
+            $data['college'] =  $result->college;
+            $data['major'] = $result->major;
             $data['twt_name'] = $result->twt_name;
             $data['party_branch_id'] = $result->user_info->party_branch_id;
 

@@ -59,7 +59,13 @@ Route::group(['middleware' => 'Access'], function (){
         //报名结果
         Route::get('/sign-result', ['as' => 'api-applicant-sign-result', 'uses' => 'ApplicantController@signResult'])->middleware('HasToken');
         //退出报名
-        Route::get('/{id}/sign-exit', ['as' => 'api-applicant-sign-exit', 'uses' => 'ApplicantController@signExit'])->middleware('HasToken');
+        Route::get('/{entry_id}/sign-exit', ['as' => 'api-applicant-sign-exit', 'uses' => 'ApplicantController@signExit'])->middleware('HasToken');
+        //成绩查询
+        Route::get('/grade-check', ['as' => 'api-applicant-grade-check', 'uses' => 'ApplicantController@gradeCheck'])->middleware('HasToken');
+        //证书查询
+        Route::get('/{entry_id}/certificate-check', ['as' => 'api-applicant-certificate-check', 'uses' => 'ApplicantController@certificateCheck'])->middleware('HasToken');
+        //账号状态
+        Route::get('/account-status', ['as' => 'api-applicant-account-status', 'uses' => 'ApplicantController@accountStatus']);
     });
 
 });

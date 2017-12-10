@@ -148,26 +148,26 @@ class ModuleTableSeeder extends Seeder
         /**
          * 栏目管理 父模块3 ，子模块 141 - 150
          */
-        DB::table('twt_manager_modules')->insert([
-            'self_id'   => 3,
-            'parent_id' => 0,
-            'name'      => '栏目管理',
-            'route'      => '#',
-        ]);
-        DB::table('twt_manager_modules')->insert([
-            'self_id'   => 141,
-            'parent_id' => 3,
-            'name'      => '栏目添加',
-            'route'      => '#',
-            'url'       => 'undefined'
-        ]);
-        DB::table('twt_manager_modules')->insert([
-            'self_id'   => 142,
-            'parent_id' => 3,
-            'name'      => '栏目列表',
-            'route'      => '#',
-            'url'       => 'undefined'
-        ]);
+//        DB::table('twt_manager_modules')->insert([
+//            'self_id'   => 3,
+//            'parent_id' => 0,
+//            'name'      => '栏目管理',
+//            'route'      => '#',
+//        ]);
+//        DB::table('twt_manager_modules')->insert([
+//            'self_id'   => 141,
+//            'parent_id' => 3,
+//            'name'      => '栏目添加',
+//            'route'      => '#',
+//            'url'       => 'undefined'
+//        ]);
+//        DB::table('twt_manager_modules')->insert([
+//            'self_id'   => 142,
+//            'parent_id' => 3,
+//            'name'      => '栏目列表',
+//            'route'      => '#',
+//            'url'       => 'undefined'
+//        ]);
 
         /**
          * 党建专项 父模块4 ，子模块 151 - 160

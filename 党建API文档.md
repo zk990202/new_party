@@ -99,7 +99,7 @@ token // 可选参数
 
 接口正确返回都会有success字段，没有则说明请求失败，在message字段中返回原因
 {
-  "message"	=>	'error message'
+  "message": 'error message'
 }
 ````
 
@@ -176,7 +176,7 @@ notice_id // 通知id
 }
 接口正确返回都会有success字段，没有则说明请求失败，在message字段中返回原因
 {
-  "message"	=>	'error message'
+  "message": 'error message'
 }
 ````
 
@@ -368,4 +368,94 @@ token // 必选参数，无该参数跳转至登录页面
 	{
   		"message": ""
 	}
+	
+/api/applicant/grade-check [GET]
+成绩查询
+参数列表
+token // 必选参数，无该参数跳转至登录页面
+返回的json
+{
+	"success": 1,
+    "grade": [ // 数组，返回所有考试的信息
+        {
+            "id": 352384,
+            "testId": 464,
+            "testName": "第五十三期入党申请人培训结业考试",
+            "sno": "3016218103",
+            "academyId": 16,
+            "academyName": "软件学院",
+            "majorName": "",
+            "studentName": "",
+            "time": {
+                "date": "2017-11-30 12:51:38.000000", // 考试时间
+                "timezone_type": 3,
+                "timezone": "UTC"
+            },
+            "practiceGrade": 0, // 笔试成绩
+            "articleGrade": 0, // 论文成绩
+        }
+    ],
+    "count": 1 // 考试数目
+}
+
+/api/applicant/{entry_id}/certificate-check [GET]
+证书查询
+参数列表
+entry_id // 报名信息id，即 /api/applicant/sign-result [GET] 返回json中的 result['id']
+token // 必选参数，无该参数跳转至登录页面
+返回的json
+{
+    "success": 1,
+    "cert": [ // 数组，返回所有的证书
+        {
+            "id": 1581,
+            "sno": "3006202229",
+            "studentName": "张笑平",
+            "academyId": 2,
+            "academyName": "精仪学院",
+            "majorName": "",
+            "entryId": 288057,
+            "certNumber": "010668",
+            "type": 1,
+            "time": {
+                "date": "-0001-11-30 00:00:00.000000",
+                "timezone_type": 3,
+                "timezone": "UTC"
+            },
+            "getPerson": "曹兴", // 证书领取人
+            "place": "院团委", // 证书存放处
+            "practiceGrade": 60,
+            "articleGrade": 77,
+            "testGrade": ""
+        }
+    ]
+}
+
+/api/applicant/account-status [GET]
+账号状态
+参数列表
+token // 必选参数，无该参数跳转至登录页面
+返回的json
+{
+    "success": 1,
+    "basicInfo": { // 学生基础信息
+        "user_number": "3016218113",
+        "real_name": "",
+      	"college": "软件学院",
+        "major": "软件工程",
+        "twt_name": "zk990202"
+    },
+    "studentInfo": [ // 数组，只有第一项
+        {
+            "id": 115823,
+            "sno": "3016218103",
+            "academyId": 16,
+            "partyBranchId": 1220,
+            "isPassed": 0, // 20课是否通过，通过为1，否则为0
+            "isClear20": 0, // 20课是否被清楚，被清为1 
+            "applicantIsLocked": 0, // 申请人结业培训是否被锁，被锁为1
+        }
+    ],
+    "status": 0 // 申请人结业考试状态，通过为1
+}
 ````

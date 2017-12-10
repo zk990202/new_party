@@ -18,6 +18,7 @@ use App\Models\Applicant\EntryForm;
 use App\Models\Applicant\ExerciseForTwenty;
 use App\Models\Applicant\ExerciseList;
 use App\Models\Applicant\TestList;
+use App\Models\Cert;
 use App\Models\ScoresTwenty;
 use App\Models\StudentFiles;
 use App\Models\StudentInfo;
@@ -497,6 +498,129 @@ class ApplicantController extends Controller {
             return response()->json([
                 'message' => '不好意思，退出报名失败'
             ]);
+        }
+    }
+
+    /**
+     * 成绩查询
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function gradeCheck(Request $request){
+        //获取用户信息
+        if (Cache::has('userInfo')){
+            $userInfo = Cache::get('userInfo');
+        }else{
+            $token = $request->input('token');
+            $userInfo = Log::userInfo($token);
+            // 缓存10分钟
+            Cache::put('userInfo', $userInfo, 10);
+        }
+
+        if ($userInfo['is_teacher']){
+            return response()->json([
+                'message' => '老师,不好意思,您不可查看成绩'
+            ]);
+        }else{
+            $sno = $userInfo['user_number'];
+            //查看成绩有个要求..必须是考试处于成绩录入结束的状态以后
+            $grade = EntryForm::gradeCheck($sno);
+            if ($grade){
+                $count = count($grade);
+                return response()->json([
+                    'success' => 1,
+                    'grade' => $grade,
+                    'count' => $count
+                ]);
+            }else{
+                return response()->json([
+                    'message' => '查询成绩出错！'
+                ]);
+            }
+        }
+    }
+
+    /**
+     * 证书查询
+     * @param Request $request
+     * @param $entry_id
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function certificateCheck(Request $request, $entry_id){
+        //获取用户信息
+        if (Cache::has('userInfo')){
+            $userInfo = Cache::get('userInfo');
+        }else{
+            $token = $request->input('token');
+            $userInfo = Log::userInfo($token);
+            // 缓存10分钟
+            Cache::put('userInfo', $userInfo, 10);
+        }
+
+        if ($userInfo['is_teacher']) {
+            return response()->json([
+                'message' => '老师,不好意思,您不可查看成绩'
+            ]);
+        }else{
+            $sno = $userInfo['user_number'];
+            $entryForm = EntryForm::certificateCheck($sno);
+            if ($entryForm){
+                $cert = Cert::certCheckApplicant($entry_id);
+                if ($cert){
+                    return response()->json([
+                        'success' => 1,
+                        'cert' => $cert
+                    ]);
+                }else{
+                    return response()->json([
+                        'message' => '不好意思,没有找到相应的证书,请联系管理员!'
+                    ]);
+                }
+            }else{
+                return response()->json([
+                    'message' => '不好意思,没有找到相应的证书!'
+                ]);
+            }
+        }
+    }
+
+    /**
+     * 账号状态
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function accountStatus(Request $request){
+        //获取用户信息
+        if (Cache::has('userInfo')){
+            $userInfo = Cache::get('userInfo');
+        }else{
+            $token = $request->input('token');
+            $userInfo = Log::userInfo($token);
+            // 缓存10分钟
+            Cache::put('userInfo', $userInfo, 10);
+        }
+
+        if ($userInfo['is_teacher']) {
+            return response()->json([
+                'message' => '老师,不好意思,您没有账号状态可以查询'
+            ]);
+        }else{
+            $sno = $userInfo['user_number'];
+            $studentInfo = StudentInfo::getBySno($sno);
+            //申请人结业培训状态
+            $status = EntryForm::accountStatus($sno) ? 1 : 0;
+            if ($studentInfo){
+                return response()->json([
+                    'success' => 1,
+                    'basicInfo' => $userInfo,
+                    'studentInfo' => $studentInfo,
+                    'status' => $status
+                 ]);
+            }else{
+                return response()->json([
+                    'message' => '数据取出失败，请联系超级管理员'
+                ]);
+            }
         }
     }
 }

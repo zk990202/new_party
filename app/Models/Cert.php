@@ -187,8 +187,26 @@ class Cert extends Model
             'cert_islost' => 0,
             'isdeleted' => 0
         ]);
+        return $cert ? Resources::ProbationaryCert($cert) : false;
+    }
 
-        return $res ? Resources::ProbationaryCert($cert) : false;
+
+    //--------------------------下面就是前台的了------------------------
+
+    /**
+     * 申请人培训--证书查看
+     * @param $entry_id
+     * @return array
+     */
+    public static function certCheckApplicant($entry_id){
+        $res = self::leftJoin('twt_applicant_entryform', 'twt_cert.entry_id', '=', 'twt_applicant_entryform.entry_id')
+            ->where('twt_cert.entry_id', $entry_id)
+            ->where('twt_cert.cert_type', 1)
+            ->where('isdeleted', 0)
+            ->get()->all();
+        return array_map(function ($cert){
+            return Resources::Cert($cert);
+        }, $res);
     }
 
 }
