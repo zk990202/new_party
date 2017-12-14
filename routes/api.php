@@ -77,6 +77,17 @@ Route::group(['middleware' => 'Access'], function (){
         //考试报名
         Route::get('/sign', ['as' => 'api-academy-sign-page', 'uses' => 'AcademyController@signPage'])->middleware('HasToken');
         Route::post('/sign', ['as' => 'api-academy-sign', 'uses' => 'AcademyController@sign'])->middleware('HasToken');
+        //我的报名表(报名详情)
+        Route::get('/sign-detail', ['as' => 'api-academy-sign-detail', 'uses' => 'AcademyController@signDetail'])->middleware('HasToken');
+        //退出报名
+        Route::get('/{entry_id}/sign-exit', ['as' => 'api-academy-sign-exit', 'uses' => 'AcademyController@signExit'])->middleware('HasToken');
+        //成绩查询
+        Route::get('/grade-check', ['as' => 'api-academy-grade=check', 'uses' => 'AcademyController@gradeCheck'])->middleware('HasToken');
+        //申诉
+        Route::get('/{test_id}/complain', ['as' => 'api-academy-complain-page', 'uses' => 'AcademyController@complainPage'])->middleware('HasToken');
+        Route::post('/{test_id}/complain', ['as' => 'api-academy-complain', 'uses' => 'AcademyController@complain'])->middleware('HasToken');
+        //证书查询
+        Route::get('/certificate-check', ['as' => 'api-academy-certificate-check', 'uses' => 'AcademyController@certificateCheck'])->middleware('HasToken');
     });
 
 });

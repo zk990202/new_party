@@ -209,4 +209,20 @@ class Cert extends Model
         }, $res);
     }
 
+    /**
+     * 院级积极分子--证书查看
+     * @param $entry_id
+     * @return array
+     */
+    public static function certCheckAcademy($entry_id){
+        $res = self::leftJoin('twt_academy_entryform', 'twt_cert.entry_id', '=', 'twt_academy_entryform.entry_id')
+            ->where('twt_cert.entry_id', $entry_id)
+            ->where('twt_cert.cert_type', 2)
+            ->where('isdeleted', 0)
+            ->get()->all();
+        return array_map(function ($cert){
+            return Resources::Cert($cert);
+        }, $res);
+    }
+
 }

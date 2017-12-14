@@ -459,6 +459,7 @@ class ApplicantController extends Controller {
             if ($result){
                 return response()->json([
                     'success' => 1,
+                    'basicInfo' => $userInfo,
                     'result' => $result[0]
                 ]);
             }else{
@@ -527,6 +528,7 @@ class ApplicantController extends Controller {
                 $count = count($grade);
                 return response()->json([
                     'success' => 1,
+                    'basicInfo' => $userInfo,
                     'grade' => $grade,
                     'count' => $count
                 ]);
@@ -567,7 +569,8 @@ class ApplicantController extends Controller {
                 if ($cert){
                     return response()->json([
                         'success' => 1,
-                        'cert' => $cert
+                        'basicInfo' => $userInfo,
+                        'cert' => $cert[0]
                     ]);
                 }else{
                     return response()->json([

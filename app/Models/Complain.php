@@ -134,4 +134,30 @@ class Complain extends Model
             return Resources::Complain($complain);
         }, $res_all);
     }
+
+
+    //下面就是前台的东西了
+
+    /**
+     * 院级积极分子培训的申诉
+     * @param $sno
+     * @param $college_id
+     * @param $test_id
+     * @param $title
+     * @param $content
+     * @return bool
+     */
+    public static function addComplainAcademy($sno, $college_id, $test_id, $title, $content){
+        $res =self::create([
+            'from_sno' => $sno,
+            'to_sno' => '',
+            'college_id' => 1,
+            'test_id' => $test_id,
+            'title' => $title,
+            'content' => $content,
+            'type' => 2,
+            'isread' => 0
+        ]);
+        return $res ? true : false;
+    }
 }

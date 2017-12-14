@@ -331,15 +331,20 @@ token // 必选参数，无该参数跳转至登录页面
 	请求成功
 	{
     	"success": 1,
+      	"basicInfo":
+      	{
+        	"user_number": "3016218103",
+        	"real_name": "",
+        	"college_code": "218",
+        	"college": "软件学院",
+        	"major": "软件工程",
+        	"twt_name": "zk990202",
+    	},
     	"result": {
         	"id": 352384, // 报名信息id
         	"testId": 464,  // 考试id
         	"testName": "第五十三期入党申请人培训结业考试", // 考试期数
-        	"sno": "3016218103",
         	"academyId": 16,
-        	"academyName": "软件学院", 
-       		"majorName": "",
-        	"studentName": "",
         	"time": {
             	"date": "2017-11-30 02:55:11.000000", // 报名时间
             	"timezone_type": 3,
@@ -376,16 +381,20 @@ token // 必选参数，无该参数跳转至登录页面
 返回的json
 {
 	"success": 1,
+  	"basicInfo": {
+        "user_number": "3016218103",
+        "real_name": "",
+        "college_code": "218",
+        "college": "软件学院",
+        "major": "软件工程",
+        "twt_name": "zk990202",
+    },
     "grade": [ // 数组，返回所有考试的信息
         {
             "id": 352384,
             "testId": 464,
             "testName": "第五十三期入党申请人培训结业考试",
-            "sno": "3016218103",
             "academyId": 16,
-            "academyName": "软件学院",
-            "majorName": "",
-            "studentName": "",
             "time": {
                 "date": "2017-11-30 12:51:38.000000", // 考试时间
                 "timezone_type": 3,
@@ -406,29 +415,33 @@ token // 必选参数，无该参数跳转至登录页面
 返回的json
 {
     "success": 1,
-    "cert": [ // 数组，返回所有的证书
+  	"basicInfo": {
+        "user_number": "3016218103",
+        "real_name": "",
+        "college_code": "218",
+        "college": "软件学院",
+        "major": "软件工程",
+        "twt_name": "zk990202",
+    },
+    "cert":  
         {
             "id": 1581,
-            "sno": "3006202229",
-            "studentName": "张笑平",
             "academyId": 2,
-            "academyName": "精仪学院",
-            "majorName": "",
             "entryId": 288057,
-            "certNumber": "010668",
+            "certNumber": "010668", // 证书编号
             "type": 1,
             "time": {
                 "date": "-0001-11-30 00:00:00.000000",
                 "timezone_type": 3,
                 "timezone": "UTC"
             },
-            "getPerson": "曹兴", // 证书领取人
+            "getPerson": "曹兴", // 证书发放人
             "place": "院团委", // 证书存放处
             "practiceGrade": 60,
             "articleGrade": 77,
             "testGrade": ""
         }
-    ]
+    
 }
 
 /api/applicant/account-status [GET]
@@ -536,6 +549,149 @@ token // 必选参数，无该参数跳转至登录页面
 {
     "success": 1,
     "message": "恭喜您,报名成功!"
+}
+
+/api/academy/sign-detail [GET]
+个人报名表/报名详情
+参数列表
+token // 必选参数，无该参数跳转至登录页面
+返回的json
+{
+    "success": 1,
+  	"basicInfo": {
+        "user_number": "3016218103",
+        "real_name": "",
+        "college_code": "218",
+        "college": "软件学院",
+        "major": "软件工程",
+        "twt_name": "zk990202",
+    },
+    "signDetail": {
+        "id": 135528,
+        "testId": 530,
+        "testName": "软件学院第十四期院级积极分子党校", 
+        "time": {
+            "date": "2017-12-10 16:04:44.000000",
+            "timezone_type": 3,
+            "timezone": "UTC"
+        },
+        "status": 1, // 考试状态，0-5分别表示未录入、报名开始、报名截止、成绩录入、成绩录入结束、考试结束
+        "isExit": 0 // 报名状态，0、1分别表示正常、已退选
+    }
+}
+
+/api/academy/{entry_id}/sign-exit [GET]
+退出报名
+参数列表
+entry_id // 报名信息id，即/api/academy/sign-detail [GET] 返回json中的id
+token // 必选参数，无该参数跳转至登录页面
+返回的json
+{
+    "success": 1,
+    "message": "恭喜,您已经退出本期考试的报名,不能再参加本期考试了.!"
+}
+
+/api/academy/grade-check [GET]
+成绩查询
+参数列表
+token // 必选参数，无该参数跳转至登录页面
+返回的json
+{
+    "success": 1,
+  	"basicInfo": {
+        "user_number": "3016218103",
+        "real_name": "",
+        "college_code": "218",
+        "college": "软件学院",
+        "major": "软件工程",
+        "twt_name": "zk990202",
+    },
+    "grade": {
+        "id": 135528,
+        "testId": 530,
+        "testName": "软件学院第十四期院级积极分子党校",
+        "academyId": 16,
+        "time": {
+            "date": "2017-12-13 20:26:30.000000",
+            "timezone_type": 3,
+            "timezone": "UTC"
+        },
+        "practiceGrade": 0, // 实践成绩
+        "articleGrade": 0, // 论文成绩
+        "testGrade": 0, // 笔试成绩
+        "isPassed": 0, // 考试状态，0-2分别表示不合格、合格、优秀
+        "status": 1
+    }
+}
+
+/api/academy/{test_id}/complain [GET]
+申诉页面
+参数列表
+test_id // 培训id，即/api/academy/sign [GET] 中的test['test_id']
+token // 必选参数，无该参数跳转至登录页面
+返回的json
+{
+    "success": 1,
+    "basicInfo": {
+        "user_number": "3016218103",
+        "real_name": "张凯",
+        "college_code": "218",
+        "college": "软件学院",
+        "major": "软件工程",
+    },
+    "test": {
+        "id": 530,
+        "name": "软件学院第十四期院级积极分子党校", // 申诉的培训
+        "time": {
+            "date": "2015-11-12 00:00:00.000000",
+            "timezone_type": 3,
+            "timezone": "UTC"
+        }
+    }
+}
+
+/api/academy/{test_id}/complain [POST] 
+申诉--提交
+参数列表
+test_id // 培训id，即/api/academy/sign [GET] 中的test['test_id']
+token // 必选参数，无该参数跳转至登录页面
+title // 申诉标题
+content // 申诉内容
+返回的json
+{
+    "success": 1,
+    "message": "申诉成功!"
+}
+
+/api/academy/certificate-check [GET]
+证书查询
+参数列表
+token // 必选参数，无该参数跳转至登录页面
+返回的json
+{
+    "success": 1,
+    "basicInfo": {
+        "user_number": "3016218103",
+        "real_name": "",
+        "college_code": "218",
+        "college": "软件学院",
+        "major": "软件工程",
+    },
+    "cert": {
+        "id": 13623,
+        "academyId": 6,
+        "entryId": 21334,
+        "certNumber": "20101196", // 证书编号
+        "type": 2,
+        "time": {
+            "date": "-0001-11-30 00:00:00.000000", // 发放时间
+            "timezone_type": 3,
+            "timezone": "UTC"
+        },
+        "getPerson": "刘丹青", // 发放人
+        "place": "院团委", // 存放点
+        "isLost": 0, // 证书状态，0、1分别表示正常、丢失
+    }
 }
 ````
 

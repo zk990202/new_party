@@ -255,4 +255,60 @@ class EntryForm extends Model
         ]);
         return $res ? true : false;
     }
+
+    /**
+     * 报名详情
+     * @param $sno
+     * @return array
+     */
+    public static function signDetail($sno){
+        $res = self::leftJoin('twt_academy_testlist', 'twt_academy_entryform.test_id', '=', 'twt_academy_testlist.test_id')
+            ->where('twt_academy_testlist.test_status', '<', 5)
+            ->where('sno', $sno)
+            ->get()->all();
+        return array_map(function ($entryForm){
+            return Resources::AcademyEntryForm($entryForm);
+        }, $res);
+    }
+
+    /**
+     * 退出报名
+     * @param $entry_id
+     * @return bool
+     */
+    public static function signExit($entry_id){
+        $res = self::where('entry_id', $entry_id)
+            ->update(['isexit' => 1]);
+        return $res ? true : false;
+    }
+
+    /**
+     * 成绩查询
+     * @param $sno
+     * @return array
+     */
+    public static function gradeCheck($sno){
+        $res = self::leftJoin('twt_academy_testlist', 'twt_academy_entryform.test_id', '=', 'twt_academy_testlist.test_id')
+            ->where('sno', $sno)
+            ->where('isexit', 0)
+            ->where('twt_academy_testlist.test_status', '>', 3)
+            ->get()->all();
+        return array_map(function ($entryForm){
+            return Resources::AcademyEntryForm($entryForm);
+        }, $res);
+    }
+
+    /**
+     * 证书查询时获取发放证书的报名信息
+     * @param $sno
+     * @return mixed
+     */
+    public static function certGetEntry($sno){
+        $res = self::leftJoin('twt_academy_testlist', 'twt_academy_entryform.test_id', '=', 'twt_academy_testlist.test_id')
+            ->where('sno', $sno)
+            ->where('entry_ispassed', '>', 0)
+            ->where('cert_isgrant', 1)
+            ->get()->toArray();
+        return $res;
+    }
 }
