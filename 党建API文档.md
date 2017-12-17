@@ -695,3 +695,116 @@ token // 必选参数，无该参数跳转至登录页面
 }
 ````
 
+## 3.预备党员培训
+
+````json
+/api/probationary/coures [GET]
+预备党员培训首页/预备党员培训下的我的课表
+参数列表
+token // 必选参数，无该参数跳转至登录页面
+返回的json
+{
+    "success": 1,
+  	"basicInfo": {
+        "user_number": "3016218103",
+        "real_name": "",
+        "college_code": "218",
+        "college": "软件学院",
+        "major": "软件工程",
+    },
+    "entry": {
+        "trainId": 446,
+        "trainName": "第32期预备党员党校", // 培训期数
+        "academyId": 3,
+        "practiceGrade": 70, // 实践分数
+        "articleGrade": 70, // 论文分数
+        "time": {
+            "date": "2014-09-15 20:52:20.000000",
+            "timezone_type": 3,
+            "timezone": "UTC"
+        },
+        "isLastAdded": 0,
+        "status": 1,
+        "isAllPassed": 1,
+        "isSystemAdd": 0,
+        "certIsGrant": 1,
+        "passCompulsory": 3, // 通过必修课数
+        "passElective": 1, // 通过选修课数
+        "exitCount": 0, // 退课次数
+        "lastTrainId": 0,
+        "isExit": 0,
+        "countCheat": 0,
+        "isDeleted": 0
+    },
+    "course": [ // 数组，返回所有已选课程
+        {
+            "id": 292144,
+            "childId": 119295,
+            "courseId": "205", // 课程id
+            "courseName": "党章学习", // 课程名称
+            "courseType": 0, // 1是必修，0是选修
+            "entryTime": "0000-00-00 00:00:00", 
+            "status": 1,
+            "grade": 65,
+            "isExit": 0 // 状态，1、0分别表示退选、正常
+        }
+    ]
+}
+
+/api/probationary/{entry_id}/course-exit [GET]
+退课
+参数列表
+entry_id // 选课信息id，即/api/probationary/coures [GET] 返回json中的course[i]['id']
+token // 必选参数，无该参数跳转至登录页面
+返回的json
+{
+  	"success" : 1,
+    "message": ""
+}
+
+/api/probationary/course-choose [GET]
+选课
+参数列表
+token // 必选参数，无该参数跳转至登录页面
+返回的json
+{
+    "success": 1,
+    "course": [ //数组，返回所有可选课程
+        {
+            "id": 1015, // 课程id
+            "trainId": 446,
+            "trainName": "第32期预备党员党校",
+            "name": "党章学习", // 课程名
+            "type": 0,
+            "movieId": null,
+            "movieName": "",
+            "introduction": "",
+            "requirement": "",
+            "time": {
+                "date": "2017-03-18 14:00:00.000000",
+                "timezone_type": 3,
+                "timezone": "UTC"
+            },
+            "speaker": "张亚勇",
+            "place": "卫津路校区大活一层报告厅",
+            "limitNum": 400,
+            "canInsert": 1,
+            "isInserted": 1,
+            "isDeleted": 0,
+            "number": null
+        }
+    ]
+}
+
+/api/probationary/course-choose [POST]
+选课--提交
+参数列表
+courseId[] // 数组，所有选择课程id
+trainId  // 培训id
+token // 必选参数，无该参数跳转至登录页面
+返回的json
+{
+    "success" : 1
+}
+````
+

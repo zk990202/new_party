@@ -383,12 +383,23 @@ class EntryForm extends Model
         return $res[0];
     }
 
+    /**
+     * 更新证书
+     * @param $sno
+     * @param $i
+     * @return mixed
+     */
     public static function updateCert($sno, $i){
         $res = self::where('sno', $sno[$i])
             ->update(['cert_isgrant' => 1]);
         return $res;
     }
 
+    /**
+     * @param $sno
+     * @param $trainId
+     * @return array
+     */
     public static function getGradeBySnoAndTestId($sno, $trainId){
         $res = self::where('sno', $sno)
             ->where('train_id', $trainId)
@@ -397,4 +408,43 @@ class EntryForm extends Model
             return Resources::ProbationaryEntryForm($entryForm);
         }, $res);
     }
+
+    //下面就是前台了‘’‘’‘’‘’
+
+    /**
+     * 判断学生是否已经报名
+     * @param $sno
+     * @param $train_id
+     * @return array
+     */
+    public static function isSign($sno, $train_id){
+        $res = self::where('train_id', $train_id)
+            ->where('sno', $sno)
+            ->where('isexit', 0)
+            ->get()->all();
+        return array_map(function ($entryForm){
+            return Resources::ProbationaryEntryForm($entryForm);
+        }, $res);
+    }
+
+    /**
+     * 退课
+     * @param $entry_id
+     * @return bool
+     */
+    public static function courseExit($entry_id){
+        $res = self::where('entry_id')
+            ->increment('exitcount');
+        return $res ? true : false;
+    }
+
+    public static function getBySnoAndTrainId($sno, $trainId){
+        $res = self::where('sno', $sno)
+            ->where('train_id', $trainId)
+            ->get()->all();
+        return array_map(function ($entryForm){
+            return Resources::ProbationaryEntryForm($entryForm);
+        }, $res);
+    }
+
 }

@@ -178,4 +178,63 @@ class ChildEntryForm extends Model
             return Resources::ProbationaryChildEntryForm($childEntryForm);
         }, $childEntries);
     }
+
+    //下面就是前台了‘’‘’‘’‘’
+
+    /**
+     * 判断学生是否已经选过课
+     * @param $sno
+     * @param $entry_id
+     * @return array
+     */
+    public static function isCourse($sno, $entry_id){
+        $res = self::leftJoin('twt_probationary_courselist', 'twt_probationary_childentryform.child_courseid', '=', 'twt_probationary_courselist.course_id')
+            ->where('child_sno', $sno)
+            ->where('child_entryid', $entry_id)
+            ->get()->all();
+        return array_map(function ($childEntryForm){
+            return Resources::ProbationaryChildEntryForm($childEntryForm);
+        }, $res);
+    }
+
+    /**
+     * 退课
+     * @param $entry_id
+     * @return bool
+     */
+    public static function courseExit($entry_id){
+        $res = self::where('entry_id', $entry_id)
+            ->update(['isexit' => 1]);
+        return $res ? true : false;
+    }
+
+    /**
+     * 课程是否已经选过
+     * @param $sno
+     * @param $course_id
+     * @return array
+     */
+    public static function courseHasChosen($sno, $course_id){
+        $res = self::where('child_courseid', $course_id)
+            ->where('isexit', 0)
+            ->where('child_sno', $sno)
+            ->get()->all();
+        return array_map(function ($childEntryForm){
+            return Resources::ProbationaryChildEntryForm($childEntryForm);
+        }, $res);
+    }
+
+    public static function isChosen($sno, $type, $trainId){
+        $res = self::leftJoin('twt_probationary_courselist', 'twt_probationary_childentryform.child_courseid', '=', 'twt_probationary_courselist.course_id')
+            ->where('course_type', $type)
+            ->where('child_sno', $sno)
+            ->where('train_id', $trainId)
+            ->where('isexit', 0)
+            ->get()->all();
+        return array_map(function ($childEntryForm){
+            return Resources::ProbationaryChildEntryForm($childEntryForm);
+        }, $res);
+    }
+
+
 }

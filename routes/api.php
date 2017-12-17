@@ -90,6 +90,17 @@ Route::group(['middleware' => 'Access'], function (){
         Route::get('/certificate-check', ['as' => 'api-academy-certificate-check', 'uses' => 'AcademyController@certificateCheck'])->middleware('HasToken');
     });
 
+    //网上党校--预备党员培训
+    Route::group(['prefix' => 'probationary', 'namespace' => 'Api'], function (){
+        //我的课表
+        Route::get('/course', ['as' => 'api-probationary-course', 'uses' => 'ProbationaryController@course'])->middleware('HasToken');
+        //退课
+        Route::get('/{entry_id}/course-exit', ['as' => 'api-probationary-course-exit', 'uses' => 'ProbationaryController@courseExit'])->middleware('HasToken');
+        //选课
+        Route::get('/course-choose', ['as' => 'api-probationary-course-choose-page', 'uses' => 'ProbationaryController@courseChoosePage'])->middleware('HasToken');
+        Route::post('/course-choose', ['as' => 'api-probationary-course-choose', 'uses' => 'ProbationaryController@courseChoose'])->middleware('HasToken');
+    });
+
 });
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {

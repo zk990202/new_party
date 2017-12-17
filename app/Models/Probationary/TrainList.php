@@ -37,7 +37,7 @@ class TrainList extends Model
     }
 
     /**
-     * 获取未结束的培训
+     * 获取未结束的培训, 获取最近一次未结束的培训
      * @return array
      */
     public static function getNotEndTrain(){
@@ -125,5 +125,20 @@ class TrainList extends Model
         return array_map(function ($trainList){
             return Resources::ProbationaryTrainList($trainList);
         }, $train);
+    }
+
+    //下面就是前台的模块；
+
+    /**
+     * 获取开启并且处于网上选课状态的考试
+     * @return array
+     */
+    public static function getTrainInNetChoose(){
+        $res = self::where('train_netchoose_status', 1)
+            ->where('train_isend', 1)
+            ->get()->all();
+        return array_map(function ($trainList){
+            return Resources::ProbationaryTrainList($trainList);
+        }, $res);
     }
 }
