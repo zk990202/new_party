@@ -141,4 +141,18 @@ class TrainList extends Model
             return Resources::ProbationaryTrainList($trainList);
         }, $res);
     }
+
+    /**
+     * 获取处于报名状态的考试
+     * @return array
+     */
+    public static function getTrainInSign(){
+        $res = self::where('train_entry_status', 1)
+            ->where('train_isend', 1)
+            ->where('train_isdeleted', 0)
+            ->get()->all();
+        return array_map(function ($trainList){
+            return Resources::ProbationaryTrainList($trainList);
+        }, $res);
+    }
 }

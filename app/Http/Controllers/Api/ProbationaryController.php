@@ -16,6 +16,7 @@ use App\Models\Probationary\CourseList;
 use App\Models\Probationary\ChildEntryForm;
 use App\Models\Probationary\EntryForm;
 use App\Models\Probationary\TrainList;
+use App\Models\StudentInfo;
 use Illuminate\Cache\Events\CacheHit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
@@ -162,6 +163,11 @@ class ProbationaryController extends Controller{
         }
     }
 
+    /**
+     * 选课
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function courseChoose(Request $request){
         //获取用户信息
         if (Cache::has('userInfo')){
@@ -247,6 +253,204 @@ class ProbationaryController extends Controller{
         }else{
             return response()->json([
                 'message' => '参数丢失(trainId||courseId)'
+            ]);
+        }
+    }
+
+    /**
+     * 考试报名
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function testSignPage(Request $request){
+        //获取用户信息
+        if (Cache::has('userInfo')){
+            $userInfo = Cache::get('userInfo');
+        }else{
+            $token = $request->input('token');
+            $userInfo = Log::userInfo($token);
+            // 缓存10分钟
+            Cache::put('userInfo', $userInfo, 10);
+        }
+        if ($userInfo['is_teacher']){
+            return response()->json([
+                'message' => '老师,不好意思,您不能参加考试报名!'
+            ]);
+        }else{
+            $sno = $userInfo['user_number'];
+//            $sno = 2009205035;
+            $studentInfo = StudentInfo::getBySno($sno);
+            if ($studentInfo){
+                //先到数据库里查看一下该用户是否满足报名预备党员考试....状态在10和11的都可以参加报名考试
+                if ($studentInfo[0]['mainStatus'] == 10 || $studentInfo[0]['mainStatus'] == 11){
+                    //再看下用户是否已经通过了预备党员考试
+                    $isPass = EntryForm::isPass($sno);
+                    if (!$isPass){
+                        //查看是哪一期考试开启了....选择状态为1==报名开始的
+                        $train = TrainList::getTrainInSign();
+                        if ($train){
+                            $trainId = $train[0]['id'];
+                            //还得判断该同学该期考试是否已经报名
+                            $entry = EntryForm::isSign($sno, $trainId);
+                            if (!$entry){
+                                return response()->json([
+                                    'success' => 1,
+                                    'train' => $train[0]
+                                ]);
+                            }else{
+                                return response()->json([
+                                    'message' => '您已经报名了该期考试,不能重复报名,去查看你的课表吧.!'
+                                ]);
+                            }
+                        }else{
+                            return response()->json([
+                                'message' => '温馨提示:不好意思,暂时还没有考试开启或者考试开启但是参加报名通道未开放,请耐心等待!'
+                            ]);
+                        }
+                    }else{
+                        return response()->json([
+                            'message' => '您已经通过预备党员结业考试,无需再次报名!'
+                        ]);
+                    }
+                }else{
+                    return response()->json([
+                        'message' => '不好意思,您目前的状态不符合报名的要求,只有状态通过[预备党员]或者是已经完成[支部组织生活和党内活动],并且没有完成预备党员党校学习的学员才可以参加预备党员结业考试!如果有任何问题,请联系超管处理,谢谢!'
+                    ]);
+                }
+            }else{
+                return response()->json([
+                    'message' => '学生信息获取失败'
+                ]);
+            }
+        }
+    }
+
+    /**
+     * 考试报名--提交
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function testSign(Request $request){
+        //获取用户信息
+        if (Cache::has('userInfo')){
+            $userInfo = Cache::get('userInfo');
+        }else{
+            $token = $request->input('token');
+            $userInfo = Log::userInfo($token);
+            // 缓存10分钟
+            Cache::put('userInfo', $userInfo, 10);
+        }
+
+        $sno = $userInfo['user_number'];
+//            $sno = 2009205035;
+        $studentInfo = StudentInfo::getBySno($sno);
+        if ($studentInfo){
+            //先到数据库里查看一下该用户是否满足报名预备党员考试....状态在10和11的都可以参加报名考试
+            if ($studentInfo[0]['mainStatus'] == 10 || $studentInfo[0]['mainStatus'] == 11){
+                //再看下用户是否已经通过了预备党员考试
+                $isPass = EntryForm::isPass($sno);
+                if (!$isPass){
+                    //查看是哪一期考试开启了....选择状态为1==报名开始的
+                    $train = TrainList::getTrainInSign();
+                    if ($train){
+                        $trainId = $train[0]['id'];
+                        //还得判断该同学该期考试是否已经报名
+                        $entry = EntryForm::isSign($sno, $trainId);
+                        if (!$entry){
+                            $add = EntryForm::sign($sno, $trainId);
+                            if ($add){
+                                return response()->json([
+                                    'success' => 1,
+                                    'message' => '恭喜你,报名成功! 现在就去选课吧!'
+                                ]);
+                            }else{
+                                return response()->json([
+                                    'message' => '不好意思,报名失败! 未知错误!'
+                                ]);
+                            }
+                        }else{
+                            return response()->json([
+                                'message' => '您已经报名了该期考试,不能重复报名,去查看你的课表吧.!'
+                            ]);
+                        }
+                    }else{
+                        return response()->json([
+                            'message' => '温馨提示:不好意思,暂时还没有考试开启或者考试开启但是参加报名通道未开放,请耐心等待!'
+                        ]);
+                    }
+                }else{
+                    return response()->json([
+                        'message' => '您已经通过预备党员结业考试,无需再次报名!'
+                    ]);
+                }
+            }else{
+                return response()->json([
+                    'message' => '不好意思,您目前的状态不符合报名的要求,只有状态通过[预备党员]或者是已经完成[支部组织生活和党内活动],并且没有完成预备党员党校学习的学员才可以参加预备党员结业考试!如果有任何问题,请联系超管处理,谢谢!'
+                ]);
+            }
+        }else{
+            return response()->json([
+                'message' => '学生信息获取失败'
+            ]);
+        }
+    }
+
+    /**
+     * 报名结果
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function signResult(Request $request){
+        //获取用户信息
+        if (Cache::has('userInfo')){
+            $userInfo = Cache::get('userInfo');
+        }else{
+            $token = $request->input('token');
+            $userInfo = Log::userInfo($token);
+            // 缓存10分钟
+            Cache::put('userInfo', $userInfo, 10);
+        }
+        $sno = $userInfo['user_number'];
+        $entry = EntryForm::signResult($sno);
+        if ($entry){
+            return response()->json([
+                'success' => 1,
+                'basicInfo' => $userInfo,
+                'entry'   => $entry[0]
+            ]);
+        }else{
+            return response()->json([
+                'message' => '不好意思，暂无报名信息'
+            ]);
+        }
+    }
+
+    /**
+     * 退出报名
+     * @param Request $request
+     * @param $entry_id
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function signExit(Request $request, $entry_id){
+        //获取用户信息
+        if (Cache::has('userInfo')){
+            $userInfo = Cache::get('userInfo');
+        }else{
+            $token = $request->input('token');
+            $userInfo = Log::userInfo($token);
+            // 缓存10分钟
+            Cache::put('userInfo', $userInfo, 10);
+        }
+
+        $exit = EntryForm::signExit($entry_id);
+        if ($exit){
+            return response()->json([
+                'success' => 1,
+                'message' => '恭喜,您已经退出本期考试的报名,不能再参加本期考试了.!'
+            ]);
+        }else{
+            return response()->json([
+                'message' => '退出报名失败!'
             ]);
         }
     }

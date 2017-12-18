@@ -806,5 +806,97 @@ token // 必选参数，无该参数跳转至登录页面
 {
     "success" : 1
 }
+
+/api/probationary/test-sign [GET]
+考试报名
+参数列表
+token // 必选参数，无该参数跳转至登录页面
+返回的json
+{
+    "success": 1,
+    "train": { // 该场考试信息
+        "id": 446,
+        "name": "第32期预备党员党校",
+        "time": {
+            "date": "2017-03-06 09:00:00.000000",
+            "timezone_type": 3,
+            "timezone": "UTC"
+        },
+        "fileName": null,
+        "filePath": null,
+        "detail": "",
+        "entryStatus": 1,
+        "netChooseStatus": 1,
+        "gradeSearchStatus": 1,
+        "endListShow": 1,
+        "goodMemberShow": 1,
+        "endInsert": 1,
+        "isEndInsert": 1,
+        "isEnd": 1,
+        "isDeleted": 0
+    }
+}
+
+/api/probationary/test-sign-real [GET]
+考试报名--真正提交上去
+参数列表
+token // 必选参数，无该参数跳转至登录页面
+返回的json
+{
+    "success": 1,
+    "message": "恭喜你,报名成功! 现在就去选课吧!"
+}
+
+/api/probationary/sign-result [GET]
+报名结果
+参数列表
+token // 必选参数，无该参数跳转至登录页面
+返回的json
+{
+    "success": 1,
+  	"basicInfo": {
+        "user_number": "3016218103",
+        "real_name": "",
+        "college_code": "218",
+        "college": "软件学院",
+        "major": "软件工程",
+    },
+    "entry": {
+        "id": 157580,
+        "trainId": 446,
+        "trainName": "第32期预备党员党校",
+        "academyId": 16,
+        "practiceGrade": 0,
+        "articleGrade": 0,
+        "time": {
+            "date": "2017-12-18 03:32:16.000000",
+            "timezone_type": 3,
+            "timezone": "UTC"
+        },
+        "isLastAdded": 0,
+        "status": 1,
+        "isAllPassed": 0,
+        "isSystemAdd": 0,
+        "certIsGrant": 0,
+        "passCompulsory": 0,
+        "passElective": 0,
+        "exitCount": 0,
+        "lastTrainId": 0,
+        "isExit": 0, // 我的报名状态
+        "countCheat": 0,
+        "isDeleted": 0
+    }
+}
+
+/api/probationary/{entry_id}/sign-exit [GET]
+退出报名
+参数列表
+entry_id // 报名信息id，即/api/probationary/sign-result [GET] 返回json中的entry['id']
+token // 必选参数，无该参数跳转至登录页面
+返回的json
+{
+    "success": 1,
+    "message": "恭喜,您已经退出本期考试的报名,不能再参加本期考试了.!"
+}
 ````
 

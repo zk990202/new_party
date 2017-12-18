@@ -447,4 +447,58 @@ class EntryForm extends Model
         }, $res);
     }
 
+    /**
+     * 是否已经通过考试
+     * @param $sno
+     * @return array
+     */
+    public static function isPass($sno){
+        $res = self::where('sno', $sno)
+            ->where('entry_isallpassed', 1)
+            ->get()->all();
+        return array_map(function ($entryForm){
+            return Resources::ProbationaryEntryForm($entryForm);
+        }, $res);
+    }
+
+    /**
+     * 前台报名
+     * @param $sno
+     * @param $train_id
+     * @return bool
+     */
+    public static function sign($sno, $train_id){
+        $res = self::create([
+            'sno' => $sno,
+            'train_id' => $train_id
+        ]);
+        return $res ? true : false;
+    }
+
+    /**
+     * 报名结果
+     * @param $sno
+     * @return array
+     */
+    public static function signResult($sno){
+        $res = self::leftJoin('twt_probationary_trainlist', 'twt_probationary_entryform.train_id', '=', 'twt_probationary_trainlist.train_id')
+            ->where('train_isdeleted', 0)
+            ->where('train_isend', 1)
+            ->where('sno', $sno)
+            ->get()->all();
+        return array_map(function ($entryForm){
+            return Resources::ProbationaryEntryForm($entryForm);
+        }, $res);
+    }
+
+    /**
+     * 退出考试
+     * @param $entry_id
+     * @return bool
+     */
+    public static function signExit($entry_id){
+        $res = self::where('entry_id', $entry_id)
+            ->update(['isexit' => 1]);
+        return $res ? true : false;
+    }
 }

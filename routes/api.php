@@ -99,6 +99,13 @@ Route::group(['middleware' => 'Access'], function (){
         //选课
         Route::get('/course-choose', ['as' => 'api-probationary-course-choose-page', 'uses' => 'ProbationaryController@courseChoosePage'])->middleware('HasToken');
         Route::post('/course-choose', ['as' => 'api-probationary-course-choose', 'uses' => 'ProbationaryController@courseChoose'])->middleware('HasToken');
+        //考试报名
+        Route::get('/test-sign', ['as' => 'api-probationary-test-sign-page', 'uses' => 'ProbationaryController@testSignPage'])->middleware('HasToken');
+        Route::get('/test-sign-real', ['as' => 'api-probationary-test-sign', 'uses' => 'ProbationaryController@testSign'])->middleware('HasToken');
+        //报名结果
+        Route::get('/sign-result', ['as' => 'api-probationary-sign-result', 'uses' => 'ProbationaryController@signResult'])->middleware('HasToken');
+        //退出报名
+        Route::get('/{entry_id}/sign-exit', ['as' => 'api-probationary-sign-exit', 'uses' => 'ProbationaryController@signExit'])->middleware('HasToken');
     });
 
 });
