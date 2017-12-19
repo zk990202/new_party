@@ -240,4 +240,26 @@ class Cert extends Model
         }, $res);
     }
 
+    /**
+     * @param $cert_id
+     * @return array
+     */
+    public static function getByCertId($cert_id){
+        $res = self::where('cert_id', $cert_id)
+            ->get()->all();
+        return array_map(function ($cert){
+            return Resources::Cert($cert);
+        }, $res);
+    }
+
+    /**
+     * 证书丢失更新islost字段
+     * @param $cert_id
+     * @return bool
+     */
+    public static function certLost($cert_id){
+        $res = self::where('cert_id', $cert_id)
+            ->update(['cert_islost' => 1]);
+        return $res ? true : false;
+    }
 }

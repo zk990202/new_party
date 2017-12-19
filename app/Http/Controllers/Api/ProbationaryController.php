@@ -588,7 +588,7 @@ class ProbationaryController extends Controller{
         }
         if (!$userInfo['is_teacher']){
             $sno = $userInfo['user_number'];
-            $sno = 2008201021;
+//            $sno = 2008201021;
             $entry = EntryForm::certGetEntry($sno);
             if (!$entry){
                 return response()->json([

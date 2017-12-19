@@ -115,6 +115,13 @@ Route::group(['middleware' => 'Access'], function (){
         Route::get('/certificate-check', ['as' => 'api-probationary-certificate-check', 'uses' => 'ProbationaryController@certificateCheck'])->middleware('HasToken');
     });
 
+    //证书
+    Route::group(['prefix' => 'cert', 'namespace' => 'Api'], function (){
+        //证书补办申诉
+        Route::get('/{cert_id}/makeup', ['as' => 'api-cert-makeup-page', 'uses' => 'CertController@makeupPage'])->middleware('HasToken');
+        Route::post('{cert_id}/makeup', ['as' => 'api-cert-makeup', 'uses' => 'CertController@makeup']);
+    });
+
 });
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {

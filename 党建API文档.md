@@ -1015,3 +1015,56 @@ token // 必选参数，无该参数跳转至登录页面
 }
 ````
 
+# 四、证书
+
+````json
+/api/cert/{cert_id}/makeup [GET]
+证书补办申诉
+参数列表
+cert_id // 即/api/probationary/certificate-check [GET] 中的cert['id']
+token // 必选参数，无该参数跳转至登录页面
+返回的json
+{
+    "success": 1,
+    "basicInfo": {
+        "user_number": "3016218103",
+        "real_name": "",
+        "college_code": "218",
+        "college": "软件学院",
+        "major": "软件工程",
+    },
+    "cert": {
+        "id": 9468,
+        "academyId": 1, 
+        "majorName": "",
+        "entryId": 123113,
+        "certNumber": "20091011", // 证书编号
+        "type": 3, //1-3代表申请人、院级积极分子、预备党员结业证书
+        "time": {
+            "date": "-0001-11-30 00:00:00.000000",
+            "timezone_type": 3,
+            "timezone": "UTC"
+        },
+        "getPerson": "刘秋菊", // 发放人
+        "place": "院团委", // 存放点
+        "isLost": 0,
+        "isDeleted": 0,
+    }
+}
+
+/api/cert/{cert_id}/makeup [POST]
+证书补办申诉--提交
+参数列表
+cert_id // 即/api/probationary/certificate-check [GET] 中的cert['id']
+token // 必选参数，无该参数跳转至登录页面
+title // 申诉标题
+content // 申诉内容
+返回的json
+{
+    "success": 1,
+    "message": "申请成功! 温馨提示,请耐心等待管理员审核您的申请书补办申请!"
+}
+````
+
+
+
