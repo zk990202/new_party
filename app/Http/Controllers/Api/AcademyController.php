@@ -344,9 +344,9 @@ class AcademyController extends Controller{
             // 缓存10分钟
             Cache::put('userInfo', $userInfo, 10);
         }
-        if ($request->has('title') && $request->has('content')){
-            $title = $request->input('title');
-            $content = $request->input('content');
+        $title = $request->input('title');
+        $content = $request->input('content');
+        if ($title){
             $sno = $userInfo['user_number'];
             $collegeCode = $userInfo['college_code'];
             $collegeId = College::codeToId($collegeCode);
@@ -364,7 +364,7 @@ class AcademyController extends Controller{
             }
         }else{
             return response()->json([
-                'message' => '标题、内容不能为空'
+                'message' => '至少标题不能为空'
             ]);
         }
     }
@@ -390,7 +390,7 @@ class AcademyController extends Controller{
             ]);
         }else{
             $sno = $userInfo['user_number'];
-            $entry = EntryForm::certGetEntry(3006206036);
+            $entry = EntryForm::certGetEntry($sno);
             if ($entry){
                 $entryId = $entry[0]['entry_id'];
                 $cert = Cert::certCheckAcademy($entryId);

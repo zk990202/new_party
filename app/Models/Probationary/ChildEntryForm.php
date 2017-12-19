@@ -224,6 +224,7 @@ class ChildEntryForm extends Model
         }, $res);
     }
 
+
     public static function isChosen($sno, $type, $trainId){
         $res = self::leftJoin('twt_probationary_courselist', 'twt_probationary_childentryform.child_courseid', '=', 'twt_probationary_courselist.course_id')
             ->where('course_type', $type)

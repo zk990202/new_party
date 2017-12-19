@@ -366,7 +366,8 @@ class Resources {
             'lastTrainId' => $entryForm->last_trainid,
             'isExit' => $entryForm->isexit,
             'countCheat' => $entryForm->count_zuobi,
-            'isDeleted' => $entryForm->isdeleted
+            'isDeleted' => $entryForm->isdeleted,
+            'gradeSearchStatus' => $entryForm->trainList->train_gradesearch_status
         ];
     }
 

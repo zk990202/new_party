@@ -898,5 +898,120 @@ token // 必选参数，无该参数跳转至登录页面
     "success": 1,
     "message": "恭喜,您已经退出本期考试的报名,不能再参加本期考试了.!"
 }
+
+/api/proationary/grade-check [GET]
+成绩查询
+参数列表
+token // 必选参数，无该参数跳转至登录页面
+返回的json
+{
+    "success": 1,
+  	"basicInfo": {
+        "user_number": "3016218103",
+        "real_name": "",
+        "college_code": "218",
+        "college": "软件学院",
+        "major": "软件工程",
+    },
+    "grade": {
+        "id": 119295,
+        "trainId": 446,
+        "trainName": "第32期预备党员党校",
+        "academyId": 3,
+        "practiceGrade": 70, // 实践成绩
+        "articleGrade": 70, // 论文成绩
+        "time": {
+            "date": "2014-09-15 20:52:20.000000",
+            "timezone_type": 3,
+            "timezone": "UTC"
+        },
+        "isLastAdded": 0,
+        "status": 1,
+        "isAllPassed": 1, // 结业状态
+        "isSystemAdd": 0,
+        "certIsGrant": 1,
+        "passCompulsory": 3, // 必修课通过数
+        "passElective": 1, // 选修课通过数
+        "exitCount": 0,
+        "lastTrainId": 0,
+        "isExit": 0,
+        "countCheat": 0, // 作弊次数
+        "isDeleted": 0,
+        "gradeSearchStatus": 1
+    }
+}
+
+/api/probationary/{train_id}/complain [GET]
+申诉--页面
+参数列表
+train_id // 即/api/proationary/grade-check [GET] 返回json中的grade['trainId']
+token // 必选参数，无该参数跳转至登录页面
+返回的json
+{
+    "success": 1,
+    "basicInfo": {
+        "user_number": "3016218103",
+        "real_name": "张凯",
+        "college_code": "218",
+        "college": "软件学院",
+        "major": "软件工程",
+        "twt_name": "zk990202"
+    },
+    "train": {
+        "id": 446,
+        "name": "第32期预备党员党校", // 考试期数
+        "time": {
+            "date": "2017-03-06 09:00:00.000000", // 考试时间
+            "timezone_type": 3,
+            "timezone": "UTC"
+        }
+    }
+}
+
+/api/probationary/{train_id}/complain [POST]
+申诉--提交
+参数列表
+train_id // 即/api/proationary/grade-check [GET] 返回json中的grade['trainId']
+title // 申诉标题
+content // 申诉内容
+token // 必选参数，无该参数跳转至登录页面
+返回的json
+{
+    "success": 1,
+    "message": "申诉成功"
+}
+
+/api/probationary/certificate-check [GET]
+证书查看
+参数列表
+token // 必选参数，无该参数跳转至登录页面
+返回的json
+{
+    "success": 1,
+    "basicInfo": {
+        "user_number": "3016218103",
+        "real_name": "",
+        "college_code": "218",
+        "college": "软件学院",
+        "major": "软件工程",
+    },
+    "cert": {
+        "id": 9468,
+        "academyId": 1,
+        "majorName": "",
+        "entryId": 123113,
+        "certNumber": "20091011", // 证书编号
+        "type": 3,
+        "time": {
+            "date": "-0001-11-30 00:00:00.000000",
+            "timezone_type": 3,
+            "timezone": "UTC"
+        },
+        "getPerson": "刘秋菊", // 发放人
+        "place": "院团委", // 存放点
+        "isLost": 0,
+        "isDeleted": 0,
+    }
+}
 ````
 

@@ -225,4 +225,19 @@ class Cert extends Model
         }, $res);
     }
 
+    /**
+     * 预备党员培训--证书查看
+     * @param $entry_id
+     * @return array
+     */
+    public static function certCheckProbationary($entry_id){
+        $res = self::leftJoin('twt_probationary_entryform', 'twt_cert.entry_id', '=', 'twt_probationary_entryform.entry_id')
+            ->where('twt_cert.entry_id', $entry_id)
+            ->where('twt_cert.cert_type', 3)
+            ->get()->all();
+        return array_map(function ($cert){
+            return Resources::Cert($cert);
+        }, $res);
+    }
+
 }

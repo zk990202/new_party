@@ -151,11 +151,34 @@ class Complain extends Model
         $res =self::create([
             'from_sno' => $sno,
             'to_sno' => '',
-            'college_id' => 1,
+            'college_id' => $college_id,
             'test_id' => $test_id,
             'title' => $title,
             'content' => $content,
             'type' => 2,
+            'isread' => 0
+        ]);
+        return $res ? true : false;
+    }
+
+    /**
+     * 预备党员培训的申诉
+     * @param $sno
+     * @param $college_id
+     * @param $test_id
+     * @param $title
+     * @param $content
+     * @return bool
+     */
+    public static function addComplainProbationary($sno, $college_id, $test_id, $title, $content){
+        $res =self::create([
+            'from_sno' => $sno,
+            'to_sno' => '',
+            'college_id' => $college_id,
+            'test_id' => $test_id,
+            'title' => $title,
+            'content' => $content,
+            'type' => 3,
             'isread' => 0
         ]);
         return $res ? true : false;

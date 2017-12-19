@@ -501,4 +501,37 @@ class EntryForm extends Model
             ->update(['isexit' => 1]);
         return $res ? true : false;
     }
+
+    /**
+     * 成绩查询
+     * @param $sno
+     * @return array
+     */
+    public static function gradeCheck($sno){
+        $res = self::leftJoin('twt_probationary_trainlist', 'twt_probationary_entryform.train_id', '=', 'twt_probationary_trainlist.train_id')
+            ->where('train_gradesearch_status', 1)
+            ->where('sno', $sno)
+            ->where('twt_probationary_entryform.isexit', 0)
+            ->orderBy('twt_probationary_entryform.entry_id')
+            ->get()->all();
+        return array_map(function ($entryForm){
+            return Resources::ProbationaryEntryForm($entryForm);
+        }, $res);
+    }
+
+    /**
+     * 证书查询时获取发放证书的报名信息
+     * @param $sno
+     * @return array
+     */
+    public static function certGetEntry($sno){
+        $res = self::leftJoin('twt_probationary_trainlist', 'twt_probationary_entryform.train_id', '=', 'twt_probationary_trainlist.train_id')
+            ->where('sno', $sno)
+            ->where('entry_isallpassed', '>', 0)
+            ->where('cert_isgrant', 1)
+            ->get()->all();
+        return array_map(function ($entryForm){
+            return Resources::ProbationaryEntryForm($entryForm);
+        }, $res);
+    }
 }

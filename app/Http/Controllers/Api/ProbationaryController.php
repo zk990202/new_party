@@ -12,6 +12,9 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Helpers\Log;
+use App\Models\Cert;
+use App\Models\College;
+use App\Models\Complain;
 use App\Models\Probationary\CourseList;
 use App\Models\Probationary\ChildEntryForm;
 use App\Models\Probationary\EntryForm;
@@ -451,6 +454,164 @@ class ProbationaryController extends Controller{
         }else{
             return response()->json([
                 'message' => '退出报名失败!'
+            ]);
+        }
+    }
+
+    /**
+     * 成绩查询
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function gradeCheck(Request $request){
+        //获取用户信息
+        if (Cache::has('userInfo')){
+            $userInfo = Cache::get('userInfo');
+        }else{
+            $token = $request->input('token');
+            $userInfo = Log::userInfo($token);
+            // 缓存10分钟
+            Cache::put('userInfo', $userInfo, 10);
+        }
+        if ($userInfo['is_teacher']){
+            return response()->json([
+                'message' => '老师,不好意思,您没有考试成绩可以查看!'
+            ]);
+        }else{
+            $sno = $userInfo['user_number'];
+//            $sno = 2014203222;
+            $entry = EntryForm::gradeCheck($sno);
+            if (!$entry){
+                return response()->json([
+                    'message' => '不好意思，没有找到你的考试信息'
+                ]);
+            }else{
+                if (!$entry[0]['gradeSearchStatus']){
+                    return response()->json([
+                        'message' => '不好意思,成绩查询通道未开启!'
+                    ]);
+                }else{
+                    return response()->json([
+                        'success' => 1,
+                        'basicInfo' => $userInfo,
+                        'grade'   => $entry[0]
+                    ]);
+                }
+            }
+        }
+    }
+
+    /**
+     * 申诉--页面
+     * @param Request $request
+     * @param $train_id
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function complainPage(Request $request, $train_id){
+        //获取用户信息
+        if (Cache::has('userInfo')){
+            $userInfo = Cache::get('userInfo');
+        }else{
+            $token = $request->input('token');
+            $userInfo = Log::userInfo($token);
+            // 缓存10分钟
+            Cache::put('userInfo', $userInfo, 10);
+        }
+        $train = TrainList::getOneTrain($train_id);
+        if (!$train){
+            return response()->json([
+                'message' => '没有找到对应的培训'
+            ]);
+        }else{
+            return response()->json([
+                'success' => 1,
+                'basicInfo' => $userInfo,
+                'train' => $train[0]
+            ]);
+        }
+    }
+
+    /**
+     * 申诉--提交
+     * @param Request $request
+     * @param $train_id
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function complain(Request $request, $train_id){
+        //获取用户信息
+        if (Cache::has('userInfo')){
+            $userInfo = Cache::get('userInfo');
+        }else{
+            $token = $request->input('token');
+            $userInfo = Log::userInfo($token);
+            // 缓存10分钟
+            Cache::put('userInfo', $userInfo, 10);
+        }
+        $title = $request->input('title');
+        $content = $request->input('content');
+        if (!$title){
+            return response()->json([
+                'message' => '不要太懒,至少得添加标题!'
+            ]);
+        }else{
+            $sno = $userInfo['user_number'];
+            $collegeCode = $userInfo['college_code'];
+            $collegeId = College::codeToId($collegeCode);
+            $complain = Complain::addComplainProbationary($sno, $collegeId, $train_id, $title, $content);
+            if (!$complain){
+                return response()->json([
+                    'message' => '不好意思,该申诉未能正常保存!'
+                ]);
+            }else{
+                return response()->json([
+                    'success' => 1,
+                    'message' => '申诉成功'
+                ]);
+            }
+        }
+    }
+
+    /**
+     * 证书查看
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function certificateCheck(Request $request){
+        //获取用户信息
+        if (Cache::has('userInfo')){
+            $userInfo = Cache::get('userInfo');
+        }else{
+            $token = $request->input('token');
+            $userInfo = Log::userInfo($token);
+            // 缓存10分钟
+            Cache::put('userInfo', $userInfo, 10);
+        }
+        if (!$userInfo['is_teacher']){
+            $sno = $userInfo['user_number'];
+            $sno = 2008201021;
+            $entry = EntryForm::certGetEntry($sno);
+            if (!$entry){
+                return response()->json([
+                    'message' => '不好意思，你还没有获得证书'
+                ]);
+            }else{
+                $entryId = $entry[0]['id'];
+                $cert = Cert::certCheckProbationary($entryId);
+                if ($cert){
+                    return response()->json([
+                        'success' => 1,
+                        'basicInfo' => $userInfo,
+                        'cert' => $cert[0]
+                    ]);
+                }else{
+                    return response()->json([
+                        'message' => '温馨提示:不好意思,没有找到相应的证书,但是您的考试状态为通过,并且显示已经发放证书.可能后台数据出现了问题.请联系管理员进行处理,申请补发证书!'
+                    ]);
+                }
+            }
+        }else{
+            return response()->json([
+                'message' => '不好意思，老师，您不能查看证书'
             ]);
         }
     }

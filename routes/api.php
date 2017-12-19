@@ -106,6 +106,13 @@ Route::group(['middleware' => 'Access'], function (){
         Route::get('/sign-result', ['as' => 'api-probationary-sign-result', 'uses' => 'ProbationaryController@signResult'])->middleware('HasToken');
         //退出报名
         Route::get('/{entry_id}/sign-exit', ['as' => 'api-probationary-sign-exit', 'uses' => 'ProbationaryController@signExit'])->middleware('HasToken');
+        //成绩查询
+        Route::get('/grade-check', ['as' => 'api-probationary-grade-check', 'uses' => 'ProbationaryController@gradeCheck'])->middleware('HasToken');
+        //申诉
+        Route::get('/{train_id}/complain', ['as' => 'api-probationary-complain-page', 'uses' => 'ProbationaryController@complainPage'])->middleware('HasToken');
+        Route::post('/{train_id}/complain', ['as' => 'api-probationary-complain', 'uses' => 'ProbationaryController@complain'])->middleware('HasToken');
+        //证书查询
+        Route::get('/certificate-check', ['as' => 'api-probationary-certificate-check', 'uses' => 'ProbationaryController@certificateCheck'])->middleware('HasToken');
     });
 
 });
