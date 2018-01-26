@@ -89,6 +89,7 @@ token // 可选参数
     "userInfo": { 
         "user_number": "3016218103", // 用户学号(工号)
         "twt_name": "zk990202", // 天外天账号
+      	"real_name": //姓名
         "party_branch_id": 2388, // 所属支部
         "is_probationary": 1, // 是否是支书
         "is_teacher": 0, // 是否是老师
@@ -106,7 +107,7 @@ token // 可选参数
 ## 二、通知公告
 
 ````json
-/api/notice/party-school/list/appicant [GET]
+/api/notice/party-school/list/applicant [GET]
 通知公告首页/申请人培训栏目
 无参数
 返回的json
@@ -698,7 +699,7 @@ token // 必选参数，无该参数跳转至登录页面
 ## 3.预备党员培训
 
 ````json
-/api/probationary/coures [GET]
+/api/probationary/course [GET]
 预备党员培训首页/预备党员培训下的我的课表
 参数列表
 token // 必选参数，无该参数跳转至登录页面

@@ -77,7 +77,7 @@ class IndexController extends Controller{
         //(需要链接其他数据库)
 
         if ($partyBuild && $notices && $partySchool && $branchActivity){
-            return response()->json([
+            return view('Front.index', [
                 'success'     => 1,
                 'partyBuild'  => $partyBuild,
                 'notice'      => $notices,
@@ -86,6 +86,17 @@ class IndexController extends Controller{
                 'mainStatus'  => $mainStatus,
                 'userInfo'    => $userInfo
             ]);
+
+                /*
+            return response()->json([
+                'success'     => 1,
+                'partyBuild'  => $partyBuild,
+                'notice'      => $notices,
+                'partySchool' => $partySchool,
+                'branchActivity'      => $branchActivity,
+                'mainStatus'  => $mainStatus,
+                'userInfo'    => $userInfo
+            ]); */
         }else{
             return response()->json([
                 'message' => '取出数据失败'
