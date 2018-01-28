@@ -576,6 +576,27 @@ class ApplicantController extends Controller{
         return view('Manager.Applicant.Exam.add');
     }
 
+    /**
+     * 考试状态修改
+     * @param $id
+     * @param $status
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function examChange($id, $status){
+        $exam = TestList::findOrFail($id);
+        $exam->test_status = $status;
+        $res = $exam->save();
+        if ($res){
+            return response()->json([
+                'success' => true
+            ]);
+        }else{
+            return response()->json([
+                'message' => '操作失败，请联系后台管理员'
+            ]);
+        }
+    }
+
     public function getExamById($id){
         try{
             $exam = TestList::findOrFail($id);

@@ -327,6 +327,8 @@ Route::group(['namespace' => 'Manager', 'prefix' => 'manager'], function (){
             Route::post('add', ['as' => 'manager-applicant-exam-add', 'uses' => 'ApplicantController@examAdd']);
             //删除考试
             Route::post('{id}/delete', ['as' => 'manager-applicant-exam-delete', 'uses' => 'ApplicantController@examDelete']);
+            //状态改变
+            Route::patch('{id}/change/{status}', ['as' => 'manager-applicant-exam-change', 'uses' => 'ApplicantController@examChange']);
             //附件下载
             Route::get('{id}/download', ['as' => 'manager-applicant-exam-download', 'uses' => 'ApplicantController@examDownload']);
 

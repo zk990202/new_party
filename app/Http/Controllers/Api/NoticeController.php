@@ -25,10 +25,15 @@ class NoticeController extends Controller {
 //                ->orderBy('notice_istop', 'desc')->orderBy('notice_ishidden', 'asc')->orderBy('notice_time', 'desc')
 //                ->paginate(6);
         if ($notice_arr){
-            return response()->json([
+            return view('noticeApplicant', [
                 'success' => 1,
                 'notice' => $notice_arr
             ]);
+//
+//            return response()->json([
+//                'success' => 1,
+//                'notice' => $notice_arr
+//            ]);
         }else{
             return response()->json([
                 'message' => 'Data Error'
