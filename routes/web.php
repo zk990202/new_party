@@ -772,3 +772,27 @@ Route::get('test/{token}', function(\Illuminate\Http\Request $request, $token){
 Route::get('session', function(\Illuminate\Http\Request $request){
     dd(session('data'));
 });
+
+Route::get('mig', function(){
+    $a = DB::select("SELECT * FROM twt_manager_modules");
+
+    $m = [];
+    foreach($a as $v){
+        $m[$v->self_id] = $v->id + 12;
+    }
+
+
+    foreach($a as $i => $v){
+        if($v->parent_id > 0)
+            $v->parent_id = $m[$v->parent_id];
+        $c = $i + 13;
+
+        $uri = str_replace("manager/", "", $v->url);
+        $uri = str_replace("#", "", $uri);
+
+        DB::insert("INSERT INTO admin_menu (parent_id, `order`, title, icon, uri) VALUES ($v->parent_id, $c, '$v->name', '$v->icon','$uri')");
+        echo "success : $v->name</br>";
+    }
+    return "success";
+
+});
