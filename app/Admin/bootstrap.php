@@ -18,4 +18,14 @@
  *
  */
 
+use Encore\Admin\Facades\Admin;
+
 Encore\Admin\Form::forget(['map', 'editor']);
+Admin::js('/vendor/laravel-admin/csrf.js');
+
+Admin::css('/vendor/laravel-admin/morris.js/morris.css');
+Admin::js('/vendor/laravel-admin/raphael/raphael.min.js');
+Admin::js('/vendor/laravel-admin/morris.js/morris.min.js');
+
+
+

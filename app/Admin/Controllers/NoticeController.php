@@ -3,7 +3,10 @@
 namespace App\Admin\Controllers;
 
 use App\Http\Helpers\Resources;
+use App\Http\Service\AdminMenuService;
 use App\Models\Column;
+use Encore\Admin\Facades\Admin;
+use Encore\Admin\Layout\Content;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -15,45 +18,71 @@ use Illuminate\Support\Facades\Auth;
 
 class NoticeController extends Controller
 {
+    protected $titles;
     protected $fileExtension;
     protected $fileUsage = "noticeFile";
 
     public function __construct()
     {
         $this->fileExtension = config('fileUpload.');
-    }
+        $this->titles = AdminMenuService::getMenuName();
 
-    //以下为党校公告专区
-//    /**
-//     * @param $type [70|71|72|73]
-//     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-//     */
-//    public function partySchool($type){
-//        if(!in_array($type, [70, 71, 72, 73])){
-//            throw new InvalidParameterException();
-//        }
-//        $notice_arr = Notification::getAllNotice($type);
-//        return view('Manager/Notice/partySchool', ['notices' => $notice_arr]);
-//    }
+        Admin::css('/vendor/laravel-admin/datatables/dataTables.bootstrap.min.css');
+        Admin::js('/vendor/laravel-admin/datatables/dataTables.bootstrap.min.js');
+        Admin::js('/Trumbowyg/dist/trumbowyg.js');
+        Admin::css('/Trumbowyg/dist/ui/trumbowyg.min.css');
+    }
 
     public function partySchoolApplicant(){
         $notice_arr = Notification::getAllNotice(70);
-        return view('Manager/Notice/partySchool', ['notices' => $notice_arr]);
+        return Admin::content(function(Content $content) use ($notice_arr){
+            // 选填
+            $content->header($this->titles[0] ?? '管理后台');
+            // 选填
+            $content->description($this->titles[1] ?? '');
+
+            // 填充页面body部分，这里可以填入任何可被渲染的对象
+            $content->body(view('Admin/Notice/partySchool', ['notices' => $notice_arr]));
+        });
     }
 
     public function partySchoolAcademy(){
         $notice_arr = Notification::getAllNotice(71);
-        return view('Manager/Notice/partySchool', ['notices' => $notice_arr]);
+        return Admin::content(function(Content $content) use ($notice_arr){
+            // 选填
+            $content->header($this->titles[0] ?? '管理后台');
+            // 选填
+            $content->description($this->titles[1] ?? '');
+
+            // 填充页面body部分，这里可以填入任何可被渲染的对象
+            $content->body(view('Admin/Notice/partySchool', ['notices' => $notice_arr]));
+        });
     }
 
     public function partySchoolProbationary(){
         $notice_arr = Notification::getAllNotice(72);
-        return view('Manager/Notice/partySchool', ['notices' => $notice_arr]);
+        return Admin::content(function(Content $content) use ($notice_arr){
+            // 选填
+            $content->header($this->titles[0] ?? '管理后台');
+            // 选填
+            $content->description($this->titles[1] ?? '');
+
+            // 填充页面body部分，这里可以填入任何可被渲染的对象
+            $content->body(view('Admin/Notice/partySchool', ['notices' => $notice_arr]));
+        });
     }
 
     public function partySchoolSecretary(){
         $notice_arr = Notification::getAllNotice(73);
-        return view('Manager/Notice/partySchool', ['notices' => $notice_arr]);
+        return Admin::content(function(Content $content) use ($notice_arr){
+            // 选填
+            $content->header($this->titles[0] ?? '管理后台');
+            // 选填
+            $content->description($this->titles[1] ?? '');
+
+            // 填充页面body部分，这里可以填入任何可被渲染的对象
+            $content->body(view('Admin/Notice/partySchool', ['notices' => $notice_arr]));
+        });
     }
 
     /**
@@ -141,23 +170,38 @@ class NoticeController extends Controller
 
     /**
      * @param $notice_id
-     * @throws ModelNotFoundException
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return Content
      */
     public function editPage($notice_id){
         $notification = Notification::findOrFail($notice_id);
         $notification = Resources::Notification($notification);
 //        dd($notification);
-        return view('Manager.Notice.edit', ['notice' => $notification]);
+        return Admin::content(function(Content $content) use ($notification){
+            // 选填
+            $content->header($this->titles[0] ?? '管理后台');
+            // 选填
+            $content->description($this->titles[1] ?? '');
+
+            // 填充页面body部分，这里可以填入任何可被渲染的对象
+            $content->body(view('Admin/Notice/edit', ['notice' => $notification]));
+        });
     }
 
     /**
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     *
      */
     public function addPage(){
         // 党校公告所属类别为 1
         $columns = Column::getColumnsByParentId(1);
-        return view('Manager.Notice.add', ['columns' => $columns]);
+        return Admin::content(function(Content $content) use ($columns){
+            // 选填
+            $content->header($this->titles[0] ?? '管理后台');
+            // 选填
+            $content->description($this->titles[1] ?? '');
+
+            // 填充页面body部分，这里可以填入任何可被渲染的对象
+            $content->body(view('Admin/Notice/add', ['columns' => $columns]));
+        });
     }
 
     public function add(Request $request){
@@ -194,7 +238,15 @@ class NoticeController extends Controller
     //以下为活动通知专区
     public function activity(){
         $activity_arr = Notification::activityGetAllNotice();
-        return view('Manager/Notice/activity', ['notices' => $activity_arr]);
+        return Admin::content(function(Content $content) use ($activity_arr){
+            // 选填
+            $content->header($this->titles[0] ?? '管理后台');
+            // 选填
+            $content->description($this->titles[1] ?? '');
+
+            // 填充页面body部分，这里可以填入任何可被渲染的对象
+            $content->body(view('Admin/Notice/activity', ['notices' => $activity_arr]));
+        });
     }
 
     public function activityEdit(Request $request, $activity_id){
@@ -237,7 +289,15 @@ class NoticeController extends Controller
         $notification = Notification::findOrFail($activity_id);
         $notification = Resources::Notification($notification);
 //        dd($notification);
-        return view('Manager.Notice.activityEdit', ['notice' => $notification]);
+        return Admin::content(function(Content $content) use ($notification){
+            // 选填
+            $content->header($this->titles[0] ?? '管理后台');
+            // 选填
+            $content->description($this->titles[1] ?? '');
+
+            // 填充页面body部分，这里可以填入任何可被渲染的对象
+            $content->body(view('Admin/Notice/activityEdit', ['notice' => $notification]));
+        });
     }
 
     public function activityAddPage(){
@@ -271,11 +331,5 @@ class NoticeController extends Controller
         return response()->json([
             'message' => '添加失败，请联系后台管理员'
         ]);
-    }
-
-
-    public function test(Request $request){
-
-        return \Illuminate\Support\Facades\Route::currentRouteName();
     }
 }

@@ -32,7 +32,7 @@ Route::group(['namespace' => 'Manager', 'prefix' => 'manager'], function (){
 
         // 20课统计
         Route::get('twentyLessonsPage', ['as' => 'manager-statistics-twenty-lessons-page', 'uses' => 'StatisticsController@twentyLessonsPage']);
-        Route::get('twentyLessons', ['as' => 'manager-statistics-twenty-lessons', 'uses' => 'StatisticsController@twentyLessons']);
+        Route::get('twenty-lessons', ['as' => 'manager-statistics-twenty-lessons', 'uses' => 'StatisticsController@twentyLessons']);
 
         //申请人结业统计
         Route::get('applicantTestListPage', ['as' => 'manager-statistics-applicant-test-list-page', 'uses' => 'StatisticsController@applicantTestListPage']);

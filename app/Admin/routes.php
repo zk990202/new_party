@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Service\AdminMenuService;
 use Illuminate\Routing\Router;
 
 Admin::registerAuthRoutes();
@@ -706,11 +707,7 @@ Route::group([
      * 文件上传下载控制
      */
     $router->group(['prefix' => 'file'], function(Router $router){
-        $router->post('/', ['as' => 'file', 'uses' => 'FileController@upload']);
-    });
-
-    $router->group(['prefix' => 'auth', 'namespace' => 'Auth'], function(Router $router){
-        $router->get('logout', ['as' => 'admin-auth-logout', 'uses' => 'LoginController@logout']);
+        $router->post('', ['as' => 'file', 'uses' => 'FileController@upload']);
     });
 
 });

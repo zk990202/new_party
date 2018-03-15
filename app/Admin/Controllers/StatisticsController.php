@@ -8,17 +8,38 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\LoginCount;
 use Illuminate\Support\Facades\DB;
-use Symfony\Component\VarDumper\Dumper\DataDumperInterface;
+
+use Encore\Admin\Facades\Admin;
+use Encore\Admin\Layout\Column;
+use Encore\Admin\Layout\Content;
+use Encore\Admin\Layout\Row;
+
 
 class StatisticsController extends Controller
 {
     /**
      * 登陆统计
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     *
      */
     public function loginPage(){
+        return Admin::content(function(Content $content){
+            // 选填
+            $content->header('填写页面头标题');
 
-        return view('Manager.Statistics.login');
+            // 选填
+            $content->description('填写页面描述小标题');
+
+            // 添加面包屑导航 since v1.5.7
+            $content->breadcrumb(
+                ['text' => '首页', 'url' => '/admin'],
+                ['text' => '用户管理', 'url' => '/admin/users'],
+                ['text' => '编辑用户']
+            );
+
+            // 填充页面body部分，这里可以填入任何可被渲染的对象
+            $content->body(view('Manager.Statistics.login'));
+        });
+//        return view('Manager.Statistics.login');
     }
 
     /**
