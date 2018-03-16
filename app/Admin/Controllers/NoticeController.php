@@ -16,6 +16,8 @@ use Symfony\Component\Routing\Exception\InvalidParameterException;
 use App\Models\Notification;
 use Illuminate\Support\Facades\Auth;
 
+//TODO 文件显示不对，修改后跳转url不对
+
 class NoticeController extends Controller
 {
     protected $titles;
@@ -28,7 +30,10 @@ class NoticeController extends Controller
         $this->titles = AdminMenuService::getMenuName();
 
         Admin::css('/vendor/laravel-admin/datatables/dataTables.bootstrap.min.css');
+
+        Admin::js('/vendor/laravel-admin/datatables/jquery.dataTables.min.js');
         Admin::js('/vendor/laravel-admin/datatables/dataTables.bootstrap.min.js');
+
         Admin::js('/Trumbowyg/dist/trumbowyg.js');
         Admin::css('/Trumbowyg/dist/ui/trumbowyg.min.css');
     }

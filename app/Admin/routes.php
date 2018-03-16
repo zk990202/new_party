@@ -64,7 +64,7 @@ Route::group([
             //隐藏(显示)
             $router->patch('{notice_id}/hide', ['as' => 'admin-notice-party-school-hide', 'uses' =>'NoticeController@hide']);
             //置顶(取消置顶)
-            $router->patch('{notice_id}/topUp', ['as' => 'admin-notice-party-school-top-up', 'uses' => 'NoticeController@topUp']);
+            $router->patch('{notice_id}/top-up', ['as' => 'admin-notice-party-school-top-up', 'uses' => 'NoticeController@topUp']);
 
             //编辑
             $router->get('{notice_id}/edit', ['as' => 'admin-notice-party-school-edit-page', 'uses' => 'NoticeController@editPage']);
