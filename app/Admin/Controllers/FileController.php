@@ -72,13 +72,18 @@ class FileController extends Controller
 
         return response()->json([
             'success' => true,
-            'file' => 'storage/'.$path,
+            'file' => $path,
             'info' => $file
         ]);
     }
 
-    public function download($file){
+    public function download($file, $name){
+        $file = realpath(public_path('upload')). '/' . $file;
 
+        if(file_exists($file))
+            return response()->download($file, $name);
+        else
+            return redirect("admin::404");
     }
 
     /**

@@ -35,7 +35,8 @@
                             <label for="inputFile">上传文件</label>
                             <input type="file" id="inputFile" name="file">
 
-                            <p class="help-block">支持rar zip tar </p>
+                            <p class="help-block">支持文件格式:
+                                {{ \App\Http\Service\FileService::allowedFileExtension('noticeFile') }}  </p>
                         </div>
                     </div>
                     <!-- /.box-body -->

@@ -16,8 +16,6 @@ use Symfony\Component\Routing\Exception\InvalidParameterException;
 use App\Models\Notification;
 use Illuminate\Support\Facades\Auth;
 
-//TODO 文件显示不对，修改后跳转url不对
-
 class NoticeController extends Controller
 {
     protected $titles;
@@ -227,7 +225,7 @@ class NoticeController extends Controller
             'fileName'  =>  $fileName,
             'filePath'  =>  $filePath,
             // 介入登陆后进行调整
-            'author'    =>  Auth::user()->username ?? '3014218099'
+            'author'    =>  Admin::user()->sno ?? '管理员'
         ]);
         if($res){
             return response()->json([
@@ -306,7 +304,15 @@ class NoticeController extends Controller
     }
 
     public function activityAddPage(){
-        return view('Manager.Notice.activityAdd');
+        return Admin::content(function(Content $content){
+            // 选填
+            $content->header($this->titles[0] ?? '管理后台');
+            // 选填
+            $content->description($this->titles[1] ?? '');
+
+            // 填充页面body部分，这里可以填入任何可被渲染的对象
+            $content->body(view('Admin/Notice/activityAdd'));
+        });
     }
 
     public function activityAdd(Request $request){

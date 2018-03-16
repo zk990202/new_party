@@ -34,9 +34,9 @@ class Resources {
             'content'   =>  $notification->notice_content,
             'time'      =>  $notification->notice_time,
             'fileName'  =>  $notification->notice_filename,
-            'filePath'  =>  $notification->notice_filepath,
+            'filePath'  =>  $notification->notice_filepath ? config('app.url') . "/upload/" . str_replace("./upload", "", $notification->notice_filepath) : '',
             'isTop'     =>  $notification->notice_istop,
-            'authorName'=>  $notification->owner->username ?? '',
+            'authorName'=>  $notification->author,
             'isHidden'  =>  $notification->notice_ishidden,
             'isDeleted' =>  $notification->notice_isdeleted
         ];

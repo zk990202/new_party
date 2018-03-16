@@ -87,7 +87,7 @@ Route::group([
         $router->group(['prefix' => 'activity'], function(Router $router){
             $router->get('list', ['as' => 'admin-notice-activity-list', 'uses' => 'NoticeController@activity']);
             $router->patch('{activity_id}/hide', ['as' => 'admin-notice-activity-hide', 'uses' => 'NoticeController@hide']);
-            $router->patch('{activity_id}/topUp', ['as' => 'admin-notice-activity-top-up', 'uses' => 'NoticeController@topUp']);
+            $router->patch('{activity_id}/top-up', ['as' => 'admin-notice-activity-top-up', 'uses' => 'NoticeController@topUp']);
 
             $router->get('{activity_id}/edit', ['as' => 'admin-notice-activity-edit-page', 'uses' => 'NoticeController@activityEditPage']);
             $router->post('{activity_id}/edit', ['as' => 'admin-notice-activity-edit', 'uses' => 'NoticeController@activityEdit']);
@@ -109,7 +109,7 @@ Route::group([
 
         //隐藏(显示)、置顶(取消置顶)新闻
         $router->patch('{id}/hide', ['as' => 'admin-party-build-hide', 'uses' => 'PartyBuildController@hide']);
-        $router->patch('{id}/topUp',['as' => 'admin-party-build-top-up', 'uses' =>  'PartyBuildController@topUp']);
+        $router->patch('{id}/top-up',['as' => 'admin-party-build-top-up', 'uses' =>  'PartyBuildController@topUp']);
 
         //编辑新闻
         $router->get('{id}/edit', ['as' => 'admin-party-build-edit-page', 'uses' => 'PartyBuildController@editPage']);
@@ -131,7 +131,7 @@ Route::group([
 
         //隐藏(显示)、置顶(取消置顶)新闻
         $router->patch('{id}/hide', ['as' => 'admin-study-group-hide', 'uses' => 'StudyGroupController@hide']);
-        $router->patch('{id}/topUp', ['as' => 'admin-study-group-top-up', 'uses' => 'StudyGroupController@topUp']);
+        $router->patch('{id}/top-up', ['as' => 'admin-study-group-top-up', 'uses' => 'StudyGroupController@topUp']);
 
         //编辑新闻
         $router->get('{id}/edit', ['as' => 'admin-study-group-edit-page', 'uses' => 'StudyGroupController@editPage']);
@@ -708,6 +708,7 @@ Route::group([
      */
     $router->group(['prefix' => 'file'], function(Router $router){
         $router->post('', ['as' => 'file', 'uses' => 'FileController@upload']);
+        //$router->get('/{filePath}', ['as' => 'admin-file-download', 'uses' => 'FileController@download']);
     });
 
 });

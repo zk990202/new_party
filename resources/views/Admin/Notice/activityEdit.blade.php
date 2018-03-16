@@ -27,9 +27,10 @@
                             <input type="file" id="inputFile" name="file">
                             <p class="help-block">
                                 @if($notice['fileName'])
-                                    已有附件：{{ $notice['fileName'] }}，如不更改请勿重新添加
+                                    已有附件：{!! '<a target="_blank" href="' . $notice['filePath'] .'">' . $notice['fileName'] .'</a>'  !!}，如不更改请勿重新添加<br/>
                                 @endif
                                 支持文件格式：
+                                {{ \App\Http\Service\FileService::allowedFileExtension('noticeFile') }}
                             </p>
                         </div>
                     </div>
@@ -139,7 +140,7 @@
                             success: function(data){
                                 if(data.success){
                                     alert('修改成功');
-                                    window.location.href = '/admin/notice/activity/' + $('#noticeId').val() + '/edit';
+                                    window.location.href = '/admin/notice/activity/list';
                                 }
                                 else{
                                     alert(data.message);
@@ -170,7 +171,7 @@
                     success: function(data){
                         if(data.success){
                             alert('修改成功');
-                            window.location.href = '/admin/notice/activity/' + $('#noticeId').val() + '/edit';
+                            window.location.href = '/admin/notice/activity/list';
                         }
                         else{
                             alert(data.message);
