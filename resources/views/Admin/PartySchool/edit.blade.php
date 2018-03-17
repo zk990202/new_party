@@ -1,10 +1,4 @@
-@extends('layouts.app')
 
-@section('css')
-    <link rel="stylesheet" href="/Trumbowyg/dist/ui/trumbowyg.min.css">
-@endsection
-
-@section('main')
     <section class="content">
 
         <div class="row">
@@ -33,9 +27,10 @@
                                 <input type="file" id="inputFile" name="file">
                                 <p class="help-block">
                                     @if($newses['imgPath'])
-                                        已有图片：{{ $newses['imgPath'] }}，如不更改请勿重新添加
+                                        已有图片：{!! '<a target="_blank" href="' . $newses['imgPath'] .'">' . $newses['imgPath'] .'</a>'  !!}，如不更改请勿重新添加<br/>
                                     @endif
-                                    支持图片格式：png, jpeg, jpg, bmp
+                                    支持文件格式：
+                                    {{ \App\Http\Service\FileService::allowedFileExtension('partyBuildImg') }}
                                 </p>
                             </div>
                         </div>
@@ -51,9 +46,6 @@
         <!-- ./row -->
     </section>
     <!-- /.content -->
-@endsection
-
-@section('func')
     <script src="/Trumbowyg/dist/trumbowyg.js"></script>
     <script src="/Trumbowyg/dist/plugins/upload/trumbowyg.upload.js"></script>
     <script>
@@ -83,7 +75,7 @@
                 ],
                 plugins: {
                     upload: {
-                        serverPath: '/manager/file',
+                        serverPath: '/admin/file',
                         fileFieldName: 'upload',
                         usage : 'partyBuildImg'
                     }
@@ -92,7 +84,7 @@
             });
 
             $.ajax({
-                url : '/manager/party-school/'+$('#newsesId').val(),
+                url : '/admin/party-school/'+$('#newsesId').val(),
                 type: 'GET',
                 dataType: 'json',
                 success: function(data){
@@ -118,7 +110,7 @@
                     data.append('upload', file);
                     data.append("usage", 'partyBuildImg');
                     $.ajax({
-                        url: '/manager/file',
+                        url: '/admin/file',
                         type: 'POST',
                         data: data,
                         cache: false,
@@ -137,7 +129,7 @@
                             form.append('content', $('#editor').val());
                             form.append('imgPath', path);
                             $.ajax({
-                                url: '/manager/party-school/' + $('#newsesId').val() + '/edit',
+                                url: '/admin/party-school/' + $('#newsesId').val() + '/edit',
                                 type: 'POST',
                                 data: form,
                                 cache: false,
@@ -147,7 +139,7 @@
                                 success: function(data){
                                     if(data.success){
                                         alert('修改成功');
-                                        window.location.href = '/manager/party-school/' + $('#newsesId').val() + '/edit';
+                                        window.location.href = '/admin/party-school/list';
                                     }
                                     else{
                                         alert(data.message);
@@ -168,7 +160,7 @@
                     form.append('title', $('#newsesTitle').val());
                     form.append('content', $('#editor').val());
                     $.ajax({
-                        url: '/manager/party-school/' + $('#newsesId').val() + '/edit',
+                        url: '/admin/party-school/' + $('#newsesId').val() + '/edit',
                         type: 'POST',
                         data: form,
                         cache: false,
@@ -178,7 +170,7 @@
                         success: function(data){
                             if(data.success){
                                 alert('修改成功');
-                                window.location.href = '/manager/party-school/' + $('#newsesId').val() + '/edit';
+                                window.location.href = '/admin/party-school/list';
                             }
                             else{
                                 alert(data.message);
@@ -192,4 +184,4 @@
             });
         })
     </script>
-@endsection
+
