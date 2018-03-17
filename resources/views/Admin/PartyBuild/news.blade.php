@@ -30,7 +30,8 @@
                                 <td>{{ $news['typeName'] }}</td>
                                 <td>{{ $news['time'] }}</td>
                                 <td>{{ $news['authorName']}}</td>
-                                <td>{{ $news['imgPath'] ? '有图片' : '无图片' }}</td>
+                                <td>{!!   $news['imgPath'] ? '<a target="_blank" href="' .  $news['imgPath']  .'">有图片</a>' : '无图片' !!}</td>
+
 
                                 <td>{{ $news['isHidden'] ? '隐藏' : '显示'}}</td>
                                 <td>

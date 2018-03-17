@@ -23,10 +23,7 @@ class FileService{
         return $res;
     }
 
-    public static function fileAccessUri($filePath, $usage){
-        $fileConfig = config('fileUpload.rules');
-        if(!in_array($usage, array_keys($fileConfig)) || !isset($fileConfig[$usage]['disk']))
-            return $filePath;
-        return config("filesystems.disks.$usage.url") . $filePath;
+    public static function fileAccessUri($filePath){
+        return $filePath ? config('app.url') . "/upload/" . str_replace("./upload/", "", $filePath) : '';
     }
 }

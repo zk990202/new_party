@@ -13,6 +13,11 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Mockery\Exception;
 
+/**
+ * 党建专项模块
+ * Class PartyBuildController
+ * @package App\Admin\Controllers
+ */
 class PartyBuildController extends Controller{
 
     protected $imgExtension;
