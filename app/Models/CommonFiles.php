@@ -72,8 +72,7 @@ class CommonFiles extends Model{
     public static function getAllContents(){
         $res_arr = self::whereBetween('file_type', [7, 9])
             ->orderBy('file_isdeleted', 'ASC')
-            ->orderBy('file_type', 'ASC')
-            ->orderBy('file_id', 'DESC')
+            ->orderBy('file_addtime', 'DESC')
             ->get()->all();
 
         return array_map(function ($CommonFiles){

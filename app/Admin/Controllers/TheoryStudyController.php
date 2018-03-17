@@ -10,7 +10,10 @@ namespace App\Admin\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Http\Helpers\Resources;
+use App\Http\Service\AdminMenuService;
 use App\Models\CommonFiles;
+use Encore\Admin\Facades\Admin;
+use Encore\Admin\Layout\Content;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Mockery\Exception;
@@ -21,20 +24,38 @@ class TheoryStudyController extends Controller{
     protected $eBookExtension;
     protected $videoUsage = "theoryStudyVideo";
     protected $eBookUsage = "theoryStudyEBook";
+    protected $titles;
 
     public function __construct()
     {
         $this->videoExtension = config('fileUpload.');
         $this->eBookExtension = config('fileUpload');
+        $this->titles = AdminMenuService::getMenuName();
+        Admin::js('/Trumbowyg/dist/trumbowyg.js');
+        Admin::js('/Trumbowyg/dist/plugins/upload/trumbowyg.upload.js');
+        Admin::css('/Trumbowyg/dist/ui/trumbowyg.min.css');
+
+        Admin::css('/vendor/laravel-admin/datatables/dataTables.bootstrap.min.css');
+
+        Admin::js('/vendor/laravel-admin/datatables/jquery.dataTables.min.js');
+        Admin::js('/vendor/laravel-admin/datatables/dataTables.bootstrap.min.js');
     }
 
     /**
      * 内容列表
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return \Encore\Admin\Layout\Content
      */
     public function lists(){
         $contents_arr = CommonFiles::getAllContents();
-        return view('Manager.TheoryStudy.all', ['contents' => $contents_arr]);
+        return Admin::content(function(Content $content) use ($contents_arr){
+            // 选填
+            $content->header($this->titles[0] ?? '管理后台');
+            // 选填
+            $content->description($this->titles[1] ?? '');
+
+            // 填充页面body部分，这里可以填入任何可被渲染的对象
+            $content->body(view('Admin.TheoryStudy.all', ['contents' => $contents_arr]));
+        });
     }
 
     /**
@@ -91,12 +112,20 @@ class TheoryStudyController extends Controller{
 
     /**
      * @param $id
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return Content
      */
     public function editArticlePage($id){
         $contents = CommonFiles::findOrFail($id);
         $contents = Resources::CommonFiles($contents);
-        return view('Manager.TheoryStudy.editArticle', ['contents' => $contents]);
+        return Admin::content(function(Content $content) use ($contents){
+            // 选填
+            $content->header($this->titles[0] ?? '管理后台');
+            // 选填
+            $content->description($this->titles[1] ?? '');
+
+            // 填充页面body部分，这里可以填入任何可被渲染的对象
+            $content->body(view('Admin.TheoryStudy.editArticle', ['contents' => $contents]));
+        });
     }
 
     /**
@@ -137,12 +166,20 @@ class TheoryStudyController extends Controller{
 
     /**
      * @param $id
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return Content
      */
     public function editVideoPage($id){
         $contents = CommonFiles::findOrFail($id);
         $contents = Resources::CommonFiles($contents);
-        return view('Manager.TheoryStudy.editVideo', ['contents' => $contents]);
+        return Admin::content(function(Content $content) use ($contents){
+            // 选填
+            $content->header($this->titles[0] ?? '管理后台');
+            // 选填
+            $content->description($this->titles[1] ?? '');
+
+            // 填充页面body部分，这里可以填入任何可被渲染的对象
+            $content->body(view('Admin.TheoryStudy.editVideo', ['contents' => $contents]));
+        });
     }
 
     /**
@@ -158,7 +195,8 @@ class TheoryStudyController extends Controller{
             $res = CommonFiles::updateById($id, [
                 // 防止编辑器xss攻击，这里进行编码，同时避免二次编码
                 'title' => $title,
-                'filePath' => $img_path
+                'filePath' => $img_path,
+                'content'  => ''
             ]);
             if($res){
                 return response()->json([
@@ -184,7 +222,15 @@ class TheoryStudyController extends Controller{
     public function editEBookPage($id){
         $contents = CommonFiles::findOrFail($id);
         $contents = Resources::CommonFiles($contents);
-        return view('Manager.TheoryStudy.editVideo', ['contents' => $contents]);
+        return Admin::content(function(Content $content) use ($contents){
+            // 选填
+            $content->header($this->titles[0] ?? '管理后台');
+            // 选填
+            $content->description($this->titles[1] ?? '');
+
+            // 填充页面body部分，这里可以填入任何可被渲染的对象
+            $content->body(view('Admin.TheoryStudy.editEBook', ['contents' => $contents]));
+        });
     }
 
     /**
@@ -220,10 +266,18 @@ class TheoryStudyController extends Controller{
     }
 
     /**
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return Content
      */
     public function addArticlePage(){
-        return view('manager.TheoryStudy.addArticle');
+        return Admin::content(function(Content $content) {
+            // 选填
+            $content->header($this->titles[0] ?? '管理后台');
+            // 选填
+            $content->description($this->titles[1] ?? '');
+
+            // 填充页面body部分，这里可以填入任何可被渲染的对象
+            $content->body(view('Admin.TheoryStudy.addArticle'));
+        });
     }
 
     /**
@@ -257,10 +311,18 @@ class TheoryStudyController extends Controller{
     }
 
     /**
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return Content
      */
     public function addVideoPage(){
-        return view('manager.TheoryStudy.addVideo');
+        return Admin::content(function(Content $content) {
+            // 选填
+            $content->header($this->titles[0] ?? '管理后台');
+            // 选填
+            $content->description($this->titles[1] ?? '');
+
+            // 填充页面body部分，这里可以填入任何可被渲染的对象
+            $content->body(view('Admin.TheoryStudy.addVideo'));
+        });
     }
 
     /**
@@ -294,10 +356,18 @@ class TheoryStudyController extends Controller{
     }
 
     /**
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return Content
      */
     public function addEBookPage(){
-        return view('manager.TheoryStudy.addEBook');
+        return Admin::content(function(Content $content) {
+            // 选填
+            $content->header($this->titles[0] ?? '管理后台');
+            // 选填
+            $content->description($this->titles[1] ?? '');
+
+            // 填充页面body部分，这里可以填入任何可被渲染的对象
+            $content->body(view('Admin.TheoryStudy.addEBook'));
+        });
     }
 
 
