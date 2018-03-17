@@ -17,6 +17,14 @@ use Encore\Admin\Layout\Row;
 
 class StatisticsController extends Controller
 {
+
+    public function __construct()
+    {
+        Admin::css('/vendor/laravel-admin/morris.js/morris.css');
+        Admin::js('/vendor/laravel-admin/raphael/raphael.min.js');
+        Admin::js('/vendor/laravel-admin/morris.js/morris.min.js');
+    }
+
     /**
      * 登陆统计
      *

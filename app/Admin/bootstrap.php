@@ -22,10 +22,11 @@ use Encore\Admin\Facades\Admin;
 
 Encore\Admin\Form::forget(['map', 'editor']);
 Admin::js('/vendor/laravel-admin/csrf.js');
-
-Admin::css('/vendor/laravel-admin/morris.js/morris.css');
-Admin::js('/vendor/laravel-admin/raphael/raphael.min.js');
-Admin::js('/vendor/laravel-admin/morris.js/morris.min.js');
-
+Admin::js('/Trumbowyg/dist/trumbowyg.js');
+Admin::js('/Trumbowyg/dist/plugins/upload/trumbowyg.upload.js');
+Admin::css('/Trumbowyg/dist/ui/trumbowyg.min.css');
+Admin::css('/vendor/laravel-admin/datatables/dataTables.bootstrap.min.css');
+Admin::js('/vendor/laravel-admin/datatables/jquery.dataTables.min.js');
+Admin::js('/vendor/laravel-admin/datatables/dataTables.bootstrap.min.js');
 
 

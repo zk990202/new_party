@@ -1,10 +1,4 @@
-@extends('layouts.app')
 
-@section('css')
-    <link rel="stylesheet" href="/Trumbowyg/dist/ui/trumbowyg.min.css">
-@endsection
-
-@section('main')
     <section class="content">
 
         <div class="row">
@@ -59,7 +53,7 @@
                                 <th>附件</th>
                                 <td>
                                     @if($exam[0]['fileName'])
-                                        {{--<a href="{{ url('manager/applicant/exam/'.$exam[0]['id'].'/download') }}">{{ $exam[0]['fileName'] }}</a>--}}
+                                        {{--<a href="{{ url('admin/applicant/exam/'.$exam[0]['id'].'/download') }}">{{ $exam[0]['fileName'] }}</a>--}}
                                         <a href="{{ $exam[0]['filePath'] }}">{{ $exam[0]['fileName'] }}</a>
                                     @else
                                         无附件
@@ -74,6 +68,6 @@
         <!-- ./row -->
     </section>
     <!-- /.content -->
-@endsection
+
 
 
