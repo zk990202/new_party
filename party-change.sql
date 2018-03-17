@@ -27,3 +27,5 @@ ALTER TABLE twt_partybranch CHANGE partybranch_total_reply partybranch_total_rep
 ALTER TABLE twt_partybranch CHANGE partybranch_total_topic partybranch_total_topic INT(11) NOT NULL DEFAULT 0;
 ALTER TABLE twt_partybranch CHANGE partybranch_total_act partybranch_total_act INT(11) NOT NULL DEFAULT 0;
 ALTER TABLE twt_logincount  ADD COLUMN created_at datetime ;
+
+ALTER TABLE twt_commonfiles CHANGE file_addtime file_addtime datetime;

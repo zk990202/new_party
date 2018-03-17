@@ -4,7 +4,10 @@ namespace App\Admin\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Http\Helpers\Resources;
+use App\Http\Service\AdminMenuService;
 use App\Models\CommonFiles;
+use Encore\Admin\Facades\Admin;
+use Encore\Admin\Layout\Content;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -14,19 +17,38 @@ class ImportantFilesController extends Controller{
 
     protected $imgExtension;
     protected $imgUsage = "importantFilesFile";
+    protected $titles;
 
     public function __construct()
     {
         $this->imgExtension = config('fileUpload.');
+        $this->titles = AdminMenuService::getMenuName();
+        Admin::js('/Trumbowyg/dist/trumbowyg.js');
+        Admin::js('/Trumbowyg/dist/plugins/upload/trumbowyg.upload.js');
+        Admin::css('/Trumbowyg/dist/ui/trumbowyg.min.css');
+
+        Admin::css('/vendor/laravel-admin/datatables/dataTables.bootstrap.min.css');
+
+        Admin::js('/vendor/laravel-admin/datatables/jquery.dataTables.min.js');
+        Admin::js('/vendor/laravel-admin/datatables/dataTables.bootstrap.min.js');
     }
 
     /**
      * 列出所有的重要文件
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return \Encore\Admin\Layout\Content
      */
     public function lists(){
         $files_arr = CommonFiles::getAll();
-        return view('Manager.ImportantFiles.all', ['files' => $files_arr]);
+
+        return Admin::content(function(Content $content) use ($files_arr){
+            // 选填
+            $content->header($this->titles[0] ?? '管理后台');
+            // 选填
+            $content->description($this->titles[1] ?? '');
+
+            // 填充页面body部分，这里可以填入任何可被渲染的对象
+            $content->body(view('Admin.ImportantFiles.all', ['files' => $files_arr]));
+        });
     }
 
     /**
@@ -52,13 +74,13 @@ class ImportantFilesController extends Controller{
     public function edit(Request $request, $id){
         $title = $request->input('title');
         $content = $request->input('content');
-        $img_path = $request->input('filePath') ?? null;
+        $filePath = $request->input('filePath') ?? null;
         try{
             $res = CommonFiles::updateById($id, [
                 // 防止编辑器xss攻击，这里进行编码，同时避免二次编码
                 'content' => $content,
                 'title' => $title,
-                'filePath' => $img_path
+                'filePath' => $filePath
             ]);
             if($res){
                 return response()->json([
@@ -82,19 +104,36 @@ class ImportantFilesController extends Controller{
     }
 
     /**
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return Content
      */
     public function editPage($id){
         $files = CommonFiles::findOrFail($id);
         $files = Resources::CommonFiles($files);
-        return view('Manager.ImportantFiles.edit', ['files' => $files]);
+
+        return Admin::content(function(Content $content) use ($files){
+            // 选填
+            $content->header($this->titles[0] ?? '管理后台');
+            // 选填
+            $content->description($this->titles[1] ?? '');
+
+            // 填充页面body部分，这里可以填入任何可被渲染的对象
+            $content->body(view('Admin.ImportantFiles.edit', ['files' => $files]));
+        });
     }
 
     /**
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return Content
      */
     public function addPage(){
-        return view('Manager.ImportantFiles.add');
+        return Admin::content(function(Content $content) {
+            // 选填
+            $content->header($this->titles[0] ?? '管理后台');
+            // 选填
+            $content->description($this->titles[1] ?? '');
+
+            // 填充页面body部分，这里可以填入任何可被渲染的对象
+            $content->body(view('Admin.ImportantFiles.add'));
+        });
     }
 
     public function add(Request $request){
