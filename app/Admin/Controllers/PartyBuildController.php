@@ -4,30 +4,50 @@ namespace App\Admin\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Http\Helpers\Resources;
+use App\Http\Service\AdminMenuService;
 use App\Models\Column;
 use App\Models\SpecialNews;
+use Encore\Admin\Facades\Admin;
+use Encore\Admin\Layout\Content;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Mockery\Exception;
 
 class PartyBuildController extends Controller{
 
     protected $imgExtension;
     protected $imgUsage = "partyBuildImg";
+    protected $titles;
 
     public function __construct()
     {
         $this->imgExtension = config('fileUpload.');
+        $this->titles = AdminMenuService::getMenuName();
+        Admin::js('/Trumbowyg/dist/trumbowyg.js');
+        Admin::js('/Trumbowyg/dist/plugins/upload/trumbowyg.upload.js');
+        Admin::css('/Trumbowyg/dist/ui/trumbowyg.min.css');
+
+        Admin::css('/vendor/laravel-admin/datatables/dataTables.bootstrap.min.css');
+
+        Admin::js('/vendor/laravel-admin/datatables/jquery.dataTables.min.js');
+        Admin::js('/vendor/laravel-admin/datatables/dataTables.bootstrap.min.js');
     }
 
     /**
      * 列出所有的新闻
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return Content
      */
     public function lists(){
         $news_arr = SpecialNews::getAllNews();
-        return view('Manager.PartyBuild.news', ['newses' => $news_arr]);
+        return Admin::content(function(Content $content) use ($news_arr){
+            // 选填
+            $content->header($this->titles[0] ?? '管理后台');
+            // 选填
+            $content->description($this->titles[1] ?? '');
+
+            // 填充页面body部分，这里可以填入任何可被渲染的对象
+            $content->body(view('Admin.PartyBuild.news', ['newses' => $news_arr]));
+        });
     }
 
     /**
@@ -98,21 +118,37 @@ class PartyBuildController extends Controller{
 
     /**
      * @param $id
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return \Encore\Admin\Layout\Content|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function editPage($id){
         $news = SpecialNews::findOrFail($id);
         $news = Resources::SpecialNews($news);
-        return view('Manager.PartyBuild.edit', ['newses' => $news]);
+        return Admin::content(function(Content $content) use ($news){
+            // 选填
+            $content->header($this->titles[0] ?? '管理后台');
+            // 选填
+            $content->description($this->titles[1] ?? '');
+
+            // 填充页面body部分，这里可以填入任何可被渲染的对象
+            $content->body(view('Admin.PartyBuild.edit', ['newses' => $news]));
+        });
     }
 
     /**
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return Content|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function addPage(){
         //党建专项所属类别为3
         $columns = Column::getColumnsByParentId(3);
-        return view('Manager.PartyBuild.add', ['columns' => $columns]);
+        return Admin::content(function(Content $content) use ($columns){
+            // 选填
+            $content->header($this->titles[0] ?? '管理后台');
+            // 选填
+            $content->description($this->titles[1] ?? '');
+
+            // 填充页面body部分，这里可以填入任何可被渲染的对象
+            $content->body(view('Admin.PartyBuild.add', ['columns' => $columns]));
+        });
     }
 
     /**
@@ -136,7 +172,7 @@ class PartyBuildController extends Controller{
             'content' => $content,
             'imgPath' => $img_path,
             // 介入登陆后进行调整
-            'author'    =>  Auth::user()->username ?? '3014218099'
+            'author'    =>  Admin::user()->name ?? '管理员'
         ]);
         if($res){
             return response()->json([
