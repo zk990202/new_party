@@ -22,14 +22,6 @@ class StudyGroupController extends Controller{
     {
         $this->imgExtension = config('fileUpload.');
         $this->titles = AdminMenuService::getMenuName();
-        Admin::js('/Trumbowyg/dist/trumbowyg.js');
-        Admin::js('/Trumbowyg/dist/plugins/upload/trumbowyg.upload.js');
-        Admin::css('/Trumbowyg/dist/ui/trumbowyg.min.css');
-
-        Admin::css('/vendor/laravel-admin/datatables/dataTables.bootstrap.min.css');
-
-        Admin::js('/vendor/laravel-admin/datatables/jquery.dataTables.min.js');
-        Admin::js('/vendor/laravel-admin/datatables/dataTables.bootstrap.min.js');
     }
 
     /**
