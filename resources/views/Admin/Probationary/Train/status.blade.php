@@ -1,16 +1,10 @@
-@extends('layouts.app')
 
-@section('css')
-    <link rel="stylesheet" href="/Trumbowyg/dist/ui/trumbowyg.min.css">
-@endsection
-
-@section('main')
     <section class="content">
 
         <div class="row">
             <div class="col-md-12">
                 <div class="box box-primary">
-                    <form method="post" action="{{ url('manager/probationary/train/'.$train['id'].'/status') }}">
+                    <form method="post" action="{{ url('admin/probationary/train/'.$train['id'].'/status') }}">
 
                         <div class="box-header with-border">
                             <h3 class="box-title">培训状态控制:这里是控制培训的各个阶段的.请务必慎重操作,不可胡乱修改状态!</h3>
@@ -92,11 +86,7 @@
         <!-- ./row -->
     </section>
     <!-- /.content -->
-@endsection
 
-@section('func')
-    <script src="/AdminLTE/bower_components/datatables.net/js/jquery.dataTables.min.js"></script>
-    <script src="/AdminLTE/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
     <script>
 
         $(function () {
@@ -107,7 +97,7 @@
 
         var entryStatus = function (id) {
             $.ajax({
-                'url': '/manager/probationary/train/' + id + '/entryStatus',
+                'url': '/admin/probationary/train/' + id + '/entryStatus',
                 'method': 'post',
                 'success': function (data) {
                     window.location.reload();
@@ -117,7 +107,7 @@
 
         var netChooseStatus = function (id) {
             $.ajax({
-                'url': '/manager/probationary/train/' + id + '/netChooseStatus',
+                'url': '/admin/probationary/train/' + id + '/netChooseStatus',
                 'method': 'post',
                 'success': function (data) {
                     window.location.reload();
@@ -127,7 +117,7 @@
 
         var gradeSearchStatus = function (id) {
             $.ajax({
-                'url': '/manager/probationary/train/' + id + '/gradeSearchStatus',
+                'url': '/admin/probationary/train/' + id + '/gradeSearchStatus',
                 'method': 'post',
                 'success': function (data) {
                     window.location.reload();
@@ -137,7 +127,7 @@
 
         var endListShow = function (id) {
             $.ajax({
-                'url': '/manager/probationary/train/' + id + '/endListShow',
+                'url': '/admin/probationary/train/' + id + '/endListShow',
                 'method': 'post',
                 'success': function (data) {
                     window.location.reload();
@@ -147,7 +137,7 @@
 
         var goodMemberShow = function (id) {
             $.ajax({
-                'url': '/manager/probationary/train/' + id + '/goodMemberShow',
+                'url': '/admin/probationary/train/' + id + '/goodMemberShow',
                 'method': 'post',
                 'success': function (data) {
                     window.location.reload();
@@ -157,7 +147,7 @@
 
         var isEnd = function (id) {
             $.ajax({
-                'url': '/manager/probationary/train/' + id + '/isEnd',
+                'url': '/admin/probationary/train/' + id + '/isEnd',
                 'method': 'post',
                 'success': function (data) {
                     window.location.reload();
@@ -166,4 +156,3 @@
         };
 
     </script>
-@endsection

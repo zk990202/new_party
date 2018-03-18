@@ -1,10 +1,4 @@
-@extends('layouts.app')
 
-@section('css')
-    <link rel="stylesheet" href="/AdminLTE/bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css">
-@endsection
-
-@section('main')
     <section class="content">
         <!-- Small boxes (Stat box) -->
         <div class="row">
@@ -32,7 +26,7 @@
                             @foreach($trains as $train)
                                 <tr>
                                     <td>
-                                        <a href="{{ url('manager/probationary/train/'.$train['id'].'/detail') }}">
+                                        <a href="{{ url('admin/probationary/train/'.$train['id'].'/detail') }}">
                                             {{ $train['name'] }}
                                         </a>
                                     </td>
@@ -46,12 +40,12 @@
                                         @endif
                                     </td>
                                     <td>
-                                        <a href="{{ url('manager/probationary/train/'.$train['id'].'/edit') }}">
+                                        <a href="{{ url('admin/probationary/train/'.$train['id'].'/edit') }}">
                                             <button type="button" class="btn btn-block btn-info btn-xs">编辑考试</button>
                                         </a>
                                     </td>
                                     <td>
-                                        <a href="{{ url('manager/probationary/train/'.$train['id'].'/status') }}">
+                                        <a href="{{ url('admin/probationary/train/'.$train['id'].'/status') }}">
                                             <button type="button" class="btn btn-block btn-info btn-xs">修改状态</button>
                                         </a>
                                     </td>
@@ -67,7 +61,7 @@
                                     {{--</td>--}}
                                     <td>
                                         @if($train['endInsert'])
-                                            {{--<a href="{{ url('Manager/Probationary/train/'.$train['id'].'/open') }}">--}}
+                                            {{--<a href="{{ url('admin/Probationary/train/'.$train['id'].'/open') }}">--}}
                                             <button type="button" class="btn btn-block btn-success btn-xs" onclick="if(confirm('注意:这里想要结束成绩录入,则必须所有的课程成绩录入都必须结束.而且一旦结束该成绩录入,所有的成绩将不能被修改.真的确定要结束成绩的录入吗?')) closeTrain({{ $train['id'] }})">结束录入</button>
                                         @elseif($train['isEndInsert'])
                                             无操作
@@ -101,11 +95,7 @@
         </div>
         <!-- Main row -->
     </section>
-@endsection
 
-@section('func')
-    <script src="/AdminLTE/bower_components/datatables.net/js/jquery.dataTables.min.js"></script>
-    <script src="/AdminLTE/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
     <script>
 
         $(function () {
@@ -115,7 +105,7 @@
         });
         var openTrain = function openTrain (id) {
             $.ajax({
-                url: '/manager/probationary/train/' + id + '/open',
+                url: '/admin/probationary/train/' + id + '/open',
                 method: 'post',
                 data: 'form',
                 dataType : 'json',
@@ -131,7 +121,7 @@
         };
         var closeTrain = function closeTrain (id) {
             $.ajax({
-                url: '/manager/probationary/train/' + id + '/close',
+                url: '/admin/probationary/train/' + id + '/close',
                 method: 'post',
                 data: 'form',
                 dataType : 'json',
@@ -146,4 +136,4 @@
             });
         };
     </script>
-@endsection
+

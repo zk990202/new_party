@@ -1,10 +1,4 @@
-@extends('layouts.app')
 
-@section('css')
-    <link rel="stylesheet" href="/AdminLTE/bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css">
-@endsection
-
-@section('main')
     <section class="content">
         <!-- Small boxes (Stat box) -->
         <div class="row">
@@ -16,7 +10,7 @@
                     </div>
                     <div class="box-body">
                         {{--<form role="form" enctype="multipart/form-data">--}}
-                        <form method="POST" action="{{ url('manager/probationary/certificate/grant-result') }}">
+                        <form method="POST" action="{{ url('admin/probationary/certificate/grant-result') }}">
                             <table id="example1" class="table table-bordered table-striped">
                                 <thead>
                                 <tr>
@@ -88,11 +82,7 @@
         </div>
         <!-- Main row -->
     </section>
-@endsection
 
-@section('func')
-    <script src="/AdminLTE/bower_components/datatables.net/js/jquery.dataTables.min.js"></script>
-    <script src="/AdminLTE/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
     <script>
 
         $(function () {
@@ -106,7 +96,7 @@
 //                form.append('getPerson', $('#getPerson'));
 //                form.append('place', $('#place'));
 //                $.ajax({
-//                    url: '/manager/applicant/certificate/grant-result',
+//                    url: '/admin/applicant/certificate/grant-result',
 //                    type: 'POST',
 //                    data: form,
 //                    cache: false,
@@ -116,7 +106,7 @@
 //                    success: function(data){
 //                        if(data.success){
 //                            alert('证书发放成功');
-//                            window.location.href = 'manager/applicant/certificate/grant'
+//                            window.location.href = 'admin/applicant/certificate/grant'
 //                        }
 //                        else{
 //                            alert(data.message);
@@ -126,4 +116,4 @@
 //            })
         });
     </script>
-@endsection
+

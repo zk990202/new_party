@@ -1,10 +1,4 @@
-@extends('layouts.app')
 
-@section('css')
-    <link rel="stylesheet" href="/Trumbowyg/dist/ui/trumbowyg.min.css">
-@endsection
-
-@section('main')
     <section class="content">
 
         <div class="row">
@@ -74,11 +68,7 @@
         <!-- ./row -->
     </section>
     <!-- /.content -->
-@endsection
 
-@section('func')
-    <script src="/Trumbowyg/dist/trumbowyg.js"></script>
-    <script src="/Trumbowyg/dist/plugins/upload/trumbowyg.upload.js"></script>
     <script>
         $(function(){
             // editor
@@ -106,7 +96,7 @@
                 ],
                 plugins: {
                     upload: {
-                        serverPath: '/manager/file',
+                        serverPath: '/admin/file',
                         fileFieldName: 'upload',
                         usage : 'probationaryImg'
                     }
@@ -139,7 +129,7 @@
                 ],
                 plugins: {
                     upload: {
-                        serverPath: '/manager/file',
+                        serverPath: '/admin/file',
                         fileFieldName: 'upload',
                         usage : 'probationaryImg'
                     }
@@ -149,7 +139,7 @@
             });
 
 //            $.ajax({
-//                url : '/manager/probationary/course/'+$('#id').val(),
+//                url : '/admin/probationary/course/'+$('#id').val(),
 //                type: 'GET',
 //                dataType: 'json',
 //                success: function(data){
@@ -179,7 +169,7 @@
                 form.append('introduction', $('#introduction').val());
                 form.append('requirement', $('#requirement').val());
                 $.ajax({
-                    url: '/manager/probationary/course/add/compulsory',
+                    url: '/admin/probationary/course/add/compulsory',
                     type: 'POST',
                     data: form,
                     cache: false,
@@ -189,7 +179,7 @@
                     success: function(data){
                         if(data.success){
                             alert('添加成功');
-                            window.location.href = '/manager/probationary/course/list';
+                            window.location.href = '/admin/probationary/course/list';
                         }
                         else{
                             alert(data.message);
@@ -202,4 +192,3 @@
             });
         })
     </script>
-@endsection

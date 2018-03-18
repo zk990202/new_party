@@ -32,6 +32,7 @@ use Mockery\Exception;
 
 class ApplicantController extends Controller{
 
+    protected $imgExtension;
     protected $fileExtensions;
     protected $fileUsage = "applicantFile";
     protected $titles;

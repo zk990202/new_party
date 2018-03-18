@@ -1,10 +1,4 @@
-@extends('layouts.app')
 
-@section('css')
-    <link rel="stylesheet" href="/AdminLTE/bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css">
-@endsection
-
-@section('main')
     <section class="content">
         <!-- Small boxes (Stat box) -->
         <div class="row">
@@ -35,11 +29,11 @@
                                 <tr>
                                     <td>
                                         @if(!$course['type'])
-                                            <a href="{{ url('manager/probationary/course/'.$course['id'].'/detail/compulsory') }}">
+                                            <a href="{{ url('admin/probationary/course/'.$course['id'].'/detail/compulsory') }}">
                                                 {{ $course['name'] }}
                                             </a>
                                         @else
-                                            <a href="{{ url('manager/probationary/course/'.$course['id'].'/detail/elective') }}">
+                                            <a href="{{ url('admin/probationary/course/'.$course['id'].'/detail/elective') }}">
                                                 {{ $course['name'] }}
                                             </a>
                                         @endif
@@ -57,11 +51,11 @@
                                     </td>
                                     <td>
                                         @if(!$course['type'])
-                                            <a href="{{ url('manager/probationary/course/'.$course['id'].'/edit/compulsory') }}">
+                                            <a href="{{ url('admin/probationary/course/'.$course['id'].'/edit/compulsory') }}">
                                                 <button type="button" class="btn btn-block btn-info btn-xs">编辑</button>
                                             </a>
                                         @else
-                                            <a href="{{ url('manager/probationary/course/'.$course['id'].'/edit/elective') }}">
+                                            <a href="{{ url('admin/probationary/course/'.$course['id'].'/edit/elective') }}">
                                                 <button type="button" class="btn btn-block btn-info btn-xs">编辑</button>
                                             </a>
                                         @endif
@@ -116,11 +110,7 @@
         </div>
         <!-- Main row -->
     </section>
-@endsection
 
-@section('func')
-    <script src="/AdminLTE/bower_components/datatables.net/js/jquery.dataTables.min.js"></script>
-    <script src="/AdminLTE/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
     <script>
 
         $(function () {
@@ -131,7 +121,7 @@
 
         var deleteCourse = function (id) {
             $.ajax({
-                url: '/manager/probationary/course/' + id + '/delete',
+                url: '/admin/probationary/course/' + id + '/delete',
                 method: 'post',
                 dataType: 'json',
                 success: function (data) {
@@ -147,7 +137,7 @@
 
         var openGradeInput = function(id) {
             $.ajax({
-                url: '/manager/probationary/course/' + id + '/open',
+                url: '/admin/probationary/course/' + id + '/open',
                 method: 'post',
                 data: 'form',
                 dataType : 'json',
@@ -163,7 +153,7 @@
         };
         var closeGradeInput = function(id) {
             $.ajax({
-                url: '/manager/probationary/course/' + id + '/close',
+                url: '/admin/probationary/course/' + id + '/close',
                 method: 'post',
                 data: 'form',
                 dataType : 'json',
@@ -178,4 +168,4 @@
             });
         };
     </script>
-@endsection
+

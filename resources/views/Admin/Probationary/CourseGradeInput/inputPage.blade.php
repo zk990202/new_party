@@ -1,10 +1,4 @@
-@extends('layouts.app')
 
-@section('css')
-    <link rel="stylesheet" href="/AdminLTE/bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css">
-@endsection
-
-@section('main')
     <section class="content">
         <!-- Small boxes (Stat box) -->
         <div class="row">
@@ -14,7 +8,7 @@
                     <div class="box-header with-border">
                         <h3 class="box-title">{{ $train[0]['name'] }} 课程成绩录入 (选择课程后进行对应的成绩录入)</h3>
                     </div>
-                    <form method="POST" action="{{ url('manager/probationary/course-gradeInput/filter') }}">
+                    <form method="POST" action="{{ url('admin/probationary/course-gradeInput/filter') }}">
                         <div class="form-group">
                             <label for="courseName">课程名称</label>
                             <select name="courseId" class="form-control">
@@ -42,11 +36,7 @@
         </div>
         <!-- Main row -->
     </section>
-@endsection
 
-@section('func')
-    <script src="/AdminLTE/bower_components/datatables.net/js/jquery.dataTables.min.js"></script>
-    <script src="/AdminLTE/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
     <script>
 
         $(function () {
@@ -55,4 +45,4 @@
             });
         });
     </script>
-@endsection
+

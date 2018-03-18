@@ -1,10 +1,4 @@
-@extends('layouts.app')
 
-@section('css')
-    <link rel="stylesheet" href="/AdminLTE/bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css">
-@endsection
-
-@section('main')
     <section class="content">
         <!-- Small boxes (Stat box) -->
         <div class="row">
@@ -31,12 +25,12 @@
                                     <td>
                                         {{--这里进行判断，如果toSno不为空，则申诉已被回复，显示的页面不含有文本框--}}
                                         @if($complain['toSno'])
-                                            <a href="{{ url('manager/probationary/complain/'.$complain['id'].'/detail_1') }}">
+                                            <a href="{{ url('admin/probationary/complain/'.$complain['id'].'/detail_1') }}">
                                                 {{ $complain['title'] }}
                                             </a>
                                             {{--未被回复的页面，含有编辑器--}}
                                         @else
-                                            <a href="{{ url('manager/probationary/complain/'.$complain['id'].'/detail') }}">
+                                            <a href="{{ url('admin/probationary/complain/'.$complain['id'].'/detail') }}">
                                                 {{ $complain['title'] }}
                                             </a>
                                         @endif
@@ -86,11 +80,7 @@
         </div>
         <!-- Main row -->
     </section>
-@endsection
 
-@section('func')
-    <script src="/AdminLTE/bower_components/datatables.net/js/jquery.dataTables.min.js"></script>
-    <script src="/AdminLTE/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
     <script>
 
         $(function () {
@@ -100,4 +90,4 @@
         });
 
     </script>
-@endsection
+

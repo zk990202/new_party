@@ -1,10 +1,4 @@
-@extends('layouts.app')
 
-@section('css')
-    <link rel="stylesheet" href="/Trumbowyg/dist/ui/trumbowyg.min.css">
-@endsection
-
-@section('main')
     <section class="content">
 
         <div class="row">
@@ -95,11 +89,7 @@
         <!-- ./row -->
     </section>
     <!-- /.content -->
-@endsection
 
-@section('func')
-    <script src="/Trumbowyg/dist/trumbowyg.js"></script>
-    <script src="/Trumbowyg/dist/plugins/upload/trumbowyg.upload.js"></script>
     <script>
         $(function(){
             // editor
@@ -127,7 +117,7 @@
                 ],
                 plugins: {
                     upload: {
-                        serverPath: '/manager/file',
+                        serverPath: '/admin/file',
                         fileFieldName: 'upload',
                         usage : 'importantFilesImg'
                     }
@@ -136,7 +126,7 @@
             });
 
 //            $.ajax({
-//                url : '/manager/probationary/complain/'+$('#id').val(),
+//                url : '/admin/probationary/complain/'+$('#id').val(),
 //                type: 'GET',
 //                dataType: 'json',
 //                success: function(data){
@@ -161,7 +151,7 @@
                 form.append('content', $('#editor').val());
                 form.append('type', $('#type').val());
                 $.ajax({
-                    url: '/manager/probationary/complain/' + $('#id').val() + '/detail',
+                    url: '/admin/probationary/complain/' + $('#id').val() + '/detail',
                     type: 'POST',
                     data: form,
                     cache: false,
@@ -171,7 +161,7 @@
                     success: function(data){
                         if(data.success){
                             alert('回复成功');
-                            window.location.href = '/manager/probationary/complain';
+                            window.location.href = '/admin/probationary/complain';
                         }
                         else{
                             alert(data.message);
@@ -182,4 +172,4 @@
 
         });
     </script>
-@endsection
+

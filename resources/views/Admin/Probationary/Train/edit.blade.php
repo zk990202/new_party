@@ -1,10 +1,4 @@
-@extends('layouts.app')
 
-@section('css')
-    <link rel="stylesheet" href="/Trumbowyg/dist/ui/trumbowyg.min.css">
-@endsection
-
-@section('main')
     <section class="content">
 
         <div class="row">
@@ -55,11 +49,7 @@
         <!-- ./row -->
     </section>
     <!-- /.content -->
-@endsection
 
-@section('func')
-    <script src="/Trumbowyg/dist/trumbowyg.js"></script>
-    <script src="/Trumbowyg/dist/plugins/upload/trumbowyg.upload.js"></script>
     <script>
         $(function(){
             // editor
@@ -87,7 +77,7 @@
                 ],
                 plugins: {
                     upload: {
-                        serverPath: '/manager/file',
+                        serverPath: '/admin/file',
                         fileFieldName: 'upload',
                         usage : 'probationaryImg'
                     }
@@ -97,7 +87,7 @@
             });
 
             $.ajax({
-                url : '/manager/probationary/train/'+$('#id').val(),
+                url : '/admin/probationary/train/'+$('#id').val(),
                 type: 'GET',
                 dataType: 'json',
                 success: function(data){
@@ -122,7 +112,7 @@
                     data.append('upload', file);
                     data.append("usage", 'probationaryFile');
                     $.ajax({
-                        url: '/manager/file',
+                        url: '/admin/file',
                         type: 'POST',
                         data: data,
                         cache: false,
@@ -143,7 +133,7 @@
                             form.append('filePath', path);
                             form.append('fileName', file_name);
                             $.ajax({
-                                url: '/manager/probationary/train/' + $('#id').val() + '/edit',
+                                url: '/admin/probationary/train/' + $('#id').val() + '/edit',
                                 type: 'POST',
                                 data: form,
                                 cache: false,
@@ -153,7 +143,7 @@
                                 success: function(data){
                                     if(data.success){
                                         alert('修改成功');
-                                        window.location.href = '/manager/probationary/train/' + $('#id').val() + '/edit';
+                                        window.location.href = '/admin/probationary/train/' + $('#id').val() + '/edit';
                                     }
                                     else{
                                         alert(data.message);
@@ -175,7 +165,7 @@
                     form.append('time', $('#time').val());
                     form.append('detail', $('#editor').val());
                     $.ajax({
-                        url: '/manager/probationary/train/' + $('#id').val() + '/edit',
+                        url: '/admin/probationary/train/' + $('#id').val() + '/edit',
                         type: 'POST',
                         data: form,
                         cache: false,
@@ -185,7 +175,7 @@
                         success: function(data){
                             if(data.success){
                                 alert('修改成功');
-                                window.location.href = '/manager/probationary/train/' + $('#id').val() + '/edit';
+                                window.location.href = '/admin/probationary/train/' + $('#id').val() + '/edit';
                             }
                             else{
                                 alert(data.message);
@@ -199,4 +189,3 @@
             });
         })
     </script>
-@endsection

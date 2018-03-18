@@ -122,6 +122,13 @@ Route::group(['middleware' => 'Access'], function (){
         Route::post('{cert_id}/makeup', ['as' => 'api-cert-makeup', 'uses' => 'CertController@makeup']);
     });
 
+    //我的支部
+    Route::group(['prefix' => 'party-branch', 'namespace' => 'Api'], function (){
+        //个人状态
+        Route::get('/personal-status', ['as' => 'api-party-branch-personal-status', 'uses' => 'PartyBranchController@personalStatus'])->middleware('HasToken');
+
+    });
+
 });
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {

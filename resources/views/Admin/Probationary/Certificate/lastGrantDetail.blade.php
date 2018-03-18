@@ -1,10 +1,4 @@
-@extends('layouts.app')
 
-@section('css')
-    <link rel="stylesheet" href="/Trumbowyg/dist/ui/trumbowyg.min.css">
-@endsection
-
-@section('main')
     <section class="content">
 
         <div class="row">
@@ -72,11 +66,7 @@
         <!-- ./row -->
     </section>
     <!-- /.content -->
-@endsection
 
-@section('func')
-    <script src="/Trumbowyg/dist/trumbowyg.js"></script>
-    <script src="/Trumbowyg/dist/plugins/upload/trumbowyg.upload.js"></script>
     <script>
         $(function(){
             // editor
@@ -104,7 +94,7 @@
                 ],
                 plugins: {
                     upload: {
-                        serverPath: '/manager/file',
+                        serverPath: '/admin/file',
                         fileFieldName: 'upload',
                         usage : 'importantFilesImg'
                     }
@@ -113,7 +103,7 @@
             });
 
             $.ajax({
-                url : '/manager/probationary/certificate/last-grant/'+$('#lostId').val(),
+                url : '/admin/probationary/certificate/last-grant/'+$('#lostId').val(),
                 type: 'GET',
                 dataType: 'json',
                 success: function(data){
@@ -140,7 +130,7 @@
                     form.append('lostId', $('#lostId').val());
                     form.append('dealWord', $('#editor').val());
                     $.ajax({
-                        url: '/manager/probationary/certificate/last-grant/' + $('#lostId').val() + '/detail',
+                        url: '/admin/probationary/certificate/last-grant/' + $('#lostId').val() + '/detail',
                         type: 'POST',
                         data: form,
                         cache: false,
@@ -150,7 +140,7 @@
                         success: function(data){
                             if(data.success){
                                 alert('补办成功');
-                                window.location.href = '/manager/probationary/certificate/last-grant';
+                                window.location.href = '/admin/probationary/certificate/last-grant';
                             }
                             else{
                                 alert(data.message);
@@ -168,7 +158,7 @@
                     form.append('lostId', $('#lostId').val());
                     form.append('dealWord', $('#editor').val());
                     $.ajax({
-                        url: '/manager/probationary/certificate/last-grant/' + $('#lostId').val() + '/reject',
+                        url: '/admin/probationary/certificate/last-grant/' + $('#lostId').val() + '/reject',
                         type: 'POST',
                         data: form,
                         cache: false,
@@ -178,7 +168,7 @@
                         success: function (data) {
                             if (data.success) {
                                 alert('驳回成功');
-                                window.location.href = '/manager/probationary/certificate/last-grant';
+                                window.location.href = '/admin/probationary/certificate/last-grant';
                             }
                             else {
                                 alert(data.message);
@@ -190,4 +180,4 @@
 
         });
     </script>
-@endsection
+

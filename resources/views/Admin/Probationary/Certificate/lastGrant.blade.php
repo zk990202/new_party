@@ -1,10 +1,4 @@
-@extends('layouts.app')
 
-@section('css')
-    <link rel="stylesheet" href="/AdminLTE/bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css">
-@endsection
-
-@section('main')
     <section class="content">
         <!-- Small boxes (Stat box) -->
         <div class="row">
@@ -46,7 +40,7 @@
                                     </td>
                                     <td>
                                         @if($certLost['dealStatus'] == 0)
-                                            <a href="{{ url('manager/probationary/certificate/last-grant/'.$certLost['lostId']).'/detail' }}">
+                                            <a href="{{ url('admin/probationary/certificate/last-grant/'.$certLost['lostId']).'/detail' }}">
                                                 <button type="button" class="btn btn-block btn-danger btn-xs">进行处理</button>
                                             </a>
                                         @else
@@ -78,11 +72,7 @@
         </div>
         <!-- Main row -->
     </section>
-@endsection
 
-@section('func')
-    <script src="/AdminLTE/bower_components/datatables.net/js/jquery.dataTables.min.js"></script>
-    <script src="/AdminLTE/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
     <script>
 
         $(function () {
@@ -91,4 +81,4 @@
             });
         });
     </script>
-@endsection
+

@@ -10,22 +10,41 @@ namespace App\Admin\Controllers;
 
 
 use App\Http\Controllers\Controller;
+use App\Http\Service\AdminMenuService;
 use App\Models\Classes;
 use App\Models\College;
 use App\Models\PartyBranch\PartyBranch;
 use App\Models\StudentInfo;
 use App\Models\UserInfo;
+use Encore\Admin\Facades\Admin;
+use Encore\Admin\Layout\Content;
 use Illuminate\Http\Request;
 
 class PartyBranchController extends Controller {
+
+    protected $titles;
+
+    public function __construct()
+    {
+        $this->titles = AdminMenuService::getMenuName();
+    }
+
     /**
      * 支部列表--显示学院及每个学院的支部数
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return Content
      */
     public function pList(){
         $college = College::getAll();
         $branches = PartyBranch::getAllCount($college);
-        return view('Manager.PartyBranch.pList', ['branches' => $branches]);
+        return Admin::content(function (Content $content) use ($branches){
+            // 选填
+            $content->header($this->titles[0] ?? '管理后台');
+            // 选填
+            $content->description($this->titles[1] ?? '');
+            // 填充页面body部分，这里可以填入任何可被渲染的对象
+            $content->body(view('Admin.PartyBranch.pList', ['branches' => $branches]));
+        });
+        //return view('Manager.PartyBranch.pList', ['branches' => $branches]);
     }
 
     /**
