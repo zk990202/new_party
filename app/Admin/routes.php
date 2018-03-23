@@ -10,7 +10,7 @@ Route::group([
     'namespace'     => config('admin.route.namespace'),
     'middleware'    => config('admin.route.middleware'),
 ], function (Router $router) {
-
+    //$router->get('logs', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index');
     $router->get('/', 'HomeController@index');
     /**
      * 数据统计模块，路由为 /admin/statistics/{action}, 命名空间 \App\Http\Controllers\Manager\
