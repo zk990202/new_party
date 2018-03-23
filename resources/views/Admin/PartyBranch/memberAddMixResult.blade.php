@@ -1,39 +1,28 @@
-@extends('layouts.app')
 
-@section('css')
-    <link rel="stylesheet" href="/AdminLTE/bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css">
-@endsection
 
-@section('main')
-    <section class="content">
-        <!-- Small boxes (Stat box) -->
-        <div class="row">
-            <div class="col-xs-12">
-                <div class="box">
-                    <!-- /.box-header -->
-                    <div class="box-header with-border">
-                        <h3 class="box-title">添加支部成员1</h3>
-                    </div>
-                    <div>
-                        <h1>{{ $res }}</h1>
-                    </div>
-                    <div>
-                        <h3>
-                            <a href="{{ url('manager/party-branch/'.$branch[0]['id'].'/member-add-mix?schoolYear='.$schoolYear.'&studentType='.$studentType) }}">返回添加支部成员页面</a>
-                        </h3>
-                    </div>
-                    <!-- /.box-body -->
+<section class="content">
+    <!-- Small boxes (Stat box) -->
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="box">
+                <!-- /.box-header -->
+                <div class="box-header with-border">
+                    <h3 class="box-title">添加支部成员1</h3>
                 </div>
-                <!-- /.box -->
-
+                <div>
+                    <h1>{{ $res }}</h1>
+                </div>
+                <div>
+                    <h3>
+                        <a href="{{ url('admin/party-branch/'.$branch[0]['id'].'/member-add-mix?schoolYear='.$schoolYear.'&studentType='.$studentType) }}">返回添加支部成员页面</a>
+                    </h3>
+                </div>
+                <!-- /.box-body -->
             </div>
-            <!-- /.col -->
-        </div>
-        <!-- Main row -->
-    </section>
-@endsection
+            <!-- /.box -->
 
-@section('func')
-    <script src="/AdminLTE/bower_components/datatables.net/js/jquery.dataTables.min.js"></script>
-    <script src="/AdminLTE/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
-@endsection
+        </div>
+        <!-- /.col -->
+    </div>
+    <!-- Main row -->
+</section>
