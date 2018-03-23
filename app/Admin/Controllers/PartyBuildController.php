@@ -28,7 +28,6 @@ class PartyBuildController extends Controller{
     {
         $this->imgExtension = config('fileUpload.');
         $this->titles = AdminMenuService::getMenuName();
-
     }
 
     /**
