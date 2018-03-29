@@ -157,6 +157,20 @@ class StudentInfo extends Model
     }
 
     /**
+     * 查询正在发展且公示的人员
+     * @param $branch_id
+     * @return array
+     */
+    public static function developSee($branch_id){
+        $res = self::where('partybranch_id', $branch_id)
+            ->where('main_status', 7)
+            ->get()->all();
+        return array_map(function ($studentInfo){
+            return Resources::StudentInfo($studentInfo);
+        }, $res);
+    }
+
+    /**
      * 查询支部团推优+积极分子
      * @param $branch_id
      * @return array

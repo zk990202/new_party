@@ -1,10 +1,4 @@
-@extends('layouts.app')
 
-@section('css')
-    <link rel="stylesheet" href="/AdminLTE/bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css">
-@endsection
-
-@section('main')
     <section class="content">
         <!-- Small boxes (Stat box) -->
         <div class="row">
@@ -15,7 +9,7 @@
                         <h3 class="box-title">{{ $train[0]['name'] }} 结业成绩调整</h3>
                     </div>
                     <div class="box-body">
-                        <form method="POST" action="{{url('manager/probationary/graduation/change')}}" >
+                        <form method="POST" action="{{url('admin/probationary/graduation/change')}}" >
                             <div class="box-body">
                                 <label for="first">基本信息</label>
                                 <table id="example1" class="table table-bordered table-striped">
@@ -172,7 +166,7 @@
                             <input type="hidden" name="sno" value="{{ $entry[0]['sno'] }}">
                             <input type="hidden" name="isAllPassed" value="{{ $entry[0]['isAllPassed']}}">
                             <input type="hidden" name="entryFormId" value="{{ $entry[0]['id'] }}">
-                            <button type="submit" class="btn btn-primary" onclick="if(confirm('确认要提交本页面的成绩列表吗？'))location.href='{{url('manager/probationary/graduation/change')}}'">提交</button>
+                            <button type="submit" class="btn btn-primary" onclick="if(confirm('确认要提交本页面的成绩列表吗？'))location.href='{{url('admin/probationary/graduation/change')}}'">提交</button>
                         </form>
                     </div>
                     <!-- /.box-body -->
@@ -184,11 +178,7 @@
         </div>
         <!-- Main row -->
     </section>
-@endsection
 
-@section('func')
-    <script src="/AdminLTE/bower_components/datatables.net/js/jquery.dataTables.min.js"></script>
-    <script src="/AdminLTE/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
     <script>
 
         $(function () {
@@ -198,4 +188,4 @@
         });
 
     </script>
-@endsection
+

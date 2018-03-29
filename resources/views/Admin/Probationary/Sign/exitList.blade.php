@@ -1,10 +1,4 @@
-@extends('layouts.app')
 
-@section('css')
-    <link rel="stylesheet" href="/AdminLTE/bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css">
-@endsection
-
-@section('main')
     <section class="content">
         <!-- Small boxes (Stat box) -->
         <div class="row">
@@ -85,11 +79,7 @@
         </div>
         <!-- Main row -->
     </section>
-@endsection
 
-@section('func')
-    <script src="/AdminLTE/bower_components/datatables.net/js/jquery.dataTables.min.js"></script>
-    <script src="/AdminLTE/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
     <script>
 
         $(function () {
@@ -99,7 +89,7 @@
         });
         var inCourseChoose = function(id) {
             $.ajax({
-                url: '/manager/probationary/sign/' + id + '/inCourseChoose',
+                url: '/admin/probationary/sign/' + id + '/inCourseChoose',
                 method: 'post',
                 data: 'form',
                 dataType : 'json',
@@ -115,7 +105,7 @@
         };
         var exitCourseChoose = function(id) {
             $.ajax({
-                url: '/manager/probationary/sign/' + id + '/exitCourseChoose',
+                url: '/admin/probationary/sign/' + id + '/exitCourseChoose',
                 method: 'post',
                 data: 'form',
                 dataType : 'json',
@@ -131,7 +121,7 @@
         };
         var deleteEntry = function(id) {
             $.ajax({
-                url: '/manager/probationary/sign/' + id + '/delete',
+                url: '/admin/probationary/sign/' + id + '/delete',
                 method: 'post',
                 data: 'form',
                 dataType : 'json',
@@ -146,4 +136,4 @@
             });
         };
     </script>
-@endsection
+

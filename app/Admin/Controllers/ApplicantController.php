@@ -10,6 +10,7 @@ namespace App\Admin\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Http\Helpers\Resources;
+use App\Http\Service\AdminMenuService;
 use App\Models\Applicant\ArticleList;
 use App\Models\Applicant\CourseList;
 use App\Models\Applicant\EntryForm;
@@ -22,6 +23,8 @@ use App\Models\College;
 use App\Models\Complain;
 use App\Models\ScoresTwenty;
 use App\Models\StudentInfo;
+use Encore\Admin\Facades\Admin;
+use Encore\Admin\Layout\Content;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -29,22 +32,34 @@ use Mockery\Exception;
 
 class ApplicantController extends Controller{
 
+    protected $imgExtension;
     protected $fileExtensions;
     protected $fileUsage = "applicantFile";
+    protected $titles;
 
     public function __construct()
     {
-        $this->fileExtensions = config('fileUpload');
+        $this->imgExtension = config('fileUpload.');
+        $this->titles = AdminMenuService::getMenuName();
     }
 
     //----------------------以下是课程设置部分--------------------------------------------------------------
     /**
      * 课程列表
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return \Encore\Admin\Layout\Content
      */
     public function courseList(){
         $course_arr = CourseList::getAll();
-        return view('Manager.Applicant.Course.list', ['courses' => $course_arr]);
+        return Admin::content(function(Content $content) use ($course_arr){
+            // 选填
+            $content->header($this->titles[0] ?? '管理后台');
+            // 选填
+            $content->description($this->titles[1] ?? '');
+
+            // 填充页面body部分，这里可以填入任何可被渲染的对象
+            $content->body(view('Admin.Applicant.Course.list', ['courses' => $course_arr]));
+        });
+
     }
 
     /**
@@ -67,7 +82,16 @@ class ApplicantController extends Controller{
         $article = ArticleList::getArticleById($id);
 //        dd($article);
         $exercise = ExerciseList::getExerciseById($id);
-        return view('Manager.Applicant.Course.detail', ['courses' => $course, 'articles' => $article, 'exercises' => $exercise]);
+        return Admin::content(function(Content $content) use ($course, $article, $exercise){
+            // 选填
+            $content->header($this->titles[0] ?? '管理后台');
+            // 选填
+            $content->description($this->titles[1] ?? '');
+
+            // 填充页面body部分，这里可以填入任何可被渲染的对象
+            $content->body(view('Admin.Applicant.Course.detail', ['courses' => $course, 'articles' => $article, 'exercises' => $exercise]));
+        });
+
     }
 
     /**
@@ -107,12 +131,20 @@ class ApplicantController extends Controller{
 
     /**
      * @param $id
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return Content
      */
     public function courseEditPage($id){
         $course = CourseList::findOrFail($id);
         $course = Resources::CourseList($course);
-        return view('Manager.Applicant.Course.edit', ['courses' => $course]);
+        return Admin::content(function(Content $content) use ($course){
+            // 选填
+            $content->header($this->titles[0] ?? '管理后台');
+            // 选填
+            $content->description($this->titles[1] ?? '');
+            // 填充页面body部分，这里可以填入任何可被渲染的对象
+            $content->body(view('Admin.Applicant.Course.edit', ['courses' => $course]));
+        });
+
     }
 
     public function getCourseById($id){
@@ -131,12 +163,18 @@ class ApplicantController extends Controller{
 
     /**
      * 文章列表
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return Content
      */
     public function articleList(){
         $article_arr = ArticleList::getAll();
-
-        return view('Manager.Applicant.Article.list', ['articles' => $article_arr]);
+        return Admin::content(function(Content $content) use ($article_arr){
+            // 选填
+            $content->header($this->titles[0] ?? '管理后台');
+            // 选填
+            $content->description($this->titles[1] ?? '');
+            // 填充页面body部分，这里可以填入任何可被渲染的对象
+            $content->body(view('Admin.Applicant.Course.edit', ['articles' => $article_arr]));
+        });
     }
 
     /**
@@ -206,13 +244,20 @@ class ApplicantController extends Controller{
 
     /**
      * @param $id
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return Content
      */
     public function articleEditPage($id){
         $article = ArticleList::findOrFail($id);
         $article = Resources::ArticleList($article);
         $course = CourseList::getCourse();
-        return view('Manager.Applicant.Article.edit', ['articles' => $article, 'courses' => $course]);
+        return Admin::content(function(Content $content) use ($article, $course){
+            // 选填
+            $content->header($this->titles[0] ?? '管理后台');
+            // 选填
+            $content->description($this->titles[1] ?? '');
+            // 填充页面body部分，这里可以填入任何可被渲染的对象
+            $content->body(view('Admin.Applicant.Article.edit', ['articles' => $article, 'courses' => $course]));
+        });
     }
 
     /**
@@ -246,11 +291,18 @@ class ApplicantController extends Controller{
 
     /**
      * @param $course_id
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return Content
      */
     public function articleAddPage($course_id){
         $course = CourseList::getCourseById($course_id);
-        return view('Manager.Applicant.Article.add', ['courses' => $course]);
+        return Admin::content(function(Content $content) use ($course){
+            // 选填
+            $content->header($this->titles[0] ?? '管理后台');
+            // 选填
+            $content->description($this->titles[1] ?? '');
+            // 填充页面body部分，这里可以填入任何可被渲染的对象
+            $content->body(view('Admin.Applicant.Article.add', ['courses' => $course]));
+        });
     }
 
     public function getArticleById($id){
@@ -270,11 +322,18 @@ class ApplicantController extends Controller{
 
     /**
      * 题目列表
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return Content
      */
     public function exerciseList(){
         $exercise_arr = ExerciseList::getAll();
-        return view('Manager.Applicant.Exercise.list', ['exercises' => $exercise_arr]);
+        return Admin::content(function(Content $content) use ($exercise_arr){
+            // 选填
+            $content->header($this->titles[0] ?? '管理后台');
+            // 选填
+            $content->description($this->titles[1] ?? '');
+            // 填充页面body部分，这里可以填入任何可被渲染的对象
+            $content->body(view('Admin.Applicant.Exercise.list', ['exercises' => $exercise_arr]));
+        });
     }
 
     /**
@@ -357,14 +416,21 @@ class ApplicantController extends Controller{
 
     /**
      * @param $id
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return Content
      */
     public function exerciseEditPage($id){
         $exercise = ExerciseList::findOrFail($id);
         $exercise = Resources::ExerciseList($exercise);
         $course = CourseList::getCourse();
         $answer = ExerciseAnswerTransform::getAnswer();
-        return view('Manager.Applicant.Exercise.edit', ['exercises' => $exercise, 'courses' => $course, 'answers' => $answer]);
+        return Admin::content(function(Content $content) use ($exercise, $course, $answer){
+            // 选填
+            $content->header($this->titles[0] ?? '管理后台');
+            // 选填
+            $content->description($this->titles[1] ?? '');
+            // 填充页面body部分，这里可以填入任何可被渲染的对象
+            $content->body(view('Admin.Applicant.Exercise.edit', ['exercises' => $exercise, 'courses' => $course, 'answers' => $answer]));
+        });
     }
 
     /**
@@ -410,12 +476,20 @@ class ApplicantController extends Controller{
 
     /**
      * @param $course_id
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return Content
      */
     public function exerciseAddPage($course_id){
         $course = CourseList::getCourseById($course_id);
         $answer = ExerciseAnswerTransform::getAnswer();
-        return view('Manager.Applicant.Exercise.add', ['courses' => $course, 'answers' => $answer]);
+        return Admin::content(function(Content $content) use ($course, $answer){
+            // 选填
+            $content->header($this->titles[0] ?? '管理后台');
+            // 选填
+            $content->description($this->titles[1] ?? '');
+            // 填充页面body部分，这里可以填入任何可被渲染的对象
+            $content->body(view('Admin.Applicant.Exercise.add', ['courses' => $course, 'answers' => $answer]));
+        });
+
     }
 
     public function getExerciseById($id)
@@ -435,21 +509,35 @@ class ApplicantController extends Controller{
 
     /**
      * 考试列表
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return Content
      */
     public function examList(){
         $exams = TestList::getAll();
-        return view('Manager.Applicant.Exam.list', ['exams' => $exams]);
+        return Admin::content(function(Content $content) use ($exams){
+            // 选填
+            $content->header($this->titles[0] ?? '管理后台');
+            // 选填
+            $content->description($this->titles[1] ?? '');
+            // 填充页面body部分，这里可以填入任何可被渲染的对象
+            $content->body(view('Admin.Applicant.Exam.list', ['exams' => $exams]));
+        });
     }
 
     /**
      * 考试详情
      * @param $id
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return Content
      */
     public function examDetail($id){
         $exam = TestList::getExamById($id);
-        return view('Manager.Applicant.Exam.detail', ['exam' => $exam]);
+        return Admin::content(function(Content $content) use ($exam){
+            // 选填
+            $content->header($this->titles[0] ?? '管理后台');
+            // 选填
+            $content->description($this->titles[1] ?? '');
+            // 填充页面body部分，这里可以填入任何可被渲染的对象
+            $content->body(view('Admin.Applicant.Exam.detail', ['exams' => $exam]));
+        });
     }
 
     /**
@@ -527,12 +615,19 @@ class ApplicantController extends Controller{
 
     /**
      * @param $id
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return Content
      */
     public function examEditPage($id){
         $exam = TestList::findOrFail($id);
         $exam = Resources::TestList($exam);
-        return view('Manager.Applicant.Exam.edit', ['exam' => $exam]);
+        return Admin::content(function(Content $content) use ($exam){
+            // 选填
+            $content->header($this->titles[0] ?? '管理后台');
+            // 选填
+            $content->description($this->titles[1] ?? '');
+            // 填充页面body部分，这里可以填入任何可被渲染的对象
+            $content->body(view('Admin.Applicant.Exam.edit', ['exams' => $exam]));
+        });
     }
 
     /**
@@ -570,10 +665,17 @@ class ApplicantController extends Controller{
     }
 
     /**
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return Content
      */
     public function examAddPage(){
-        return view('Manager.Applicant.Exam.add');
+        return Admin::content(function(Content $content) {
+            // 选填
+            $content->header($this->titles[0] ?? '管理后台');
+            // 选填
+            $content->description($this->titles[1] ?? '');
+            // 填充页面body部分，这里可以填入任何可被渲染的对象
+            $content->body(view('Admin.Applicant.Exam.add'));
+        });
     }
 
     /**
@@ -613,29 +715,50 @@ class ApplicantController extends Controller{
     //-------------------------------以下是报名情况模块-----------------------------------------------------
     /**
      * 报名列表
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return Content
      */
     public function signList(){
         $signs = EntryForm::getAllSign();
-        return view('Manager.Applicant.Sign.list', ['signs' => $signs]);
+        return Admin::content(function(Content $content) use ($signs) {
+            // 选填
+            $content->header($this->titles[0] ?? '管理后台');
+            // 选填
+            $content->description($this->titles[1] ?? '');
+            // 填充页面body部分，这里可以填入任何可被渲染的对象
+            $content->body(view('Admin.Applicant.Sign.list',  ['signs' => $signs]));
+        });
     }
 
     /**
      * 退考列表
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return Content
      */
     public function signExit(){
         $signs = EntryForm::getSignExit();
-        return view('Manager.Applicant.Sign.exit', ['signs' => $signs]);
+        return Admin::content(function(Content $content) use ($signs) {
+            // 选填
+            $content->header($this->titles[0] ?? '管理后台');
+            // 选填
+            $content->description($this->titles[1] ?? '');
+            // 填充页面body部分，这里可以填入任何可被渲染的对象
+            $content->body(view('Admin.Applicant.Sign.exit',  ['signs' => $signs]));
+        });
     }
 
     /**
      * 补考报名页面
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return Content
      */
     public function signMakeupPage(){
         $signs = EntryForm::getAllSign();
-        return view('Manager.Applicant.Sign.makeup', ['signs' => $signs]);
+        return Admin::content(function(Content $content) use ($signs) {
+            // 选填
+            $content->header($this->titles[0] ?? '管理后台');
+            // 选填
+            $content->description($this->titles[1] ?? '');
+            // 填充页面body部分，这里可以填入任何可被渲染的对象
+            $content->body(view('Admin.Applicant.Sign.makeup',  ['signs' => $signs]));
+        });
     }
 
     /**
@@ -697,18 +820,25 @@ class ApplicantController extends Controller{
     //--------------------以下是结业成绩统计模块--------------------------------------------------
     /**
      * 成绩筛选界面
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return Content
      */
     public function gradeListPage(){
         $exams = TestList::getAll();
         $colleges = College::getAll();
-        return view('Manager.Applicant.Grade.listPage', ['exams' => $exams, 'colleges' => $colleges]);
+        return Admin::content(function(Content $content) use ($exams, $colleges) {
+            // 选填
+            $content->header($this->titles[0] ?? '管理后台');
+            // 选填
+            $content->description($this->titles[1] ?? '');
+            // 填充页面body部分，这里可以填入任何可被渲染的对象
+            $content->body(view('Admin.Applicant.Grade.listPage',  ['exams' => $exams, 'colleges' => $colleges]));
+        });
     }
 
     /**
      * 筛选结果
      * @param Request $request
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return Content
      */
     public function gradeList(Request $request){
         $testId = $request->input('testId');
@@ -716,7 +846,14 @@ class ApplicantController extends Controller{
 //        dd($college);
         $res = EntryForm::getGrade($testId, $college);
 //        dd($res);
-        return view('Manager.Applicant.Grade.list', ['grades' => $res]);
+        return Admin::content(function(Content $content) use ($res) {
+            // 选填
+            $content->header($this->titles[0] ?? '管理后台');
+            // 选填
+            $content->description($this->titles[1] ?? '');
+            // 填充页面body部分，这里可以填入任何可被渲染的对象
+            $content->body(view('Admin.Applicant.Grade.list',  ['grades' => $res]));
+        });
     }
 
     //------------------------以下是成绩录入页面---------------------------------------------------------
@@ -724,7 +861,14 @@ class ApplicantController extends Controller{
         $test = TestList::gradeInput();
         $testId = $test[0]['id'];
         $entries = EntryForm::gradeInput($testId);
-        return view('Manager.Applicant.gradeInput.GradeInput', ['test' => $test, 'entries' => $entries]);
+        return Admin::content(function(Content $content) use ($test, $entries) {
+            // 选填
+            $content->header($this->titles[0] ?? '管理后台');
+            // 选填
+            $content->description($this->titles[1] ?? '');
+            // 填充页面body部分，这里可以填入任何可被渲染的对象
+            $content->body(view('Admin.Applicant.GradeInput.gradeInput',  ['test' => $test, 'entries' => $entries]));
+        });
     }
 
     public function gradeInput(Request $request){
@@ -737,24 +881,39 @@ class ApplicantController extends Controller{
         for ($i = 0; $i < count($id); $i++){
             EntryForm::gradeInputUpdate($i, $id, $practiceGrade, $articleGrade, $status);
         }
-        return view('Manager.Applicant.GradeInput.result');
+
+        return Admin::content(function(Content $content) {
+            // 选填
+            $content->header($this->titles[0] ?? '管理后台');
+            // 选填
+            $content->description($this->titles[1] ?? '');
+            // 填充页面body部分，这里可以填入任何可被渲染的对象
+            $content->body(view('Admin.Applicant.GradeInput.result'));
+        });
     }
 
     //------------------------证书管理------------------------------------------------------------------
     /**
      * 证书筛选界面
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return Content
      */
     public function certificateListPage(){
         $exams = TestList::getAll();
         $colleges = College::getAll();
-        return view('Manager.Applicant.Certificate.listPage', ['exams' => $exams, 'colleges' => $colleges]);
+        return Admin::content(function(Content $content) use ($exams, $colleges) {
+            // 选填
+            $content->header($this->titles[0] ?? '管理后台');
+            // 选填
+            $content->description($this->titles[1] ?? '');
+            // 填充页面body部分，这里可以填入任何可被渲染的对象
+            $content->body(view('Admin.Applicant.Certificate.listPage',  ['exams' => $exams, 'colleges' => $colleges]));
+        });
     }
 
     /**
      * 证书筛选结果
      * @param Request $request
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return Content
      */
     public function certificateList(Request $request){
         $testId = $request->input('testId');
@@ -763,36 +922,58 @@ class ApplicantController extends Controller{
         $min = EntryForm::getMinEntryId($testId);
         $res = Cert::getCert($max, $min, $college);
 //        dd($res);
-        return view('Manager.Applicant.Certificate.list', ['certificates' => $res]);
+
+        return Admin::content(function(Content $content) use ($res) {
+            // 选填
+            $content->header($this->titles[0] ?? '管理后台');
+            // 选填
+            $content->description($this->titles[1] ?? '');
+            // 填充页面body部分，这里可以填入任何可被渲染的对象
+            $content->body(view('Admin.Applicant.Certificate.list', ['certificates' => $res]));
+        });
     }
 
     /**
      * 筛选考试合格但未发放证书的学生
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return Content
      */
     public function certificateGrantPage(){
         $exams = TestList::getAll();
         $colleges = College::getAll();
-        return view('Manager.Applicant.Certificate.grantPage', ['exams' => $exams, 'colleges' => $colleges]);
+        return Admin::content(function(Content $content) use ($exams, $colleges) {
+            // 选填
+            $content->header($this->titles[0] ?? '管理后台');
+            // 选填
+            $content->description($this->titles[1] ?? '');
+            // 填充页面body部分，这里可以填入任何可被渲染的对象
+            $content->body(view('Admin.Applicant.Certificate.grantPage', ['exams' => $exams, 'colleges' => $colleges]));
+        });
     }
 
     /**
      * 筛选结果
      * @param Request $request
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return Content
      */
     public function certificateGrant(Request $request){
         $testId = $request->input('testId');
         $college = $request->input('college');
         $res = EntryForm::getCert($testId, $college);
 //        dd($res);
-        return view('Manager.Applicant.Certificate.grant', ['certificates' => $res]);
+        return Admin::content(function(Content $content) use ($res) {
+            // 选填
+            $content->header($this->titles[0] ?? '管理后台');
+            // 选填
+            $content->description($this->titles[1] ?? '');
+            // 填充页面body部分，这里可以填入任何可被渲染的对象
+            $content->body(view('Admin.Applicant.Certificate.grant', ['certificates' => $res]));
+        });
     }
 
     /**
      * 进行证书发放的后台逻辑操作
      * @param Request $request
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return Content
      */
     public function certificateGrantResult(Request $request){
         $data = $request->all();
@@ -817,21 +998,44 @@ class ApplicantController extends Controller{
         }else{
             $res_type = 0;
         }
-        return view('Manager.Applicant.Certificate.grantResult', ['res_type' => $res_type]);
+
+        return Admin::content(function(Content $content) use ($res_type) {
+            // 选填
+            $content->header($this->titles[0] ?? '管理后台');
+            // 选填
+            $content->description($this->titles[1] ?? '');
+            // 填充页面body部分，这里可以填入任何可被渲染的对象
+            $content->body(view('Admin.Applicant.Certificate.grantResult', ['res_type' => $res_type]));
+        });
     }
 
     /**
      * 申请补办证书的列表
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return Content
      */
     public function certificateLastGrant(){
         $certLost = CertLost::getCertLost();
-        return view('Manager.Applicant.Certificate.lastGrant', ['certLosts' => $certLost]);
+
+        return Admin::content(function(Content $content) use ($certLost) {
+            // 选填
+            $content->header($this->titles[0] ?? '管理后台');
+            // 选填
+            $content->description($this->titles[1] ?? '');
+            // 填充页面body部分，这里可以填入任何可被渲染的对象
+            $content->body(view('Admin.Applicant.Certificate.lastGrant',['certLosts' => $certLost]));
+        });
     }
 
     public function certificateLastGrantDetailPage($id){
         $certLost = CertLost::getCertLostById($id);
-        return view('Manager.Applicant.Certificate.lastGrantDetail', ['certLost' => $certLost]);
+        return Admin::content(function(Content $content) use ($certLost) {
+            // 选填
+            $content->header($this->titles[0] ?? '管理后台');
+            // 选填
+            $content->description($this->titles[1] ?? '');
+            // 填充页面body部分，这里可以填入任何可被渲染的对象
+            $content->body(view('Admin.Applicant.Certificate.lastGrantDetail',['certLosts' => $certLost]));
+        });
     }
 
     /**
@@ -902,11 +1106,19 @@ class ApplicantController extends Controller{
     //--------------------以下是申诉管理部分--------------------------------------------------------------
     /**
      * 申诉列表
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return Content
      */
     public function complainList(){
         $complains = Complain::getAll();
-        return view('Manager.Applicant.Complain.list', ['complains' => $complains]);
+
+        return Admin::content(function(Content $content) use ($complains) {
+            // 选填
+            $content->header($this->titles[0] ?? '管理后台');
+            // 选填
+            $content->description($this->titles[1] ?? '');
+            // 填充页面body部分，这里可以填入任何可被渲染的对象
+            $content->body(view('Admin.Applicant.Complain.list',['complains' => $complains]));
+        });
     }
     /*
      * 新党建因为部分逻辑修改，可能会导致部分已回复的申诉显示为未回复，只需再提交一次即可解决
@@ -917,7 +1129,7 @@ class ApplicantController extends Controller{
     /**
      * 展示申诉还未回复的页面，含编辑器
      * @param $id
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return Content
      */
     public function complainDetailPage($id){
         $complain = Complain::getComplainById($id);
@@ -925,13 +1137,21 @@ class ApplicantController extends Controller{
         $testId = $complain[0]['testId'];
         $grade = EntryForm::getGradeBySnoAndTestId($sno, $testId);
 //        dd($grade);
-        return view('Manager.Applicant.Complain.detail', ['complain' => $complain, 'grade' => $grade]);
+
+        return Admin::content(function(Content $content) use ($complain, $grade) {
+            // 选填
+            $content->header($this->titles[0] ?? '管理后台');
+            // 选填
+            $content->description($this->titles[1] ?? '');
+            // 填充页面body部分，这里可以填入任何可被渲染的对象
+            $content->body(view('Admin.Applicant.Complain.detail',['complain' => $complain, 'grade' => $grade]));
+        });
     }
 
     /**
      * 展示申诉已回复的页面
      * @param $id
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return Content
      */
     public function complainDetailPage_1($id){
         $complain = Complain::getComplainById($id);
@@ -939,7 +1159,14 @@ class ApplicantController extends Controller{
         $testId = $complain[0]['testId'];
         $grade = EntryForm::getGradeBySnoAndTestId($sno, $testId);
         $reply = Complain::getReply($id);
-        return view('Manager.Applicant.Complain.detail_1', ['complain' => $complain, 'grade' => $grade, 'reply' => $reply]);
+        return Admin::content(function(Content $content) use ($complain, $grade, $reply) {
+            // 选填
+            $content->header($this->titles[0] ?? '管理后台');
+            // 选填
+            $content->description($this->titles[1] ?? '');
+            // 填充页面body部分，这里可以填入任何可被渲染的对象
+            $content->body(view('Admin.Applicant.Complain.detail_1', ['complain' => $complain, 'grade' => $grade, 'reply' => $reply]));
+        });
     }
 
     /**
@@ -983,23 +1210,44 @@ class ApplicantController extends Controller{
     //---------------------------作弊+违纪--------------------------------------------------------------------------
     public function cheatListPage(){
         $exams = TestList::getAll();
-        return view('Manager.Applicant.Cheat.listPage', ['exams' => $exams]);
+        return Admin::content(function(Content $content) use ($exams) {
+            // 选填
+            $content->header($this->titles[0] ?? '管理后台');
+            // 选填
+            $content->description($this->titles[1] ?? '');
+            // 填充页面body部分，这里可以填入任何可被渲染的对象
+            $content->body(view('Admin.Applicant.Cheat.listPage', ['exams' => $exams]));
+        });
     }
 
     public function cheatList(Request $request){
         $testId = $request->input('testId');
         $cheats = EntryForm::getInCheat($testId);
-        return view('Manager.Applicant.Cheat.list', ['cheats' => $cheats]);
+        return Admin::content(function(Content $content) use ($cheats) {
+            // 选填
+            $content->header($this->titles[0] ?? '管理后台');
+            // 选填
+            $content->description($this->titles[1] ?? '');
+            // 填充页面body部分，这里可以填入任何可被渲染的对象
+            $content->body(view('Admin.Applicant.Cheat.list', ['cheats' => $cheats]));
+        });
     }
 
     //----------------------------被锁人员---------------------------------------------------------------------
     /**
      * 被锁人员列表
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return Content
      */
     public function lockedList(){
         $locks = StudentInfo::getLocked();
-        return view('Manager.Applicant.Locked.list', ['locks' => $locks]);
+        return Admin::content(function(Content $content) use ($locks) {
+            // 选填
+            $content->header($this->titles[0] ?? '管理后台');
+            // 选填
+            $content->description($this->titles[1] ?? '');
+            // 填充页面body部分，这里可以填入任何可被渲染的对象
+            $content->body(view('Admin.Applicant.Locked.list', ['locks' => $locks]));
+        });
     }
 
     /**
@@ -1019,7 +1267,14 @@ class ApplicantController extends Controller{
     //-----------------------------被清人员---------------------------------------------------------------------------
     public function clearList(){
         $clears = StudentInfo::getClear();
-        return view('Manager.Applicant.Clear.list', ['clears' => $clears]);
+        return Admin::content(function(Content $content) use ($clears) {
+            // 选填
+            $content->header($this->titles[0] ?? '管理后台');
+            // 选填
+            $content->description($this->titles[1] ?? '');
+            // 填充页面body部分，这里可以填入任何可被渲染的对象
+            $content->body(view('Admin.Applicant.Clear.list', ['clears' => $clears]));
+        });
     }
 
     public function unclear($id){

@@ -10,6 +10,7 @@ namespace App\Admin\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Http\Helpers\Resources;
+use App\Http\Service\AdminMenuService;
 use App\Models\Cert;
 use App\Models\CertLost;
 use App\Models\College;
@@ -20,6 +21,8 @@ use App\Models\Probationary\CourseList;
 use App\Models\Probationary\EntryForm;
 use App\Models\Probationary\TrainList;
 use App\Models\StudentInfo;
+use Encore\Admin\Facades\Admin;
+use Encore\Admin\Layout\Content;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Mockery\Exception;
@@ -28,39 +31,66 @@ use phpDocumentor\Reflection\Types\Null_;
 class ProbationaryController extends Controller{
     protected $fileExtension;
     protected $fileUsage = 'probationaryFile';
+    protected $titles;
 
     public function __construct(){
+        $this->titles = AdminMenuService::getMenuName();
         $this->fileExtension = config('fileUpload');
     }
 
     //-----------------------------以下是课程设置部分---------------------------------------------------
+
     /**
      * 培训列表
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return Content
      */
     public function trainList(){
         $trains = TrainList::getAll();
-        return view('Manager.Probationary.Train.list', ['trains' => $trains]);
+        return Admin::content(function (Content $content) use ($trains){
+            // 选填
+            $content->header($this->titles[0] ?? '管理后台');
+            // 选填
+            $content->description($this->titles[1] ?? '');
+            // 填充页面body部分，这里可以填入任何可被渲染的对象
+            $content->body(view('Admin.Probationary.Train.list', ['trains' => $trains]));
+        });
+        //return view('Manager.Probationary.Train.list', ['trains' => $trains]);
     }
 
     /**
      * 培训详情
      * @param $id
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return Content
      */
     public function trainDetail($id){
         $train = TrainList::getOneTrain($id);
-        return view('Manager.Probationary.Train.detail', ['train' => $train]);
+        return Admin::content(function (Content $content) use ($train){
+            // 选填
+            $content->header($this->titles[0] ?? '管理后台');
+            // 选填
+            $content->description($this->titles[1] ?? '');
+            // 填充页面body部分，这里可以填入任何可被渲染的对象
+            $content->body(view('Admin.Probationary.Train.detail', ['train' => $train]));
+        });
+        //return view('Manager.Probationary.Train.detail', ['train' => $train]);
     }
 
     /**
      * 编辑考试展示页面
      * @param $id
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return Content
      */
     public function trainEditPage($id){
         $train = TrainList::getOneTrain($id);
-        return view('Manager.Probationary.Train.edit', ['train' => $train[0]]);
+        return Admin::content(function (Content $content) use ($train){
+            // 选填
+            $content->header($this->titles[0] ?? '管理后台');
+            // 选填
+            $content->description($this->titles[1] ?? '');
+            // 填充页面body部分，这里可以填入任何可被渲染的对象
+            $content->body(view('Admin.Probationary.Train.edit', ['train' => $train[0]]));
+        });
+        //return view('Manager.Probationary.Train.edit', ['train' => $train[0]]);
     }
 
     /**
@@ -107,11 +137,19 @@ class ProbationaryController extends Controller{
     /**
      * 修改状态展示页面
      * @param $id
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return Content
      */
     public function trainStatusPage($id){
         $train = TrainList::getOneTrain($id);
-        return view('Manager.Probationary.Train.status', ['train' => $train[0]]);
+        return Admin::content(function (Content $content) use ($train){
+            // 选填
+            $content->header($this->titles[0] ?? '管理后台');
+            // 选填
+            $content->description($this->titles[1] ?? '');
+            // 填充页面body部分，这里可以填入任何可被渲染的对象
+            $content->body(view('Admin.Probationary.Train.status', ['train' => $train[0]]));
+        });
+        //return view('Manager.Probationary.Train.status', ['train' => $train[0]]);
     }
 
     /**
@@ -280,10 +318,18 @@ class ProbationaryController extends Controller{
 
     /**
      * 培训添加前端页面
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return Content
      */
     public function trainAddPage(){
-        return view('Manager.Probationary.Train.add');
+        return Admin::content(function (Content $content){
+            // 选填
+            $content->header($this->titles[0] ?? '管理后台');
+            // 选填
+            $content->description($this->titles[1] ?? '');
+            // 填充页面body部分，这里可以填入任何可被渲染的对象
+            $content->body(view('Admin.Probationary.Train.add'));
+        });
+        //return view('Manager.Probationary.Train.add');
     }
 
     /**
@@ -342,54 +388,95 @@ class ProbationaryController extends Controller{
     }
 
     //-------------------------------以下是课程管理部分------------------------------------------
+
     /**
      * 课程筛选页面
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return Content
      */
     public function courseListPage(){
         $trains = TrainList::getAll();
-        return view('Manager.Probationary.Course.listPage', ['trains' => $trains]);
+        return Admin::content(function (Content $content) use ($trains){
+            // 选填
+            $content->header($this->titles[0] ?? '管理后台');
+            // 选填
+            $content->description($this->titles[1] ?? '');
+            // 填充页面body部分，这里可以填入任何可被渲染的对象
+            $content->body(view('Admin.Probationary.Course.listPage', ['trains' => $trains]));
+        });
+        //return view('Manager.Probationary.Course.listPage', ['trains' => $trains]);
     }
 
     /**
      * 课程筛选结果页面
      * @param Request $request
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return Content
      */
     public function courseList(Request $request){
         $data = $request->all();
         $courses = CourseList::getSomeCourse($data);
-        return view('Manager.Probationary.Course.list', ['courses' => $courses]);
+        return Admin::content(function (Content $content) use ($courses){
+            // 选填
+            $content->header($this->titles[0] ?? '管理后台');
+            // 选填
+            $content->description($this->titles[1] ?? '');
+            // 填充页面body部分，这里可以填入任何可被渲染的对象
+            $content->body(view('Admin.Probationary.Course.list', ['courses' => $courses]));
+        });
+       // return view('Manager.Probationary.Course.list', ['courses' => $courses]);
     }
 
     /**
      * 必修课详情
      * @param $id
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return Content
      */
     public function courseCompulsoryDetail($id){
         $course = CourseList::getCourseById($id);
-        return view('Manager.Probationary.Course.detailCompulsory', ['course' => $course[0]]);
+        return Admin::content(function (Content $content) use ($course){
+            // 选填
+            $content->header($this->titles[0] ?? '管理后台');
+            // 选填
+            $content->description($this->titles[1] ?? '');
+            // 填充页面body部分，这里可以填入任何可被渲染的对象
+            $content->body(view('Admin.Probationary.Course.detailCompulsory', ['course' => $course[0]]));
+        });
+        //return view('Manager.Probationary.Course.detailCompulsory', ['course' => $course[0]]);
     }
 
     /**
      * 选修课详情
      * @param $id
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return Content
      */
     public function courseElectiveDetail($id){
         $course = CourseList::getCourseById($id);
-        return view('Manager.Probationary.Course.detailElective', ['course' => $course[0]]);
+        return Admin::content(function (Content $content) use ($course){
+            // 选填
+            $content->header($this->titles[0] ?? '管理后台');
+            // 选填
+            $content->description($this->titles[1] ?? '');
+            // 填充页面body部分，这里可以填入任何可被渲染的对象
+            $content->body(view('Admin.Probationary.Course.detailElective', ['course' => $course[0]]));
+        });
+        //return view('Manager.Probationary.Course.detailElective', ['course' => $course[0]]);
     }
 
     /**
      * 必修课编辑前端页面
      * @param $id
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return Content
      */
     public function courseCompulsoryEditPage($id){
         $course = CourseList::getCourseById($id);
-        return view('Manager.Probationary.Course.editCompulsory', ['course' => $course[0]]);
+        return Admin::content(function (Content $content) use ($course){
+            // 选填
+            $content->header($this->titles[0] ?? '管理后台');
+            // 选填
+            $content->description($this->titles[1] ?? '');
+            // 填充页面body部分，这里可以填入任何可被渲染的对象
+            $content->body(view('Admin.Probationary.Course.editCompulsory', ['course' => $course[0]]));
+        });
+        //return view('Manager.Probationary.Course.editCompulsory', ['course' => $course[0]]);
     }
 
     /**
@@ -425,13 +512,22 @@ class ProbationaryController extends Controller{
 
     /**
      * 选修课编辑前端
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @param $id
+     * @return Content
      */
     public function courseElectiveEditPage($id){
         $course = CourseList::getCourseById($id);
         $trains = TrainList::getNotEndTrain();
         $files = CommonFiles::getAddElective();
-        return view('Manager.Probationary.Course.editElective', ['course' => $course[0], 'trains' => $trains, 'files' => $files]);
+        return Admin::content(function (Content $content) use ($course, $trains, $files){
+            // 选填
+            $content->header($this->titles[0] ?? '管理后台');
+            // 选填
+            $content->description($this->titles[1] ?? '');
+            // 填充页面body部分，这里可以填入任何可被渲染的对象
+            $content->body(view('Admin.Probationary.Course.editElective', ['course' => $course[0], 'trains' => $trains, 'files' => $files]));
+        });
+        //return view('Manager.Probationary.Course.editElective', ['course' => $course[0], 'trains' => $trains, 'files' => $files]);
     }
 
     /**
@@ -569,11 +665,19 @@ class ProbationaryController extends Controller{
 
     /**
      * 添加必须课前端页面
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return Content
      */
     public function courseAddCompulsoryPage(){
         $trains = TrainList::getNotEndTrain();
-        return view('Manager.Probationary.Course.addCompulsory', ['trains' => $trains]);
+        return Admin::content(function (Content $content) use ($trains){
+            // 选填
+            $content->header($this->titles[0] ?? '管理后台');
+            // 选填
+            $content->description($this->titles[1] ?? '');
+            // 填充页面body部分，这里可以填入任何可被渲染的对象
+            $content->body(view('Admin.Probationary.Course.addCompulsory', ['trains' => $trains]));
+        });
+        //return view('Manager.Probationary.Course.addCompulsory', ['trains' => $trains]);
     }
 
     /**
@@ -620,12 +724,20 @@ class ProbationaryController extends Controller{
 
     /**
      * 添加选修课前端页面
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return Content
      */
     public function courseAddElectivePage(){
         $trains = TrainList::getNotEndTrain();
         $files = CommonFiles::getAddElective();
-        return view('Manager.Probationary.Course.addElective', ['trains' => $trains, 'files' => $files]);
+        return Admin::content(function (Content $content) use ($trains, $files){
+            // 选填
+            $content->header($this->titles[0] ?? '管理后台');
+            // 选填
+            $content->description($this->titles[1] ?? '');
+            // 填充页面body部分，这里可以填入任何可被渲染的对象
+            $content->body(view('Admin.Probationary.Course.addElective', ['trains' => $trains, 'files' => $files]));
+        });
+        //return view('Manager.Probationary.Course.addElective', ['trains' => $trains, 'files' => $files]);
     }
 
     /**
@@ -685,9 +797,10 @@ class ProbationaryController extends Controller{
 
 
     //---------------------------------以下是报名管理部分-----------------------------------------------
+
     /**
      * 报名列表
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return Content
      */
     public function signList(){
         $train = TrainList::getNotEndTrain();
@@ -698,12 +811,20 @@ class ProbationaryController extends Controller{
         if ($train == null){
             $train = [['name' => '无']];
         }
-        return view('Manager.Probationary.Sign.list', ['signs' => $signs, 'train' => $train]);
+        return Admin::content(function (Content $content) use ($signs, $train){
+            // 选填
+            $content->header($this->titles[0] ?? '管理后台');
+            // 选填
+            $content->description($this->titles[1] ?? '');
+            // 填充页面body部分，这里可以填入任何可被渲染的对象
+            $content->body(view('Admin.Probationary.Sign.list', ['signs' => $signs, 'train' => $train]));
+        });
+        //return view('Manager.Probationary.Sign.list', ['signs' => $signs, 'train' => $train]);
     }
 
     /**
      * 退报名列表
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return Content
      */
     public function signExitList(){
         $train = TrainList::getNotEndTrain();
@@ -714,7 +835,15 @@ class ProbationaryController extends Controller{
         if ($train == null){
             $train = [['name' => '无']];
         }
-        return view('Manager.Probationary.Sign.exitList', ['signs' => $signs, 'train' => $train]);
+        return Admin::content(function (Content $content) use ($signs, $train){
+            // 选填
+            $content->header($this->titles[0] ?? '管理后台');
+            // 选填
+            $content->description($this->titles[1] ?? '');
+            // 填充页面body部分，这里可以填入任何可被渲染的对象
+            $content->body(view('Admin.Probationary.Sign.exitList', ['signs' => $signs, 'train' => $train]));
+        });
+        //return view('Manager.Probationary.Sign.exitList', ['signs' => $signs, 'train' => $train]);
     }
 
     /**
@@ -779,11 +908,19 @@ class ProbationaryController extends Controller{
 
     /**
      * 补考报名前端
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return Content
      */
     public function signMakeupPage(){
         $train = TrainList::getNotEndTrain();
-        return view('Manager.Probationary.Sign.makeup', ['trains' => $train]);
+        return Admin::content(function (Content $content) use ($train){
+            // 选填
+            $content->header($this->titles[0] ?? '管理后台');
+            // 选填
+            $content->description($this->titles[1] ?? '');
+            // 填充页面body部分，这里可以填入任何可被渲染的对象
+            $content->body(view('Admin.Probationary.Sign.makeup', ['trains' => $train]));
+        });
+        //return view('Manager.Probationary.Sign.makeup', ['trains' => $train]);
     }
 
     /**
@@ -835,21 +972,30 @@ class ProbationaryController extends Controller{
     }
 
     //-------------------------------以下是选课管理部分------------------------------------------
+
     /**
      * 选课管理筛选页面
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return Content
      */
     public function chooseCourseListPage(){
         $train = TrainList::getNotEndTrain();
         $courses = CourseList::getByTrainId($train[0]['id']);
         $colleges = College::getAll();
-        return view('Manager.Probationary.ChooseCourse.listPage', ['courses' => $courses, 'colleges' => $colleges]);
+        return Admin::content(function (Content $content) use ($colleges, $courses){
+            // 选填
+            $content->header($this->titles[0] ?? '管理后台');
+            // 选填
+            $content->description($this->titles[1] ?? '');
+            // 填充页面body部分，这里可以填入任何可被渲染的对象
+            $content->body(view('Admin.Probationary.ChooseCourse.listPage', ['courses' => $courses, 'colleges' => $colleges]));
+        });
+        //return view('Manager.Probationary.ChooseCourse.listPage', ['courses' => $courses, 'colleges' => $colleges]);
     }
 
     /**
      * 选课管理筛选结果
      * @param Request $request
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return Content
      */
     public function chooseCourseList(Request $request){
         $train = TrainList::getNotEndTrain();
@@ -858,7 +1004,15 @@ class ProbationaryController extends Controller{
         }
         $data = $request->all();
         $res = ChildEntryForm::getByCourseAndCollege($data);
-        return view('Manager.Probationary.ChooseCourse.list', ['entries' => $res, 'train' => $train]);
+        return Admin::content(function (Content $content) use ($res, $train){
+            // 选填
+            $content->header($this->titles[0] ?? '管理后台');
+            // 选填
+            $content->description($this->titles[1] ?? '');
+            // 填充页面body部分，这里可以填入任何可被渲染的对象
+            $content->body(view('Admin.Probationary.ChooseCourse.list', ['entries' => $res, 'train' => $train]));
+        });
+        //return view('Manager.Probationary.ChooseCourse.list', ['entries' => $res, 'train' => $train]);
     }
 
     /**
@@ -923,12 +1077,20 @@ class ProbationaryController extends Controller{
 
     /**
      * 补选课页面
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return Content
      */
     public function chooseCourseMakeupPage(){
         $train = TrainList::getNotEndTrain();
         $courses = CourseList::getByTrainId($train[0]['id']);
-        return view('Manager.Probationary.ChooseCourse.makeup', ['train' => $train, 'courses' => $courses]);
+        return Admin::content(function (Content $content) use ($train, $courses){
+            // 选填
+            $content->header($this->titles[0] ?? '管理后台');
+            // 选填
+            $content->description($this->titles[1] ?? '');
+            // 填充页面body部分，这里可以填入任何可被渲染的对象
+            $content->body(view('Admin.Probationary.ChooseCourse.makeup', ['train' => $train, 'courses' => $courses]));
+        });
+        //return view('Manager.Probationary.ChooseCourse.makeup', ['train' => $train, 'courses' => $courses]);
     }
 
     //补选课后台逻辑
@@ -1016,45 +1178,71 @@ class ProbationaryController extends Controller{
     }
 
     //----------------------------以下是课程成绩录入模块-----------------------------------------
+
     /**
      * 课程成绩录入前对课程进行筛选
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return Content
      */
     public function courseGradeInputPage1(){
         $train = TrainList::getNotEndTrain();
         $courses = CourseList::getByTrainId($train[0]['id']);
-        return view('Manager.Probationary.CourseGradeInput.inputPage', ['train' => $train,'courses' => $courses]);
+        return Admin::content(function (Content $content) use ($train, $courses){
+            // 选填
+            $content->header($this->titles[0] ?? '管理后台');
+            // 选填
+            $content->description($this->titles[1] ?? '');
+            // 填充页面body部分，这里可以填入任何可被渲染的对象
+            $content->body(view('Admin.Probationary.CourseGradeInput.inputPage', ['train' => $train,'courses' => $courses]));
+        });
+        //return view('Manager.Probationary.CourseGradeInput.inputPage', ['train' => $train,'courses' => $courses]);
     }
 
     /**
      * 课程成绩录入表单显示页面
      * @param Request $request
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return Content
      */
     public function courseGradeInputPage(Request $request){
         $train = TrainList::getNotEndTrain();
         $courseId  = $request->input('courseId');
         $entries = ChildEntryForm::getByCourseId($courseId);
-        return view('Manager.Probationary.CourseGradeInput.input', ['train' => $train ,'entries' => $entries]);
+        return Admin::content(function (Content $content) use ($train, $entries){
+            // 选填
+            $content->header($this->titles[0] ?? '管理后台');
+            // 选填
+            $content->description($this->titles[1] ?? '');
+            // 填充页面body部分，这里可以填入任何可被渲染的对象
+            $content->body(view('Admin.Probationary.CourseGradeInput.input', ['train' => $train ,'entries' => $entries]));
+        });
+        //return view('Manager.Probationary.CourseGradeInput.input', ['train' => $train ,'entries' => $entries]);
     }
 
     /**
      * 课程成绩录入后台逻辑
      * @param Request $request
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return Content
      */
     public function courseGradeInput(Request $request){
         $data = $request->all();
         for ($i = 0; $i < count($data['id']); $i++){
             ChildEntryForm::updateSome($data, $i);
         }
-        return view('Manager.Probationary.CourseGradeInput.result');
+        return Admin::content(function (Content $content){
+            // 选填
+            $content->header($this->titles[0] ?? '管理后台');
+            // 选填
+            $content->description($this->titles[1] ?? '');
+            // 填充页面body部分，这里可以填入任何可被渲染的对象
+            $content->body(view('Admin.Probationary.CourseGradeInput.result'));
+        });
+        //return view('Manager.Probationary.CourseGradeInput.result');
     }
 
     //-----------------------以下是结业成绩模块--------------------------------------------
+
     /**
      * 结业成绩录入前端页面
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return Content
      */
     public function graduationGradeInputPage(){
         $train = TrainList::getNotEndTrain();
@@ -1062,35 +1250,59 @@ class ProbationaryController extends Controller{
         if ($train[0]['endInsert']){
             $entries = EntryForm::getByTrainId($train[0]['id']);
         }
-        return view('Manager.Probationary.Graduation.GradeInput', ['train' => $train ,'entries' => $entries]);
+        return Admin::content(function (Content $content) use ($train, $entries){
+            // 选填
+            $content->header($this->titles[0] ?? '管理后台');
+            // 选填
+            $content->description($this->titles[1] ?? '');
+            // 填充页面body部分，这里可以填入任何可被渲染的对象
+            $content->body(view('Admin.Probationary.Graduation.GradeInput', ['train' => $train ,'entries' => $entries]));
+        });
+        //return view('Manager.Probationary.Graduation.GradeInput', ['train' => $train ,'entries' => $entries]);
     }
 
     /**
      * 结业成绩录入后台逻辑
      * @param Request $request
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return Content
      */
     public function graduationGradeInput(Request $request){
         $data = $request->all();
         for ($i = 0; $i < count($data['id']); $i++){
             EntryForm::updateGradeAndStatus($data, $i);
         }
-        return view('Manager.Probationary.Graduation.GradeInputResult');
+        return Admin::content(function (Content $content){
+            // 选填
+            $content->header($this->titles[0] ?? '管理后台');
+            // 选填
+            $content->description($this->titles[1] ?? '');
+            // 填充页面body部分，这里可以填入任何可被渲染的对象
+            $content->body(view('Admin.Probationary.Graduation.GradeInputResult'));
+        });
+        //return view('Manager.Probationary.Graduation.GradeInputResult');
     }
 
     /**
      * 结业成绩调整前的学号筛选
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return Content
      */
     public function graduationGradeChangePage1(){
         $train = TrainList::getNotEndTrain();
-        return view('Manager.Probationary.Graduation.GradeChangePage', ['train' => $train]);
+        return Admin::content(function (Content $content) use ($train){
+            // 选填
+            $content->header($this->titles[0] ?? '管理后台');
+            // 选填
+            $content->description($this->titles[1] ?? '');
+            // 填充页面body部分，这里可以填入任何可被渲染的对象
+            $content->body(view('Admin.Probationary.Graduation.GradeChangePage', ['train' => $train]));
+        });
+        //return view('Manager.Probationary.Graduation.GradeChangePage', ['train' => $train]);
     }
 
     /**
      * 结业成绩调整筛选出的学生信息
      * @param Request $request
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return Content
      */
     public function graduationGradeChangePage(Request $request){
         $train = TrainList::getNotEndTrain();
@@ -1105,13 +1317,21 @@ class ProbationaryController extends Controller{
             }
             $children = ChildEntryForm::getByEntryId($entry[0]['id']);
         }
-        return view('Manager.Probationary.Graduation.GradeChange', ['train' => $train ,'lastTrainEntry' => $lastTrainEntry, 'entry' => $entry, 'children' => $children]);
+        return Admin::content(function (Content $content) use ($train, $lastTrainEntry, $entry, $children){
+            // 选填
+            $content->header($this->titles[0] ?? '管理后台');
+            // 选填
+            $content->description($this->titles[1] ?? '');
+            // 填充页面body部分，这里可以填入任何可被渲染的对象
+            $content->body(view('Admin.Probationary.Graduation.GradeChange', ['train' => $train ,'lastTrainEntry' => $lastTrainEntry, 'entry' => $entry, 'children' => $children]));
+        });
+        //return view('Manager.Probationary.Graduation.GradeChange', ['train' => $train ,'lastTrainEntry' => $lastTrainEntry, 'entry' => $entry, 'children' => $children]);
     }
 
     /**
      * 结业成绩调整后台逻辑
      * @param Request $request
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return Content
      */
     public function graduationGradeChange(Request $request){
         $data = $request->all();
@@ -1148,24 +1368,41 @@ class ProbationaryController extends Controller{
         }else{
             $result = '重要信息丢失！';
         }
-        return view('Manager.Probationary.Graduation.GradeChangeResult', ['result' => $result]);
+        return Admin::content(function (Content $content) use ($result){
+            // 选填
+            $content->header($this->titles[0] ?? '管理后台');
+            // 选填
+            $content->description($this->titles[1] ?? '');
+            // 填充页面body部分，这里可以填入任何可被渲染的对象
+            $content->body(view('Admin.Probationary.Graduation.GradeChangeResult', ['result' => $result]));
+        });
+        //return view('Manager.Probationary.Graduation.GradeChangeResult', ['result' => $result]);
     }
 
     //------------------------以下是成绩查询模块-----------------------------------------
+
     /**
      * 成绩查询前的筛选页面
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return Content
      */
     public function gradeSearchPage(){
         $trains = TrainList::getAll();
         $colleges = College::getAll();
-        return view('Manager.Probationary.GradeSearch.searchPage', ['trains' => $trains, 'colleges' => $colleges]);
+        return Admin::content(function (Content $content) use ($trains, $colleges){
+            // 选填
+            $content->header($this->titles[0] ?? '管理后台');
+            // 选填
+            $content->description($this->titles[1] ?? '');
+            // 填充页面body部分，这里可以填入任何可被渲染的对象
+            $content->body(view('Admin.Probationary.GradeSearch.searchPage', ['trains' => $trains, 'colleges' => $colleges]));
+        });
+        //return view('Manager.Probationary.GradeSearch.searchPage', ['trains' => $trains, 'colleges' => $colleges]);
     }
 
     /**
      * 成绩查询展示页面
      * @param Request $request
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return Content
      */
     public function gradeSearch(Request $request){
         $data = $request->all();
@@ -1190,24 +1427,41 @@ class ProbationaryController extends Controller{
             $entries[$i]['children'] = $children;
         }
 
-        return view('Manager.Probationary.GradeSearch.search', ['entries' => $entries, 'children' => $children]);
+        return Admin::content(function (Content $content) use ($entries, $children){
+            // 选填
+            $content->header($this->titles[0] ?? '管理后台');
+            // 选填
+            $content->description($this->titles[1] ?? '');
+            // 填充页面body部分，这里可以填入任何可被渲染的对象
+            $content->body(view('Admin.Probationary.GradeSearch.search', ['entries' => $entries, 'children' => $children]));
+        });
+        //return view('Manager.Probationary.GradeSearch.search', ['entries' => $entries, 'children' => $children]);
     }
 
     //--------------------------以下是证书管理部分---------------------------------------
+
     /**
      * 证书筛选界面
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return Content
      */
     public function certificateListPage(){
         $trains = TrainList::getAll();
         $colleges = College::getAll();
-        return view('Manager.Probationary.Certificate.listPage', ['trains' => $trains, 'colleges' => $colleges]);
+        return Admin::content(function (Content $content) use ($trains, $colleges){
+            // 选填
+            $content->header($this->titles[0] ?? '管理后台');
+            // 选填
+            $content->description($this->titles[1] ?? '');
+            // 填充页面body部分，这里可以填入任何可被渲染的对象
+            $content->body(view('Admin.Probationary.Certificate.listPage', ['trains' => $trains, 'colleges' => $colleges]));
+        });
+        //return view('Manager.Probationary.Certificate.listPage', ['trains' => $trains, 'colleges' => $colleges]);
     }
 
     /**
      * 筛选结果
      * @param Request $request
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return Content
      */
     public function certificateList(Request $request){
         $trainId = $request->input('trainId');
@@ -1215,35 +1469,59 @@ class ProbationaryController extends Controller{
         $max = EntryForm::getMaxEntryId($trainId);
         $min = EntryForm::getMinEntryId($trainId);
         $certs = Cert::getCertProbationary($max, $min, $academyId);
-        return view('Manager.Probationary.Certificate.list', ['certificates' => $certs]);
+        return Admin::content(function (Content $content) use ($certs){
+            // 选填
+            $content->header($this->titles[0] ?? '管理后台');
+            // 选填
+            $content->description($this->titles[1] ?? '');
+            // 填充页面body部分，这里可以填入任何可被渲染的对象
+            $content->body(view('Admin.Probationary.Certificate.list', ['certificates' => $certs]));
+        });
+        //return view('Manager.Probationary.Certificate.list', ['certificates' => $certs]);
     }
 
     /**
      * 筛选考试合格但未发放证书的学生
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return Content
      */
     public function certificateGrantPage(){
         $trains = TrainList::getAll();
         $colleges = College::getAll();
-        return view('Manager.Probationary.Certificate.grantPage', ['trains' => $trains, 'colleges' => $colleges]);
+        return Admin::content(function (Content $content) use ($trains, $colleges){
+            // 选填
+            $content->header($this->titles[0] ?? '管理后台');
+            // 选填
+            $content->description($this->titles[1] ?? '');
+            // 填充页面body部分，这里可以填入任何可被渲染的对象
+            $content->body(view('Admin.Probationary.Certificate.grantPage', ['trains' => $trains, 'colleges' => $colleges]));
+        });
+        //return view('Manager.Probationary.Certificate.grantPage', ['trains' => $trains, 'colleges' => $colleges]);
     }
 
     /**
      * 筛选结果
      * @param Request $request
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return Content
      */
     public function certificateGrant(Request $request){
         $trainId = $request->input('trainId');
         $academyId = $request->input('academyId');
         $certs = EntryForm::getCert($trainId, $academyId);
-        return view('Manager.Probationary.Certificate.grant', ['certificates' => $certs]);
+        return Admin::content(function (Content $content) use ($certs){
+            // 选填
+            $content->header($this->titles[0] ?? '管理后台');
+            // 选填
+            $content->description($this->titles[1] ?? '');
+            // 填充页面body部分，这里可以填入任何可被渲染的对象
+            $content->body(view('Admin.Probationary.Certificate.grant', ['certificates' => $certs]));
+        });
+        //return view('Manager.Probationary.Certificate.grant', ['certificates' => $certs]);
     }
 
     /**
      * 证书发放后台逻辑
      * @param Request $request
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return Content
      */
     public function certificateGrantResult(Request $request){
         $data = $request->all();
@@ -1266,26 +1544,50 @@ class ProbationaryController extends Controller{
         }else{
             $res_type = 0;
         }
-        return view('Manager.Probationary.Certificate.grantResult', ['res_type' => $res_type]);
+        return Admin::content(function (Content $content) use ($res_type){
+            // 选填
+            $content->header($this->titles[0] ?? '管理后台');
+            // 选填
+            $content->description($this->titles[1] ?? '');
+            // 填充页面body部分，这里可以填入任何可被渲染的对象
+            $content->body(view('Admin.Probationary.Certificate.grantResult', ['res_type' => $res_type]));
+        });
+        //return view('Manager.Probationary.Certificate.grantResult', ['res_type' => $res_type]);
     }
 
     /**
      * 申请补办证书的列表
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return Content
      */
     public function certificateLastGrant(){
         $certLost = CertLost::getCertLostProbationary();
-        return view('Manager.Probationary.Certificate.lastGrant', ['certLosts' => $certLost]);
+        return Admin::content(function (Content $content) use ($certLost){
+            // 选填
+            $content->header($this->titles[0] ?? '管理后台');
+            // 选填
+            $content->description($this->titles[1] ?? '');
+            // 填充页面body部分，这里可以填入任何可被渲染的对象
+            $content->body(view('Admin.Probationary.Certificate.lastGrant', ['certLosts' => $certLost]));
+        });
+        //return view('Manager.Probationary.Certificate.lastGrant', ['certLosts' => $certLost]);
     }
 
     /**
      * 补办详情页面
      * @param $id
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return Content
      */
     public function certificateLastGrantDetailPage($id){
         $certLost = CertLost::getCertLostByIdProbationary($id);
-        return view('Manager.Probationary.Certificate.lastGrantDetail', ['certLost' => $certLost]);
+        return Admin::content(function (Content $content) use ($certLost){
+            // 选填
+            $content->header($this->titles[0] ?? '管理后台');
+            // 选填
+            $content->description($this->titles[1] ?? '');
+            // 填充页面body部分，这里可以填入任何可被渲染的对象
+            $content->body(view('Admin.Probationary.Certificate.lastGrantDetail', ['certLost' => $certLost]));
+        });
+        //return view('Manager.Probationary.Certificate.lastGrantDetail', ['certLost' => $certLost]);
     }
 
     /**
@@ -1353,13 +1655,22 @@ class ProbationaryController extends Controller{
     }
 
     //---------------------以下是申诉管理部分------------------------------------------
+
     /**
      * 申诉列表
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return Content
      */
     public function complainList(){
         $complains = Complain::getAllProbationary();
-        return view('Manager.Probationary.Complain.list', ['complains' => $complains]);
+        return Admin::content(function (Content $content) use ($complains){
+            // 选填
+            $content->header($this->titles[0] ?? '管理后台');
+            // 选填
+            $content->description($this->titles[1] ?? '');
+            // 填充页面body部分，这里可以填入任何可被渲染的对象
+            $content->body(view('Admin.Probationary.Complain.list', ['complains' => $complains]));
+        });
+        //return view('Manager.Probationary.Complain.list', ['complains' => $complains]);
     }
     /*
      * 新党建因为部分逻辑修改，可能会导致部分已回复的申诉显示为未回复，只需再提交一次即可解决
@@ -1370,20 +1681,28 @@ class ProbationaryController extends Controller{
     /**
      * 展示申诉还未回复的页面，含编辑器
      * @param $id
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return Content
      */
     public function complainDetailPage($id){
         $complain = Complain::getComplainById($id);
         $sno = $complain[0]['fromSno'];
         $trainId = $complain[0]['testId'];
         $grade = EntryForm::getGradeBySnoAndTestId($sno, $trainId);
-        return view('Manager.Probationary.Complain.detail', ['complain' => $complain, 'grade' => $grade]);
+        return Admin::content(function (Content $content) use ($complain, $grade){
+            // 选填
+            $content->header($this->titles[0] ?? '管理后台');
+            // 选填
+            $content->description($this->titles[1] ?? '');
+            // 填充页面body部分，这里可以填入任何可被渲染的对象
+            $content->body(view('Admin.Probationary.Complain.detail', ['complain' => $complain, 'grade' => $grade]));
+        });
+        //return view('Manager.Probationary.Complain.detail', ['complain' => $complain, 'grade' => $grade]);
     }
 
     /**
      * 展示申诉已回复的页面
      * @param $id
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return Content
      */
     public function complainDetailPage_1($id){
         $complain = Complain::getComplainById($id);
@@ -1391,7 +1710,15 @@ class ProbationaryController extends Controller{
         $testId = $complain[0]['testId'];
         $grade = EntryForm::getGradeBySnoAndTestId($sno, $testId);
         $reply = Complain::getReply($id);
-        return view('Manager.Academy.Complain.detail_1', ['complain' => $complain, 'grade' => $grade, 'reply' => $reply]);
+        return Admin::content(function (Content $content) use ($complain, $grade, $reply){
+            // 选填
+            $content->header($this->titles[0] ?? '管理后台');
+            // 选填
+            $content->description($this->titles[1] ?? '');
+            // 填充页面body部分，这里可以填入任何可被渲染的对象
+            $content->body(view('Admin.Academy.Complain.detail_1', ['complain' => $complain, 'grade' => $grade, 'reply' => $reply]));
+        });
+        //return view('Manager.Academy.Complain.detail_1', ['complain' => $complain, 'grade' => $grade, 'reply' => $reply]);
     }
 
     /**

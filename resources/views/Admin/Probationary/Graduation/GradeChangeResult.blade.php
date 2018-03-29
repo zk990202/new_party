@@ -1,10 +1,4 @@
-@extends('layouts.app')
 
-@section('css')
-    <link rel="stylesheet" href="/AdminLTE/bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css">
-@endsection
-
-@section('main')
     <section class="content">
         <!-- Small boxes (Stat box) -->
         <div class="row">
@@ -19,7 +13,7 @@
                     </div>
                     <div>
                         <h3>
-                            <a href="{{ url('manager/probationary/graduation/change') }}">返回成绩调整页面</a>
+                            <a href="{{ url('admin/probationary/graduation/change') }}">返回成绩调整页面</a>
                         </h3>
                     </div>
                     <!-- /.box-body -->
@@ -31,9 +25,4 @@
         </div>
         <!-- Main row -->
     </section>
-@endsection
 
-@section('func')
-    <script src="/AdminLTE/bower_components/datatables.net/js/jquery.dataTables.min.js"></script>
-    <script src="/AdminLTE/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
-@endsection

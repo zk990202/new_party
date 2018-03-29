@@ -1,10 +1,4 @@
-@extends('layouts.app')
 
-@section('css')
-    <link rel="stylesheet" href="/Trumbowyg/dist/ui/trumbowyg.min.css">
-@endsection
-
-@section('main')
     <section class="content">
 
         <div class="row">
@@ -32,8 +26,8 @@
                             <div class="form-group">
                                 <label for="inputFile">上传图片</label>
                                 <input type="file" id="inputFile" name="file">
-
-                                <p class="help-block">支持png jpeg jpg bmp </p>
+                                <p class="help-block">支持文件格式:
+                                    {{ \App\Http\Service\FileService::allowedFileExtension('noticeImg') }}  </p>
                             </div>
                         </div>
                         <!-- /.box-body -->
@@ -47,11 +41,7 @@
         <!-- ./row -->
     </section>
     <!-- /.content -->
-@endsection
 
-@section('func')
-    <script src="/Trumbowyg/dist/trumbowyg.js"></script>
-    <script src="/Trumbowyg/dist/plugins/upload/trumbowyg.upload.js"></script>
     <script>
         $(function(){
             // editor
@@ -79,7 +69,7 @@
                 ],
                 plugins: {
                     upload: {
-                        serverPath: '/manager/file',
+                        serverPath: '/admin/file',
                         fileFieldName: 'upload',
                         usage : 'noticeImg'
                     }
@@ -95,7 +85,7 @@
                     data.append('upload', file);
                     data.append("usage", 'noticeImg');
                     $.ajax({
-                        url: '/manager/file',
+                        url: '/admin/file',
                         type: 'POST',
                         data: data,
                         cache: false,
@@ -115,7 +105,7 @@
                             form.append('column', $('#column').val());
                             form.append('imgPath', path);
                             $.ajax({
-                                url: '/manager/party-school/add',
+                                url: '/admin/party-school/add',
                                 type: 'POST',
                                 data: form,
                                 cache: false,
@@ -125,7 +115,7 @@
                                 success: function(data){
                                     if(data.success){
                                         alert('添加成功');
-                                        window.location.href = '/manager/party-school/list/';
+                                        window.location.href = '/admin/party-school/list/';
                                     }
                                     else{
                                         alert(data.message);
@@ -147,7 +137,7 @@
                     form.append('content', $('#editor').val());
                     form.append('column', $('#column').val());
                     $.ajax({
-                        url: '/manager/party-school/add',
+                        url: '/admin/party-school/add',
                         type: 'POST',
                         data: form,
                         cache: false,
@@ -157,7 +147,7 @@
                         success: function(data){
                             if(data.success){
                                 alert('添加成功');
-                                window.location.href = '/manager/party-school/list/';
+                                window.location.href = '/admin/party-school/list/';
                             }
                             else{
                                 alert(data.message);
@@ -171,4 +161,3 @@
             });
         })
     </script>
-@endsection

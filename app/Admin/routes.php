@@ -409,7 +409,7 @@ Route::group([
         // 总培训控制
         $router->group(['prefix' => 'train-list'], function(Router $router){
             //总培训列表
-            $router->get('/', ['as' => 'admin-academy-train-list', 'uses' => 'AcademyController@trainList']);
+            $router->get('/list', ['as' => 'admin-academy-train-list', 'uses' => 'AcademyController@trainList']);
             //关闭总培训
             $router->patch('{id}/close', ['as' => 'admin-academy-train-list-close', 'uses' => 'AcademyController@trainClose']);
             //添加总培训

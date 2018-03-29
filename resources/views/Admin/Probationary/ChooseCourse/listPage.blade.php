@@ -1,10 +1,4 @@
-@extends('layouts.app')
 
-@section('css')
-    <link rel="stylesheet" href="/AdminLTE/bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css">
-@endsection
-
-@section('main')
     <section class="content">
         <!-- Small boxes (Stat box) -->
         <div class="row">
@@ -14,7 +8,7 @@
                     <div class="box-header with-border">
                         <h3 class="box-title">课程列表</h3>
                     </div>
-                    <form method="POST" action="{{ url('manager/probationary/choose-course/list') }}">
+                    <form method="POST" action="{{ url('admin/probationary/choose-course/list') }}">
                         <div class="form-group">
                             <label for="courseName">课程名称</label>
                             <select name="courseId" class="form-control">
@@ -50,11 +44,7 @@
         </div>
         <!-- Main row -->
     </section>
-@endsection
 
-@section('func')
-    <script src="/AdminLTE/bower_components/datatables.net/js/jquery.dataTables.min.js"></script>
-    <script src="/AdminLTE/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
     <script>
 
         $(function () {
@@ -63,4 +53,4 @@
             });
         });
     </script>
-@endsection
+

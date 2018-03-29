@@ -1,10 +1,4 @@
-@extends('layouts.app')
 
-@section('css')
-    <link rel="stylesheet" href="/Trumbowyg/dist/ui/trumbowyg.min.css">
-@endsection
-
-@section('main')
     <section class="content">
 
         <div class="row">
@@ -64,4 +58,3 @@
         <!-- ./row -->
     </section>
     <!-- /.content -->
-@endsection

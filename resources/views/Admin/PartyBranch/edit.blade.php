@@ -1,10 +1,4 @@
-@extends('layouts.app')
 
-@section('css')
-    <link rel="stylesheet" href="/AdminLTE/bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css">
-@endsection
-
-@section('main')
     <section class="content">
         <!-- Small boxes (Stat box) -->
         <div class="row">
@@ -61,7 +55,7 @@
                                         @endif
                                     </td>
                                     <td>
-                                        <a href="{{ url('manager/party-branch/'.$branch['id'].'/manager') }}">
+                                        <a href="{{ url('admin/party-branch/'.$branch['id'].'/admin') }}">
                                             <button type="button" class="btn btn-success btn-xs">管理支部</button>
                                         </a>
                                     </td>
@@ -119,11 +113,6 @@
         </div>
         <!-- Main row -->
     </section>
-@endsection
-
-@section('func')
-    <script src="/AdminLTE/bower_components/datatables.net/js/jquery.dataTables.min.js"></script>
-    <script src="/AdminLTE/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
     <script>
 
         $(function () {
@@ -140,7 +129,7 @@
             form.append('childName', $('#childName').val());
             form.append('name', $('#name').val());
             $.ajax({
-                url: '/manager/party-branch/' + $('#branchId').val() + '/edit',
+                url: '/admin/party-branch/' + $('#branchId').val() + '/edit',
                 type: 'post',
                 data: form,
                 cache: false,
@@ -150,7 +139,7 @@
                 success: function(data){
                     if(data.success){
                         alert('修改成功');
-                        window.location.href = '/manager/party-branch/' + $('#branchId').val() + '/edit';
+                        window.location.href = '/admin/party-branch/' + $('#branchId').val() + '/edit';
                     }
                     else{
                         alert(data.message);
@@ -163,4 +152,4 @@
         });
 
     </script>
-@endsection
+

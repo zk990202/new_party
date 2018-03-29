@@ -10,38 +10,65 @@ namespace App\Admin\Controllers;
 
 
 use App\Http\Controllers\Controller;
+use App\Http\Service\AdminMenuService;
 use App\Models\Classes;
 use App\Models\College;
 use App\Models\PartyBranch\PartyBranch;
 use App\Models\StudentInfo;
 use App\Models\UserInfo;
+use Encore\Admin\Facades\Admin;
+use Encore\Admin\Layout\Content;
 use Illuminate\Http\Request;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class PartyBranchController extends Controller {
+
+    protected $titles;
+
+    public function __construct()
+    {
+        $this->titles = AdminMenuService::getMenuName();
+    }
+
     /**
      * 支部列表--显示学院及每个学院的支部数
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return Content
      */
     public function pList(){
         $college = College::getAll();
         $branches = PartyBranch::getAllCount($college);
-        return view('Manager.PartyBranch.pList', ['branches' => $branches]);
+        return Admin::content(function (Content $content) use ($branches){
+            // 选填
+            $content->header($this->titles[0] ?? '管理后台');
+            // 选填
+            $content->description($this->titles[1] ?? '');
+            // 填充页面body部分，这里可以填入任何可被渲染的对象
+            $content->body(view('Admin.PartyBranch.pList', ['branches' => $branches]));
+        });
+        //return view('Manager.PartyBranch.pList', ['branches' => $branches]);
     }
 
     /**
      * 支部列表--每个学院下的所有党支部
      * @param $academy_id
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return Content
      */
     public function cList($academy_id){
         $branches = PartyBranch::getAll($academy_id);
-        return view('Manager.PartyBranch.cList', ['branches' => $branches]);
+        return Admin::content(function (Content $content) use ($branches){
+            // 选填
+            $content->header($this->titles[0] ?? '管理后台');
+            // 选填
+            $content->description($this->titles[1] ?? '');
+            // 填充页面body部分，这里可以填入任何可被渲染的对象
+            $content->body(view('Admin.PartyBranch.cList', ['branches' => $branches]));
+        });
     }
 
     /**
      * 支部管理--主页面
      * @param $branch_id
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return Content
      */
     public function manager($branch_id){
         $branch = PartyBranch::getById($branch_id);
@@ -69,7 +96,7 @@ class PartyBranchController extends Controller {
         //申请人+非申请人
         $apply = StudentInfo::apply($branch_id);
         $applyNum = count($apply);
-        return view('Manager.PartyBranch.manager', [
+        $viewData = [
             'branch' => $branch[0],
             'allNum' => $allNum,
             'realNum' => $realNum,
@@ -79,14 +106,22 @@ class PartyBranchController extends Controller {
             'academyNum' => $academyNum,
             'excellentNum' => $excellentNum,
             'applyNum' => $applyNum
-        ]);
+        ];
+        return Admin::content(function (Content $content) use ($viewData){
+            // 选填
+            $content->header($this->titles[0] ?? '管理后台');
+            // 选填
+            $content->description($this->titles[1] ?? '');
+            // 填充页面body部分，这里可以填入任何可被渲染的对象
+            $content->body(view('Admin.PartyBranch.manager', $viewData));
+        });
     }
 
     /**
      * 支部管理--添加支部干部--显示页面
      * @param $branch_id
      * @param $type
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return Content
      */
     public function addCadrePage($branch_id, $type){
         $branch = PartyBranch::getById($branch_id);
@@ -109,12 +144,20 @@ class PartyBranchController extends Controller {
         }else{
             $res = '未找到支部相关信息';
         }
-        return view('manager.PartyBranch.addCadre', [
+        $viewData = [
             'cadre' => $cadre,
             'type' => $type,
             'res' => $res,
             'branch' => $branch[0]
-        ]);
+        ];
+        return Admin::content(function (Content $content) use ($viewData){
+            // 选填
+            $content->header($this->titles[0] ?? '管理后台');
+            // 选填
+            $content->description($this->titles[1] ?? '');
+            // 填充页面body部分，这里可以填入任何可被渲染的对象
+            $content->body(view('Admin.PartyBranch.addCadre', $viewData));
+        });
     }
 
     /**
@@ -218,7 +261,7 @@ class PartyBranchController extends Controller {
     /**
      * 支部管理--成员列表
      * @param $branch_id
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return Content
      */
     public function memberList($branch_id){
         $branch = PartyBranch::getById($branch_id);
@@ -246,7 +289,7 @@ class PartyBranchController extends Controller {
         //申请人+非申请人
         $apply = StudentInfo::apply($branch_id);
         $applyNum = count($apply);
-        return view('Manager.PartyBranch.memberList', [
+        $viewData = [
             'branch' => $branch[0],
             'allNum' => $allNum,
             'realNum' => $realNum,
@@ -264,13 +307,21 @@ class PartyBranchController extends Controller {
             'academy' => $academy,
             'excellent' => $excellent,
             'apply' => $apply
-        ]);
+        ];
+        return Admin::content(function (Content $content) use ($viewData){
+            // 选填
+            $content->header($this->titles[0] ?? '管理后台');
+            // 选填
+            $content->description($this->titles[1] ?? '');
+            // 填充页面body部分，这里可以填入任何可被渲染的对象
+            $content->body(view('Admin.PartyBranch.memberList', $viewData));
+        });
     }
 
     /**
      * 支部管理--成员添加(本科，硕士，博士)--页面
      * @param $branch_id
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return Content
      */
     public function memberAddPage($branch_id){
         $branch = PartyBranch::getById($branch_id);
@@ -287,14 +338,21 @@ class PartyBranchController extends Controller {
             $members = StudentInfo::noneMembersDoctor($academyId, $schoolYear);
         }
 //        dd($members);
-        return view('Manager.PartyBranch.memberAdd', ['members' => $members, 'branch' => $branch]);
+        return Admin::content(function (Content $content) use ($members, $branch){
+            // 选填
+            $content->header($this->titles[0] ?? '管理后台');
+            // 选填
+            $content->description($this->titles[1] ?? '');
+            // 填充页面body部分，这里可以填入任何可被渲染的对象
+            $content->body(view('Admin.PartyBranch.memberAdd', ['members' => $members, 'branch' => $branch]));
+        });
     }
 
     /**
      * 支部管理--成员添加(本科，硕士，博士)--逻辑
      * @param Request $request
      * @param $branch_id
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return Content
      */
     public function memberAdd(Request $request, $branch_id){
         $branch = PartyBranch::getById($branch_id);
@@ -310,13 +368,21 @@ class PartyBranchController extends Controller {
         }else{
             $res = '添加失败';
         }
-        return view('Manager.PartyBranch.memberAddResult', ['res' => $res, 'branch' => $branch]);
+        $viewData = ['res' => $res, 'branch' => $branch];
+        return Admin::content(function (Content $content) use ($viewData){
+            // 选填
+            $content->header($this->titles[0] ?? '管理后台');
+            // 选填
+            $content->description($this->titles[1] ?? '');
+            // 填充页面body部分，这里可以填入任何可被渲染的对象
+            $content->body(view('Admin.PartyBranch.memberAddResult', $viewData));
+        });
     }
 
     /**
      * 支部管理--成员添加(混合党支部)--筛选学生
      * @param $branch_id
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return Content
      */
     public function memberAddMixPreviewPage($branch_id){
         $branch = PartyBranch::getById($branch_id);
@@ -325,14 +391,22 @@ class PartyBranchController extends Controller {
         for ($i = 0; $i < count($grades1); $i++){
             $grades[$i] = $grades1[$i]['grade'];
         }
-        return view('Manager.PartyBranch.memberAddMixPreview', ['branch' => $branch[0], 'grades' => $grades]);
+        $viewData = ['branch' => $branch[0], 'grades' => $grades];
+        return Admin::content(function (Content $content) use ($viewData){
+            // 选填
+            $content->header($this->titles[0] ?? '管理后台');
+            // 选填
+            $content->description($this->titles[1] ?? '');
+            // 填充页面body部分，这里可以填入任何可被渲染的对象
+            $content->body(view('Admin.PartyBranch.memberAddMixPreview', $viewData));
+        });
     }
 
     /**
      * 支部管理--成员添加(混合党支部)--添加页面
      * @param Request $request
      * @param $branch_id
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return Content
      */
     public function memberAddMixPage(Request $request, $branch_id){
         $branch = PartyBranch::getById($branch_id);
@@ -372,19 +446,27 @@ class PartyBranchController extends Controller {
                 $members = StudentInfo::noneMemberAllNotYear($academyId);
             }
         }
-        return view('Manager.PartyBranch.memberAddMix', [
+        $viewData = [
             'members' => $members,
             'branch' => $branch,
             'schoolYear' => $schoolYear,
             'studentType' => $studentType
-        ]);
+        ];
+        return Admin::content(function (Content $content) use ($viewData){
+            // 选填
+            $content->header($this->titles[0] ?? '管理后台');
+            // 选填
+            $content->description($this->titles[1] ?? '');
+            // 填充页面body部分，这里可以填入任何可被渲染的对象
+            $content->body(view('Admin.PartyBranch.memberAddMix', $viewData));
+        });
     }
 
     /**
      * 支部管理--成员添加(混合)--逻辑
      * @param Request $request
      * @param $branch_id
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return Content
      */
     public function memberAddMix(Request $request, $branch_id){
         $branch = PartyBranch::getById($branch_id);
@@ -402,18 +484,26 @@ class PartyBranchController extends Controller {
         }else{
             $res = '添加失败';
         }
-        return view('Manager.PartyBranch.memberAddMixResult', [
+        $viewData = [
             'res' => $res,
             'branch' => $branch,
             'schoolYear' => $schoolYear,
             'studentType' => $studentType
-        ]);
+        ];
+        return Admin::content(function (Content $content) use ($viewData){
+            // 选填
+            $content->header($this->titles[0] ?? '管理后台');
+            // 选填
+            $content->description($this->titles[1] ?? '');
+            // 填充页面body部分，这里可以填入任何可被渲染的对象
+            $content->body(view('Admin.PartyBranch.memberAddMixResult', $viewData));
+        });
     }
 
     /**
      * 支部管理--成员删除--选择学生
      * @param $branch_id
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return Content
      */
     public function memberDeletePage($branch_id){
         $branch = PartyBranch::getById($branch_id);
@@ -441,7 +531,8 @@ class PartyBranchController extends Controller {
         //申请人+非申请人
         $apply = StudentInfo::apply($branch_id);
         $applyNum = count($apply);
-        return view('Manager.PartyBranch.memberDelete', [
+
+        $viewData = [
             'branch' => $branch[0],
             'allNum' => $allNum,
             'realNum' => $realNum,
@@ -459,14 +550,22 @@ class PartyBranchController extends Controller {
             'academy' => $academy,
             'excellent' => $excellent,
             'apply' => $apply
-        ]);
+        ];
+        return Admin::content(function (Content $content) use ($viewData){
+            // 选填
+            $content->header($this->titles[0] ?? '管理后台');
+            // 选填
+            $content->description($this->titles[1] ?? '');
+            // 填充页面body部分，这里可以填入任何可被渲染的对象
+            $content->body(view('Admin.PartyBranch.memberDelete', $viewData));
+        });
     }
 
     /**
      * 支部管理--成员删除--逻辑
      * @param Request $request
      * @param $branch_id
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return Content
      */
     public function memberDelete(Request $request, $branch_id){
         $branch = PartyBranch::getById($branch_id);
@@ -497,17 +596,35 @@ class PartyBranchController extends Controller {
         }else{
             $res = '请勾选要删除的成员';
         }
-        return view('Manager.PartyBranch.memberDeleteResult', ['res' => $res, 'branch' => $branch]);
+        $viewData = ['res' => $res, 'branch' => $branch];
+        return Admin::content(function (Content $content) use ($viewData){
+            // 选填
+            $content->header($this->titles[0] ?? '管理后台');
+            // 选填
+            $content->description($this->titles[1] ?? '');
+            // 填充页面body部分，这里可以填入任何可被渲染的对象
+            $content->body(view('Admin.PartyBranch.memberDeleteResult', $viewData));
+        });
     }
 
     /**
      * 编辑党支部--页面
      * @param $branch_id
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return Content
      */
     public function editPage($branch_id){
         $branch = PartyBranch::getById($branch_id);
-        return view('Manager.PartyBranch.edit', ['branch' => $branch[0]]);
+        if(count($branch) < 1)
+            throw new NotFoundHttpException("未找到相关支部");
+        $viewData = ['branch' => $branch[0]];
+        return Admin::content(function (Content $content) use ($viewData){
+            // 选填
+            $content->header($this->titles[0] ?? '管理后台');
+            // 选填
+            $content->description($this->titles[1] ?? '');
+            // 填充页面body部分，这里可以填入任何可被渲染的对象
+            $content->body(view('Admin.PartyBranch.edit', $viewData));
+        });
     }
 
     /**
@@ -596,7 +713,7 @@ class PartyBranchController extends Controller {
 
     /**
      * 支部查询前的筛选条件
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return Content
      */
     public function searchPreview(){
         $colleges = College::getAll();
@@ -605,26 +722,42 @@ class PartyBranchController extends Controller {
         for ($i = 0; $i < count($grades1); $i++){
             $grades[$i] = $grades1[$i]['grade'];
         }
-        return view('Manager.PartyBranch.searchPreview', [
+        $viewData = [
             'colleges' => $colleges,
             'grades' => $grades,
-            ]);
+        ];
+        return Admin::content(function (Content $content) use ($viewData){
+            // 选填
+            $content->header($this->titles[0] ?? '管理后台');
+            // 选填
+            $content->description($this->titles[1] ?? '');
+            // 填充页面body部分，这里可以填入任何可被渲染的对象
+            $content->body(view('Admin.PartyBranch.searchPreview', $viewData));
+        });
     }
 
     /**
      * 支部查询
      * @param Request $request
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return Content
      */
     public function search(Request $request){
         $data = $request->all();
         $branches = PartyBranch::searchBranch($data['academyId'], $data['schoolYear'], $data['type']);
-        return view('Manager.PartyBranch.cList', ['branches' => $branches]);
+        $viewData =  ['branches' => $branches];
+        return Admin::content(function (Content $content) use ($viewData){
+            // 选填
+            $content->header($this->titles[0] ?? '管理后台');
+            // 选填
+            $content->description($this->titles[1] ?? '');
+            // 填充页面body部分，这里可以填入任何可被渲染的对象
+            $content->body(view('Admin.PartyBranch.cList', $viewData));
+        });
     }
 
     /**
      * 支部组建--页面
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return Content
      */
     public function addPage(){
         $colleges = College::getAll();
@@ -633,7 +766,15 @@ class PartyBranchController extends Controller {
         for ($i = 0; $i < count($grades1); $i++){
             $grades[$i] = $grades1[$i]['grade'];
         }
-        return view('Manager.PartyBranch.add', ['colleges' => $colleges, 'grades' => $grades]);
+        $viewData =  ['colleges' => $colleges, 'grades' => $grades];
+        return Admin::content(function (Content $content) use ($viewData){
+            // 选填
+            $content->header($this->titles[0] ?? '管理后台');
+            // 选填
+            $content->description($this->titles[1] ?? '');
+            // 填充页面body部分，这里可以填入任何可被渲染的对象
+            $content->body(view('Admin.PartyBranch.add', $viewData));
+        });
     }
 
     /**
@@ -706,7 +847,7 @@ class PartyBranchController extends Controller {
 
     /**
      * 支部隐藏--筛选条件
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View'
+     * @return Content
      */
     public function hidePreview(){
         $colleges = College::getAll();
@@ -715,21 +856,37 @@ class PartyBranchController extends Controller {
         for ($i = 0; $i < count($grades1); $i++){
             $grades[$i] = $grades1[$i]['grade'];
         }
-        return view('Manager.PartyBranch.hidePreview', [
+        $viewData =  [
             'colleges' => $colleges,
             'grades' => $grades,
-        ]);
+        ];
+        return Admin::content(function (Content $content) use ($viewData){
+            // 选填
+            $content->header($this->titles[0] ?? '管理后台');
+            // 选填
+            $content->description($this->titles[1] ?? '');
+            // 填充页面body部分，这里可以填入任何可被渲染的对象
+            $content->body(view('Admin.PartyBranch.hidePreview', $viewData));
+        });
     }
 
     /**
      * 支部隐藏--列表
      * @param Request $request
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return Content
      */
     public function hidePage(Request $request){
         $data = $request->all();
         $branches = PartyBranch::searchBranch($data['academyId'], $data['schoolYear'], $data['type']);
-        return view('Manager.PartyBranch.canHideList', ['branches' => $branches]);
+        $viewData =  ['branches' => $branches];
+        return Admin::content(function (Content $content) use ($viewData){
+            // 选填
+            $content->header($this->titles[0] ?? '管理后台');
+            // 选填
+            $content->description($this->titles[1] ?? '');
+            // 填充页面body部分，这里可以填入任何可被渲染的对象
+            $content->body(view('Admin.PartyBranch.canHideList', $viewData));
+        });
     }
 
     /**
@@ -754,11 +911,19 @@ class PartyBranchController extends Controller {
 
     /**
      * 查看已隐藏的支部--筛选
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return Content
      */
     public function hidedListPreview(){
         $colleges = College::getAll();
-        return view('Manager.PartyBranch.hidedListPreview', ['colleges' => $colleges,]);
+        $viewData =  ['colleges' => $colleges];
+        return Admin::content(function (Content $content) use ($viewData){
+            // 选填
+            $content->header($this->titles[0] ?? '管理后台');
+            // 选填
+            $content->description($this->titles[1] ?? '');
+            // 填充页面body部分，这里可以填入任何可被渲染的对象
+            $content->body(view('Admin.PartyBranch.hidedListPreview', $viewData));
+        });
     }
 
     public function hidedList(Request $request){
@@ -768,6 +933,14 @@ class PartyBranchController extends Controller {
         }else{
             $branches = PartyBranch::getHidedBranchByAcademy($academyId);
         }
-        return view('Manager.PartyBranch.hidedList', ['branches' => $branches]);
+        $viewData =  ['branches' => $branches];
+        return Admin::content(function (Content $content) use ($viewData){
+            // 选填
+            $content->header($this->titles[0] ?? '管理后台');
+            // 选填
+            $content->description($this->titles[1] ?? '');
+            // 填充页面body部分，这里可以填入任何可被渲染的对象
+            $content->body(view('Admin.PartyBranch.hidedList', $viewData));
+        });
     }
 }

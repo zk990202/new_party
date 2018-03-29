@@ -7,6 +7,7 @@
  */
 namespace App\Http\Helpers;
 
+use App\Http\Service\FileService;
 use App\Models\Academy\EntryForm as AcademyEntryForm;
 use App\Models\Academy\TestList as AcademyTestList;
 use App\Models\Applicant\ArticleList;
@@ -34,7 +35,7 @@ class Resources {
             'content'   =>  $notification->notice_content,
             'time'      =>  $notification->notice_time,
             'fileName'  =>  $notification->notice_filename,
-            'filePath'  =>  $notification->notice_filepath ? config('app.url') . "/upload/" . str_replace("./upload", "", $notification->notice_filepath) : '',
+            'filePath'  =>  FileService::fileAccessUri($notification->notice_filepath),
             'isTop'     =>  $notification->notice_istop,
             'authorName'=>  $notification->author,
             'isHidden'  =>  $notification->notice_ishidden,
@@ -53,7 +54,7 @@ class Resources {
             'type' => $partyBuild->type,
             'typeName' => $partyBuild->column->column_name,
             'isTop' => $partyBuild->isrecommand,
-            'imgPath' => $partyBuild->img_path ? config('app.url') . "/upload" . str_replace("./upload", "", $partyBuild->img_path) : '',
+            'imgPath' => FileService::fileAccessUri($partyBuild->img_path),
             'isHidden' => $partyBuild->isdeleted
         ];
     }
@@ -65,7 +66,7 @@ class Resources {
             'content' => $commonFiles->file_content,
             'time' => $commonFiles->file_addtime,
             'type' => $commonFiles->file_type,
-            'filePath' => $commonFiles->file_img,
+            'filePath' => FileService::fileAccessUri($commonFiles->file_img),
             'isHidden' => $commonFiles->file_isdeleted
         ];
     }

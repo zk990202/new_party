@@ -1,10 +1,4 @@
-@extends('layouts.app')
 
-@section('css')
-    <link rel="stylesheet" href="/AdminLTE/bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css">
-@endsection
-
-@section('main')
     <section class="content">
         <!-- Small boxes (Stat box) -->
         <div class="row">
@@ -34,7 +28,7 @@
                                     <td>{{ $news['title'] }}</td>
                                     <td>{{ $news['time'] }}</td>
                                     <td>{{ $news['authorName']}}</td>
-                                    <td>{{ $news['imgPath'] ? '有图片' : '无图片' }}</td>
+                                    <td>{!!   $news['imgPath'] ? '<a target="_blank" href="' .  $news['imgPath']  .'">有图片</a>' : '无图片' !!}</td>
                                     <td>{{ $news['isHidden'] ? '隐藏' : '显示'}}</td>
                                     <td>
                                         @if($news['isHidden'])
@@ -44,7 +38,7 @@
                                         @endif
                                     </td>
                                     <td>
-                                        <a href="{{ url('manager/party-school/'.$news['id'].'/edit') }}">
+                                        <a href="{{ url('admin/party-school/'.$news['id'].'/edit') }}">
                                             <button type="button" class="btn btn-block btn-info btn-xs">编辑</button></a>
                                     </td>
                                     <td>
@@ -80,11 +74,6 @@
         </div>
         <!-- Main row -->
     </section>
-@endsection
-
-@section('func')
-    <script src="/AdminLTE/bower_components/datatables.net/js/jquery.dataTables.min.js"></script>
-    <script src="/AdminLTE/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
     <script>
 
         $(function () {
@@ -94,7 +83,7 @@
         });
         var hideNews = function hideNews (newsId) {
             $.ajax({
-                'url': '/manager/party-school/' + newsId + '/hide',
+                'url': '/admin/party-school/' + newsId + '/hide',
                 'method': 'patch',
                 'success': function (data) {
                     window.location.reload();
@@ -104,7 +93,7 @@
 
         var showNews = function (newsId) {
             $.ajax({
-                'url': '/manager/party-school/' + newsId + '/hide',
+                'url': '/admin/party-school/' + newsId + '/hide',
                 'method': 'patch',
                 'success': function (data) {
                     window.location.reload();
@@ -114,7 +103,7 @@
 
         var topUpNews = function (newsId) {
             $.ajax({
-                'url': '/manager/party-school/' + newsId + '/top-up',
+                'url': '/admin/party-school/' + newsId + '/top-up',
                 'method': 'patch',
                 'success': function (data) {
                     window.location.reload();
@@ -124,7 +113,7 @@
 
         var downNews = function (newsId) {
             $.ajax({
-                'url': '/manager/party-school/' + newsId + '/top-up',
+                'url': '/admin/party-school/' + newsId + '/top-up',
                 'method': 'patch',
                 'success': function (data) {
                     window.location.reload();
@@ -132,4 +121,4 @@
             });
         };
     </script>
-@endsection
+

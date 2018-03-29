@@ -24,7 +24,7 @@ class CommonFiles extends Model{
     public static function getAll(){
         $res_arr = self::whereBetween('file_type', [1, 6])
             ->orderBy('file_isdeleted', 'ASC')
-            ->orderBy('file_type', 'DESC')
+            ->orderBy('file_addtime', 'DESC')
             ->get()->all();
 
         return array_map(function ($CommonFiles){
@@ -46,7 +46,7 @@ class CommonFiles extends Model{
         $files = self::findOrFail($id);
         $files->file_title = $data['title'];
         $files->file_content = $data['content'];
-        $files->file_img = $data['imgPath'] ?? $files->file_img;
+        $files->file_img = $data['filePath'] ?? $files->file_img;
         $res = $files->save();
         return $res ? Resources::CommonFiles($files) : false;
     }
@@ -72,8 +72,7 @@ class CommonFiles extends Model{
     public static function getAllContents(){
         $res_arr = self::whereBetween('file_type', [7, 9])
             ->orderBy('file_isdeleted', 'ASC')
-            ->orderBy('file_type', 'ASC')
-            ->orderBy('file_id', 'DESC')
+            ->orderBy('file_addtime', 'DESC')
             ->get()->all();
 
         return array_map(function ($CommonFiles){

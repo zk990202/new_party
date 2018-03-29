@@ -1,10 +1,4 @@
-@extends('layouts.app')
 
-@section('css')
-    <link rel="stylesheet" href="/Trumbowyg/dist/ui/trumbowyg.min.css">
-@endsection
-
-@section('main')
     <section class="content">
 
         <div class="row">
@@ -50,12 +44,7 @@
         </div>
         <!-- ./row -->
     </section>
-    <!-- /.content -->
-@endsection
 
-@section('func')
-    <script src="/Trumbowyg/dist/trumbowyg.js"></script>
-    <script src="/Trumbowyg/dist/plugins/upload/trumbowyg.upload.js"></script>
     <script>
         $(function(){
             // editor
@@ -83,7 +72,7 @@
                 ],
                 plugins: {
                     upload: {
-                        serverPath: '/manager/file',
+                        serverPath: '/admin/file',
                         fileFieldName: 'upload',
                         usage : 'fileUsage'
                     }
@@ -98,7 +87,7 @@
                 form.append('courseId', $('#courseId').val());
                 form.append('sno', $('#sno').val());
                 $.ajax({
-                    url: '/manager/probationary/choose-course/makeup',
+                    url: '/admin/probationary/choose-course/makeup',
                     type: 'POST',
                     data: form,
                     cache: false,
@@ -108,7 +97,7 @@
                     success: function(data){
                         if(data.success){
                             alert('补选课成功');
-                            window.location.href = '/manager/probationary/choose-course/makeup';
+                            window.location.href = '/admin/probationary/choose-course/makeup';
                         }
                         else{
                             alert(data.message);
@@ -118,4 +107,4 @@
             });
         })
     </script>
-@endsection
+

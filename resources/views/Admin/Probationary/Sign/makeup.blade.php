@@ -1,10 +1,4 @@
-@extends('layouts.app')
 
-@section('css')
-    <link rel="stylesheet" href="/Trumbowyg/dist/ui/trumbowyg.min.css">
-@endsection
-
-@section('main')
     <section class="content">
 
         <div class="row">
@@ -43,11 +37,7 @@
         <!-- ./row -->
     </section>
     <!-- /.content -->
-@endsection
 
-@section('func')
-    <script src="/Trumbowyg/dist/trumbowyg.js"></script>
-    <script src="/Trumbowyg/dist/plugins/upload/trumbowyg.upload.js"></script>
     <script>
         $(function(){
             // editor
@@ -75,7 +65,7 @@
                 ],
                 plugins: {
                     upload: {
-                        serverPath: '/manager/file',
+                        serverPath: '/admin/file',
                         fileFieldName: 'upload',
                         usage : 'fileUsage'
                     }
@@ -90,7 +80,7 @@
                 form.append('trainId', $('#trainId').val());
                 form.append('sno', $('#sno').val());
                 $.ajax({
-                    url: '/manager/probationary/sign/makeup-sign',
+                    url: '/admin/probationary/sign/makeup-sign',
                     type: 'POST',
                     data: form,
                     cache: false,
@@ -100,7 +90,7 @@
                     success: function(data){
                         if(data.success){
                             alert('补考报名成功');
-                            window.location.href = '/manager/probationary/sign/makeup-sign';
+                            window.location.href = '/admin/probationary/sign/makeup-sign';
                         }
                         else{
                             alert(data.message);
@@ -110,4 +100,4 @@
             });
         })
     </script>
-@endsection
+

@@ -4,7 +4,10 @@ namespace App\Admin\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Http\Helpers\Resources;
+use App\Http\Service\AdminMenuService;
 use App\Models\SpecialNews;
+use Encore\Admin\Facades\Admin;
+use Encore\Admin\Layout\Content;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -13,19 +16,29 @@ use Mockery\Exception;
 class StudyGroupController extends Controller{
     protected $imgExtension;
     protected $imgUsage = "partyBuildImg";//学习小组与党建专项的图片上传一样,在同一个数据表中
+    protected $titles;
 
     public function __construct()
     {
         $this->imgExtension = config('fileUpload.');
+        $this->titles = AdminMenuService::getMenuName();
     }
 
     /**
      * 列出所有新闻
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return \Encore\Admin\Layout\Content
      */
     public function lists(){
         $news_arr = SpecialNews::getAllNewsStudy();
-        return view('Manager.StudyGroup.news', ['newses' => $news_arr]);
+        return Admin::content(function(Content $content) use ($news_arr){
+            // 选填
+            $content->header($this->titles[0] ?? '管理后台');
+            // 选填
+            $content->description($this->titles[1] ?? '');
+
+            // 填充页面body部分，这里可以填入任何可被渲染的对象
+            $content->body(view('Admin.StudyGroup.news', ['newses' => $news_arr]));
+        });
     }
 
     /**
@@ -96,16 +109,32 @@ class StudyGroupController extends Controller{
 
     /**
      * @param $id
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return Content
      */
     public function editPage($id){
         $news = SpecialNews::FindorFail($id);
         $news = Resources::SpecialNews($news);
-        return view('Manager.StudyGroup.edit', ['newses' => $news]);
+        return Admin::content(function(Content $content) use ($news){
+            // 选填
+            $content->header($this->titles[0] ?? '管理后台');
+            // 选填
+            $content->description($this->titles[1] ?? '');
+
+            // 填充页面body部分，这里可以填入任何可被渲染的对象
+            $content->body(view('Admin.StudyGroup.edit', ['newses' => $news]));
+        });
     }
 
     public function addPage(){
-        return view('Manager.StudyGroup.add');
+        return Admin::content(function(Content $content) {
+            // 选填
+            $content->header($this->titles[0] ?? '管理后台');
+            // 选填
+            $content->description($this->titles[1] ?? '');
+
+            // 填充页面body部分，这里可以填入任何可被渲染的对象
+            $content->body(view('Admin.StudyGroup.add'));
+        });
     }
 
     public function add(Request $request){
