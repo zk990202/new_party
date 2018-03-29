@@ -50,10 +50,10 @@
             </li>
             <li class="list"><a href="#" class="menu">重要文件</a>
                 <ul class="sub-menu">
-                    <li><a href="ImportantFiles.html">规章制度</a></li>
-                    <li><a href="RegularlyFile.html">常用文书</a></li>
-                    <li><a href="MustRead.html">入党必读</a></li>
-                    <li><a href="SystemBook.html">系统手册</a></li>
+                    <li><a href="{{ url('commonFiles/regulation') }}">规章制度</a></li>
+                    <li><a href="{{ url('commonFiles/instrument') }}">常用文书</a></li>
+                    <li><a href="{{ url('commonFiles/mustRead') }}">入党必读</a></li>
+                    <li><a href="{{ url('commonFiles/manual') }}">系统手册</a></li>
                 </ul>
             </li>
 

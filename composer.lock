@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "fe41cb8bca1a7b92750a3f29e80f449d",
+    "content-hash": "3823f30adbfae610ffc0d37ba3ad9eb2",
     "packages": [
         {
             "name": "barryvdh/laravel-ide-helper",
@@ -2636,6 +2636,35 @@
             "time": "2017-11-27T11:13:29+00:00"
         },
         {
+            "name": "twt/sso",
+            "version": "1.1.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/twtstudio/twt-sso-php.git",
+                "reference": "157e3786186dd2cefafe5dc60bbf144f8ffe2023"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://files.phpcomposer.com/files/twtstudio/twt-sso-php/157e3786186dd2cefafe5dc60bbf144f8ffe2023.zip",
+                "reference": "157e3786186dd2cefafe5dc60bbf144f8ffe2023",
+                "shasum": ""
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "TwT\\SSO\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "authors": [
+                {
+                    "name": "Innpaul Zhang",
+                    "email": "zyp108421@gmail.com"
+                }
+            ],
+            "time": "2017-12-15T02:19:15+00:00"
+        },
+        {
             "name": "vlucas/phpdotenv",
             "version": "v2.4.0",
             "source": {
@@ -4314,7 +4343,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Zizaco/entrust/zipball/3623cc052937d9e62543402b50f24065720d44b9",
+                "url": "https://files.phpcomposer.com/files/Zizaco/entrust/3623cc052937d9e62543402b50f24065720d44b9.zip",
                 "reference": "3623cc052937d9e62543402b50f24065720d44b9",
                 "shasum": ""
             },

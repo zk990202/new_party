@@ -8,4 +8,5 @@ class ColumnFiles extends Model
 {
     //
     protected $table = "twt_columnfiles";
+
 }

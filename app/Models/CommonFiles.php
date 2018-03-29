@@ -15,6 +15,12 @@ class CommonFiles extends Model{
 
     protected $fillable = ['file_title', 'file_content', 'file_addtime', 'file_type', 'file_img', 'file_isdeleted'];
 
+    // 文件类别
+    const REGULAR_FILE = 2;
+    const INSTRUMENT_FILE = 4;
+    const MUST_READ_FILE = 5;
+    const MANUAL_FILE = 6;
+
     //以下为重要文件模块
 
     /**
@@ -103,7 +109,21 @@ class CommonFiles extends Model{
     }
 
     public static function getFilesByTypeWithPage($type, $perPage = 10){
-        // TODO
+        $files = self::where('file_isdeleted', 0)
+            ->where('file_type', $type)
+            ->orderBy('file_addtime', 'DESC')
+            ->paginate($perPage);
+
+        foreach($files as $i => $v){
+            $files[$i] = (function($v){
+                $notice = Resources::CommonFiles($v);
+                $notice['content'] = htmlspecialchars_decode($notice['content']);
+                $notice['content'] = str_limit(strip_tags($notice['content']), $limit = 100, $end = '...');
+                return $notice;
+            })($v);
+        }
+
+        return $files;
     }
 
 }

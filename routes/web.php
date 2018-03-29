@@ -32,7 +32,22 @@ Route::group(['namespace' => 'Front'], function(){
 
     Route::group(['prefix' => 'news'], function(){
         Route::get('partySchool', 'NewsController@partySchool');
+
     });
+
+    Route::group(['prefix' => 'commonFiles'], function(){
+        Route::get('regulation', 'FilesController@regulation');
+        Route::get('instrument', 'FilesController@instrument');
+        Route::get('mustRead', 'FilesController@mustRead');
+        Route::get('manual', 'FilesController@manual');
+    });
+});
+
+Route::get('test', function(){
+    $sso = new \TwT\SSO\Api(config('sso.app_id'), config('sso.app_key'));
+    $token = "5Q2jc5HWk0s4tsv5dtmReIXD5AmulvNqY8pOiaNrGnkn6owyUgHmfAVIOFdw6I5Ev2CyXCa4Ld7ioX3BWohAszU6soZS7BaaYnOp";
+    $user = $sso->fetchUserInfo($token);
+    dd($user);
 });
 
 
