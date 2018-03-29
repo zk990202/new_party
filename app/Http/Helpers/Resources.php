@@ -53,7 +53,7 @@ class Resources {
             'type' => $partyBuild->type,
             'typeName' => $partyBuild->column->column_name,
             'isTop' => $partyBuild->isrecommand,
-            'imgPath' => $partyBuild->img_path ? config('app.url') . "/upload/" . str_replace("./upload", "", $partyBuild->img_path) : '',
+            'imgPath' => $partyBuild->img_path ? config('app.url') . "/upload" . str_replace("./upload", "", $partyBuild->img_path) : '',
             'isHidden' => $partyBuild->isdeleted
         ];
     }

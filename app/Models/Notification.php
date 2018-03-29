@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use App\Http\Helpers\Resources;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Http\Request;
 
 class Notification extends Model
 {
@@ -112,13 +113,14 @@ class Notification extends Model
 
     /**
      * 前台首页--取出最新4条通知
+     * @param int $limit
      * @return array
      */
-    public static function getIndexData(){
+    public static function getIndexData($limit = 4){
         $res = self::where('notice_isdeleted', 0)
             ->orderBy('notice_istop', 'desc')
             ->orderBy('notice_time', 'desc')
-            ->limit(4)
+            ->limit($limit)
             ->get()->all();
         return array_map(function($notification){
             return Resources::Notification($notification);
@@ -140,24 +142,23 @@ class Notification extends Model
 
     /**
      * 取出所有通知--带分页
-     * @param $type
+     * @param $columnId
      * @return mixed
+     * @internal param $type
      */
-    public static function getAllNoticeWithPage($type){
-        $res_arr = self::where('column_id', $type)->where('notice_isdeleted', 0)
+    public static function getAllNoticeByColumnIdWithPage($columnId){
+        $res_arr = self::where('column_id', $columnId)->where('notice_isdeleted', 0)
             ->orderBy('notice_istop', 'desc')->orderBy('notice_ishidden', 'asc')->orderBy('notice_time', 'desc')
             ->paginate(6);
-        return $res_arr;
-    }
 
-    /**
-     * 取出所有活动通知--带分页
-     * @return mixed
-     */
-    public static function activityGetAllNoticeWithPage(){
-        $res_arr = self::where('column_id', 2)->where('notice_isdeleted', 0)
-            ->orderBy('notice_istop', 'desc')->orderBy('notice_ishidden', 'asc')->orderBy('notice_time', 'desc')
-            ->paginate(6);
+        foreach($res_arr as $i => $v){
+            $res_arr[$i] = (function($v){
+                $notice = Resources::Notification($v);
+                $notice['content'] = htmlspecialchars_decode($notice['content']);
+                $notice['content'] = str_limit(strip_tags($notice['content']), $limit = 100, $end = '...');
+                return $notice;
+            })($v);
+        }
         return $res_arr;
     }
 }

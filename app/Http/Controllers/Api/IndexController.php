@@ -53,7 +53,7 @@ class IndexController extends Controller{
 
         //党建专项，从数据库中取出6条数据
         //先取出党建专项的id
-        $type1 = Column::getSpecialId();
+        $type1 = Column::getPartyBuildIds();
         $type = [];
         for ($i = 0; $i < count($type1); $i++){
             $type[$i] = $type1[$i]['column_id'];

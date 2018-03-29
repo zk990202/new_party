@@ -176,15 +176,17 @@ class SpecialNews extends Model
     //下面为前台的模块了！！
 
     /**
-     * 前台首页--获取6条党建专项数据
-     * @param $type
+     * 按照多个类别获取新闻
+     * @param $type array
+     * @param $limit integer
      * @return array
      */
-    public static function getIndexDataPartyBuild($type){
+    public static function newsByTypesLimit($type, $limit = 5){
         $res = self::whereIn('type', $type)
             ->where('isdeleted', 0)
+            ->orderBy('isrecommand', 'desc')
             ->orderBy('inserttime', 'desc')
-            ->limit(6)
+            ->limit($limit)
             ->get()->all();
         return array_map(function ($specialNews){
             return Resources::SpecialNews($specialNews);
@@ -192,19 +194,40 @@ class SpecialNews extends Model
     }
 
     /**
-     * 前台首页--获取5条党校培训数据
+     * 按照单一类别获取新闻
+     * @param $type
+     * @param int $limit
      * @return array
      */
-    public static function getIndexDataPartySchool(){
-        $res = self::where('type', 2)
-            ->where('isrecommand', 1)
+    public static function newsByTypeLimit($type, $limit = 5){
+        $res = self::where('type', $type)
             ->where('isdeleted', 0)
+            ->whereNotNull('img_path')
+            ->orderBy('isrecommand', 'desc')
             ->orderBy('inserttime', 'desc')
-            ->limit(5)
+            ->limit($limit)
             ->get()->all();
         return array_map(function ($specialNews){
             return Resources::SpecialNews($specialNews);
         }, $res);
+    }
+
+    public static function newsByTypeWithPage($type, $perPage = 10){
+        $res = self::where('type', $type)
+            ->where('isdeleted', 0)
+            ->whereNotNull('img_path')
+            ->orderBy('isrecommand', 'desc')
+            ->orderBy('inserttime', 'desc')
+            ->paginate($perPage);
+        foreach($res as $i => $v){
+            $res[$i] = (function($v){
+                $notice = Resources::SpecialNews($v);
+                $notice['content'] = htmlspecialchars_decode($notice['content']);
+                $notice['content'] = str_limit(strip_tags($notice['content']), $limit = 100, $end = '...');
+                return $notice;
+            })($v);
+        }
+        return $res;
     }
 
 //    public static function getIndexDataStudyGroup(){

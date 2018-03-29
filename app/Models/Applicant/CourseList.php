@@ -33,10 +33,22 @@ class CourseList extends Model
         return array_map(function ($CourseList){
             return Resources::CourseList($CourseList);
         }, $res_arr);
+    }
 
-//        dd(array_map(function ($CourseList){
-//            return Resources::CourseList($CourseList);
-//        }, $res_arr));
+    /**
+     * 获取$limit条课程
+     * @param int $limit
+     * @return array
+     */
+    public static function getCourseByLimit($limit = 20){
+        $res_arr = self::where('course_isdeleted', 0)
+            ->orderBy('course_priority', 'ASC')
+            ->limit($limit)
+            ->get()->all();
+
+        return array_map(function ($CourseList){
+            return Resources::CourseList($CourseList);
+        }, $res_arr);
     }
 
     /**

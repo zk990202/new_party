@@ -103,4 +103,8 @@ class CommonFiles extends Model{
         }, $files);
     }
 
+    public static function getFilesByTypeWithPage($type, $perPage = 10){
+        // TODO
+    }
+
 }
