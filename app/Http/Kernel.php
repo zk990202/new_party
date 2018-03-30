@@ -2,7 +2,6 @@
 
 namespace App\Http;
 
-use App\Http\Middleware\VerifyToken;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
 class Kernel extends HttpKernel
@@ -52,7 +51,7 @@ class Kernel extends HttpKernel
      * @var array
      */
     protected $routeMiddleware = [
-        'auth' => \Illuminate\Auth\Middleware\Authenticate::class,
+//        'auth' => \Illuminate\Auth\Middleware\Authenticate::class,
         'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
         'bindings' => \Illuminate\Routing\Middleware\SubstituteBindings::class,
         'can' => \Illuminate\Auth\Middleware\Authorize::class,
@@ -64,6 +63,8 @@ class Kernel extends HttpKernel
         'ability' => \Zizaco\Entrust\Middleware\EntrustAbility::class,
 
         'Access' => \App\Http\Middleware\Access::class,
-        'HasToken' => \App\Http\Middleware\HasToken::class
+        'HasToken' => \App\Http\Middleware\HasToken::class,
+
+        'auth'  =>  \App\Http\Middleware\Authentication::class,
     ];
 }

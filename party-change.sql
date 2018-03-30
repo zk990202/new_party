@@ -29,3 +29,21 @@ ALTER TABLE twt_partybranch CHANGE partybranch_total_act partybranch_total_act I
 ALTER TABLE twt_logincount  ADD COLUMN created_at datetime ;
 
 ALTER TABLE twt_commonfiles CHANGE file_addtime file_addtime datetime;
+
+-- userinfo表更新
+ALTER TABLE b_userinfo ADD COLUMN username VARCHAR(60) NOT NULL;
+ALTER TABLE b_userinfo ADD COLUMN gender TINYINT(4) DEFAULT 1;
+ALTER TABLE b_userinfo ADD COLUMN sso_token VARCHAR(255) DEFAULT NULL;
+ALTER TABLE b_userinfo CHANGE usernumb user_number VARCHAR(20) NOT NULL;
+ALTER TABLE b_userinfo CHANGE partybranchid party_branch_id INT(11);
+ALTER TABLE b_userinfo DROP COLUMN departmentid;
+ALTER TABLE b_userinfo CHANGE collegeid college_id INT(10);
+ALTER TABLE b_userinfo CHANGE lastschool last_school VARCHAR(255);
+ALTER TABLE b_userinfo DROP COLUMN oldcollegeid;
+ALTER TABLE b_userinfo CHANGE classid class_id INT(11);
+ALTER TABLE b_userinfo CHANGE stuintime stu_in_time VARCHAR(50);
+ALTER TABLE b_userinfo DROP COLUMN gradeadd;
+ALTER TABLE b_userinfo DROP COLUMN state;
+ALTER TABLE b_userinfo CHANGE majorname major_name VARCHAR(200);
+ALTER TABLE b_userinfo DROP COLUMN stucity;
+ALTER TABLE b_userinfo CHANGE COLUMN politicalface political_face VARCHAR(50);

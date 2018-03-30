@@ -2,9 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 
-class UserInfo extends Model
+class UserInfo extends Authenticatable
 {
     //
     protected $table = "b_userinfo";
@@ -14,7 +14,17 @@ class UserInfo extends Model
     }
 
     public function college(){
-        return $this->belongsTo('App\Models\College', 'collegeid', 'id');
+        return $this->belongsTo('App\Models\College', 'college_id', 'id');
+    }
+
+    public function setRememberToken($value)
+    {
+        // do nothing
+    }
+
+    public function getRememberToken()
+    {
+        // do nothing
     }
 
     /**

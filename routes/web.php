@@ -10,6 +10,8 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
+
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 Route::group(['namespace' => 'Front'], function(){
@@ -43,12 +45,18 @@ Route::group(['namespace' => 'Front'], function(){
     });
 });
 
-Route::get('test', function(){
+Route::get('test', function() {
+    Auth::logout();
     $sso = new \TwT\SSO\Api(config('sso.app_id'), config('sso.app_key'));
     $token = "5Q2jc5HWk0s4tsv5dtmReIXD5AmulvNqY8pOiaNrGnkn6owyUgHmfAVIOFdw6I5Ev2CyXCa4Ld7ioX3BWohAszU6soZS7BaaYnOp";
     $user = $sso->fetchUserInfo($token);
-    dd($user);
+    dd($user) ;
+//    $sno = $user->result->user_number;
+//    $user = \App\Models\UserInfo::where('user_number', $sno)->first();
+//    Auth::login($user);
+//    return Auth::user();
 });
+//})->middleware('auth');
 
 
 Route::get('mig', function(){
