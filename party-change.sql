@@ -1,3 +1,4 @@
+/*
 ALTER TABLE twt_notification ADD COLUMN updated_at datetime ON UPDATE CURRENT_TIMESTAMP();
 ALTER TABLE twt_specialnews ADD COLUMN updated_at datetime ON UPDATE CURRENT_TIMESTAMP();
 ALTER TABLE twt_specialnews CHANGE summary summary VARCHAR(100) NULL;
@@ -29,7 +30,7 @@ ALTER TABLE twt_partybranch CHANGE partybranch_total_act partybranch_total_act I
 ALTER TABLE twt_logincount  ADD COLUMN created_at datetime ;
 
 ALTER TABLE twt_commonfiles CHANGE file_addtime file_addtime datetime;
-
+*/
 -- userinfo表更新
 ALTER TABLE b_userinfo ADD COLUMN username VARCHAR(60) NOT NULL;
 ALTER TABLE b_userinfo ADD COLUMN gender TINYINT(4) DEFAULT 1;

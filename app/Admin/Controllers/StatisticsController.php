@@ -45,9 +45,9 @@ class StatisticsController extends Controller
             );
 
             // 填充页面body部分，这里可以填入任何可被渲染的对象
-            $content->body(view('Manager.Statistics.login'));
+            $content->body(view('Admin.Statistics.login'));
         });
-//        return view('Manager.Statistics.login');
+//        return view('Admin.Statistics.login');
     }
 
     /**
@@ -82,11 +82,28 @@ class StatisticsController extends Controller
 
     /**
      * 20课统计
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return Content
      */
     public function twentyLessonsPage(){
 
-        return view('Manager.Statistics.twentyLessons');
+        return Admin::content(function (Content $content){
+            // 选填
+            $content->header('填写页面头标题');
+
+            // 选填
+            $content->description('填写页面描述小标题');
+
+            // 添加面包屑导航 since v1.5.7
+            $content->breadcrumb(
+                ['text' => '首页', 'url' => '/admin'],
+                ['text' => '用户管理', 'url' => '/admin/users'],
+                ['text' => '编辑用户']
+            );
+
+            // 填充页面body部分，这里可以填入任何可被渲染的对象
+            $content->body(view('Admin.Statistics.twentyLessons'));
+        });
+        //return view('Admin.Statistics.twentyLessons');
     }
 
     /**
@@ -120,10 +137,28 @@ class StatisticsController extends Controller
 
     /**
      * 申请人结业统计
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return Content
      */
     public function applicantTestListPage(){
-        return view('Manager.Statistics.applicantTestList');
+        return Admin::content(function(Content $content){
+            // 选填
+            $content->header('填写页面头标题');
+
+            // 选填
+            $content->description('填写页面描述小标题');
+
+            // 添加面包屑导航 since v1.5.7
+            $content->breadcrumb(
+                ['text' => '首页', 'url' => '/admin'],
+                ['text' => '用户管理', 'url' => '/admin/users'],
+                ['text' => '编辑用户']
+            );
+
+            // 填充页面body部分，这里可以填入任何可被渲染的对象
+            $content->body(view('Admin.Statistics.applicantTestList'));
+        });
+
+        //return view('Admin.Statistics.applicantTestList');
     }
 
     /**
@@ -193,7 +228,7 @@ class StatisticsController extends Controller
             ->where('test_parent', 0)
             ->where('test_isdeleted', 0)
             ->get();
-        return view('Manager.Statistics.academyTestList', [
+        return view('Admin.Statistics.academyTestList', [
             'test' => $tests,
             'test_parent' => $test_parent
             ]);
@@ -255,18 +290,70 @@ class StatisticsController extends Controller
     /*----------------------------------------------------------------------------------------------------*/
     /**
      * 支部统计,分别按学院、年级、类型分类
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     *
      */
     public function partyBranchPage1(){
-        return view('Manager.Statistics.partyBranchCollege');
+        return Admin::content(function(Content $content){
+            // 选填
+            $content->header('填写页面头标题');
+
+            // 选填
+            $content->description('填写页面描述小标题');
+
+            // 添加面包屑导航 since v1.5.7
+            $content->breadcrumb(
+                ['text' => '首页', 'url' => '/admin'],
+                ['text' => '用户管理', 'url' => '/admin/users'],
+                ['text' => '编辑用户']
+            );
+
+            // 填充页面body部分，这里可以填入任何可被渲染的对象
+            $content->body(view('Admin.Statistics.partyBranchCollege'));
+        });
+        //return view('Admin.Statistics.partyBranchCollege');
     }
 
     public function partyBranchPage2(){
-        return view('Manager.Statistics.partyBranchGrade');
+        return Admin::content(function(Content $content){
+            // 选填
+            $content->header('填写页面头标题');
+
+            // 选填
+            $content->description('填写页面描述小标题');
+
+            // 添加面包屑导航 since v1.5.7
+            $content->breadcrumb(
+                ['text' => '首页', 'url' => '/admin'],
+                ['text' => '用户管理', 'url' => '/admin/users'],
+                ['text' => '编辑用户']
+            );
+
+            // 填充页面body部分，这里可以填入任何可被渲染的对象
+            $content->body(view('Admin.Statistics.partyBranchGrade'));
+        });
+
+        //return view('Admin.Statistics.partyBranchGrade');
     }
 
     public function partyBranchPage3(){
-        return view('Manager.Statistics.partyBranchCategory');
+        return Admin::content(function(Content $content){
+            // 选填
+            $content->header('填写页面头标题');
+
+            // 选填
+            $content->description('填写页面描述小标题');
+
+            // 添加面包屑导航 since v1.5.7
+            $content->breadcrumb(
+                ['text' => '首页', 'url' => '/admin'],
+                ['text' => '用户管理', 'url' => '/admin/users'],
+                ['text' => '编辑用户']
+            );
+
+            // 填充页面body部分，这里可以填入任何可被渲染的对象
+            $content->body(view('Admin.Statistics.partyBranchCategory'));
+        });
+        //return view('Admin.Statistics.partyBranchCategory');
     }
 
     public function partyBranch1(){
