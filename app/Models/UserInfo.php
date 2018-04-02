@@ -9,6 +9,11 @@ class UserInfo extends Authenticatable
     //
     protected $table = "b_userinfo";
 
+    // 所有元素均可以被批量赋值
+    protected $guarded = [];
+
+    public $timestamps = false;
+
     public function major(){
         return $this->belongsTo('App\Models\Major', 'major', 'majorid');
     }
@@ -49,5 +54,19 @@ class UserInfo extends Authenticatable
         $res = self::where('usernumb', $sno)
             ->update(['partybranchid' => 0]);
         return $res ? true : false;
+    }
+
+    public function updateSSOToken($token){
+        $this->sso_token = $token;
+        $this->save();
+    }
+
+    public function getSSOToken(){
+        return $this->sso_token;
+    }
+
+    public function setSSOToken($token){
+        $this->sso_token = $token;
+        $this->save();
     }
 }

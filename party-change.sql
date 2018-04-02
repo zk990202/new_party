@@ -34,6 +34,7 @@ ALTER TABLE twt_commonfiles CHANGE file_addtime file_addtime datetime;
 ALTER TABLE b_userinfo ADD COLUMN username VARCHAR(60) NOT NULL;
 ALTER TABLE b_userinfo ADD COLUMN gender TINYINT(4) DEFAULT 1;
 ALTER TABLE b_userinfo ADD COLUMN sso_token VARCHAR(255) DEFAULT NULL;
+ALTER TABLE b_userinfo ADD COLUMN last_login DATETIME DEFAULT NULL;
 ALTER TABLE b_userinfo CHANGE usernumb user_number VARCHAR(20) NOT NULL;
 ALTER TABLE b_userinfo CHANGE partybranchid party_branch_id INT(11);
 ALTER TABLE b_userinfo DROP COLUMN departmentid;
