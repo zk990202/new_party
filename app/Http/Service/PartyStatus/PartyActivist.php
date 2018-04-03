@@ -8,36 +8,42 @@
 
 namespace App\Http\Service\PartyStatus;
 
+use App\Models\StudentInfo;
+
 class PartyActivist extends BaseWorkItem{
 
     public function to()
     {
-        // TODO: Implement to() method.
+        if($this->isActive())
+            return;
+        parent::to();
+        $status = StudentInfo::getMainStatus($this->userNumber) ;
+        // 团支部推优和积极分子平级
+        if($status == MainStatus::COMMUNIST)
+            StudentInfo::updateMainStatusTo($this->userNumber, MainStatus::ACTIVIST_COMMUNIST);
+        else
+            StudentInfo::updateMainStatusTo($this->userNumber, MainStatus::ACTIVIST);
     }
 
     public function cancel()
     {
-        // TODO: Implement cancel() method.
-    }
+        if(!$this->isActive())
+            return;
+        parent::cancel();
 
-    /**
-     * @return array
-     */
-    public function dependenceList()
-    {
-        // TODO: Implement dependenceList() method.
-    }
+        $status = StudentInfo::getMainStatus($this->userNumber) ;
 
-    /**
-     * @return array
-     */
-    public function determinationList()
-    {
-        // TODO: Implement determinationList() method.
+        if($status == MainStatus::ACTIVIST)
+            // 入党申请人
+            StudentInfo::updateMainStatusTo($this->userNumber, MainStatus::APPLICANT);
+        else
+            // 团支部推优
+            StudentInfo::updateMainStatusTo($this->userNumber, MainStatus::COMMUNIST);
     }
 
     public function isActive()
     {
-        // TODO: Implement isActive() method.
+        $status = StudentInfo::getMainStatus($this->userNumber) ;
+        return $status >= MainStatus::ACTIVIST && $status != MainStatus::COMMUNIST;
     }
 }

@@ -16,6 +16,7 @@ class StudentInfo extends Model
         'turn_real_meetingtime', 'approve_passedtime', 'partymember_time', 'thought_reportcount', 'personal_reportcount', 'main_status',
         'is_init'];
 
+
     public function college(){
         return $this->belongsTo('App\Models\College', 'academy_id', 'id');
     }
@@ -462,14 +463,37 @@ class StudentInfo extends Model
         return $res ? true : false;
     }
 
+    /**
+     * 季度思想汇报数量
+     * @param $sno
+     * @return int
+     */
     public static function getReportNumber($sno){
         $user = self::where('sno', $sno)->first();
         return $user ? $user->thought_reportcount : 0;
     }
 
+    /**
+     * 调整季度思想汇报数量
+     * @param $sno
+     * @param $num
+     * @return mixed
+     */
     public static function updateReportTo($sno, $num){
         return self::where('sno', $sno)->update([
             'thought_reportcount' => $num
         ]);
+    }
+
+    public static function getMainStatus($sno){
+        $user = self::where('sno', $sno)->first();
+        return $user ? intval($user->main_status) : 0;
+    }
+
+    public static function updateMainStatusTo($sno, $status){
+        $user = self::where('sno', $sno)->update([
+            'main_status' => $status
+        ]);
+        return;
     }
 }

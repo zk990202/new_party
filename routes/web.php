@@ -47,7 +47,7 @@ Route::group(['namespace' => 'Front'], function(){
 });
 
 Route::get('test', function() {
-    $a = new \App\Http\Service\PartyStatus\PartyApplication();
+    $a = new \App\Http\Service\PartyStatus\DevelopmentTarget();
     $a->setUserNumber('3014218099');
     $a->to();
     dd($a->isActive());

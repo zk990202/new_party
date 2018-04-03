@@ -10,7 +10,7 @@ namespace App\Http\Service\PartyStatus;
 
 use App\Models\StudentInfo;
 
-class IdeologicalReport4 extends BaseWorkItem{
+class IdeologicalReport_4 extends BaseWorkItem{
 
     public function to()
     {

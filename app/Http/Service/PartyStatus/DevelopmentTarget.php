@@ -8,20 +8,10 @@
 
 namespace App\Http\Service\PartyStatus;
 
-class DevelopmentTarget extends BaseWorkItem{
-
-    public function to()
+class DevelopmentTarget extends BaseStatusItem {
+    public function __construct()
     {
-        // TODO: Implement to() method.
-    }
-
-    public function cancel()
-    {
-        // TODO: Implement cancel() method.
-    }
-
-    public function isActive()
-    {
-        // TODO: Implement isActive() method.
+        parent::__construct();
+        $this->status = MainStatus::DEVELOPMENT_TARGET;
     }
 }

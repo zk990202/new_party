@@ -8,10 +8,10 @@
 
 namespace App\Http\Service\PartyStatus;
 
-class CentralizedTraining extends BaseStatusItem {
+class DevelopmentPublicity extends BaseStatusItem {
     public function __construct()
     {
         parent::__construct();
-        $this->status = MainStatus::CENTRALIZED_TRAINING;
+        $this->status = MainStatus::DEVELOPMENT_PUBLICITY;
     }
 }
