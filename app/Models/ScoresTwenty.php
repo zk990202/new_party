@@ -196,8 +196,6 @@ class ScoresTwenty extends Model
         return $res;
     }
 
-
-
     /**
      * @param $sno
      */
@@ -208,4 +206,10 @@ class ScoresTwenty extends Model
         dd($res);
     }
 
+    public static function clear($sno){
+        $res = self::where('student_id', $sno)->update([
+            'isdeleted' => 1
+        ]);
+        return;
+    }
 }

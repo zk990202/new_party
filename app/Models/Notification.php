@@ -23,7 +23,7 @@ class Notification extends Model
     }
 
     public function owner(){
-        return $this->hasOne('App\Models\User', 'usernumb', 'author');
+        return $this->hasOne('App\Models\UserInfo', 'user_number', 'author');
     }
 
     //以下是党校公告专区

@@ -50,7 +50,7 @@ class Resources {
             'summary' => $partyBuild->summary,
             'content' => $partyBuild->content,
             'time' => $partyBuild->inserttime,
-            'authorName' => $partyBuild->owner->username ?? '',
+            'authorName' => $partyBuild->userInfo->username ?? '',
             'type' => $partyBuild->type,
             'typeName' => $partyBuild->column->column_name,
             'isTop' => $partyBuild->isrecommand,

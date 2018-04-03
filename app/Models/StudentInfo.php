@@ -21,11 +21,11 @@ class StudentInfo extends Model
     }
 
     public function user(){
-        return $this->belongsTo('App\Models\User', 'sno', 'usernumb');
+        return $this->belongsTo('App\Models\UserInfo', 'sno', 'user_number');
     }
 
     public function userInfo(){
-        return $this->belongsTo('App\Models\UserInfo', 'sno', 'usernumb');
+        return $this->belongsTo('App\Models\UserInfo', 'sno', 'user_number');
     }
 
     public function testList(){
@@ -95,10 +95,8 @@ class StudentInfo extends Model
      */
     public static function getStudentInfo($sno){
         $studentInfo = self::where('sno', $sno)
-            ->get()->all();
-        return array_map(function ($studentInfo){
-            return Resources::StudentInfo($studentInfo);
-        }, $studentInfo);
+            ->first();
+        return Resources::StudentInfo($studentInfo);
     }
 
     /**
@@ -430,10 +428,10 @@ class StudentInfo extends Model
      * @param $sno
      * @return mixed
      */
-    public static function updatePassTwenty($sno){
+    public static function updatePassTwenty($sno, $status = 1){
         $res = self::where('sno', $sno)
             ->update([
-                'is_pass20' => 1,
+                'is_pass20' => $status,
                 'pass20_time' => date('Y-m-d')
             ]);
         return $res;
@@ -462,5 +460,16 @@ class StudentInfo extends Model
             ->where('applicant_islocked', 1)
             ->get()->toArray();
         return $res ? true : false;
+    }
+
+    public static function getReportNumber($sno){
+        $user = self::where('sno', $sno)->first();
+        return $user ? $user->thought_reportcount : 0;
+    }
+
+    public static function updateReportTo($sno, $num){
+        return self::where('sno', $sno)->update([
+            'thought_reportcount' => $num
+        ]);
     }
 }

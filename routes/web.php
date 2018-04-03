@@ -11,6 +11,7 @@
 |
 */
 
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -44,6 +45,14 @@ Route::group(['namespace' => 'Front'], function(){
         Route::get('manual', 'FilesController@manual');
     });
 });
+
+Route::get('test', function() {
+    $a = new \App\Http\Service\PartyStatus\PartyApplication();
+    $a->setUserNumber('3014218099');
+    $a->to();
+    dd($a->isActive());
+});
+//})->middleware('auth');
 
 
 Route::get('mig', function(){

@@ -938,7 +938,7 @@ class ProbationaryController extends Controller{
                 $isPass = EntryForm::isAllPassed($sno);
                 if (!$isPass){
                     //判断该用户是否符合要求....
-                    if ($studentInfo[0]['mainStatus'] > 9 && $studentInfo[0]['mainStatus'] < 12){
+                    if ($studentInfo['mainStatus'] > 9 && $studentInfo['mainStatus'] < 12){
                         $res = EntryForm::add($sno, $trainId);
                         if ($res){
                             return response()->json([

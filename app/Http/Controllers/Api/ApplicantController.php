@@ -144,7 +144,7 @@ class ApplicantController extends Controller {
             $exercises = [];
             //如果选择的是第一课,那么就得判断该用户是否提交入党申请书
             if ($course_id == 41){
-                $studentFile = StudentFiles::getStudentFile($sno);
+                $studentFile = StudentFiles::getStudentFiles($sno, [StudentFiles::FILE_TYPE['APPLICANT']], [StudentFiles::FILE_STATUS['QUALIFIED'], StudentFiles::FILE_STATUS['EXCELLENT']]);
                 if (!$studentFile){
                     return response()->json([
                         'message' => '不好意思,您可能没有提交入党申请书,或者是没有通过,暂时还不是申请人的身份,不能答题!'
@@ -354,7 +354,7 @@ class ApplicantController extends Controller {
                         $isOpen = TestList::ifOpen();
                         if ($isOpen){
                             //查看该期考试是否已经报名
-                            $isSign = EntryForm::isEntry($sno, $testId);
+                            $isSign = EntryForm::isEntryWithTestId($sno, $testId);
                             if (!$isSign){
                                 return response()->json([
                                     'success' => 1
@@ -413,7 +413,7 @@ class ApplicantController extends Controller {
         }
 
         $sno = $userInfo['user_number'];
-        $isSign = EntryForm::isEntry($sno, $testId);
+        $isSign = EntryForm::isEntryWithTestId($sno, $testId);
         //判断是否已经报名，避免重复报名
         if (!$isSign){
             $sign = EntryForm::signAdd($sno, $testId, $campus);

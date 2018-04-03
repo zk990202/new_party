@@ -39,7 +39,7 @@ class UserInfo extends Authenticatable
      * @return bool
      */
     public static function updatePartyBranch($sno, $branch_id){
-        $res = self::where('usernumb', $sno)
+        $res = self::where('user_number', $sno)
             ->update(['partybranchid' => $branch_id]);
         return $res ? true : false;
     }
@@ -51,7 +51,7 @@ class UserInfo extends Authenticatable
      * @return bool
      */
     public static function deletePartyBranch($sno, $branch_id){
-        $res = self::where('usernumb', $sno)
+        $res = self::where('user_number', $sno)
             ->update(['partybranchid' => 0]);
         return $res ? true : false;
     }

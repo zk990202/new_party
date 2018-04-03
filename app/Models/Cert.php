@@ -13,6 +13,12 @@ class Cert extends Model
 
     const CREATED_AT = 'cert_time';
 
+    //1表示申请人的。2表示院级的3表示预备党员的
+    const CERT_APPLICANT = 1;
+    const CERT_ACADEMY = 2;
+    const CERT_PROBATIONARY = 3;
+
+
     protected $fillable = ['sno', 'entry_id', 'cert_no', 'cert_type', 'cert_time', 'cert_getperson', 'cert_place',
         'cert_islost', 'isdeleted'];
 
@@ -21,11 +27,11 @@ class Cert extends Model
     }
 
     public function userInfo(){
-        return $this->belongsTo('App\Models\Userinfo','sno','usernumb');
+        return $this->belongsTo('App\Models\UserInfo','sno','user_number');
     }
 
     public function user(){
-        return $this->belongsTo('App\Models\User', 'sno', 'usernumb');
+        return $this->belongsTo('App\Models\UserInfo', 'sno', 'user_number');
     }
 
     public function entryForm(){
@@ -261,5 +267,17 @@ class Cert extends Model
         $res = self::where('cert_id', $cert_id)
             ->update(['cert_islost' => 1]);
         return $res ? true : false;
+    }
+
+    public static function getCertByTypeSno($type, $sno){
+        $res = self::where([
+            'cert_type' => $type,
+            'sno'       => $sno,
+            'isdeleted' => 0
+        ])->get()->all();
+
+        return array_map(function($res){
+            return Resources::Cert($res);
+        }, $res);
     }
 }

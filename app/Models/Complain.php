@@ -19,11 +19,11 @@ class Complain extends Model
     }
 
     public function userInfo(){
-        return $this->belongsTo('App\Models\UserInfo', 'from_sno', 'usernumb');
+        return $this->belongsTo('App\Models\UserInfo', 'from_sno', 'user_number');
     }
 
     public function user(){
-        return $this->belongsTo('App\Models\User', 'from_sno', 'usernumb');
+        return $this->belongsTo('App\Models\UserInfo', 'from_sno', 'user_number');
     }
 
     public function college(){

@@ -18,6 +18,14 @@ class EntryForm extends Model
     protected $primaryKey = 'entry_id';
 
     const CREATED_AT = 'entry_time';
+
+    //考试状态  0未录入,1正常，2作弊，3违纪，4缺考
+    const NOT_ENTERED = 0;
+    const ENTRY_NORMAL = 1;
+    const ENTRY_CHEATED = 2;
+    const ENTRY_VIOLATION = 3;
+    const ENTRY_MISSED = 4;
+
     protected $fillable = ['sno', 'test_id', 'entry_time', 'entry_practicegrade', 'entry_articlegrade',
         'entry_testgrade', 'entry_status', 'entry_ispassed', 'is_systemadd', 'entry_islastadded',
         'cert_isgrant', 'isexit'];
@@ -31,11 +39,11 @@ class EntryForm extends Model
     }
 
     public function userInfo(){
-        return $this->belongsTo('App\Models\UserInfo','sno','usernumb');
+        return $this->belongsTo('App\Models\UserInfo','sno','user_number');
     }
 
     public function user(){
-        return $this->belongsTo('App\Models\User', 'sno', 'usernumb');
+        return $this->belongsTo('App\Models\UserInfo', 'sno', 'user_number');
     }
 
     /**

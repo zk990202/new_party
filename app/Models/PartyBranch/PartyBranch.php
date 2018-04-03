@@ -26,15 +26,15 @@ class PartyBranch extends Model
     const CREATED_AT = 'partybranch_establishtime';
 
     public function user_secretary(){
-        return $this->belongsTo('App\Models\User', 'partybranch_secretary', 'usernumb');
+        return $this->belongsTo('App\Models\UserInfo', 'partybranch_secretary', 'user_number');
     }
 
     public function user_organizer(){
-        return $this->belongsTo('App\Models\User', 'partybranch_organizer', 'usernumb');
+        return $this->belongsTo('App\Models\UserInfo', 'partybranch_organizer', 'user_number');
     }
 
     public function user_propagator(){
-        return $this->belongsTo('App\Models\User', 'partybranch_propagator', 'usernumb');
+        return $this->belongsTo('App\Models\UserInfo', 'partybranch_propagator', 'user_number');
     }
 
     public function college_(){

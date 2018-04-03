@@ -20,7 +20,7 @@ class SpecialNews extends Model
     }
 
     public function owner(){
-        return $this->hasOne('App\Models\User', 'usernumb', 'author');
+        return $this->hasOne('App\Models\UserInfo', 'user_number', 'author');
     }
 
     /*以下为党建专项模块---------------------------------------------------------------------------------------------------*/

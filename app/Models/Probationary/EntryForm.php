@@ -31,11 +31,11 @@ class EntryForm extends Model
     }
 
     public function userInfo(){
-        return $this->belongsTo('App\Models\UserInfo','sno','usernumb');
+        return $this->belongsTo('App\Models\UserInfo','sno','user_number');
     }
 
     public function user(){
-        return $this->belongsTo('App\Models\User', 'sno', 'usernumb');
+        return $this->belongsTo('App\Models\UserInfo', 'sno', 'user_number');
     }
 
     public function trainList(){
