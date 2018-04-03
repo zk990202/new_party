@@ -10,8 +10,7 @@ namespace App\Http\Service\PartyStatus;
 
 use App\Models\StudentFiles;
 
-// 入党申请书状态
-class PartyApplication extends BaseWorkItem{
+class VolunteerBook extends BaseWorkItem{
 
     public function to()
     {
@@ -24,7 +23,7 @@ class PartyApplication extends BaseWorkItem{
             'file_content' => '系统添加,并设置为通过状态!',
             'file_addtime' => date('Y-m-d H:i:s'),
             'file_dealtime' => date('Y-m-d H:i:s'),
-            'file_type' => StudentFiles::FILE_TYPE['APPLICANT'],
+            'file_type' => StudentFiles::FILE_TYPE['VOLUNTEER_BOOK'],
             'file_status' => StudentFiles::FILE_STATUS['QUALIFIED'],
             'is_systemadd' => 1
         ]);
@@ -32,16 +31,18 @@ class PartyApplication extends BaseWorkItem{
 
     public function cancel()
     {
-        if(!$this->isActive())
+        if(! $this->isActive())
             return;
         parent::cancel();
-        StudentFiles::where(['sno' => $this->userNumber, 'file_type' => StudentFiles::FILE_TYPE['APPLICANT']])
-            ->update(['file_status' => StudentFiles::FILE_STATUS['UNPROCESSED']]);
+
+        if($this->isActive()){
+            StudentFiles::where(['sno' => $this->userNumber, 'file_type' => StudentFiles::FILE_TYPE['VOLUNTEER_BOOK']])
+                ->update(['file_status' => StudentFiles::FILE_STATUS['UNPROCESSED']]);
+        }
     }
 
     public function isActive()
     {
-        // 是否提交入党申请书
         $file = StudentFiles::getStudentFiles($this->userNumber, $type = [StudentFiles::FILE_TYPE['APPLICANT']], $status = [StudentFiles::FILE_STATUS['QUALIFIED'], StudentFiles::FILE_STATUS['EXCELLENT']]);
         return boolval($file);
     }
