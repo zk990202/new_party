@@ -31,7 +31,8 @@ abstract class BaseStatusItem extends BaseWorkItem{
         if(!$this->isActive())
             return;
         parent::cancel();
-        StudentInfo::updateMainStatusTo($this->userNumber, $this->status);
+        // 这个逻辑不满足入党积极分子和团支部推优那里
+        StudentInfo::updateMainStatusTo($this->userNumber, $this->status - 1);
     }
 
     public function isActive()

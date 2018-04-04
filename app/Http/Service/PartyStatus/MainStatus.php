@@ -31,4 +31,14 @@ class MainStatus{
     const COMMITTEE_APPROVAL = 9;
     // 预备党员
     const PROBATIONARY = 10;
+    // 支部组织生活和党内活动
+    const PARTY_ORGANIZATION = 11;
+    // 党员转正公示
+    const CORRECT_PUBLICITY = 12;
+    // 召开转正大会表决通过
+    const VOTE_PASSED = 13;
+    // 党委审批
+    const PARTY_APPROVAL = 14;
+    // 正式党员
+    const FORMAL_MEMBER = 15;
 }

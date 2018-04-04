@@ -26,6 +26,14 @@ class EntryForm extends Model
     const CREATED_AT = 'entry_time';
     const UPDATED_AT = 'updated_at';
 
+
+    //考试状态  0未录入,1正常，2作弊，3违纪，4缺考
+    const NOT_ENTERED = 0;
+    const ENTRY_NORMAL = 1;
+    const ENTRY_CHEATED = 2;
+    const ENTRY_VIOLATION = 3;
+    const ENTRY_MISSED = 4;
+
     public function studentInfo(){
         return $this->belongsTo('App\Models\StudentInfo', 'sno', 'sno');
     }
@@ -450,15 +458,13 @@ class EntryForm extends Model
     /**
      * 是否已经通过考试
      * @param $sno
-     * @return array
+     * @return bool
      */
     public static function isPass($sno){
         $res = self::where('sno', $sno)
             ->where('entry_isallpassed', 1)
             ->get()->all();
-        return array_map(function ($entryForm){
-            return Resources::ProbationaryEntryForm($entryForm);
-        }, $res);
+        return $res ? true : false;
     }
 
     /**

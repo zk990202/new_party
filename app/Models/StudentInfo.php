@@ -496,4 +496,26 @@ class StudentInfo extends Model
         ]);
         return;
     }
+
+    /**
+     * 获取个人小结数量
+     * @param $sno
+     * @return int
+     */
+    public static function getPersonalSummaryNumber($sno){
+        $user = self::where('sno', $sno)->first();
+        return $user ? $user->personal_reportcount : 0;
+    }
+
+    /**
+     * 调整季度思想汇报数量
+     * @param $sno
+     * @param $num
+     * @return mixed
+     */
+    public static function updatePersonalSummaryTo($sno, $num){
+        return self::where('sno', $sno)->update([
+            'personal_reportcount' => $num
+        ]);
+    }
 }
