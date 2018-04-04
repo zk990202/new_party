@@ -24,8 +24,8 @@ abstract class BaseWorkItem implements IWorkable{
         $className = explode('\\', $className);
         $className = end($className);
 
-        $this->dependenceList = config("party.$className.dependsOn");
-        $this->determinationList = config("party.$className.determines");
+        $this->dependenceList = config("party.nodes.$className.dependsOn");
+        $this->determinationList = config("party.nodes.$className.determines");
 
     }
 

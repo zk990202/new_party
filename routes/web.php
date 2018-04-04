@@ -15,13 +15,12 @@ use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
-Route::group(['namespace' => 'Front'], function(){
+Route::group(['namespace' => 'Front', 'middleware' => 'auth'], function(){
     // 首页
     Route::get('/', 'HomeController@index');
     Route::group(['prefix' => 'applicant'], function(){
         // 20课列表
         Route::get('courseStudy', 'ApplicantController@courseStudy');
-
 
     });
 
@@ -44,12 +43,16 @@ Route::group(['namespace' => 'Front'], function(){
         Route::get('mustRead', 'FilesController@mustRead');
         Route::get('manual', 'FilesController@manual');
     });
+
+    Route::group(['prefix' => 'personal'], function(){
+        Route::get('status', 'PersonalController@status');
+    });
 });
 
 Route::get('test', function() {
-    $a = new \App\Http\Service\PartyStatus\DevelopmentTarget();
+    $a = new \App\Http\Service\PartyStatus\ProbationaryMember();
     $a->setUserNumber('3014218099');
-    $a->to();
+    $a->cancel();
     dd($a->isActive());
 });
 //})->middleware('auth');

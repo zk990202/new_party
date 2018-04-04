@@ -69,4 +69,8 @@ class UserInfo extends Authenticatable
         $this->sso_token = $token;
         $this->save();
     }
+
+    public function userNumber(){
+        return $this->user_number;
+    }
 }
