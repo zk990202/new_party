@@ -25,6 +25,12 @@ class EntryForm extends Model
     const ENTRY_VIOLATION = 3;
     const ENTRY_MISSED = 4;
 
+    const PASSED_STATUS = [
+        'NOT_PASS' => 0,
+        'PASSED'   => 1,
+        'EXCELLENT'=> 2
+    ];
+
     protected $fillable = ['test_id', 'sno', 'entry_time', 'entry_practicegrade', 'entry_articlegrade', 'entry_islastadded',
         'is_systemadd', 'entry_ispassed', 'entry_status', 'cert_isgrant', 'isexit', 'campus'];
 
@@ -386,5 +392,54 @@ class EntryForm extends Model
         return array_map(function ($entryForm){
             return Resources::EntryForm($entryForm);
         }, $res);
+    }
+
+    public static function warpStatus(&$item){
+        if(isset($item['status'])){
+            $status = $item['status'];
+            switch($status){
+                case self::NOT_ENTERED:
+                    $item['status'] = '未录入';
+                    break;
+                case self::ENTRY_NORMAL:
+                    $item['status'] = '正常';
+                    break;
+                case self::ENTRY_CHEATED:
+                    $item['status'] = '作弊';
+                    break;
+                case self::ENTRY_VIOLATION:
+                    $item['status'] = '违纪';
+                    break;
+                case self::ENTRY_MISSED:
+                    $item['status'] = '缺考';
+                    break;
+                default:
+                    $item['status'] = '未知状态';
+                    break;
+            }
+        }
+    }
+
+    public static function exitEntryByUserNumber($userNumber, $entryId){
+        return self::where(['entry_id' => $entryId, 'sno' => $userNumber])
+            ->update(['isexit' => 1]);
+    }
+
+    public static function warpIsPassed(&$item){
+        if(isset($item['isPassed'])){
+            switch ($item['isPassed']){
+                case self::PASSED_STATUS['NOT_PASS']:
+                    $item['isPassed'] = '不及格';
+                    break;
+                case self::PASSED_STATUS['PASSED']:
+                    $item['isPassed'] = '几个';
+                    break;
+                case self::PASSED_STATUS['EXCELLENT']:
+                    $item['isPassed'] = '优秀';
+                    break;
+                default:
+                    $item['isPassed'] = '未知状态';
+            }
+        }
     }
 }

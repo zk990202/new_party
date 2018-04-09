@@ -19,6 +19,15 @@ class TestList extends Model {
     protected $fillable = ['test_name', 'test_begintime', 'test_attention', 'test_filename', 'test_filepath',
         'test_status', 'test_ishidden'];
 
+    // 0未开始1报名开始,2报名截止,3成绩录入,4录入结束5,考试结束
+    const TEST_STATUS = [
+        'NOT_START' => 0,
+        'STARTED'   => 1,
+        'STOPPED'   => 2,
+        'ENTERING'  => 3,
+        'ENTERED'   => 4,
+        'FINISHED'  => 5
+    ];
     /**
      * 获取所有考试
      * @return array
@@ -108,4 +117,43 @@ class TestList extends Model {
             ->get()->toArray();
         return $res ? true : false;
     }
+
+    public static function getActiveTest(){
+        $res = self::where('test_status', 1)
+            ->where('test_isdeleted', 0)
+            ->first();
+        if(!$res)
+            return null;
+        return Resources::TestList($res);
+    }
+
+    public static function warpStatus(&$item){
+        if(isset($item['testStatus'])){
+            $status = $item['testStatus'];
+            switch($status){
+                case self::TEST_STATUS['NOT_START']:
+                    $item['testStatus'] = '尚未开始';
+                    break;
+                case self::TEST_STATUS['STARTED']:
+                    $item['testStatus'] = '报名开始';
+                    break;
+                case self::TEST_STATUS['STOPPED']:
+                    $item['testStatus'] = '报名结束';
+                    break;
+                case self::TEST_STATUS['ENTERING']:
+                    $item['testStatus'] = '成绩录入中';
+                    break;
+                case self::TEST_STATUS['ENTERED']:
+                    $item['testStatus'] = '成绩录入结束';
+                    break;
+                case self::TEST_STATUS['FINISHED']:
+                    $item['testStatus'] = '考试结束';
+                    break;
+                default:
+                    $item['testStatus'] = '未知状态';
+            }
+        }
+    }
+
+
 }

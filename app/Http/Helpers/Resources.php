@@ -92,7 +92,7 @@ class Resources {
             'courseId' => $articleList->course_id,
             'articleName' => $articleList->article_name,
             'courseName' =>$articleList->courseList->course_name ?? "",
-            'content' => $articleList->article_content,
+            'content' => clean($articleList->article_content),
             'isHidden' => $articleList->article_ishidden,
             'isDeleted' => $articleList->article_isdeleted
         ];
@@ -155,24 +155,28 @@ class Resources {
 
     public static function EntryForm(EntryForm $entryForm){
         return [
-            'id' => $entryForm->entry_id,
-            'testId' => $entryForm->test_id,
-            'testName' => $entryForm->testList->test_name,
-            'sno' => $entryForm->sno,
-            'academyId' => $entryForm->studentInfo->academy_id ?? '',
-            'academyName' => $entryForm->studentInfo->college->shortname ?? '',
-            'majorName' => $entryForm->userInfo->major->majorname ?? '',
-            'studentName' => $entryForm->user->username ?? '',
-            'time' => $entryForm->entry_time,
+            'id'            => $entryForm->entry_id,
+            'testId'        => $entryForm->test_id,
+            'testName'      => $entryForm->testList->test_name,
+            'testTime'      => $entryForm->testList->test_begintime,
+            'testStatus'    => $entryForm->testList->test_status,
+            'sno'           => $entryForm->sno,
+            'academyId'     => $entryForm->studentInfo->academy_id ?? '',
+            'academyName'   => $entryForm->studentInfo->college->shortname ?? '',
+            'majorName'     => $entryForm->userInfo->major->majorname ?? '',
+            'studentName'   => $entryForm->user->username ?? '',
+            'time'          => $entryForm->entry_time,
             'practiceGrade' => $entryForm->entry_practicegrade,
-            'articleGrade' => $entryForm->entry_articlegrade,
-            'isLastAdded' => $entryForm->entry_islastadded,
-            'isSystemAdd' => $entryForm->is_systemadd,
-            'isPassed' => $entryForm->entry_ispassed,
-            'status' => $entryForm->entry_status,
-            'certIsGrant' => $entryForm->cert_isgrant,
-            'isExit' => $entryForm->isexit,
-            'campus' => $entryForm->campus
+            'articleGrade'  => $entryForm->entry_articlegrade,
+            'isLastAdded'   => $entryForm->entry_islastadded,
+            'isSystemAdd'   => $entryForm->is_systemadd,
+            'isPassed'      => $entryForm->entry_ispassed,
+            'status'        => $entryForm->entry_status,
+            'certIsGrant'   => $entryForm->cert_isgrant,
+            'isExit'        => $entryForm->isexit,
+            'campus'        => $entryForm->campus,
+            'fileName'      => $entryForm->testList->test_filename,
+            'filePath'      => FileService::fileAccessUri($entryForm->testList->test_filepath),
         ];
     }
 

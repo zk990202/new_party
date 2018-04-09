@@ -79,7 +79,7 @@ class ApplicantController extends Controller{
     public function courseDetail($id){
         $course = CourseList::getCourseById($id);
 //        dd($course);
-        $article = ArticleList::getArticleById($id);
+        $article = ArticleList::getArticleByCourseId($id);
 //        dd($article);
         $exercise = ExerciseList::getExerciseById($id);
         return Admin::content(function(Content $content) use ($course, $article, $exercise){

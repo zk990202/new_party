@@ -72,7 +72,7 @@ class UserService{
 
         $userDetail = [
             'user_number'     => $userInfo->user_number,
-            'party_branch_id' => $userInfo->user_info->party_branch_id,
+            //'party_branch_id' => $userInfo->user_info->party_branch_id,
             'college_id'      => $userInfo->college_code,
             'province'        => $userInfo->user_info->province,
             'last_school'     => $userInfo->user_info->last_school,
@@ -96,7 +96,22 @@ class UserService{
         return $user;
     }
 
+    public function getCurrentUser(){
+        if(!auth()->check())
+            return null;
+        $user = auth()->user();
+        $data = [
+            'userNumber'  => $user->user_number,
+            'username'    => $user->username,
+            'major'       => $user->major_name,
+            'college'     => $user->college->collegename,
+            'partyBranch' => $user->info->partyBranch->partybranch_name
+        ];
+        return $data;
+    }
+
     protected function existLocal(){
 
     }
+
 }

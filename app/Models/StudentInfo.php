@@ -33,6 +33,10 @@ class StudentInfo extends Model
         return $this->belongsTo('App\Models\Applicant\TestList', 'locked_test_id', 'test_id');
     }
 
+    public function partyBranch(){
+        return $this->belongsTo('App\Models\PartyBranch\PartyBranch', 'partybranch_id', 'partybranch_id');
+    }
+
     /**
      * 获取所有被锁人员
      * @return mixed
@@ -517,5 +521,15 @@ class StudentInfo extends Model
         return self::where('sno', $sno)->update([
             'personal_reportcount' => $num
         ]);
+    }
+
+    /**
+     * 判断用户是否被锁
+     * @param $userNumber
+     * @return bool
+     */
+    public static function isLocked($userNumber){
+        $user = self::where('sno', $userNumber)->first();
+        return boolval($user->applicant_islocked);
     }
 }

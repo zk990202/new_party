@@ -48,3 +48,6 @@ ALTER TABLE b_userinfo DROP COLUMN state;
 ALTER TABLE b_userinfo CHANGE majorname major_name VARCHAR(200);
 ALTER TABLE b_userinfo DROP COLUMN stucity;
 ALTER TABLE b_userinfo CHANGE COLUMN politicalface political_face VARCHAR(50);
+
+DROP TABLE b_party;
+DROP TABLE intro;

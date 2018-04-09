@@ -45,7 +45,7 @@ class ArticleList extends Model
      * @param $id
      * @return array
      */
-    public static function getArticleById($id){
+    public static function getArticleByCourseId($id){
         $articles = self::where('course_id', $id)
             ->where('article_isdeleted', 0)
             ->get()->all();

@@ -11,8 +11,6 @@
 |
 */
 
-use Illuminate\Support\Facades\App;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 Route::group(['namespace' => 'Front', 'middleware' => 'auth'], function(){
@@ -21,9 +19,18 @@ Route::group(['namespace' => 'Front', 'middleware' => 'auth'], function(){
     Route::group(['prefix' => 'applicant'], function(){
         // 20课列表
         Route::get('courseStudy', 'ApplicantController@courseStudy');
+        Route::get('courseStudy/{id}', 'ApplicantController@courseDetail');
+
+        Route::get('signUp', 'ApplicantController@signUpPage');
+        Route::post('signUp', 'ApplicantController@signUp');
+
+        Route::get('signResult', 'ApplicantController@signUpResult');
+        Route::get('signExit', 'ApplicantController@signExit');
+
+        Route::get('grade', 'ApplicantController@grade');
 
     });
-
+    // 通知公告
     Route::group(['prefix' => 'notification'], function(){
         Route::get('applicant', 'NotificationController@applicant');
         Route::get('academy', 'NotificationController@academy');
@@ -32,11 +39,13 @@ Route::group(['namespace' => 'Front', 'middleware' => 'auth'], function(){
         Route::get('activity', 'NotificationController@activity');
     });
 
+    // 新闻板块
     Route::group(['prefix' => 'news'], function(){
         Route::get('partySchool', 'NewsController@partySchool');
 
     });
 
+    // 重要文件
     Route::group(['prefix' => 'commonFiles'], function(){
         Route::get('regulation', 'FilesController@regulation');
         Route::get('instrument', 'FilesController@instrument');
@@ -44,15 +53,19 @@ Route::group(['namespace' => 'Front', 'middleware' => 'auth'], function(){
         Route::get('manual', 'FilesController@manual');
     });
 
+    // 个人支部
     Route::group(['prefix' => 'personal'], function(){
         Route::get('status', 'PersonalController@status');
+        Route::get('partyBranch', 'PersonalController@partyBranch');
+        Route::get('doc', 'PersonalController@docPage');
+        Route::post('doc', 'PersonalController@docStore');
     });
 });
 
 Route::get('test', function() {
-    $a = new \App\Http\Service\PartyStatus\ProbationaryMember();
+    $a = new \App\Http\Service\PartyStatus\ApplicantPartySchool();
     $a->setUserNumber('3014218099');
-    $a->cancel();
+    $a->to();
     dd($a->isActive());
 });
 //})->middleware('auth');

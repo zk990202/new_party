@@ -10,14 +10,14 @@
             </li>
             <li class="list"><a href="#" class="menu">网上党校</a>
                 <ul class="sub-menu">
-                    <li><a href="ProposerTrain.html">申请人培训</a></li>
+                    <li><a href="{{ url('applicant/courseStudy') }}">申请人培训</a></li>
                     <li><a href="ActivistTrain.html">积极分子培训</a></li>
                     <li><a href="Preliminary-memeberTrain.html">预备党员培训</a></li>
                 </ul>
             </li>
             <li class="list"><a href="#" class="menu">我的支部</a>
                 <ul class="sub-menu">
-                    <li><a href="Ownness.html">个人状态</a></li>
+                    <li><a href="{{ url('personal/status') }}">个人状态</a></li>
                     <li><a href="detial.html">支部详情</a></li>
                     <li><a href="member-list.html">支部成员列表</a></li>
                     <li><a href="#">我的学习小组</a></li>

@@ -19,7 +19,11 @@ class UserInfo extends Authenticatable
     }
 
     public function college(){
-        return $this->belongsTo('App\Models\College', 'college_id', 'id');
+        return $this->belongsTo('App\Models\College', 'college_id', 'code');
+    }
+
+    public function info(){
+        return $this->belongsTo('App\Models\StudentInfo', 'user_number', 'sno');
     }
 
     public function setRememberToken($value)

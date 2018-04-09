@@ -30,9 +30,12 @@
 @include('front.layouts.footer')
 
 <script src="/script/jquery-3.2.1.js"></script>
+<script src="/script/sweetalert2.all.min.js"></script>
 <script src="/script/head.js"></script>
 <script src="/script/child-list.js"></script>
 <script src="/script/show.js"></script>
+
+@include('sweetalert::alert')
 
 @section('js')
 @show()

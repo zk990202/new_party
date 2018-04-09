@@ -27,5 +27,15 @@ interface IWorkable{
      */
     public function determinationList();
 
+    /**
+     * 已经完成的结点
+     * @return boolean
+     */
     public function isActive();
+
+    /**
+     * 正在进行的节点
+     * @return boolean
+     */
+    public function isProcessing();
 }

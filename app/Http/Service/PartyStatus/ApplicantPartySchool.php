@@ -32,7 +32,7 @@ class ApplicantPartySchool extends BaseWorkItem{
             ]);
         }
 
-        StudentInfo::updatePassTwenty($this->userNumber);
+        StudentInfo::updatePassTwenty($this->userNumber, $status = 1);
     }
 
     public function cancel()

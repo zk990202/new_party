@@ -449,4 +449,9 @@ class PartyBranch extends Model
             return Resources::PartyBranch($partyBranch);
         }, $res)[0];
     }
+
+    public static function getBranchById($id){
+        $res = self::where('partybranch_id', $id)->first();
+        return Resources::PartyBranch($res);
+    }
 }

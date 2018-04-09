@@ -53,7 +53,7 @@ class ApplicantController extends Controller {
      */
     public function course($course_id){
         //得到课程对应的文章
-        $article = ArticleList::getArticleById($course_id);
+        $article = ArticleList::getArticleByCourseId($course_id);
         if ($article){
             return response()->json([
                 'success' => 1,
