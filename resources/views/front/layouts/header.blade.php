@@ -1,8 +1,7 @@
 <div class="header">
     <div class="system">
-        <img  src="/img3/党建logo.png"/>
+        <img  src="/img3/partyBuilding.png"/>
     </div>
-
     <nav>
         <ul>
             <li class="list">
@@ -69,14 +68,14 @@
         </ul>
     </nav>
     <div class="land">
-        <img src="/img3/登陆.png" style="width: 17px; height: 17px"/>
+        <img src="/img3/land.png" class="landImg"/>
         <a href="">登录</a>
     </div>
 </div>
 <div class="respond">
     <div>
         <a href="#" class="enable">
-            <img src="/img3/菜单图标.png" />
+            <img src="/img3/menu.png" />
         </a>
     </div>
     <div class="child-list">

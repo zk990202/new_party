@@ -37,7 +37,7 @@ class ApplicantController extends FrontBaseController{
         $data = [
             'courseList' => $courseList
         ];
-        return view('front.applicant.courseList', ['data' => $data]);
+        return view('front.applicant.courseList', ['data' => $data, 'course' => 'nav1']);
     }
 
     /**

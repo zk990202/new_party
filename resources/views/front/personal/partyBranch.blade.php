@@ -1,33 +1,9 @@
 @extends('front.layouts.app')
 
 @section('css')
-    <link rel="stylesheet" href="/css/SecondPage.css" type="text/css" />
 @endsection
 
-@section('style')
-    <style>
-        .information p{
-            height:30px;
-            width: 94%;
-            font-size: 14px;
-            background: rgba(241,237,238,1);
-            line-height: 30px;
-        }
-        .information b{
-            color: rgba(189,0,1,1);
-            margin-left: 30px;
-        }
-        .information span{
-            color: black;
-        }
-        .nav1{
-            background:#e9a9a7 ;
-        }
-        .nav1 a{
-            color: white;
-        }
-    </style>
-@endsection
+
 
 @section('main')
 

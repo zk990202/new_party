@@ -1,19 +1,7 @@
 @extends('front.layouts.app')
 
 @section('css')
-    <link rel="stylesheet" href="/css/SecondPage.css" type="text/css" />
     <link rel="stylesheet" href="/css/footer.css" type="text/css">
-@endsection
-
-@section('style')
-    <style>
-        .nav1{
-            background: #e9a9a7;
-        }
-        .nav1 a{
-            color: white;
-        }
-    </style>
 @endsection
 
 @section('main')

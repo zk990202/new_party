@@ -1,9 +1,6 @@
 @extends('front.layouts.app')
 @section('css')
-    <link rel="stylesheet" href="/css/detail.css" type="text/css" />
 @endsection()
-@section('style')
-@endsection
 
 @section('main')
     <div class="total">

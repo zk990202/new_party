@@ -19,6 +19,8 @@ class UserInfo extends Authenticatable
     }
 
     public function college(){
+        if($this->college_id < 100)
+            return $this->belongsTo('App\Models\College', 'college_id', 'code');
         return $this->belongsTo('App\Models\College', 'college_id', 'code');
     }
 

@@ -11,6 +11,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Controllers\FrontBaseController;
 use App\Http\Service\AcademyService;
 use App\Http\Service\ApplicantService;
+use App\Models\Academy\TestList;
 
 class AcademyController extends FrontBaseController {
     protected $academyService;
@@ -27,7 +28,17 @@ class AcademyController extends FrontBaseController {
      * 积极分子课程设置
      */
     public function courseStudy(){
-        // TODO
+        $user = $this->userService->getCurrentUser();
+        $collegeId = $user['collegeId'];
+
+        $list = TestList::getListByCollegeIdWithPage($collegeId, $numPerPage = 6);
+        //dd($list);
+
+        return view('front.academy.courseList', ['list' => $list]);
+    }
+
+    public function courseDetail(){
+
     }
 
     /**

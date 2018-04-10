@@ -1,7 +1,6 @@
 @extends('front.layouts.app')
 
 @section('css')
-    <link rel="stylesheet" href="/css/SecondPage.css" type="text/css" />
     <link rel="stylesheet" href="/css/footer.css" type="text/css">
 @endsection
 

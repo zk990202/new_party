@@ -12,6 +12,8 @@
     {{--<link href="http://cdn.bootcss.com/bootstrap/3.3.2/css/bootstrap.min.css" rel="stylesheet" />--}}
     <title>党建</title>
     <link rel="stylesheet" href="/css/head.css" type="text/css" />
+    <link rel="stylesheet" href="/css/SecondPage.css" type="text/css" />
+    <link rel="stylesheet" href="/css/nav.css" type="text/css" />
 
     @section('css')
     @show()

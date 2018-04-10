@@ -1,8 +1,8 @@
 @extends('front.layouts.app')
 @section('css')
-    <link rel="stylesheet" href="/css/proposerTrain.css" type="text/css">
-
 @endsection()
+@section('style')
+@endsection
 
 @section('main')
     <div class="total">

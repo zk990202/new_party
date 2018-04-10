@@ -21,7 +21,7 @@ class TestList extends Model
         'test_attention', 'test_status', 'test_isdeleted'];
 
     public function college(){
-        return $this->belongsTo('App\Models\College', 'test_of_academy', 'id');
+        return $this->belongsTo('App\Models\College', 'test_of_academy', 'code');
     }
 
     public function testList(){
@@ -172,20 +172,6 @@ class TestList extends Model
     }
 
     //--------------下面就是前台的东西了----------------
-
-    /**
-     * 根据学院获取所有课程
-     * @param $college_id
-     * @return mixed
-     */
-    public static function allCourse($college_id){
-        $res = self::where('test_of_academy', $college_id)
-            ->where('test_isdeleted', 0)
-            ->orderBy('test_id', 'desc')
-            ->paginate(15);
-        return $res;
-    }
-
     /**
      * 考试是否开启
      * @param $college_id
@@ -196,6 +182,22 @@ class TestList extends Model
             ->where('test_status', 1)
             ->where('test_isdeleted', 0)
             ->get()->toArray();
+        return $res;
+    }
+
+    public static function getListByCollegeIdWithPage($collegeId, $numPerPage = 15){
+        $res = self::where('test_of_academy', $collegeId)
+            ->where('test_isdeleted', 0)
+            ->orderBy('test_id', 'desc')
+            ->paginate($numPerPage);
+
+        foreach($res as $i => $v){
+            $res[$i] = (function($v){
+                $t = Resources::AcademyTestList($v);
+                $t['shortContent'] = str_limit(strip_tags($t['introduction']), $limit = 100, $end = '...');
+                return $t;
+            })($v);
+        }
         return $res;
     }
 

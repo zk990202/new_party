@@ -16,6 +16,8 @@ use Illuminate\Support\Facades\Route;
 Route::group(['namespace' => 'Front', 'middleware' => 'auth'], function(){
     // 首页
     Route::get('/', 'HomeController@index');
+
+    // 入党申请人党校相关
     Route::group(['prefix' => 'applicant'], function(){
         // 20课列表
         Route::get('courseStudy', 'ApplicantController@courseStudy');
@@ -32,6 +34,14 @@ Route::group(['namespace' => 'Front', 'middleware' => 'auth'], function(){
         Route::post('complain', 'ApplicantController@complain');
 
         Route::get('status', 'ApplicantController@userStatus');
+
+    });
+
+    //院级积极分子党校学习
+    Route::group(['prefix' => 'academy'], function(){
+        // 课程学习列表
+        Route::get('courseStudy', 'AcademyController@courseStudy');
+        Route::get('courseStudy/{id}', 'AcademyController@courseDetail');
 
     });
     // 通知公告
@@ -97,4 +107,32 @@ Route::get('mig', function(){
     }
     return "success";
 
+});
+
+Route::get('changeSql', function(){
+    $colleges = DB::select("SELECT * FROM b_college WHERE `state` = 'ok'");
+    foreach($colleges as $v){
+        $map[$v->id] = $v->code;
+    }
+    $table = [
+        'b_userinfo'           => 'college_id',
+        'twt_academy_testlist' => 'test_of_academy',
+        'twt_complain'         => 'collegeid',
+        'twt_manager'          => 'manager_academy',
+        'twt_partybranch'      => 'partybranch_academy',
+        'twt_student_info'     => 'academy_id',
+    ];
+
+    foreach($table as $key => $v){
+        echo "processing $key ...<br/>";
+        foreach($map as $pre => $cur){
+            if(!$pre || !$cur )
+                continue;
+            echo "UPDATE $key SET `$v` = $cur WHERE `$v` = $pre ";
+            echo "<br/>";
+            $flag = DB::update("UPDATE $key SET `$v` = $cur WHERE `$v` = $pre");
+            echo $flag ? 'success' : 'false';
+            echo "<br/>";
+        }
+    }
 });

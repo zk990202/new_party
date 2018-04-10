@@ -41,7 +41,7 @@ class AcademyController extends Controller{
         $collegeCode = $userInfo['college_code'];
         if ($collegeCode){
             $collegeId = College::codeToId($collegeCode);
-            $course = TestList::allCourse($collegeId);
+            $course = TestList::getListByCollegeIdWithPage($collegeId);
             if ($course){
                 return response()->json([
                     'success' => 1,

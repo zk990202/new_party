@@ -33,7 +33,7 @@ class Complain extends Model
     }
 
     public function college(){
-        return $this->belongsTo('App\Models\College', 'collegeid', 'id');
+        return $this->belongsTo('App\Models\College', 'collegeid', 'code');
     }
 
     //-------------------------------以下是申请人结业模块-------------------------------------------
