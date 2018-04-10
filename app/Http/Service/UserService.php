@@ -104,6 +104,7 @@ class UserService{
             'userNumber'  => $user->user_number,
             'username'    => $user->username,
             'major'       => $user->major_name,
+            'collegeId'   => $user->college_id,
             'college'     => $user->college->collegename,
             'partyBranch' => $user->info->partyBranch->partybranch_name
         ];

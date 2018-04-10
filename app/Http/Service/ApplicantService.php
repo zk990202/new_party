@@ -49,7 +49,7 @@ class ApplicantService{
                 'msg'    => '请先通过申请人网上党校学习',
             ];
 
-        if(StudentInfo::isLocked($userNumber))
+        if(StudentInfo::applicantIsLocked($userNumber))
             return [
                 'status' => false,
                 'msg'    => '您的账号已经被锁住，无法进行报名，请联系管理员请求解锁',

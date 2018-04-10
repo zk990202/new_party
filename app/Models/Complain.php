@@ -13,6 +13,12 @@ class Complain extends Model
 
     protected $fillable = ['from_sno', 'to_sno', 'collegeid', 'test_id', 'title', 'content', 'type',
         'time', 'isread', 'isreplay'];
+    // 1表示申请人,2表示院级,3表示预备党员
+    const TYPE = [
+        'APPLICANT'    => 1,
+        'ACADEMY'      => 2,
+        'PROBATIONARY' => 3
+    ];
 
     public function testList(){
         return $this->belongsTo('App\Models\Applicant\TestList', 'test_id', 'test_id');

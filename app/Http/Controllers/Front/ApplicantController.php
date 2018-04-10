@@ -13,6 +13,8 @@ use App\Http\Service\ApplicantService;
 use App\Models\Applicant\ArticleList;
 use App\Models\Applicant\EntryForm;
 use App\Models\Applicant\TestList;
+use App\Models\Complain;
+use App\Models\ScoresTwenty;
 use App\Models\StudentInfo;
 use Illuminate\Http\Request;
 
@@ -164,6 +166,48 @@ class ApplicantController extends FrontBaseController{
     }
 
     /**
+     * 申请人党校成绩申诉界面
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function complainPage(){
+        return view('front.applicant.complain');
+    }
+
+    /**
+     * 申请人党校成绩申诉
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function complain(Request $request){
+        $data = $request->only(['title', 'content', 'testId']);
+        if(count($data) != 2){
+            return $this->alertService->alertAndBackWithError('请确认标题与内容填写无误');
+        }
+        $user = $this->userService->getCurrentUser();
+
+        $entryList = EntryForm::getGradeBySnoAndTestId($user['userNumber'], $data['testId']);
+        if(!$entryList)
+            return $this->alertService->alertAndBackWithError('您没有参加这场考试，无法申诉');
+        $flag = Complain::create([
+            'from_sno' => $user['userNumber'],
+            'to_sno' => '',
+            'collegeid' => $user['collegeId'],
+            'test_id' => $data['testId'],
+            'title' => $data['title'],
+            'content' => $data['content'],
+            'type' => Complain::TYPE['APPLICANT'],
+            'isread' => 0
+        ]);
+
+        if(!$flag){
+            return $this->alertService->alertAndBackWithError('系统发生了错误，请稍后重试，或联系管理员解决');
+        }
+
+        // TODO 加一个申诉界面吧，还有需要控制申诉期，申诉期过了就不能申诉了
+
+    }
+
+    /**
      * 证书查询
      */
     public function ca(){
@@ -174,6 +218,21 @@ class ApplicantController extends FrontBaseController{
      * 账号状态
      */
     public function userStatus(){
-        // TODO
+        $user = $this->userService->getCurrentUser();
+
+        $isPass20 = StudentInfo::isPass20($user['userNumber']) ? '通过' : '未通过';
+        $isClear20 = StudentInfo::isClear20($user['userNumber']) ? '被清' : '正常';
+        $isLocked = StudentInfo::applicantIsLocked($user['userNumber']) ? '被锁' : '正常';
+        $isPassed = EntryForm::isPass($user['userNumber']) ? '通过' : '未通过';
+        $data = [
+            'user' => $user,
+            'info' => [
+                'isPass20' => $isPass20,
+                'isClear20' => $isClear20,
+                'isLocked' => $isLocked,
+                'isPassed' => $isPassed,
+            ]
+        ];
+        return view('front.applicant.status', ['data' => $data]);
     }
 }

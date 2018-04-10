@@ -117,6 +117,8 @@ class EntryForm extends Model
         $res = self::where('sno', $sno)
             ->select('entry_id')
             ->get()->toArray();
+        if(!$res)
+            return null;
         return $res[0];
     }
 

@@ -28,6 +28,10 @@ Route::group(['namespace' => 'Front', 'middleware' => 'auth'], function(){
         Route::get('signExit', 'ApplicantController@signExit');
 
         Route::get('grade', 'ApplicantController@grade');
+        Route::get('complain', 'ApplicantController@complainPage');
+        Route::post('complain', 'ApplicantController@complain');
+
+        Route::get('status', 'ApplicantController@userStatus');
 
     });
     // 通知公告

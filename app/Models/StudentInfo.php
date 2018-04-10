@@ -457,14 +457,12 @@ class StudentInfo extends Model
 
     /**
      * 申请人培训是否被锁
-     * @param $sno
+     * @param $userNumber
      * @return bool
      */
-    public static function applicantIsLocked($sno){
-        $res = self::where('sno', $sno)
-            ->where('applicant_islocked', 1)
-            ->get()->toArray();
-        return $res ? true : false;
+    public static function applicantIsLocked($userNumber){
+        $user = self::where('sno', $userNumber)->first();
+        return boolval($user && $user->applicant_islocked);
     }
 
     /**
@@ -523,13 +521,11 @@ class StudentInfo extends Model
         ]);
     }
 
-    /**
-     * 判断用户是否被锁
-     * @param $userNumber
-     * @return bool
-     */
-    public static function isLocked($userNumber){
+    public static function isClear20($userNumber){
         $user = self::where('sno', $userNumber)->first();
-        return boolval($user->applicant_islocked);
+
+        return boolval($user && $user->is_clear20);
     }
+
+
 }

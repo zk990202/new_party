@@ -8,7 +8,7 @@
             <li><a href="{{ url('applicant/signResult') }}">报名结果</a></li>
             <li><a href="{{ url('applicant/grade') }}">成绩查询</a></li>
             <li>证书查询</li>
-            <li><a href="AccountStatus.html">账号状态</a></li>
+            <li><a href="{{ url('applicant/status') }}">账号状态</a></li>
         </ul>
         <p><a href="#">积极分子培训</a></p>
         <ul>
