@@ -1,6 +1,4 @@
-@extends('layouts.app')
 
-@section('main')
     <section class="content">
         <!-- Small boxes (Stat box) -->
         <div class="row">
@@ -42,13 +40,11 @@
         </div>
         <!-- Main row -->
     </section>
-@endsection
 
-@section('func')
     <script>
         $(function(){
             $.ajax({
-                'url' : '/manager/statistics/academy-test-list/0',
+                'url' : '/admin/statistics/academy-test-list/0',
                 'method' : 'get',
                 'success' : function(data){
                     console.log(data);
@@ -79,7 +75,7 @@
                 $('#academyTestListChart').empty();
                 var form = new FormData();
                 $.ajax({
-                    url: '/manager/statistics/academy-test-list/'+ $('#test_parent').val(),
+                    url: '/admin/statistics/academy-test-list/'+ $('#test_parent').val(),
                     method: 'get',
                     'success' : function(data){
                         console.log(data);
@@ -110,4 +106,3 @@
 
 
     </script>
-@endsection

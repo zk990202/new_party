@@ -1,6 +1,4 @@
-@extends('layouts.app')
 
-@section('main')
     <section class="content">
         <!-- Small boxes (Stat box) -->
         <div class="row">
@@ -25,14 +23,12 @@
         </div>
         <!-- Main row -->
     </section>
-@endsection
 
-@section('func')
 
     <script>
         $(function () {
             $.ajax({
-                'url' : '/manager/statistics/twenty-lessons',
+                'url' : '/admin/statistics/twenty-lessons',
                 'method' : 'get',
                 'success' : function(data){
                     console.log(data);
@@ -94,4 +90,3 @@
         })
 
     </script>
-@endsection
