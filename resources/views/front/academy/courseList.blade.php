@@ -1,17 +1,7 @@
 @extends('front.layouts.app')
 @section('css')
-    <link rel="stylesheet" href="/css/proposerTrain.css" type="text/css">
+    <link rel="stylesheet" href="/css/footer.css" type="text/css">
 @endsection()
-@section('style')
-    <style>
-        .nav2{
-            background: #e9a9a7 ;
-        }
-        .nav2 a{
-            color: white;
-        }
-    </style>
-@endsection
 
 @section('main')
     <div class="total">
@@ -21,12 +11,11 @@
             <hr/>
             @foreach($list as $v)
                 <div>
-                    <h1>{{ $v['name'] }}</h1>
+                    <h1><a href="{{ url('academy/courseStudy/'. $v['id']) }}"> {{ $v['name'] }}</a></h1>
                     <p>{{ $v['shortContent'] }}</p>
                 </div>
             @endforeach
             {{ $list->links() }}
-
         </div>
     </div>
 @endsection

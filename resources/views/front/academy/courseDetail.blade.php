@@ -1,20 +1,17 @@
 @extends('front.layouts.app')
 @section('css')
+    <link rel="stylesheet" href="/css/detail.css" type="text/css" />
 @endsection()
 
 @section('main')
+
     <div class="total">
         @include('front.layouts.applicantSchoolSidebar')
         <div class="courseLearning">
-            <h2>{{ $data['course']['courseName'] }}</h2>
-            <hr/>
+            <h4>{{ $detail['name'] }}</h4>
             <div>
-                @foreach($data['articles'] as $item)
-                <h4>{{ $item['articleName'] }}</h4>
-                <div>
-                    {!! $item['content'] !!}
-                </div>
-                @endforeach
+                {!! $detail['introduction'] !!}
+                <p class="time">{{ $detail['time'] }}</p>
             </div>
         </div>
     </div>

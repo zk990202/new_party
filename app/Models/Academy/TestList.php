@@ -4,6 +4,7 @@ namespace App\Models\Academy;
 
 use App\Http\Helpers\Resources;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Request;
 
 /**
  * Class TestList
@@ -199,6 +200,11 @@ class TestList extends Model
             })($v);
         }
         return $res;
+    }
+
+    public static function getTestById($id){
+        $res = self::where('test_id', $id)->first();
+        return $res ? Resources::AcademyTestList($res) : null;
     }
 
 }

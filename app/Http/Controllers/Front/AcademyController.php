@@ -25,20 +25,23 @@ class AcademyController extends FrontBaseController {
     }
 
     /**
-     * 积极分子课程设置
+     * 积极分子课程显示界面
      */
     public function courseStudy(){
         $user = $this->userService->getCurrentUser();
         $collegeId = $user['collegeId'];
 
         $list = TestList::getListByCollegeIdWithPage($collegeId, $numPerPage = 6);
-        //dd($list);
 
         return view('front.academy.courseList', ['list' => $list]);
     }
 
-    public function courseDetail(){
+    public function courseDetail($id){
+        $detail = TestList::getTestById($id);
+        if(!$detail)
+            return $this->alertService->alertAndBackWithError("课程不存在");
 
+        return view('front.academy.courseDetail', ['detail' => $detail]);
     }
 
     /**
