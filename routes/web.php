@@ -43,6 +43,12 @@ Route::group(['namespace' => 'Front', 'middleware' => 'auth'], function(){
         Route::get('courseStudy', 'AcademyController@courseStudy');
         Route::get('courseStudy/{id}', 'AcademyController@courseDetail');
 
+        Route::get('signUp', 'AcademyController@signUpPage');
+        Route::get('signResult', 'AcademyController@signUpResult');
+        Route::post('signUp', 'AcademyController@signUp');
+
+        Route::get('signExit', 'AcademyController@signExit');
+
     });
     // 通知公告
     Route::group(['prefix' => 'notification'], function(){

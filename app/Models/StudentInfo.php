@@ -527,5 +527,10 @@ class StudentInfo extends Model
         return boolval($user && $user->is_clear20);
     }
 
+    public static function getCollegeId($userNumber){
+        $user = self::where('sno', $userNumber)->first();
+        return $user ? $user->academy_id : false;
+    }
+
 
 }

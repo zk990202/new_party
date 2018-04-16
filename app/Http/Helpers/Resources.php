@@ -263,6 +263,8 @@ class Resources {
             'id' => $entryForm->entry_id,
             'testId' => $entryForm->test_id,
             'testName' => $entryForm->testList->test_name,
+            'testStatus'   => $entryForm->testList->test_status,
+            'testTime'      => $entryForm->testList->test_begintime,
             'sno' => $entryForm->sno,
             'academyId' => $entryForm->studentInfo->academy_id ?? '',
             'academyName' => $entryForm->studentInfo->college->shortname ?? '',

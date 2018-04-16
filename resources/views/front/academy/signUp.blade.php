@@ -1,8 +1,8 @@
 @extends('front.layouts.app')
 @section('css')
+    <link rel="stylesheet" href="/css/proposerTrain.css" type="text/css">
+
 @endsection()
-@section('style')
-@endsection
 
 @section('main')
     <div class="total">
@@ -11,7 +11,7 @@
             <h2>我要报名</h2>
             <hr/>
             <h3 style="text-align: center">个人报名信息</h3>
-            <form action="{{ url('applicant/signUp') }}" method="post">
+            <form action="{{ url('academy/signUp') }}" method="post">
                 {{ csrf_field() }}
                 <table border="1">
                     <tr>

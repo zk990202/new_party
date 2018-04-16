@@ -1,8 +1,7 @@
 @extends('front.layouts.app')
 @section('css')
+    <link rel="stylesheet" href="/css/proposerTrain.css" type="text/css">
 @endsection()
-@section('style')
-@endsection
 
 @section('main')
     <div class="total">
@@ -26,18 +25,16 @@
                 </tr>
                 <tr>
                     <td>考试状态：{{ $data['form']['testStatus'] }}</td>
-                    <td>考试附件：<a href="{{$data['form']['filePath']}}">{{ $data['form']['fileName'] }}</a></td>
+                    <td>考试附件：<a href="#">无</a></td>
                 </tr>
                 <tr>
                     <td>我的报名时间：{{ $data['form']['time'] }}</td>
                     <td>我的报名状态：{{ $data['form']['status'] }}</td>
                 </tr>
                 <tr>
-                    <td>所在校区：{{ $data['form']['campus'] }}</td>
-
-                    <td>
+                    <td colspan=2>
                         @if(!$data['form']['isExit'])
-                            <a href="{{ url('applicant/signExit') }}"><input class="button" type="button" value="退出报名"></a>
+                            <a href="{{ url('academy/signExit') }}"><input class="button" type="button" value="退出报名"></a>
                         @else
                             已退出报名
                         @endif

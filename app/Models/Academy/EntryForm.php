@@ -230,11 +230,11 @@ class EntryForm extends Model
      * @param $test_id
      * @return mixed
      */
-    public static function isSign($sno, $test_id){
+    public static function getEntryByTestId($sno, $test_id){
         $res = self::where('sno', $sno)
             ->where('test_id', $test_id)
-            ->get()->toArray();
-        return $res;
+            ->first();
+        return $res ? Resources::AcademyEntryForm($res) : null;
     }
 
     /**
@@ -269,14 +269,12 @@ class EntryForm extends Model
      * @param $sno
      * @return array
      */
-    public static function signDetail($sno){
+    public static function getSignResult($sno){
         $res = self::leftJoin('twt_academy_testlist', 'twt_academy_entryform.test_id', '=', 'twt_academy_testlist.test_id')
             ->where('twt_academy_testlist.test_status', '<', 5)
             ->where('sno', $sno)
-            ->get()->all();
-        return array_map(function ($entryForm){
-            return Resources::AcademyEntryForm($entryForm);
-        }, $res);
+            ->first();
+        return $res ? Resources::AcademyEntryForm($res) : null;
     }
 
     /**
@@ -318,5 +316,10 @@ class EntryForm extends Model
             ->where('cert_isgrant', 1)
             ->get()->toArray();
         return $res;
+    }
+
+    public static function exitEntryByUserNumber($userNumber, $entryId){
+        return self::where(['entry_id' => $entryId, 'sno' => $userNumber])
+            ->update(['isexit' => 1]);
     }
 }

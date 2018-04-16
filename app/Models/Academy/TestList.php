@@ -21,6 +21,16 @@ class TestList extends Model
     protected $fillable = ['test_parent', 'test_name', 'test_of_academy', 'test_begintime', 'test_introduction',
         'test_attention', 'test_status', 'test_isdeleted'];
 
+    // 0未开始1报名开始,2报名截止,3成绩录入,4录入结束5,考试结束
+    const TEST_STATUS = [
+        'NOT_START' => 0,
+        'STARTED'   => 1,
+        'STOPPED'   => 2,
+        'ENTERING'  => 3,
+        'ENTERED'   => 4,
+        'FINISHED'  => 5
+    ];
+
     public function college(){
         return $this->belongsTo('App\Models\College', 'test_of_academy', 'code');
     }
@@ -176,14 +186,14 @@ class TestList extends Model
     /**
      * 考试是否开启
      * @param $college_id
-     * @return bool
+     * @return array
      */
-    public static function isOpen($college_id){
+    public static function getActiveTest($college_id){
         $res = self::where('test_of_academy', $college_id)
-            ->where('test_status', 1)
+            ->where('test_status', self::TEST_STATUS['STARTED'])
             ->where('test_isdeleted', 0)
-            ->get()->toArray();
-        return $res;
+            ->first();
+        return $res ? Resources::AcademyTestList($res) : null;
     }
 
     public static function getListByCollegeIdWithPage($collegeId, $numPerPage = 15){
@@ -206,5 +216,6 @@ class TestList extends Model
         $res = self::where('test_id', $id)->first();
         return $res ? Resources::AcademyTestList($res) : null;
     }
+
 
 }

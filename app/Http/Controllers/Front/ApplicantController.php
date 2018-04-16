@@ -14,7 +14,6 @@ use App\Models\Applicant\ArticleList;
 use App\Models\Applicant\EntryForm;
 use App\Models\Applicant\TestList;
 use App\Models\Complain;
-use App\Models\ScoresTwenty;
 use App\Models\StudentInfo;
 use Illuminate\Http\Request;
 
@@ -99,8 +98,7 @@ class ApplicantController extends FrontBaseController{
         if(! $form){
             return $this->alertService->alertAndBackWithError('遇到了一个错误');
         }
-        alert()->success('报名成功', '请查看报名结果以确保报名信息无误');
-        return redirect(url('applicant/signResult'));
+        return $this->alertService->alertAndBackWithSuccess('请查看报名结果以确保报名信息无误', $url = url('applicant/signResult'));
     }
 
     /**

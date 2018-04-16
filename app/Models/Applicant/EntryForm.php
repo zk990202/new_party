@@ -434,7 +434,7 @@ class EntryForm extends Model
                     $item['isPassed'] = '不及格';
                     break;
                 case self::PASSED_STATUS['PASSED']:
-                    $item['isPassed'] = '几个';
+                    $item['isPassed'] = '及格';
                     break;
                 case self::PASSED_STATUS['EXCELLENT']:
                     $item['isPassed'] = '优秀';
