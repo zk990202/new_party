@@ -127,7 +127,20 @@ class AcademyController extends FrontBaseController {
      * 成绩查询界面
      */
     public function grade(){
-        // TODO
+        $user = $this->userService->getCurrentUser();
+
+        $entryList = EntryForm::gradeCheck($user['userNumber']);
+        foreach($entryList as &$v){
+            \App\Models\Applicant\TestList::warpStatus($v);
+            \App\Models\Applicant\EntryForm::warpStatus($v);
+            \App\Models\Applicant\EntryForm::warpIsPassed($v);
+        }
+        $data = [
+            'user' => $user,
+            'list' => $entryList
+        ];
+        //dd($entryList);
+        return view('front.academy.grade', ['data' => $data]);
     }
 
     /**

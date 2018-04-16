@@ -49,6 +49,10 @@ Route::group(['namespace' => 'Front', 'middleware' => 'auth'], function(){
 
         Route::get('signExit', 'AcademyController@signExit');
 
+        Route::get('grade', 'AcademyController@grade');
+        Route::get('complain', 'AcademyController@complainPage');
+        Route::post('complain', 'AcademyController@complain');
+
     });
     // 通知公告
     Route::group(['prefix' => 'notification'], function(){

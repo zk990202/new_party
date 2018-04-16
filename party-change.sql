@@ -52,3 +52,5 @@ ALTER TABLE b_userinfo CHANGE COLUMN politicalface political_face VARCHAR(50);
 
 DROP TABLE b_party;
 DROP TABLE intro;
+
+ALTER TABLE twt_academy_testlist CHANGE test_begintime test_begintime datetime DEFAULT null;
