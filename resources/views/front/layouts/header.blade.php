@@ -10,8 +10,8 @@
             <li class="list"><a href="#" class="menu">网上党校</a>
                 <ul class="sub-menu">
                     <li><a href="{{ url('applicant/courseStudy') }}">申请人培训</a></li>
-                    <li><a href="ActivistTrain.html">积极分子培训</a></li>
-                    <li><a href="Preliminary-memeberTrain.html">预备党员培训</a></li>
+                    <li><a href="{{ url('academy/courseStudy') }}">积极分子培训</a></li>
+                    <li><a href="{{ url('probationary/notice') }}">预备党员培训</a></li>
                 </ul>
             </li>
             <li class="list"><a href="#" class="menu">我的支部</a>

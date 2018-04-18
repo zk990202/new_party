@@ -21,7 +21,7 @@ class ChildEntryForm extends Model
     protected $fillable = ['child_entryid', 'child_sno', 'child_courseid', 'child_entrytime', 'child_status',
         'child_status', 'child_grade', 'isexit'];
 
-    const CREATED_AT = 'entry_time';
+    const CREATED_AT = 'child_entrytime';
     const UPDATED_AT = 'updated_at';
 
     public function studentInfo(){
@@ -218,10 +218,8 @@ class ChildEntryForm extends Model
         $res = self::where('child_courseid', $course_id)
             ->where('isexit', 0)
             ->where('child_sno', $sno)
-            ->get()->all();
-        return array_map(function ($childEntryForm){
-            return Resources::ProbationaryChildEntryForm($childEntryForm);
-        }, $res);
+            ->first();
+        return $res ? Resources::ProbationaryChildEntryForm($res) : null;
     }
 
 
@@ -237,5 +235,22 @@ class ChildEntryForm extends Model
         }, $res);
     }
 
+    public static function getCountByCourseId($courseId){
+        $res = self::where(['child_courseid' => $courseId, 'isexit' => 0])->count();
+        return $res;
+    }
+
+    public static function getSelectedCourses($userNumber, $entryId){
+        $res = self::where(['child_sno' => $userNumber, 'child_entryid' => $entryId, 'isexit' => 0])
+            ->get()->all();
+        return array_map(function ($childEntryForm){
+            return Resources::ProbationaryChildEntryForm($childEntryForm);
+        }, $res);
+    }
+
+    public static function getCourseById($id){
+        $res = self::where('entry_id', $id)->first();
+        return $res ? Resources::ProbationaryChildEntryForm($res) : null;
+    }
 
 }

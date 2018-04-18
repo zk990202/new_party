@@ -132,12 +132,10 @@ class Notification extends Model
      * @param $id
      * @return array
      */
-    public static function getById($id){
+    public static function getNoticeById($id){
         $res = self::where('notice_id', $id)
-            ->get()->all();
-        return array_map(function($notification){
-            return Resources::Notification($notification);
-        }, $res);
+            ->first();
+        return $res ? Resources::Notification($res) : null;
     }
 
     /**

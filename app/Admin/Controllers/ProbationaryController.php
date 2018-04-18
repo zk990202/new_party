@@ -438,7 +438,7 @@ class ProbationaryController extends Controller{
             // 选填
             $content->description($this->titles[1] ?? '');
             // 填充页面body部分，这里可以填入任何可被渲染的对象
-            $content->body(view('Admin.Probationary.Course.detailCompulsory', ['course' => $course[0]]));
+            $content->body(view('Admin.Probationary.Course.detailCompulsory', ['course' => $course]));
         });
         //return view('Manager.Probationary.Course.detailCompulsory', ['course' => $course[0]]);
     }
@@ -456,7 +456,7 @@ class ProbationaryController extends Controller{
             // 选填
             $content->description($this->titles[1] ?? '');
             // 填充页面body部分，这里可以填入任何可被渲染的对象
-            $content->body(view('Admin.Probationary.Course.detailElective', ['course' => $course[0]]));
+            $content->body(view('Admin.Probationary.Course.detailElective', ['course' => $course]));
         });
         //return view('Manager.Probationary.Course.detailElective', ['course' => $course[0]]);
     }
@@ -474,7 +474,7 @@ class ProbationaryController extends Controller{
             // 选填
             $content->description($this->titles[1] ?? '');
             // 填充页面body部分，这里可以填入任何可被渲染的对象
-            $content->body(view('Admin.Probationary.Course.editCompulsory', ['course' => $course[0]]));
+            $content->body(view('Admin.Probationary.Course.editCompulsory', ['course' => $course]));
         });
         //return view('Manager.Probationary.Course.editCompulsory', ['course' => $course[0]]);
     }
@@ -525,7 +525,7 @@ class ProbationaryController extends Controller{
             // 选填
             $content->description($this->titles[1] ?? '');
             // 填充页面body部分，这里可以填入任何可被渲染的对象
-            $content->body(view('Admin.Probationary.Course.editElective', ['course' => $course[0], 'trains' => $trains, 'files' => $files]));
+            $content->body(view('Admin.Probationary.Course.editElective', ['course' => $course, 'trains' => $trains, 'files' => $files]));
         });
         //return view('Manager.Probationary.Course.editElective', ['course' => $course[0], 'trains' => $trains, 'files' => $files]);
     }
@@ -596,7 +596,7 @@ class ProbationaryController extends Controller{
     public function courseOpen($id){
         $course = CourseList::getCourseById($id);
         if ($course){
-            if (!$course[0]['isInserted']){
+            if (!$course['isInserted']){
                 $course1 = CourseList::findOrFail($id);
                 $course1->course_caninsert = 1;
                 $course1->course_isinserted = 1;
@@ -642,11 +642,11 @@ class ProbationaryController extends Controller{
                     }
                     else{
                         //没有作弊,那么直接看他的成绩是否通过,若通过,则在它的报名表中加1
-                        if ($child['grade'] >= 60 && !$course[0]['type']){
+                        if ($child['grade'] >= 60 && !$course['type']){
                             //必修课
                             $compulsory = EntryForm::updateCompulsory($help[0]['id']);
                         }
-                        if ($child['grade'] >= 60 && $course[0]['type']){
+                        if ($child['grade'] >= 60 && $course['type']){
                             //选修课
                             $elective = EntryForm::updateEletive($help[0]['id']);
                         }
@@ -1108,7 +1108,7 @@ class ProbationaryController extends Controller{
                 if ($isEntry){
                     //这里需要判断一下,该课程是否已经录入成绩完毕了
                     $endCourse = CourseList::getCourseById($courseId);
-                    $courseType = $endCourse[0]['type'];
+                    $courseType = $endCourse['type'];
                     $pass = ChildEntryForm::getBySnoAndTrainId($sno, $trainId, $courseType);
 
                     $left = 0;

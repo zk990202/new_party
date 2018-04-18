@@ -84,10 +84,8 @@ class CourseList extends Model
      */
     public static function getCourseById($id){
         $course = self::where('course_id', $id)
-            ->get()->all();
-        return array_map(function ($courseList){
-            return Resources::ProbationaryCourseList($courseList);
-        }, $course);
+            ->first();
+        return $course ? Resources::ProbationaryCourseList($course) : null;
     }
 
     /**
@@ -164,6 +162,23 @@ class CourseList extends Model
             return true;
         }else{
             return false;
+        }
+    }
+
+    public static function warpType(& $item){
+        //课程类型，0 必修 1，选修
+        if(isset($item['type'])){
+            if($item['type'] == 0)
+                $item['type'] = '必修';
+            else
+                $item['type'] = '选修';
+        }
+
+        if(isset($item['courseType'])){
+            if($item['courseType'] == 0)
+                $item['courseType'] = '必修';
+            else
+                $item['courseType'] = '选修';
         }
     }
 }

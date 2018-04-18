@@ -54,3 +54,5 @@ DROP TABLE b_party;
 DROP TABLE intro;
 
 ALTER TABLE twt_academy_testlist CHANGE test_begintime test_begintime datetime DEFAULT null;
+-- 2018-04-17
+ALTER TABLE twt_probationary_trainlist CHANGE train_gradeserach_status train_gradesearch_status TINYINT(4) DEFAULT 0 NOT NULL;

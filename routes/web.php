@@ -52,8 +52,30 @@ Route::group(['namespace' => 'Front', 'middleware' => 'auth'], function(){
         Route::get('grade', 'AcademyController@grade');
         Route::get('complain', 'AcademyController@complainPage');
         Route::post('complain', 'AcademyController@complain');
-
     });
+
+    //预备党员党校党校学习
+    Route::group(['prefix' => 'probationary'], function(){
+
+        Route::get('notice', 'ProbationaryController@notice');
+        Route::get('notice/{id}', 'ProbationaryController@noticeDetail');
+
+        Route::get('signUp', 'ProbationaryController@signUpPage');
+        Route::get('signResult', 'ProbationaryController@signUpResult');
+        Route::post('signUp', 'ProbationaryController@signUp');
+        Route::get('signExit', 'ProbationaryController@signExit');
+
+        Route::get('courseChoose', 'ProbationaryController@courseChoosePage');
+        Route::post('courseChoose', 'ProbationaryController@courseChoose');
+        // 课程学习列表
+        Route::get('studyList', 'ProbationaryController@courseChooseResult');
+        Route::get('courseExit/{id}', 'ProbationaryController@courseExit');
+
+        Route::get('grade', 'ProbationaryController@grade');
+        Route::get('complain', 'ProbationaryController@complainPage');
+        Route::post('complain', 'ProbationaryController@complain');
+    });
+
     // 通知公告
     Route::group(['prefix' => 'notification'], function(){
         Route::get('applicant', 'NotificationController@applicant');

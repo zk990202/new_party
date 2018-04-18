@@ -420,7 +420,7 @@ class EntryForm extends Model
     //下面就是前台了‘’‘’‘’‘’
 
     /**
-     * 判断学生是否已经报名
+     * 判断学生是否已经报名，退出考试的也算已经报名的
      * @param $sno
      * @param $train_id
      * @return array
@@ -428,11 +428,23 @@ class EntryForm extends Model
     public static function isSign($sno, $train_id){
         $res = self::where('train_id', $train_id)
             ->where('sno', $sno)
-            ->where('isexit', 0)
             ->get()->all();
         return array_map(function ($entryForm){
             return Resources::ProbationaryEntryForm($entryForm);
         }, $res);
+    }
+
+    /**
+     * 判断学生是否已经报名
+     * @param $sno
+     * @param $train_id
+     * @return array
+     */
+    public static function isSignNotExit($sno, $train_id){
+        $res = self::where('train_id', $train_id)
+            ->where(['sno' => $sno, 'isexit' => 0])
+            ->first();
+        return $res ? Resources::ProbationaryEntryForm($res) : null;
     }
 
     /**
@@ -483,18 +495,16 @@ class EntryForm extends Model
 
     /**
      * 报名结果
-     * @param $sno
+     * @param $userNumber
      * @return array
      */
-    public static function signResult($sno){
+    public static function getSignResult($userNumber){
         $res = self::leftJoin('twt_probationary_trainlist', 'twt_probationary_entryform.train_id', '=', 'twt_probationary_trainlist.train_id')
             ->where('train_isdeleted', 0)
             ->where('train_isend', 1)
-            ->where('sno', $sno)
-            ->get()->all();
-        return array_map(function ($entryForm){
-            return Resources::ProbationaryEntryForm($entryForm);
-        }, $res);
+            ->where('sno', $userNumber)
+            ->first();
+        return $res ? Resources::ProbationaryEntryForm($res) : null;
     }
 
     /**
@@ -539,5 +549,28 @@ class EntryForm extends Model
         return array_map(function ($entryForm){
             return Resources::ProbationaryEntryForm($entryForm);
         }, $res);
+    }
+
+    public static function warpStatus(&$item){
+        if(isset($item['trainStatus'])){
+            if($item['trainStatus'])
+                $item['trainStatus'] = '开启';
+            else
+                $item['trainStatus'] = '关闭';
+        }
+
+        if(isset($item['trainCourseStatus'])){
+            if($item['trainCourseStatus'])
+                $item['trainCourseStatus'] = '开启';
+            else
+                $item['trainCourseStatus'] = '关闭';
+        }
+
+        if(isset($item['trainGradeStatus'])){
+            if($item['trainGradeStatus'])
+                $item['trainGradeStatus'] = '开启';
+            else
+                $item['trainGradeStatus'] = '关闭';
+        }
     }
 }
