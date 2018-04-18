@@ -199,7 +199,7 @@ class ProbationaryController extends FrontBaseController{
                     $countOfElectiveClass ++;
             }
         }
-        return $this->alertService->alertAndBackWithSuccess(implode("，", $successCourse) . " 选课成功", url('probationary/courseChoose'));
+        return $this->alertService->alertAndBackWithSuccess('【'.implode("】，【", $successCourse) . "】 选课成功", url('probationary/studyList'));
     }
 
     /**

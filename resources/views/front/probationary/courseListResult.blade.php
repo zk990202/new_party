@@ -11,7 +11,53 @@
             <h2>我的课表</h2>
             <hr/>
 
+            <table border="1">
+                <thead>
+                <tr>
+                    <th>
+                        培训期数
+                    </th>
+                    <th>
+                        通过必修
+                    </th>
+                    <th>
+                        需学必修
+                    </th>
+                    <th>
+                        通过选修
+                    </th>
+                    <th>
+                        需学选修
+                    </th>
+                    <th>
+                        实践
+                    </th>
+                    <th>
+                        论文
+                    </th>
+                    <th>
+                        紧接上期
+                    </th>
+                    <th>
+                        退课次数
+                    </th>
+                </tr>
+                </thead>
+                <tbody>
 
+                <tr>
+                    <td>{{ $v['courseName'] }}</td>
+                    <td>{{ $v['courseType'] }}</td>
+                    <td>{{ $v['courseTime'] }}</td>
+                    <td>{{ $v['coursePlace'] ?? '无' }}</td>
+                    <td><a href="{{ url('probationary/courseExit/' . $v['id']) }}">
+                            <button class="button">退选</button>
+                        </a></td>
+                </tr>
+
+                </tbody>
+            </table>
+            <br/>
             <table border="1">
                 <thead>
                 <tr>
@@ -39,7 +85,9 @@
                         <td>{{ $v['courseType'] }}</td>
                         <td>{{ $v['courseTime'] }}</td>
                         <td>{{ $v['coursePlace'] ?? '无' }}</td>
-                        <td><a href="{{ url('probationary/courseExit/' . $v['id']) }}"><button class="button">退选</button></a></td>
+                        <td><a href="{{ url('probationary/courseExit/' . $v['id']) }}">
+                                <button class="button">退选</button>
+                            </a></td>
                     </tr>
                 @endforeach
                 </tbody>
