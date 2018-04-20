@@ -50,14 +50,14 @@ class FileController extends Controller
         $size = $file->getSize();
 //        dd($size);
         //line 54 has some buuuuug
-        $extension = $file->extension();
-        dd(114);
+        $extension = $this->getExtension($file->getClientOriginalName());
+        //dd(114);
         if(!$this->checkExtension($extension, $usage)){
             return response()->json([
                 'message' => '文件类型不符'.$extension
             ]);
         }
-        dd(13);
+        //dd(13);
         if(!$this->checkFileSize($size, $usage)){
             return response()->json([
                 'message' => '文件不能大于5M'
@@ -77,7 +77,7 @@ class FileController extends Controller
 
         return response()->json([
             'success' => true,
-            'file' => $path,
+            'file' => config('app.url') . '/upload/' . $path,
             'info' => $file
         ]);
     }
@@ -116,6 +116,15 @@ class FileController extends Controller
     protected function checkFileSize($size, $usage){
         $max_size = $this->config['rules'][$usage]['max_size'] ?? $this->config['max_size'];
         return $size < $max_size;
+    }
+
+    /**
+     * 获取文件后缀名
+     * @param $filename
+     * @return mixed
+     */
+    protected function getExtension($filename){
+        return pathinfo($filename,PATHINFO_EXTENSION);
     }
 
 
