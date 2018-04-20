@@ -583,4 +583,15 @@ class Resources
             'desc'    => $route->desc,
         ];
     }
+
+    public static function test()
+    {
+        return [
+            'id'           => 1,
+            'name'         => 'www',
+            'color'        => 'yellow',
+            'hhhhcolor'    => 'red',
+            'hhhhhhhcolor' => 'r',
+        ];
+    }
 }
