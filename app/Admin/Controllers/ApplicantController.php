@@ -29,6 +29,7 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Mockery\Exception;
+use phpDocumentor\Reflection\Types\Null_;
 
 class ApplicantController extends Controller{
 
@@ -173,7 +174,7 @@ class ApplicantController extends Controller{
             // 选填
             $content->description($this->titles[1] ?? '');
             // 填充页面body部分，这里可以填入任何可被渲染的对象
-            $content->body(view('Admin.Applicant.Course.edit', ['articles' => $article_arr]));
+            $content->body(view('Admin.Applicant.Article.list', ['articles' => $article_arr]));
         });
     }
 
@@ -448,7 +449,7 @@ class ApplicantController extends Controller{
         $optionD = $request->input('optionD');
         $optionE = $request->input('optionE');
         $answerNumber = $request->input('answerNumber');
-        if(!$type || !$content || !$optionA || !$optionB|| !$optionC || !$optionD){
+        if(!$type && !$content && !$optionA && !$optionB && !$optionC && !$optionD){
             return response()->json([
                 'message' => '参数丢失(注意：A、B、C、D选项不可为空，E选项可为空)'
             ]);
@@ -536,7 +537,7 @@ class ApplicantController extends Controller{
             // 选填
             $content->description($this->titles[1] ?? '');
             // 填充页面body部分，这里可以填入任何可被渲染的对象
-            $content->body(view('Admin.Applicant.Exam.detail', ['exams' => $exam]));
+            $content->body(view('Admin.Applicant.Exam.detail', ['exam' => $exam]));
         });
     }
 
@@ -626,7 +627,7 @@ class ApplicantController extends Controller{
             // 选填
             $content->description($this->titles[1] ?? '');
             // 填充页面body部分，这里可以填入任何可被渲染的对象
-            $content->body(view('Admin.Applicant.Exam.edit', ['exams' => $exam]));
+            $content->body(view('Admin.Applicant.Exam.edit', ['exam' => $exam]));
         });
     }
 
@@ -718,14 +719,29 @@ class ApplicantController extends Controller{
      * @return Content
      */
     public function signList(){
+        $test = TestList::getTestAfterSTOPPED();
+//        dd($test);
+        if ($test == null){
+            $test[0]['name'] = '暂无报名截止的考试';
+        }
+
         $signs = EntryForm::getAllSign();
-        return Admin::content(function(Content $content) use ($signs) {
+        if ($signs == null) {
+            $signs[0]['testName'] = '暂无报名截止的考试';
+            $signs[0]['sno'] = '';
+            $signs[0]['studentName'] = '';
+            $signs[0]['academyName'] = '';
+            $signs[0]['majorName'] = '';
+            $signs[0]['time'] = '';
+            $signs[0]['campus'] = '';
+        }
+        return Admin::content(function(Content $content) use ($signs, $test) {
             // 选填
             $content->header($this->titles[0] ?? '管理后台');
             // 选填
             $content->description($this->titles[1] ?? '');
             // 填充页面body部分，这里可以填入任何可被渲染的对象
-            $content->body(view('Admin.Applicant.Sign.list',  ['signs' => $signs]));
+            $content->body(view('Admin.Applicant.Sign.list',  ['test' => $test, 'signs' => $signs]));
         });
     }
 
@@ -734,14 +750,27 @@ class ApplicantController extends Controller{
      * @return Content
      */
     public function signExit(){
+        $test = TestList::getTestAfterSTOPPED();
+        if ($test == null){
+            $test[0]['name'] = '暂无报名截止的考试';
+        }
         $signs = EntryForm::getSignExit();
-        return Admin::content(function(Content $content) use ($signs) {
+        if ($signs == null) {
+            $signs[0]['testName'] = '暂无报名截止的考试';
+            $signs[0]['sno'] = '';
+            $signs[0]['studentName'] = '';
+            $signs[0]['academyName'] = '';
+            $signs[0]['majorName'] = '';
+            $signs[0]['time'] = '';
+            $signs[0]['campus'] = '';
+        }
+        return Admin::content(function(Content $content) use ($signs, $test) {
             // 选填
             $content->header($this->titles[0] ?? '管理后台');
             // 选填
             $content->description($this->titles[1] ?? '');
             // 填充页面body部分，这里可以填入任何可被渲染的对象
-            $content->body(view('Admin.Applicant.Sign.exit',  ['signs' => $signs]));
+            $content->body(view('Admin.Applicant.Sign.exit',  ['test' => $test,'signs' => $signs]));
         });
     }
 
@@ -750,14 +779,29 @@ class ApplicantController extends Controller{
      * @return Content
      */
     public function signMakeupPage(){
+        $test = TestList::getTestAfterSTOPPED();
+//        dd($test);
+        if ($test == null){
+            $test[0]['name'] = '暂无报名截止的考试';
+        }
         $signs = EntryForm::getAllSign();
-        return Admin::content(function(Content $content) use ($signs) {
+        if ($signs == null) {
+            $signs[0]['testName'] = '暂无报名截止的考试';
+            $signs[0]['id'] = 0;
+            $signs[0]['sno'] = '';
+            $signs[0]['studentName'] = '';
+            $signs[0]['academyName'] = '';
+            $signs[0]['majorName'] = '';
+            $signs[0]['time'] = '';
+            $signs[0]['campus'] = '';
+        }
+        return Admin::content(function(Content $content) use ($signs, $test) {
             // 选填
             $content->header($this->titles[0] ?? '管理后台');
             // 选填
             $content->description($this->titles[1] ?? '');
             // 填充页面body部分，这里可以填入任何可被渲染的对象
-            $content->body(view('Admin.Applicant.Sign.makeup',  ['signs' => $signs]));
+            $content->body(view('Admin.Applicant.Sign.makeup',  ['test' => $test, 'signs' => $signs]));
         });
     }
 
@@ -859,8 +903,31 @@ class ApplicantController extends Controller{
     //------------------------以下是成绩录入页面---------------------------------------------------------
     public function gradeInputPage(){
         $test = TestList::gradeInput();
-        $testId = $test[0]['id'];
-        $entries = EntryForm::gradeInput($testId);
+        $entries = [];
+        if ($test == null){
+            $test[0]['name'] = '无通过考试的学生，不可录入数据';
+            $entries[0]['id'] = 0;
+            $entries[0]['sno'] = 0;
+            $entries[0]['studentName'] = '';
+            $entries[0]['academyName'] = '';
+            $entries[0]['testId'] = 0;
+            $entries[0]['practiceGrade'] = 0;
+            $entries[0]['articleGrade'] = 0;
+            $entries[0]['status'] = 0;
+        }else{
+            $testId = $test[0]['id'];
+            $entries = EntryForm::gradeInput($testId);
+            if ($entries == null){
+                $entries[0]['id'] = 0;
+                $entries[0]['sno'] = 0;
+                $entries[0]['studentName'] = '';
+                $entries[0]['academyName'] = '';
+                $entries[0]['testId'] = 0;
+                $entries[0]['practiceGrade'] = 0;
+                $entries[0]['articleGrade'] = 0;
+                $entries[0]['status'] = 0;
+            }
+        }
         return Admin::content(function(Content $content) use ($test, $entries) {
             // 选填
             $content->header($this->titles[0] ?? '管理后台');
@@ -1034,7 +1101,7 @@ class ApplicantController extends Controller{
             // 选填
             $content->description($this->titles[1] ?? '');
             // 填充页面body部分，这里可以填入任何可被渲染的对象
-            $content->body(view('Admin.Applicant.Certificate.lastGrantDetail',['certLosts' => $certLost]));
+            $content->body(view('Admin.Applicant.Certificate.lastGrantDetail',['certLost' => $certLost]));
         });
     }
 

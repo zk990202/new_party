@@ -140,7 +140,8 @@ class StudyGroupController extends Controller{
     public function add(Request $request){
         $title = $request->input('title');
         $content = $request->input('content');
-        $img_path = $request->input('imgPath') ?? null;
+        $file_path = $request->input('filePath') ?? null;
+        $file_name = $request->input('fileName') ?? null;
         if(!$title || !$content){
             return response()->json([
                 'message' => '参数丢失'
@@ -150,7 +151,8 @@ class StudyGroupController extends Controller{
             'type' => 1,
             'title' => $title,
             'content' => $content,
-            'imgPath' => $img_path,
+            'filePath' => $file_path,
+            'fileName' => $file_name,
             // 介入登陆后进行调整
             'author'    =>  Auth::user()->username ?? '3014218099'
         ]);

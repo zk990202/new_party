@@ -136,7 +136,7 @@
                 success: function(data){
                     if(data.success){
                         alert('添加成功');
-                        window.location.href = '/admin/applicant/exercise';
+                        window.location.href = '/admin/applicant/course/'+ $('#courseId').val() + '/detail';
                     }
                     else{
                         alert(data.message);

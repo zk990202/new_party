@@ -222,7 +222,7 @@ class Resources
             'sno'         => $certLost->cert->sno,
             'testName'    => $certLost->cert->entryForm->testList->test_name ?? '',
             'studentName' => $certLost->cert->user->username ?? '',
-            'academyName' => $certLost->cert->studentInfo->college->shortname,
+            'academyName' => $certLost->cert->studentInfo->college->shortname ?? '',
             'majorName'   => $certLost->cert->userInfo->major->majorname ?? '',
             'certId'      => $certLost->cert_id,
             'certType'    => $certLost->cert->cert_type,

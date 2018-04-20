@@ -43,6 +43,23 @@ class TestList extends Model {
     }
 
     /**
+     * 取出状态处于
+     *  'STOPPED'   => 2,
+     *  'ENTERING'  => 3,
+     *  'ENTERED'  => 4
+     * 的考试
+     * @return array
+     */
+    public static function getTestAfterSTOPPED(){
+        $res_all = self::where('test_isdeleted', 0)
+            ->whereBetween('test_status', [2, 4])
+            ->get()->all();
+        return array_map(function ($testList){
+            return Resources::TestList($testList);
+        }, $res_all);
+    }
+
+    /**
      * 根据id获取考试
      * @param $id
      * @return array

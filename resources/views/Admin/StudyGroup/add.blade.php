@@ -102,7 +102,9 @@
                         form.append('title', $('#newsesTitle').val());
                         form.append('content', $('#editor').val());
                         form.append('column', $('#column').val());
-                        form.append('imgPath', path);
+                       // form.append('imgPath', path);
+                        form.append('filePath', path);
+                        form.append('fileName', file_name);
                         $.ajax({
                             url: '/admin/study-group/add',
                             type: 'POST',

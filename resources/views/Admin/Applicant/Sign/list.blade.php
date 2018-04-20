@@ -6,7 +6,7 @@
             <div class="box">
                 <!-- /.box-header -->
                 <div class="box-header with-border">
-                    <h3 class="box-title">{{ $signs[0]['testName'] }}</h3>
+                    <h3 class="box-title">{{ $test[0]['name'] }}</h3>
                 </div>
                 <div class="box-body">
                     <table id="example1" class="table table-bordered table-striped">
