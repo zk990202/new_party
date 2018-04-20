@@ -30,29 +30,34 @@ class FileController extends Controller
      * @return \Illuminate\Http\JsonResponse
      */
     public function upload(Request $request){
+//        dd("11");
         $usage = $request->input('usage');
         if(empty($usage) || !$this->checkUsage($usage)){
             return response()->json([
                 'message' => '规则不符'.$usage
             ]);
         }
-
+        //dd("11");
         if(!$request->hasFile('upload')){
             return response()->json([
                 'message' => '上传失败'
             ]);
         }
-
+        //dd("11");
         $file = $request->file('upload');
-       // dd($file);
+//        dd($file);
+//        dd("12");
         $size = $file->getSize();
+//        dd($size);
+        //line 54 has some buuuuug
         $extension = $file->extension();
+        dd(114);
         if(!$this->checkExtension($extension, $usage)){
             return response()->json([
                 'message' => '文件类型不符'.$extension
             ]);
         }
-
+        dd(13);
         if(!$this->checkFileSize($size, $usage)){
             return response()->json([
                 'message' => '文件不能大于5M'

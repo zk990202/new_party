@@ -6,7 +6,7 @@
             <div class="box">
                 <!-- /.box-header -->
                 <div class="box-header with-border">
-                    <h3 class="box-title">成绩录入</h3>
+                    <h3 class="box-title">成绩录入({{ $test[0]['name'] }})</h3>
                 </div>
                 <div class="box-body">
                     <form method="POST" action="{{url('admin/applicant/grade-input')}}" >

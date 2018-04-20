@@ -23,7 +23,7 @@
                         </div>
                     </div>
                     <!-- /.box-body -->
-                    <input type="hidden" id="testId" value="{{ $signs[0]['testId'] }}">
+                    <input type="hidden" id="testId" value="{{ $test[0]['id'] }}">
                     <input type="hidden" id="id" value="{{ $signs[0]['id'] }}">
                 </form>
                 <div class="box-footer">
