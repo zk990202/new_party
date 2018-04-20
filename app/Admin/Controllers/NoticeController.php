@@ -206,6 +206,7 @@ class NoticeController extends Controller
         $column = $request->input('column');
         $filePath = $request->input('filePath') ?? '';
         $fileName = $request->input('fileName') ?? '';
+//        dd($filePath);
         if(!$title || !$content || !$column){
             return response()->json([
                 'message' => '参数丢失'

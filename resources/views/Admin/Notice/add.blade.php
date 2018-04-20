@@ -29,7 +29,7 @@
                             <label for="editor">公告内容</label>
                             <textarea id="editor" name="editor" rows="10" cols="80">
 
-                                </textarea>
+                            </textarea>
                         </div>
                         <div class="form-group">
                             <label for="inputFile">上传文件</label>
@@ -108,7 +108,7 @@
                     }
                 }).done(function(data){
                     if(data.success){
-                        var path = data.file;
+                        var path = data.info.path;
                         var file_name = data.info.name;
                         var form = new FormData();
                         form.append('title', $('#noticeTitle').val());
