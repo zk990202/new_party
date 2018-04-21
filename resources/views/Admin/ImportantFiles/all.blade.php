@@ -41,7 +41,7 @@
                                     @endif
                                 </td>
                                 <td>{{ $file['time'] }}</td>
-                                <td>{!!   $file['filePath'] ? '<a target="_blank" href="' .  $file['filePath']  .'">有附件</a>' : '无附件' !!}</td>
+                                <td>{!!   $file['filePath'] ? '<a target="_blank" href="' .  $file['filePath']  .'/download/'. $file['title'] . '">有附件</a>' : '无附件' !!}</td>
                                 <td>{{ $file['isHidden'] ? '隐藏' : '显示'}}</td>
                                 <td>
                                     @if($file['isHidden'])

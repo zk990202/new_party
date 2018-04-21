@@ -71,7 +71,7 @@
                 upload: {
                     serverPath: '/admin/file',
                     fileFieldName: 'upload',
-                    usage : 'theoryStudyeBook'
+                    usage : 'theoryStudyEBook'
                 }
             },
             autogrow: true
@@ -97,7 +97,7 @@
                     }
                 }).done(function(data){
                     if(data.success){
-                        var path = data.file;
+                        var path = data.info.path;
                         var file_name = data.info.name;
                         var form = new FormData();
                         form.append('title', $('#eBooksTitle').val());

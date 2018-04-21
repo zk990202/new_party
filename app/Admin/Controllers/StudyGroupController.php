@@ -154,7 +154,7 @@ class StudyGroupController extends Controller{
             'filePath' => $file_path,
             'fileName' => $file_name,
             // 介入登陆后进行调整
-            'author'    =>  Auth::user()->username ?? '3014218099'
+            'author'    =>  Auth::user()->username ?? '管理员'
         ]);
         if($res){
             return response()->json([

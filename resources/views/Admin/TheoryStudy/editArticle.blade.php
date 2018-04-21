@@ -27,7 +27,7 @@
                             <input type="file" id="inputFile" name="file">
                             <p class="help-block">
                                 @if($contents['filePath'])
-                                    已有文件：{!! '<a target="_blank" href="' . $contents['filePath'] .'">' . $contents['filePath'] .'</a>'  !!}，如不更改请勿重新添加<br/>
+                                    已有文件：<a target="_blank" href="{{$contents['filePath'].'/download/'.$contents['title']}}">点击下载</a>，如不更改请勿重新添加<br/>
                                 @endif
                                 支持文件格式：
                                 {{ \App\Http\Service\FileService::allowedFileExtension('importantFilesFile') }}
@@ -120,7 +120,7 @@
                     }
                 }).done(function(data){
                     if(data.success){
-                        var path = data.file;
+                        var path = data.info.path;
                         var file_name = data.info.name;
                         var form = new FormData();
                         form.append('title', $('#contentsTitle').val());

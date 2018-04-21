@@ -35,7 +35,7 @@
                                     @endif
                                 </td>
                                 <td>{{ $content['time'] }}</td>
-                                <td>{!!   $content['filePath'] ? '<a target="_blank" href="' .  $content['filePath']   .'">有附件</a>' : '无附件' !!}</td>
+                                <td>{!!   $content['filePath'] ? '<a target="_blank" href="' .  $content['filePath'] . '/download/' . $content['title'] .'">有附件</a>' : '无附件' !!}</td>
 
                                 <td>{{ $content['isHidden'] ? '隐藏' : '显示'}}</td>
                                 <td>

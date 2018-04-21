@@ -103,13 +103,14 @@
                     }
                 }).done(function(data){
                     if(data.success){
-                        var path = data.file;
+                        var path = data.info.path;
                         var file_name = data.info.name;
                         var form = new FormData();
                         form.append('title', $('#contentsTitle').val());
                         form.append('content', $('#editor').val());
                         form.append('type', $('#type').val());
                         form.append('filePath', path);
+//                        form.append('fileName', file_name);
                         $.ajax({
                             url: '/admin/theory-study/add/article',
                             type: 'POST',
