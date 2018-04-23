@@ -10,6 +10,7 @@ namespace App\Models\Applicant;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Http\Helpers\Resources;
+use Illuminate\Database\Eloquent\Builder;
 
 class TestList extends Model {
     protected $table = "twt_applicant_testlist";

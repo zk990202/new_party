@@ -3,6 +3,7 @@
 namespace App\Models\PartyBranch;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
 
 /**
  * Class PartyPost

@@ -4,6 +4,7 @@ namespace App\Models\Probationary;
 
 use App\Http\Helpers\Resources;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
 
 class CourseList extends Model
 {

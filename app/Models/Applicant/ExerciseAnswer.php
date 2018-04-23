@@ -4,6 +4,7 @@ namespace App\Models\Applicant;
 
 use Illuminate\Database\Eloquent\Model;
 
+
 /**
  * Class ExerciseAnswer
  * 入党申请人习题答案

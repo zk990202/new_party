@@ -5,6 +5,7 @@ namespace App\Models\Applicant;
 use App\Http\Helpers\Resources;
 use Illuminate\Database\Eloquent\Model;
 
+
 /**
  * Class EntryForm
  * 入党申请人报名情况、成绩统计

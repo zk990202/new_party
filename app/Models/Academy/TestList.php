@@ -5,7 +5,6 @@ namespace App\Models\Academy;
 use App\Http\Helpers\Resources;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Request;
 
 /**
  * Class TestList

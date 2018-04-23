@@ -12,7 +12,6 @@ namespace App\Models\Probationary;
 use App\Http\Helpers\Resources;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
-use function PHPSTORM_META\elementType;
 
 class EntryForm extends Model
 {

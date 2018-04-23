@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Http\Helpers\Resources;
+use Illuminate\Database\Eloquent\Builder;
+
 class Column extends Model
 {
     //

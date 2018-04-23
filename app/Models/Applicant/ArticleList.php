@@ -3,8 +3,8 @@
 namespace App\Models\Applicant;
 
 use App\Http\Helpers\Resources;
-use function foo\func;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
 
 /**
  * Class ArticleList

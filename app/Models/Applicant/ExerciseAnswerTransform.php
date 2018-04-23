@@ -11,6 +11,7 @@ namespace App\Models\Applicant;
 use App\Http\Helpers\Resources;
 use Illuminate\Database\Eloquent\Model;
 
+
 class ExerciseAnswerTransform extends Model{
 
     protected $table = "twt_applicant_exerciseanswertransform";

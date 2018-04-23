@@ -5,6 +5,7 @@ namespace App\Models\Academy;
 use App\Http\Helpers\Resources;
 use Illuminate\Database\Eloquent\Model;
 
+
 /**
  * Class EntryForm
  * 院级分党校考试

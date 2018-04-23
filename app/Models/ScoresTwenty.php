@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Http\Helpers\Resources;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
 /**

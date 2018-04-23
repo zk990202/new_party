@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Http\Helpers\Resources;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
 
 class CommonFiles extends Model{
 

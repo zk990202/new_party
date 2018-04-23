@@ -3,8 +3,8 @@
 namespace App\Models\PartyBranch;
 
 use App\Http\Helpers\Resources;
-use Illuminate\Database\Console\Migrations\ResetCommand;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
 
 /**
  * Class PartyBranch
