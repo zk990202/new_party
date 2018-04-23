@@ -21,6 +21,19 @@ class CommonFiles extends Model{
     const MUST_READ_FILE = 5;
     const MANUAL_FILE = 6;
 
+    /**
+     * 模型的「启动」方法
+     * @return void
+     */
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::addGlobalScope('notDeleted', function(Builder $builder) {
+            $builder->where('file_isdeleted', 0);
+        });
+    }
+
     //以下为重要文件模块
 
     /**
@@ -101,16 +114,14 @@ class CommonFiles extends Model{
      * @return array
      */
     public static function getAddElective(){
-        $files = self::where('file_isdeleted', 0)
-            ->get()->all();
+        $files = self::get()->all();
         return array_map(function ($commonFiles){
             return Resources::CommonFiles($commonFiles);
         }, $files);
     }
 
     public static function getFilesByTypeWithPage($type, $perPage = 10){
-        $files = self::where('file_isdeleted', 0)
-            ->where('file_type', $type)
+        $files = self::where('file_type', $type)
             ->orderBy('file_addtime', 'DESC')
             ->paginate($perPage);
 

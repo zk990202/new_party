@@ -20,6 +20,19 @@ class ScoresTwenty extends Model
     const UPDATED_AT = 'complete_time';
     const CREATED_AT = 'complete_time';
 
+    /**
+     * 模型的「启动」方法
+     * @return void
+     */
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::addGlobalScope('notDeleted', function(Builder $builder) {
+            $builder->where('isdeleted', 0);
+        });
+    }
+
     public static function scoresTwenty($start_time_stamp, $current_time_stamp = null, $group = "day"){
         // set default time stamp
         if($current_time_stamp === null){
@@ -143,7 +156,6 @@ class ScoresTwenty extends Model
     public static function ifPassCourse($course_id, $sno){
         $res = self::where('course_id', $course_id)
             ->where('student_id', $sno)
-            ->where('isdeleted', 0)
             ->get()->toArray();
         return $res;
     }
@@ -191,7 +203,6 @@ class ScoresTwenty extends Model
     public static function ifExistScore($course_id, $sno){
         $res = self::where('course_id', $course_id)
             ->where('student_id', $sno)
-            ->where('isdeleted', 0)
             ->get()->toArray();
         return $res;
     }

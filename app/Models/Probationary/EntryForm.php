@@ -10,6 +10,7 @@ namespace App\Models\Probationary;
 
 
 use App\Http\Helpers\Resources;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use function PHPSTORM_META\elementType;
 
@@ -26,6 +27,18 @@ class EntryForm extends Model
     const CREATED_AT = 'entry_time';
     const UPDATED_AT = 'updated_at';
 
+    /**
+     * 模型的「启动」方法
+     * @return void
+     */
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::addGlobalScope('notDeleted', function(Builder $builder) {
+            $builder->where('isdeleted', 0);
+        });
+    }
 
     //考试状态  0未录入,1正常，2作弊，3违纪，4缺考
     const NOT_ENTERED = 0;
@@ -166,7 +179,6 @@ class EntryForm extends Model
      */
     public static function getAllSign($id){
         $signs = self::where('train_id', $id)
-            ->where('isdeleted', 0)
             ->orderBy('entry_id', 'desc')
             ->get()->all();
         return array_map(function ($entryForm){
@@ -181,7 +193,6 @@ class EntryForm extends Model
      */
     public static function getExitSign($id){
         $signs = self::where('train_id', $id)
-            ->where('isdeleted', 0)
             ->where('isexit', 1)
             ->orderBy('entry_id', 'desc')
             ->get()->all();
@@ -458,13 +469,14 @@ class EntryForm extends Model
         return $res ? true : false;
     }
 
-    public static function getBySnoAndTrainId($sno, $trainId){
+    public static function getBySnoAndTrainIdNotExit($sno, $trainId){
         $res = self::where('sno', $sno)
-            ->where('train_id', $trainId)
-            ->get()->all();
-        return array_map(function ($entryForm){
-            return Resources::ProbationaryEntryForm($entryForm);
-        }, $res);
+            ->where([
+                'train_id'  => $trainId,
+                'isexit'    => 0
+            ])
+            ->first();
+        return $res ? Resources::ProbationaryEntryForm($res) : null;
     }
 
     /**
@@ -572,5 +584,14 @@ class EntryForm extends Model
             else
                 $item['trainGradeStatus'] = '关闭';
         }
+    }
+    // 累加退课次数
+    public static function accumulationExitCount($id, $userNumber){
+        $info = self::where(['entry_id' => $id, 'sno' => $userNumber])->first();
+        if(!$info)
+            return false;
+        $info->exitcount ++;
+        $info->save();
+        return true;
     }
 }

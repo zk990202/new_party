@@ -44,17 +44,11 @@
                 </tr>
                 </thead>
                 <tbody>
-
-                <tr>
-                    <td>{{ $v['courseName'] }}</td>
-                    <td>{{ $v['courseType'] }}</td>
-                    <td>{{ $v['courseTime'] }}</td>
-                    <td>{{ $v['coursePlace'] ?? '无' }}</td>
-                    <td><a href="{{ url('probationary/courseExit/' . $v['id']) }}">
-                            <button class="button">退选</button>
-                        </a></td>
-                </tr>
-
+                    <tr>
+                        @foreach($data['info'] as $v)
+                            <td>{{ $v }}</td>
+                        @endforeach
+                    </tr>
                 </tbody>
             </table>
             <br/>

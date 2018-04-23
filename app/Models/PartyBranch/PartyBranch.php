@@ -25,6 +25,19 @@ class PartyBranch extends Model
 
     const CREATED_AT = 'partybranch_establishtime';
 
+    /**
+     * 模型的「启动」方法
+     * @return void
+     */
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::addGlobalScope('notDeleted', function(Builder $builder) {
+            $builder->where('partybranch_isdeleted', 0);
+        });
+    }
+
     public function user_secretary(){
         return $this->belongsTo('App\Models\UserInfo', 'partybranch_secretary', 'user_number');
     }
@@ -53,7 +66,6 @@ class PartyBranch extends Model
 
             //本科生
             $undergraduate = self::where('partybranch_ishidden', 0)
-                ->where('partybranch_isdeleted', 0)
                 ->where('partybranch_academy', $v->id)
                 ->where('partybranch_type', 1)
                 ->get();
@@ -62,7 +74,6 @@ class PartyBranch extends Model
 
             //硕士生
             $master = self::where('partybranch_ishidden', 0)
-                ->where('partybranch_isdeleted', 0)
                 ->where('partybranch_academy', $v->id)
                 ->where('partybranch_type', 2)
                 ->get();
@@ -71,7 +82,6 @@ class PartyBranch extends Model
 
             //博士生
             $doctor = self::where('partybranch_ishidden', 0)
-                ->where('partybranch_isdeleted', 0)
                 ->where('partybranch_academy', $v->id)
                 ->where('partybranch_type', 3)
                 ->get();
@@ -80,7 +90,6 @@ class PartyBranch extends Model
 
             //混合党支部
             $mix = self::where('partybranch_ishidden', 0)
-                ->where('partybranch_isdeleted', 0)
                 ->where('partybranch_academy', $v->id)
                 ->where('partybranch_type', 1)
                 ->get();
@@ -98,7 +107,6 @@ class PartyBranch extends Model
 
             //本科生
             $undergraduate = self::where('partybranch_ishidden', 0)
-                ->where('partybranch_isdeleted', 0)
                 ->where('partybranch_schoolyearyear', $v->grade)
                 ->where('partybranch_type', 1)
                 ->get();
@@ -107,7 +115,6 @@ class PartyBranch extends Model
 
             //硕士生
             $master = self::where('partybranch_ishidden', 0)
-                ->where('partybranch_isdeleted', 0)
                 ->where('partybranch_schoolyearyear', $v->grade)
                 ->where('partybranch_type', 2)
                 ->get();
@@ -116,7 +123,6 @@ class PartyBranch extends Model
 
             //博士生
             $doctor = self::where('partybranch_ishidden', 0)
-                ->where('partybranch_isdeleted', 0)
                 ->where('partybranch_schoolyearyear', $v->grade)
                 ->where('partybranch_type', 3)
                 ->get();
@@ -130,28 +136,24 @@ class PartyBranch extends Model
     public static function category(){
         //本科生
         $undergraduate = self::where('partybranch_ishidden', 0)
-            ->where('partybranch_isdeleted', 0)
             ->where('partybranch_type', 1)
             ->get();
         $num_undergraduate = count($undergraduate);
 
         //硕士生
         $master = self::where('partybranch_ishidden', 0)
-            ->where('partybranch_isdeleted', 0)
             ->where('partybranch_type', 2)
             ->get();
         $num_master = count($master);
 
         //博士生
         $doctor = self::where('partybranch_ishidden', 0)
-            ->where('partybranch_isdeleted', 0)
             ->where('partybranch_type', 3)
             ->get();
         $num_doctor = count($doctor);
 
         //混合党支部
         $mix = self::where('partybranch_ishidden', 0)
-            ->where('partybranch_isdeleted', 0)
             ->where('partybranch_type', 1)
             ->get();
         $num_mix = count($mix);
@@ -173,7 +175,6 @@ class PartyBranch extends Model
         $res = [];
         foreach ($college as $i => $v){
             $every = self::where('partybranch_ishidden', 0)
-                ->where('partybranch_isdeleted', 0)
                 ->where('partybranch_academy', $v['id'])
                 ->orderBy('partybranch_id', 'desc')
                 ->get();
@@ -191,7 +192,6 @@ class PartyBranch extends Model
      */
     public static function getAll($academy_id){
         $res = self::where('partybranch_academy', $academy_id)
-            ->where('partybranch_isdeleted', 0)
             ->where('partybranch_ishidden', 0)
             ->orderBy('partybranch_id', 'desc')
             ->get()->all();
@@ -310,45 +310,37 @@ class PartyBranch extends Model
             $res = self::where('partybranch_academy', $academyId)
                 ->where('partybranch_schoolyear', $schoolYear)
                 ->where('partybranch_type', $type)
-                ->where('partybranch_isdeleted', 0)
                 ->where('partybranch_ishidden', 0)
                 ->get()->all();
         }elseif ($academyId && $schoolYear && !$type){
             $res = self::where('partybranch_academy', $academyId)
                 ->where('partybranch_schoolyear', $schoolYear)
-                ->where('partybranch_isdeleted', 0)
                 ->where('partybranch_ishidden', 0)
                 ->get()->all();
         }elseif ($academyId && !$schoolYear && $type){
             $res = self::where('partybranch_academy', $academyId)
                 ->where('partybranch_type', $type)
-                ->where('partybranch_isdeleted', 0)
                 ->where('partybranch_ishidden', 0)
                 ->get()->all();
         }elseif (!$academyId && $schoolYear && $type){
             $res = self::where('partybranch_schoolyear', $schoolYear)
                 ->where('partybranch_type', $type)
-                ->where('partybranch_isdeleted', 0)
                 ->where('partybranch_ishidden', 0)
                 ->get()->all();
         }elseif ($academyId && !$schoolYear && !$type){
             $res = self::where('partybranch_academy', $academyId)
-                ->where('partybranch_isdeleted', 0)
                 ->where('partybranch_ishidden', 0)
                 ->get()->all();
         }elseif (!$academyId && $schoolYear && !$type){
             $res = self::where('partybranch_schoolyear', $schoolYear)
-                ->where('partybranch_isdeleted', 0)
                 ->where('partybranch_ishidden', 0)
                 ->get()->all();
         }elseif (!$academyId && !$schoolYear && $type){
             $res = self::where('partybranch_type', $type)
-                ->where('partybranch_isdeleted', 0)
                 ->where('partybranch_ishidden', 0)
                 ->get()->all();
         }elseif (!$academyId && !$schoolYear && !$type){
-            $res = self::where('partybranch_isdeleted', 0)
-                ->where('partybranch_ishidden', 0)
+            $res = self::where('partybranch_ishidden', 0)
                 ->get()->all();
         }
         return array_map(function ($partyBranch){
@@ -394,7 +386,6 @@ class PartyBranch extends Model
      */
     public static function getAllHidedBranch(){
         $res = self::where('partybranch_ishidden', 1)
-            ->where('partybranch_isdeleted', 0)
             ->orderBy('partybranch_id', 'desc')
             ->get()->all();
         return array_map(function ($partyBranch){
@@ -410,7 +401,6 @@ class PartyBranch extends Model
     public static function getHidedBranchByAcademy($academyId){
         $res = self::where('partybranch_ishidden', 1)
             ->where('partybranch_academy', $academyId)
-            ->where('partybranch_isdeleted', 0)
             ->orderBy('partybranch_id', 'desc')
             ->get()->all();
         return array_map(function ($partyBranch){
@@ -425,8 +415,7 @@ class PartyBranch extends Model
      * @return array
      */
     public static function getIndexData(){
-        $res = self::where('partybranch_isdeleted', 0)
-            ->where('partybranch_ishidden', 0)
+        $res = self::where('partybranch_ishidden', 0)
             ->orderBy('partybranch_id', 'desc')
             ->limit(6)
             ->get()->all();

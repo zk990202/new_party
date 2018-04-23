@@ -28,13 +28,26 @@ class TestList extends Model {
         'ENTERED'   => 4,
         'FINISHED'  => 5
     ];
+
+    /**
+     * 模型的「启动」方法
+     * @return void
+     */
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::addGlobalScope('notDeleted', function(Builder $builder) {
+            $builder->where('test_isdeleted', 0);
+        });
+    }
+
     /**
      * 获取所有考试
      * @return array
      */
     public static function getAll(){
-        $res_all = self::where('test_isdeleted', 0)
-            ->orderBy('test_begintime', 'DESC')
+        $res_all = self::orderBy('test_begintime', 'DESC')
             ->get()->all();
 
         return array_map(function ($testList){
@@ -51,8 +64,7 @@ class TestList extends Model {
      * @return array
      */
     public static function getTestAfterSTOPPED(){
-        $res_all = self::where('test_isdeleted', 0)
-            ->whereBetween('test_status', [2, 4])
+        $res_all = self::whereBetween('test_status', [2, 4])
             ->get()->all();
         return array_map(function ($testList){
             return Resources::TestList($testList);
@@ -66,7 +78,6 @@ class TestList extends Model {
      */
     public static function getExamById($id){
         $res = self::where('test_id', $id)
-            ->where('test_isdeleted', 0)
             ->get()->all();
 
         return array_map(function ($testList){
@@ -116,7 +127,6 @@ class TestList extends Model {
      */
     public static function gradeInput(){
         $test = self::where('test_status', 3)
-            ->where('test_isdeleted', 0)
             ->get()->all();
         return array_map(function ($testList){
             return Resources::TestList($testList);
@@ -130,14 +140,12 @@ class TestList extends Model {
      */
     public static function ifOpen(){
         $res = self::where('test_status', 1)
-            ->where('test_isdeleted', 0)
             ->get()->toArray();
         return $res ? true : false;
     }
 
     public static function getActiveTest(){
         $res = self::where('test_status', 1)
-            ->where('test_isdeleted', 0)
             ->first();
         if(!$res)
             return null;

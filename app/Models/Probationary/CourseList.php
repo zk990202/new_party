@@ -18,6 +18,19 @@ class CourseList extends Model
     const CREATED_AT = 'course_begintime';
     const UPDATED_AT = 'updated_at';
 
+    /**
+     * 模型的「启动」方法
+     * @return void
+     */
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::addGlobalScope('notDeleted', function(Builder $builder) {
+            $builder->where('course_isdeleted', 0);
+        });
+    }
+
     public function trainList(){
         return $this->belongsTo('App\Models\Probationary\TrainList', 'train_id', 'train_id');
     }
@@ -31,8 +44,7 @@ class CourseList extends Model
      * @return bool
      */
     public static function isCourseInsert(){
-        $res = self::where('course_isdeleted', 0)
-            ->where(function ($query){
+        $res = self::where(function ($query){
                 $query->where('course_caninsert', 1)
                     ->orWhere('course_isinserted' , 0);
             })
@@ -53,14 +65,12 @@ class CourseList extends Model
         if ($data['courseType'] != null){
             $courses = self::where('train_id', $data['trainId'])
                 ->where('course_type', $data['courseType'])
-                ->where('course_isdeleted', 0)
                 ->get()->all();
             return array_map(function ($courseList){
                 return Resources::ProbationaryCourseList($courseList);
             }, $courses);
         }else{
             $courses = self::where('train_id', $data['trainId'])
-                ->where('course_isdeleted', 0)
                 ->get()->all();
             return array_map(function ($courseList){
                 return Resources::ProbationaryCourseList($courseList);
@@ -70,7 +80,6 @@ class CourseList extends Model
 
     public static function getByTrainId($trainId){
         $courses = self::where('train_id', $trainId)
-            ->where('course_isdeleted', 0)
             ->get()->all();
         return array_map(function ($courseList){
             return Resources::ProbationaryCourseList($courseList);

@@ -4,6 +4,7 @@ namespace App\Models\Applicant;
 
 use App\Http\Helpers\Resources;
 use App\Providers\RouteServiceProvider;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
 
@@ -25,6 +26,19 @@ class ExerciseList extends Model
         'exercise_optionC', 'exercise_optionC', 'exercise_optionD', 'exercise_optionE', 'exercise_answer',
         'exercise_ishidden', 'exercise_isdeleted'];
 
+    /**
+     * 模型的「启动」方法
+     * @return void
+     */
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::addGlobalScope('notDeleted', function(Builder $builder) {
+            $builder->where('exercise_isdeleted', 0);
+        });
+    }
+
     public function courseList(){
         return $this->belongsTo('App\Models\Applicant\CourseList', 'course_id', 'course_id');
     }
@@ -38,8 +52,7 @@ class ExerciseList extends Model
      * @return array
      */
     public static function getAll(){
-        $res_all = self::where('exercise_isdeleted', 0)
-            ->orderBy('course_id', 'ASC')
+        $res_all = self::orderBy('course_id', 'ASC')
             ->orderBy('exercise_type', 'DESC')
             ->get()->all();
 
@@ -55,7 +68,6 @@ class ExerciseList extends Model
      */
     public static function getExerciseById($id){
         $exercises = self::where('course_id', $id)
-            ->where('exercise_isdeleted', 0)
             ->where('exercise_ishidden', 0)
             ->inRandomOrder()
             ->limit(20)

@@ -23,6 +23,19 @@ class ArticleList extends Model
 
     protected $fillable = ['course_id', 'article_name', 'article_content', 'article_ishidden', 'article_isdeleted'];
 
+    /**
+     * 模型的「启动」方法
+     * @return void
+     */
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::addGlobalScope('notDeleted', function(Builder $builder) {
+            $builder->where('article_isdeleted', 0);
+        });
+    }
+
     public function courseList(){
         return $this->belongsTo('App\Models\Applicant\CourseList', 'course_id','course_id');
     }
@@ -32,8 +45,7 @@ class ArticleList extends Model
      * @return array
      */
     public static function getAll(){
-        $res_arr = self::where('article_isdeleted', 0)
-            ->orderBy('course_id', 'ASC')
+        $res_arr = self::orderBy('course_id', 'ASC')
             ->get()->all();
         return array_map(function ($articleList){
             return Resources::ArticleList($articleList);
@@ -47,7 +59,6 @@ class ArticleList extends Model
      */
     public static function getArticleByCourseId($id){
         $articles = self::where('course_id', $id)
-            ->where('article_isdeleted', 0)
             ->get()->all();
         return array_map(function ($article){
             return Resources::ArticleList($article);
@@ -61,7 +72,6 @@ class ArticleList extends Model
      */
     public static function getOneArticle($id){
         $res = self::where('article_id', $id)
-            ->where('article_isdeleted', 0)
             ->get()->all();
         return array_map(function ($articleList){
             return Resources::ArticleList($articleList);

@@ -16,6 +16,19 @@ class CertLost extends Model
 
     protected $fillable = ['cert_id', 'title', 'content', 'time', 'deal_status', 'deal_word', 'isdeleted'];
 
+    /**
+     * 模型的「启动」方法
+     * @return void
+     */
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::addGlobalScope('notDeleted', function(Builder $builder) {
+            $builder->where('isdeleted', 0);
+        });
+    }
+
     public function cert(){
         return $this->belongsTo('App\Models\Cert', 'cert_id', 'cert_id');
     }
@@ -152,7 +165,6 @@ class CertLost extends Model
     public static function isApply($cert_id){
         $res = self::where('cert_id', $cert_id)
             ->where('deal_status', 0)
-            ->where('isdeleted', 0)
             ->get()->toArray();
         return $res ? true : false;
     }

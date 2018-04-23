@@ -22,6 +22,19 @@ class Cert extends Model
     protected $fillable = ['sno', 'entry_id', 'cert_no', 'cert_type', 'cert_time', 'cert_getperson', 'cert_place',
         'cert_islost', 'isdeleted'];
 
+    /**
+     * 模型的「启动」方法
+     * @return void
+     */
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::addGlobalScope('notDeleted', function(Builder $builder) {
+            $builder->where('isdeleted', 0);
+        });
+    }
+
     public function studentInfo(){
         return $this->belongsTo('App\Models\StudentInfo', 'sno','sno');
     }
@@ -55,7 +68,6 @@ class Cert extends Model
      */
     public static function getCert($max, $min, $college){
         $res_all = self::whereBetween('entry_id', [$min, $max])
-            ->where('isdeleted', 0)
             ->where('cert_type', 1)
             ->leftJoin('twt_student_info', 'twt_cert.sno', '=', 'twt_student_info.sno')
             ->where('academy_id', $college)
@@ -122,7 +134,6 @@ class Cert extends Model
      */
     public static function getCertAcademy($max, $min){
         $res_all = self::whereBetween('entry_id', [$min, $max])
-            ->where('isdeleted', 0)
             ->where('cert_type', 2)
             ->get()->all();
         return array_map(function ($cert){
@@ -167,7 +178,6 @@ class Cert extends Model
         $res_all = self::whereBetween('entry_id', [$min, $max])
             ->leftJoin('twt_student_info', 'twt_cert.sno', '=', 'twt_student_info.sno')
             ->where('academy_id', $academyId)
-            ->where('isdeleted', 0)
             ->where('cert_type', 3)
             ->get()->all();
         return array_map(function ($cert){
@@ -208,7 +218,6 @@ class Cert extends Model
         $res = self::leftJoin('twt_applicant_entryform', 'twt_cert.entry_id', '=', 'twt_applicant_entryform.entry_id')
             ->where('twt_cert.entry_id', $entry_id)
             ->where('twt_cert.cert_type', 1)
-            ->where('isdeleted', 0)
             ->get()->all();
         return array_map(function ($cert){
             return Resources::Cert($cert);
@@ -224,7 +233,6 @@ class Cert extends Model
         $res = self::leftJoin('twt_academy_entryform', 'twt_cert.entry_id', '=', 'twt_academy_entryform.entry_id')
             ->where('twt_cert.entry_id', $entry_id)
             ->where('twt_cert.cert_type', 2)
-            ->where('isdeleted', 0)
             ->get()->all();
         return array_map(function ($cert){
             return Resources::Cert($cert);

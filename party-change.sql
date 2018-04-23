@@ -61,13 +61,13 @@ ALTER TABLE twt_probationary_trainlist CHANGE train_gradeserach_status train_gra
 -- 2018-04-20
 CREATE TABLE `twt_applicant_exerciseanswertransform` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `exercise_answer_number` int(11) NOT NULL COMMENT '题目答案的代码',
-  `exercise_answer_letter` char(11) NOT NULL COMMENT '题目答案的字母',
-  PRIMARY KEY (`id`)
+`exercise_answer_number` int(11) NOT NULL COMMENT '题目答案的代码',
+`exercise_answer_letter` char(11) NOT NULL COMMENT '题目答案的字母',
+PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 INSERT INTO `twt_applicant_exerciseanswertransform`(`exercise_answer_number`, `exercise_answer_letter`) VALUES
-	(1, 'A'),(2, 'B'),(3, 'AB'),(4, 'C'),(5, 'AC'),(6, 'BC'),(7, 'ABC'),(8, 'D'),(9, 'AD'),(10, 'BD'),(11, 'ABD'),(12, 'CD'),(13, 'ACD'),(14, 'BCD'),(15, 'ABCD'),
-	(16, 'E'),(17, 'AE'),(18, 'BE'),(19, 'ABE'),(20, 'CE'),(21, 'ACE'),(22, 'BCE'),(23, 'ABCE'),(24, 'DE'),(25, 'ADE'),(26, 'BDE'),(27, 'ABDE'),(28, 'CDE'),
-	(29, 'ACDE'),(30, 'BCDE'),(31, 'ABCDE');
+  (1, 'A'),(2, 'B'),(3, 'AB'),(4, 'C'),(5, 'AC'),(6, 'BC'),(7, 'ABC'),(8, 'D'),(9, 'AD'),(10, 'BD'),(11, 'ABD'),(12, 'CD'),(13, 'ACD'),(14, 'BCD'),(15, 'ABCD'),
+  (16, 'E'),(17, 'AE'),(18, 'BE'),(19, 'ABE'),(20, 'CE'),(21, 'ACE'),(22, 'BCE'),(23, 'ABCE'),(24, 'DE'),(25, 'ADE'),(26, 'BDE'),(27, 'ABDE'),(28, 'CDE'),
+  (29, 'ACDE'),(30, 'BCDE'),(31, 'ABCDE');
 	

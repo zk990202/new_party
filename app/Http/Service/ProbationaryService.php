@@ -8,11 +8,11 @@
 
 namespace App\Http\Service;
 
+use App\Http\Helpers\Resources;
 use App\Http\Service\PartyStatus\MainStatus;
 use App\Models\Probationary\EntryForm;
 use App\Models\Probationary\TrainList;
 use App\Models\StudentInfo;
-use App\Models\UserInfo;
 
 class ProbationaryService{
     // 选修课、必修课需要上的数量
@@ -78,5 +78,16 @@ class ProbationaryService{
 
     public function getSelectedCourses($userNumber, $entryId){
 
+    }
+
+    public function getPreEntryForm($userNumber, $curTrainId = null){
+        if($curTrainId)
+            $trains = TrainList::where('train_id', '<=', $curTrainId)->where('train_isdeleted', 0)->orderBy('train_id', 'DESC')->limit(2)->get()->all();
+        else
+            $trains = TrainList::where('train_isdeleted', 0)->orderBy('train_id', 'DESC')->limit(2)->get()->all();
+        if(!$trains || count($trains) != 2){
+            return null;
+        }
+        return $entry = EntryForm::getBySnoAndTrainIdNotExit($userNumber, $trains[1]->train_id);
     }
 }

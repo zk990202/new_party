@@ -3,6 +3,7 @@
 namespace App\Models\Probationary;
 
 use App\Http\Helpers\Resources;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
 class TrainList extends Model
@@ -24,12 +25,24 @@ class TrainList extends Model
 //    }
 
     /**
+     * 模型的「启动」方法
+     * @return void
+     */
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::addGlobalScope('notDeleted', function(Builder $builder) {
+            $builder->where('train_isdeleted', 0);
+        });
+    }
+
+    /**
      * 获取所有培训
      * @return array
      */
     public static function getAll(){
-        $res_all = self::where('train_isdeleted', 0)
-            ->orderBy('train_id', 'desc')
+        $res_all = self::orderBy('train_id', 'desc')
             ->get()->all();
         return array_map(function($trainList){
             return Resources::ProbationaryTrainList($trainList);
@@ -85,8 +98,7 @@ class TrainList extends Model
      * @return bool
      */
     public static function isEnd(){
-        $res = self::where('train_isdeleted', 0)
-            ->where('train_isend', 1)
+        $res = self::where('train_isend', 1)
             ->get()->toArray();
         if ($res){
             //未结束
@@ -119,7 +131,6 @@ class TrainList extends Model
      */
     public static function getTrainNotEnd(){
         $train = self::where('train_isend', 1)
-            ->where('train_isdeleted', 0)
             ->orderBy('train_id', 'desc')
             ->get()->all();
         return array_map(function ($trainList){
@@ -149,7 +160,6 @@ class TrainList extends Model
     public static function getActiveTrain(){
         $res = self::where('train_entry_status', 1)
             ->where('train_isend', 1)
-            ->where('train_isdeleted', 0)
             ->first();
         return $res ? Resources::ProbationaryTrainList($res) : null;
     }

@@ -3,6 +3,7 @@
 namespace App\Models\Applicant;
 
 use App\Http\Helpers\Resources;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -22,12 +23,24 @@ class CourseList extends Model
     protected $fillable = ['course_name', 'course_detail', 'course_priority', 'course_ishidden', 'course_isdeleted'];
 
     /**
+     * 模型的「启动」方法
+     * @return void
+     */
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::addGlobalScope('notDeleted', function(Builder $builder) {
+            $builder->where('course_isdeleted', 0);
+        });
+    }
+
+    /**
      * 获取所有课程
      * @return array
      */
     public static function getAll(){
-        $res_arr = self::where('course_isdeleted', 0)
-            ->orderBy('course_priority', 'ASC')
+        $res_arr = self::orderBy('course_priority', 'ASC')
             ->get()->all();
 
         return array_map(function ($CourseList){
@@ -41,8 +54,7 @@ class CourseList extends Model
      * @return array
      */
     public static function getCourseByLimit($limit = 20){
-        $res_arr = self::where('course_isdeleted', 0)
-            ->orderBy('course_priority', 'ASC')
+        $res_arr = self::orderBy('course_priority', 'ASC')
             ->limit($limit)
             ->get()->all();
 
@@ -66,8 +78,7 @@ class CourseList extends Model
     }
 
     public static function getCourse(){
-        $courses = self::where('course_isdeleted', 0)
-            ->get()->all();
+        $courses = self::get()->all();
         return array_map(function ($course){
             return Resources::CourseList($course);
         }, $courses);
@@ -75,7 +86,6 @@ class CourseList extends Model
 
     public static function getCourseById($id){
         $courses = self::where('course_id', $id)
-            ->where('course_isdeleted', 0)
             ->get()->all();
         return array_map(function ($course){
             return Resources::CourseList($course);

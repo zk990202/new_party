@@ -3,6 +3,7 @@
 namespace App\Models\Probationary;
 
 use App\Http\Helpers\Resources;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -23,6 +24,20 @@ class ChildEntryForm extends Model
 
     const CREATED_AT = 'child_entrytime';
     const UPDATED_AT = 'updated_at';
+
+    /**
+     * 模型的「启动」方法
+     *
+     * @return void
+     */
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::addGlobalScope('notDeleted', function(Builder $builder) {
+            $builder->where('isdeleted', 0);
+        });
+    }
 
     public function studentInfo(){
         return $this->belongsTo('App\Models\StudentInfo', 'sno', 'sno');
@@ -205,7 +220,7 @@ class ChildEntryForm extends Model
     public static function courseExit($entry_id){
         $res = self::where('entry_id', $entry_id)
             ->update(['isexit' => 1]);
-        return $res ? true : false;
+        return $res;
     }
 
     /**

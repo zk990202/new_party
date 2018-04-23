@@ -20,12 +20,24 @@ class Column extends Model
     const SECRETARY_ID = 73;
 
     /**
+     * 模型的「启动」方法
+     * @return void
+     */
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::addGlobalScope('notDeleted', function(Builder $builder) {
+            $builder->where('column_isdeleted', 0);
+        });
+    }
+
+    /**
      * @param $pid
      * @return array
      */
     public static function getColumnsByParentId($pid){
-        $columns = self::where('column_pid', $pid)->where('column_isdeleted', 0)
-            ->get()->all();
+        $columns = self::where('column_pid', $pid)->get()->all();
         return array_map(function($column){
             return Resources::Column($column);
         }, $columns);
@@ -37,7 +49,6 @@ class Column extends Model
      */
     public static function getChildIds($id){
         $t = self::where('column_pid', $id)
-            ->where('column_isdeleted', 0)
             ->get()->toArray();
 
         $res = [];

@@ -15,6 +15,19 @@ class SpecialNews extends Model
 
     protected $fillable = ['title', 'summary', 'content', 'inserttime', 'author', 'type', 'img_path', 'isdeleted'];
 
+    /**
+     * 模型的「启动」方法
+     * @return void
+     */
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::addGlobalScope('notDeleted', function(Builder $builder) {
+            $builder->where('isdeleted', 0);
+        });
+    }
+
     public function column(){
         return $this->belongsTo('App\Models\Column', 'type', 'column_id');
     }
@@ -183,7 +196,6 @@ class SpecialNews extends Model
      */
     public static function newsByTypesLimit($type, $limit = 5){
         $res = self::whereIn('type', $type)
-            ->where('isdeleted', 0)
             ->orderBy('isrecommand', 'desc')
             ->orderBy('inserttime', 'desc')
             ->limit($limit)
@@ -201,7 +213,6 @@ class SpecialNews extends Model
      */
     public static function newsByTypeLimit($type, $limit = 5){
         $res = self::where('type', $type)
-            ->where('isdeleted', 0)
             ->whereNotNull('img_path')
             ->orderBy('isrecommand', 'desc')
             ->orderBy('inserttime', 'desc')
@@ -214,7 +225,6 @@ class SpecialNews extends Model
 
     public static function newsByTypeWithPage($type, $perPage = 10){
         $res = self::where('type', $type)
-            ->where('isdeleted', 0)
             ->whereNotNull('img_path')
             ->orderBy('isrecommand', 'desc')
             ->orderBy('inserttime', 'desc')
@@ -233,8 +243,7 @@ class SpecialNews extends Model
 //    public static function getIndexDataStudyGroup(){
 //        $res = self::where('type', 1)
 //            ->where('isrecommand',  1)
-//            ->where('isdeleted', 0)
-//            ->orderBy('inserttime', 'desc')
+//            ->//            ->orderBy('inserttime', 'desc')
 //            ->limit()
 //    }
 }

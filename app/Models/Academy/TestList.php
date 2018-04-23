@@ -3,6 +3,7 @@
 namespace App\Models\Academy;
 
 use App\Http\Helpers\Resources;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Request;
 
@@ -31,6 +32,19 @@ class TestList extends Model
         'FINISHED'  => 5
     ];
 
+    /**
+     * 模型的「启动」方法
+     * @return void
+     */
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::addGlobalScope('notDeleted', function(Builder $builder) {
+            $builder->where('test_isdeleted', 0);
+        });
+    }
+
     public function college(){
         return $this->belongsTo('App\Models\College', 'test_of_academy', 'code');
     }
@@ -45,7 +59,6 @@ class TestList extends Model
      */
     public static function getAllTrain(){
         $res_all = self::where('test_parent', 0)
-            ->where('test_isdeleted', 0)
             ->orderBy('test_id', 'DESC')
             ->get()->all();
         return array_map(function ($testList){
@@ -88,8 +101,7 @@ class TestList extends Model
      * @return array
      */
     public static function getAllTest(){
-        $res_all = self::where('test_isdeleted', 0)
-            ->where('test_parent', '>', 0)
+        $res_all = self::where('test_parent', '>', 0)
 //            ->where('test_status', '<', 5)
             ->orderBy('test_begintime', 'desc')
             ->orderBy('test_of_academy')
@@ -161,7 +173,6 @@ class TestList extends Model
             ->where('test_status', '>', 0)
             ->where('test_status', '<', 4)
 //            ->where('test_of_academy', $academyId) 接入院级管理员权限后调试
-            ->where('test_isdeleted', 0)
             ->orderBy('test_id', 'desc')
             ->get()->all();
         return array_map(function ($testList){
@@ -175,7 +186,6 @@ class TestList extends Model
      */
     public static function gradeInput(){
         $test = self::where('test_status', 3)
-            ->where('test_isdeleted', 0)
             ->get()->all();
         return array_map(function ($testList){
             return Resources::AcademyTestList($testList);
@@ -191,14 +201,12 @@ class TestList extends Model
     public static function getActiveTest($college_id){
         $res = self::where('test_of_academy', $college_id)
             ->where('test_status', self::TEST_STATUS['STARTED'])
-            ->where('test_isdeleted', 0)
             ->first();
         return $res ? Resources::AcademyTestList($res) : null;
     }
 
     public static function getListByCollegeIdWithPage($collegeId, $numPerPage = 15){
         $res = self::where('test_of_academy', $collegeId)
-            ->where('test_isdeleted', 0)
             ->orderBy('test_id', 'desc')
             ->paginate($numPerPage);
 

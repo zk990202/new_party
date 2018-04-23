@@ -18,6 +18,19 @@ class Notification extends Model
 
     protected $fillable = ['column_id', 'notice_title', 'notice_content', 'notice_filename', 'notice_filepath', 'notice_istop', 'author', 'notice_author', 'notice_ishidden', 'notice_isdeleted'];
 
+    /**
+     * 模型的「启动」方法
+     * @return void
+     */
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::addGlobalScope('notDeleted', function(Builder $builder) {
+            $builder->where('notice_isdeleted', 0);
+        });
+    }
+
     public function column(){
         return $this->belongsTo('App\Models\Column', 'column_id', 'column_id');
     }
@@ -32,8 +45,7 @@ class Notification extends Model
      * @return array
      */
     public static function getAllNotice($type){
-        $res_arr = self::where('column_id', $type)->where('notice_isdeleted', 0)
-            ->orderBy('notice_istop', 'desc')->orderBy('notice_ishidden', 'asc')->orderBy('notice_time', 'desc')
+        $res_arr = self::where('column_id', $type)->orderBy('notice_istop', 'desc')->orderBy('notice_ishidden', 'asc')->orderBy('notice_time', 'desc')
             ->get()->all();
         return array_map(function($notification){
             return Resources::Notification($notification);
@@ -75,8 +87,7 @@ class Notification extends Model
 
     //以下是活动通知专区
     public static function activityGetAllNotice(){
-        $res_arr = self::where('column_id', 2)->where('notice_isdeleted', 0)
-            ->orderBy('notice_istop', 'desc')->orderBy('notice_ishidden', 'asc')->orderBy('notice_time', 'desc')
+        $res_arr = self::where('column_id', 2)->orderBy('notice_istop', 'desc')->orderBy('notice_ishidden', 'asc')->orderBy('notice_time', 'desc')
             ->get()->all();
         return array_map(function($notification){
             return Resources::Notification($notification);
@@ -117,8 +128,7 @@ class Notification extends Model
      * @return array
      */
     public static function getIndexData($limit = 4){
-        $res = self::where('notice_isdeleted', 0)
-            ->orderBy('notice_istop', 'desc')
+        $res = self::orderBy('notice_istop', 'desc')
             ->orderBy('notice_time', 'desc')
             ->limit($limit)
             ->get()->all();
@@ -145,8 +155,7 @@ class Notification extends Model
      * @internal param $type
      */
     public static function getAllNoticeByColumnIdWithPage($columnId){
-        $res_arr = self::where('column_id', $columnId)->where('notice_isdeleted', 0)
-            ->orderBy('notice_istop', 'desc')->orderBy('notice_ishidden', 'asc')->orderBy('notice_time', 'desc')
+        $res_arr = self::where('column_id', $columnId)->orderBy('notice_istop', 'desc')->orderBy('notice_ishidden', 'asc')->orderBy('notice_time', 'desc')
             ->paginate(6);
 
         foreach($res_arr as $i => $v){

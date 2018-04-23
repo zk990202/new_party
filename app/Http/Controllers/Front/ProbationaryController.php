@@ -142,6 +142,11 @@ class ProbationaryController extends FrontBaseController{
 
     }
 
+    /**
+     * 选课操作，上一期如果报名，且没有退出，通过的课程算这次的通过课程
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
     public function courseChoose(Request $request){
         $user = $this->userService->getCurrentUser();
         // determine whether the user has entered the active train
@@ -204,6 +209,7 @@ class ProbationaryController extends FrontBaseController{
 
     /**
      * 我的课表
+     * 选课允许接着上一期来
      */
     public function courseChooseResult(){
         $user = $this->userService->getCurrentUser();
@@ -211,20 +217,33 @@ class ProbationaryController extends FrontBaseController{
         $can = $this->probationaryService->canChooseCourse($user['userNumber']);
         if(!$can['status'])
             return $this->alertService->alertAndBack('提示', $can['msg']);
-
         $selectedCourses = ChildEntryForm::getSelectedCourses($user['userNumber'], $can['entry']['id']);
-        $countOfRequiredClass = 0;
-        $countOfElectiveClass = 0;
-        foreach($selectedCourses as &$v){
-            if($v['courseType'] == 0)
-                $countOfRequiredClass ++;
-            else
-                $countOfElectiveClass ++;
+        foreach($selectedCourses as & $v){
             CourseList::warpType($v);
+        }
+        // 预备党员党校允许接着上一期通过的课程接着上，所以要获取上一期已经通过的课程数
+        $preEntryForm = $this->probationaryService->getPreEntryForm($user['userNumber'], $can['test']['id']);
+        $preCourses = [];
+        if($preEntryForm){
+            $can['entry']['passCompulsory'] = intval($can['entry']['passCompulsory']) + intval($preEntryForm['passCompulsory']);
+            $can['entry']['passElective'] = intval($can['entry']['passElective']) + intval($preEntryForm['passCompulsory']);
+
         }
         $data = [
             'list' => $selectedCourses,
+            'info' => [
+                $can['test']['name'],
+                $can['entry']['passCompulsory'], // 已过必修课
+                $this->probationaryService::NUM_REQUIRED_COURSE,
+                $can['entry']['passElective'], // 已过选修课
+                $this->probationaryService::NUM_ELECTIVE_COURSE,
+                $can['entry']['practiceGrade'],
+                $can['entry']['articleGrade'],
+                $preEntryForm ? '是' : '否',
+                $can['entry']['exitCount']
+            ]
         ];
+        //dd($can);
         //dd($selectedCourses);
         return view('front.probationary.courseListResult', ['data' => $data]);
     }
@@ -236,9 +255,11 @@ class ProbationaryController extends FrontBaseController{
             return $this->alertService->alertAndBackWithError('课程不存在');
         if($course['sno'] != $user['userNumber'])
             return $this->alertService->alertAndBackWithError('没有权限');
-        $flag = ChildEntryForm::courseExit($id);
+        //dd($course);
+        $flag = ChildEntryForm::courseExit($id) && EntryForm::accumulationExitCount($course['childId'], $user['userNumber']);
         if(! $flag)
             return $this->alertService->alertAndBackWithError('系统错误');
+
         return $this->alertService->alertAndBackWithSuccess('退课成功');
     }
 
