@@ -73,7 +73,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                @foreach($data['list'] as $v)
+                @foreach($data['list']['cur'] as $v)
                     <tr>
                         <td>{{ $v['courseName'] }}</td>
                         <td>{{ $v['courseType'] }}</td>
@@ -82,6 +82,15 @@
                         <td><a href="{{ url('probationary/courseExit/' . $v['id']) }}">
                                 <button class="button">退选</button>
                             </a></td>
+                    </tr>
+                @endforeach
+                @foreach($data['list']['pre'] as $v)
+                    <tr>
+                        <td>{{ $v['courseName'] }}</td>
+                        <td>{{ $v['courseType'] }}</td>
+                        <td>{{ $v['courseTime'] }}</td>
+                        <td>{{ $v['coursePlace'] ?? '无' }}</td>
+                        <td>上期已通过课程</td>
                     </tr>
                 @endforeach
                 </tbody>

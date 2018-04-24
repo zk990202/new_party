@@ -175,7 +175,7 @@ class Resources
             'sno'           => $entryForm->sno,
             'academyId'     => $entryForm->studentInfo->academy_id ?? '',
             'academyName'   => $entryForm->studentInfo->college->shortname ?? '',
-            'majorName'     => $entryForm->userInfo->major->majorname ?? '',
+            'majorName'     => $entryForm->userInfo->majorInfo->majorname ?? '',
             'studentName'   => $entryForm->user->username ?? '',
             'time'          => $entryForm->entry_time,
             'practiceGrade' => $entryForm->entry_practicegrade,
@@ -200,7 +200,7 @@ class Resources
             'studentName'   => $cert->user->username ?? '',
             'academyId'     => $cert->studentInfo->academy_id,
             'academyName'   => $cert->studentInfo->college->shortname,
-            'majorName'     => $cert->userInfo->major->majorname ?? '',
+            'majorName'     => $cert->userInfo->majorInfo->majorname ?? '',
             'entryId'       => $cert->entry_id,
             'certNumber'    => $cert->cert_no,
             'type'          => $cert->cert_type,
@@ -223,7 +223,7 @@ class Resources
             'testName'    => $certLost->cert->entryForm->testList->test_name ?? '',
             'studentName' => $certLost->cert->user->username ?? '',
             'academyName' => $certLost->cert->studentInfo->college->shortname ?? '',
-            'majorName'   => $certLost->cert->userInfo->major->majorname ?? '',
+            'majorName'   => $certLost->cert->userInfo->majorInfo->majorname ?? '',
             'certId'      => $certLost->cert_id,
             'certType'    => $certLost->cert->cert_type,
             'title'       => $certLost->title,
@@ -285,7 +285,7 @@ class Resources
             'sno'           => $entryForm->sno,
             'academyId'     => $entryForm->studentInfo->academy_id ?? '',
             'academyName'   => $entryForm->studentInfo->college->shortname ?? '',
-            'majorName'     => $entryForm->userInfo->major->majorname ?? '',
+            'majorName'     => $entryForm->userInfo->majorInfo->majorname ?? '',
             'studentName'   => $entryForm->user->username ?? '',
             'time'          => $entryForm->entry_time,
             'practiceGrade' => $entryForm->entry_practicegrade,
@@ -308,7 +308,7 @@ class Resources
             'studentName'   => $cert->user->username ?? '',
             'academyId'     => $cert->studentInfo->academy_id,
             'academyName'   => $cert->studentInfo->college->shortname,
-            'majorName'     => $cert->userInfo->major->majorname ?? '',
+            'majorName'     => $cert->userInfo->majorInfo->majorname ?? '',
             'entryId'       => $cert->entry_id,
             'certNumber'    => $cert->cert_no,
             'type'          => $cert->cert_type,
@@ -386,7 +386,7 @@ class Resources
             'trainFilePath'     => $entryForm->trainList->train_filepath,
             'academyId'         => $entryForm->studentInfo->academy_id ?? '',
             'academyName'       => $entryForm->studentInfo->college->shortname ?? '',
-            'majorName'         => $entryForm->userInfo->major->majorname ?? '',
+            'majorName'         => $entryForm->userInfo->majorInfo->majorname ?? '',
             'studentName'       => $entryForm->user->username ?? '',
             'practiceGrade'     => $entryForm->entry_practicegrade,
             'articleGrade'      => $entryForm->entry_articlegrade,
@@ -436,7 +436,7 @@ class Resources
             'studentName'   => $cert->user->username ?? '',
             'academyId'     => $cert->studentInfo->academy_id,
             'academyName'   => $cert->studentInfo->college->shortname,
-            'majorName'     => $cert->userInfo->major->majorname ?? '',
+            'majorName'     => $cert->userInfo->majorInfo->majorname ?? '',
             'entryId'       => $cert->entry_id,
             'certNumber'    => $cert->cert_no,
             'type'          => $cert->cert_type,
@@ -479,6 +479,7 @@ class Resources
 
     public static function StudentInfo($studentInfo)
     {
+        //dd($studentInfo->userInfo->majorInfo);
         return [
             'id'                   => $studentInfo->info_id,
             'sno'                  => $studentInfo->sno,
@@ -513,7 +514,7 @@ class Resources
             'isInit'               => $studentInfo->is_init,
             'studentName'          => $studentInfo->user->username ?? '',
             'academyName'          => $studentInfo->college->shortname ?? '',
-            'majorName'            => $studentInfo->userInfo->major->majorname ?? '',
+            'majorName'            => $studentInfo->userInfo->majorInfo->majorname ?? '',
             'testName'             => $studentInfo->testList->test_name ?? ''
         ];
     }

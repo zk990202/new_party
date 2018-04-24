@@ -14,7 +14,7 @@ class UserInfo extends Authenticatable
 
     public $timestamps = false;
 
-    public function major(){
+    public function majorInfo(){
         return $this->belongsTo('App\Models\Major', 'major', 'majorid');
     }
 

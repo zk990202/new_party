@@ -2,8 +2,8 @@
     <div class="active">我的支部</div>
     <div class="btn">
         <p {{ isset($status) ? 'class=' . $status : '' }}><a href="{{ url('personal/status') }}">个人状态</a></p>
-        <p {{ isset($partyBranch) ? 'class=' . $partyBranch : '' }}><a href="detial.html">支部详情</a></p>
-        <p><a href="member-list.html">支部成员列表</a></p>
+        <p {{ isset($partyBranch) ? 'class=' . $partyBranch : '' }}><a href="{{ url('personal/partyBranch') }}">支部详情</a></p>
+        <p><a href="{{ url('personal/members') }}">支部成员列表</a></p>
         <p><a href="#">我的学习小组</a></p>
         <p><a href="#">上传文献查看</a></p>
         <ul>

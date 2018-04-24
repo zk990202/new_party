@@ -41,4 +41,63 @@ class MainStatus{
     const PARTY_APPROVAL = 14;
     // 正式党员
     const FORMAL_MEMBER = 15;
+
+    public static function warpStatus(& $item, $key = 'mainStatus'){
+        if(isset($item[$key])){
+            switch($item[$key]){
+                case self::APPLICANT:
+                    $item[$key] = '申请人';
+                    break;
+                case self::ACTIVIST:
+                    $item[$key] = '入党积极分子';
+                    break;
+                case self::COMMUNIST:
+                    $item[$key] = '团支部推优';
+                    break;
+                case self::ACTIVIST_COMMUNIST:
+                    $item[$key] = '团支部推优 && 入党积极分子';
+                    break;
+                case self::DEVELOPMENT_TARGET:
+                    $item[$key] = '发展对象';
+                    break;
+                case self::CENTRALIZED_TRAINING:
+                    $item[$key] = '集中培训';
+                    break;
+                case self::MATERIAL_READY:
+                    $item[$key] = '入党资料是否齐全';
+                    break;
+                case self::REPORT_TO_SUPERIOR:
+                    $item[$key] = '向上级党组织汇报';
+                    break;
+                case self::DEVELOPMENT_PUBLICITY:
+                    $item[$key] = '党员发展公示';
+                    break;
+                case self::PARTY_BRANCH_VOTING:
+                    $item[$key] = '召开发展大会';
+                    break;
+                case self::COMMITTEE_APPROVAL:
+                    $item[$key] = '党员谈话';
+                    break;
+                case self::PROBATIONARY:
+                    $item[$key] = '预备党员';
+                    break;
+                case self::PARTY_ORGANIZATION:
+                    $item[$key] = '支部组织生活和党内活动';
+                    break;
+                case self::CORRECT_PUBLICITY:
+                    $item[$key] = '党员转正公示';
+                    break;
+                case self::VOTE_PASSED:
+                    $item[$key] = '召开转正大会表决通过';
+                    break;
+                case self::PARTY_APPROVAL:
+                    $item[$key] = '党委审批';
+                    break;
+                case self::FORMAL_MEMBER:
+                    $item[$key] = '正式党员';
+                    break;
+            }
+        }
+        return $item;
+    }
 }

@@ -104,6 +104,7 @@ Route::group(['namespace' => 'Front', 'middleware' => 'auth'], function(){
     Route::group(['prefix' => 'personal'], function(){
         Route::get('status', 'PersonalController@status');
         Route::get('partyBranch', 'PersonalController@partyBranch');
+        Route::get('members', 'PersonalController@members');
         Route::get('doc', 'PersonalController@docPage');
         Route::post('doc', 'PersonalController@docStore');
     });

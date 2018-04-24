@@ -23,7 +23,7 @@
             <li><a href="{{ url('probationary/notice') }}">党校公告</a></li>
             <li><a href="{{ url('probationary/signUp') }}">报名培训</a></li>
             <li><a href="{{ url('probationary/signResult') }}">我的报名表</a></li>
-            <li>我的课表</li>
+            <li><a href="{{ url('probationary/studyList') }}"> 我的课表 </a></li>
             <li><a href="QueryResults.html">成绩查询</a></li>
             <li>证书查询</li>
         </ul>

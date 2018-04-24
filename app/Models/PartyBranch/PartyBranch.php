@@ -51,7 +51,7 @@ class PartyBranch extends Model
     }
 
     public function college_(){
-        return $this->belongsTo('App\Models\College', 'partybranch_academy', 'id');
+        return $this->belongsTo('App\Models\College', 'partybranch_academy', 'code');
     }
 
     /**
@@ -441,6 +441,6 @@ class PartyBranch extends Model
 
     public static function getBranchById($id){
         $res = self::where('partybranch_id', $id)->first();
-        return Resources::PartyBranch($res);
+        return $res ? Resources::PartyBranch($res) : null;
     }
 }

@@ -77,9 +77,8 @@ class PartyStatusService{
     }
 
 
-    public function getPartyBranchInfo($userNumber){
-        $user = StudentInfo::getStudentInfo($userNumber);
-        $partyBranch = PartyBranch::getBranchById($user['partyBranchId']);
+    public function getPartyBranchInfoById($id){
+        $partyBranch = PartyBranch::getBranchById($id);
         return $partyBranch;
     }
 

@@ -71,3 +71,4 @@ INSERT INTO `twt_applicant_exerciseanswertransform`(`exercise_answer_number`, `e
   (16, 'E'),(17, 'AE'),(18, 'BE'),(19, 'ABE'),(20, 'CE'),(21, 'ACE'),(22, 'BCE'),(23, 'ABCE'),(24, 'DE'),(25, 'ADE'),(26, 'BDE'),(27, 'ABDE'),(28, 'CDE'),
   (29, 'ACDE'),(30, 'BCDE'),(31, 'ABCDE');
 	
+-- TODO userInfo需要整体更新

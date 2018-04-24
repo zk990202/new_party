@@ -223,14 +223,16 @@ class ProbationaryController extends FrontBaseController{
         }
         // 预备党员党校允许接着上一期通过的课程接着上，所以要获取上一期已经通过的课程数
         $preEntryForm = $this->probationaryService->getPreEntryForm($user['userNumber'], $can['test']['id']);
-        $preCourses = [];
+        $preCourses = ChildEntryForm::getSelectedCourses($user['userNumber'], $preEntryForm['id']);
         if($preEntryForm){
             $can['entry']['passCompulsory'] = intval($can['entry']['passCompulsory']) + intval($preEntryForm['passCompulsory']);
             $can['entry']['passElective'] = intval($can['entry']['passElective']) + intval($preEntryForm['passCompulsory']);
-
         }
         $data = [
-            'list' => $selectedCourses,
+            'list' => [
+                'cur' => $selectedCourses,
+                'pre' => $preCourses
+            ],
             'info' => [
                 $can['test']['name'],
                 $can['entry']['passCompulsory'], // 已过必修课

@@ -15,6 +15,7 @@ use App\Http\Service\PartyStatus\IdeologicalReport_1;
 use App\Http\Service\PartyStatus\MainStatus;
 use App\Http\Service\PartyStatus\MaterialsReady;
 use App\Http\Service\PartyStatusService;
+use App\Models\StudentInfo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use RealRashid\SweetAlert\Facades\Alert;
@@ -65,9 +66,22 @@ class PersonalController extends FrontBaseController {
      *  个人党支部状态
      */
     public function partyBranch(){
-        $partyBranch = $this->partyStatusService->getPartyBranchInfo(auth()->user()->userNumber());
+        $user = $this->userService->getCurrentUser();
+        //dd($user);
+        //$partyBranch = $this->partyStatusService->getPartyBranchInfoById($user['partyBranchId']);
+        //dd($partyBranch, $user);
 
-        return view('front.personal.partyBranch', ['data' => $partyBranch, 'user' => auth()->user(), 'partyBranch' => 'nav1']);
+        return view('front.personal.partyBranch', ['user' => $user, 'partyBranch' => 'nav1']);
+    }
+
+    public function members(){
+        $user = $this->userService->getCurrentUser();
+        $members = StudentInfo::getPartyBranchMembersByIdWithPage($user['partyBranchId'], $limit = 20);
+        foreach($members as $i => &$item){
+            $members[$i] = MainStatus::warpStatus($item);
+        }
+        //dd($members);
+        return view('front.personal.members', ['list' => $members]);
     }
 
     public function docStore(Request $request){
@@ -84,8 +98,7 @@ class PersonalController extends FrontBaseController {
         }
         $type = $this->partyStatusService->getDocType(auth()->user()->userNumber());
         if(!$type){
-            Alert::info('提示', '您目前没有可提交的文件');
-            return back();
+            return $this->alertService->alertAndBack('提示', '您目前没有可提交的文件');
         }
         // TODO
     }
