@@ -429,14 +429,12 @@ class PartyBranch extends Model
      * @param $usernumb
      * @return array
      */
-    public static function isProbationary($usernumb){
-        $res = self::where('partybranch_secretary', $usernumb)
-            ->orWhere('partybranch_organizer', $usernumb)
-            ->orWhere('partybranch_propagator', $usernumb)
-            ->get()->all();
-        return array_map(function ($partyBranch){
-            return Resources::PartyBranch($partyBranch);
-        }, $res)[0];
+    public static function isProbationary($userNumb){
+        $res = self::where('partybranch_secretary', $userNumb)
+            ->orWhere('partybranch_organizer', $userNumb)
+            ->orWhere('partybranch_propagator', $userNumb)
+            ->first();
+        return $res ? Resources::PartyBranch($res) : null;
     }
 
     public static function getBranchById($id){

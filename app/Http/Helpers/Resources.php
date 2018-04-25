@@ -22,6 +22,7 @@ use App\Models\CommonFiles;
 use App\Models\Notification;
 use App\Models\RouteGroups;
 use App\Models\SpecialNews;
+use App\Models\UserInfo;
 
 
 class Resources
@@ -582,6 +583,20 @@ class Resources
             'method'  => $route->method,
             'action'  => $route->action,
             'desc'    => $route->desc,
+        ];
+    }
+
+    public static function UserInfo($user){
+        return [
+            'userNumber'    => $user->user_number,
+            'username'      => $user->username,
+            'major'         => $user->major_name,
+            'collegeId'     => $user->college_id,
+            'college'       => $user->college->collegename,
+            'partyBranchId' => $user->info->partybranch_id,
+            'partyBranch'   => $user->info->partyBranch->partybranch_name,
+            'grade'         => $user->grade,
+            'type'          => $user->type,
         ];
     }
 

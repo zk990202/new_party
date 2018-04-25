@@ -2,7 +2,6 @@
 
 namespace App\Http\Middleware;
 
-use App\Http\Controllers\Api\LoginController;
 use App\Http\Service\UserService;
 use App\Models\UserInfo;
 use Closure;
@@ -27,7 +26,6 @@ class Authentication
                 Auth::login($user);
                 return $next($request);
             }
-
             if(! $request->has('token')){
 
                 return redirect($userService->getLoginUrl($request->fullUrl()));

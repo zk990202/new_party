@@ -8,9 +8,14 @@
 
 namespace App\Http\Service;
 
+use App\Http\Helpers\Resources;
+use App\Http\Service\PartyStatus\PartyBranchVoting;
+use App\Models\PartyBranch\PartyBranch;
+use App\Models\StudentInfo;
 use App\Models\UserInfo;
 use Illuminate\Support\Facades\Auth;
 use TwT\SSO\Api;
+use TwT\SSO\UserType;
 
 class UserService
 {
@@ -29,6 +34,7 @@ class UserService
     public function login($token)
     {
         $userInfo = $this->getUserInfoFromSSO($token);
+        //dd($userInfo);
         // token 无效
         if (!$userInfo)
             return false;
@@ -63,10 +69,12 @@ class UserService
     /**
      * 从本地库中查询UserInfo，如果距离上次登陆时间较长，则从基础库查询并更新
      * @param $userNumber
+     * @return array
      */
     public function getUserInfoFromLocal($userNumber)
     {
-
+        $user = UserInfo::where('user_number', $userNumber)->first();
+        return $user ? Resources::UserInfo($user) : null;
     }
 
     /**
@@ -79,7 +87,6 @@ class UserService
 
         $userDetail = [
             'user_number'    => $userInfo->user_number,
-            //'party_branch_id' => $userInfo->user_info->party_branch_id,
             'college_id'     => $userInfo->college_code,
             'province'       => $userInfo->user_info->province,
             'last_school'    => $userInfo->user_info->last_school,
@@ -91,6 +98,7 @@ class UserService
             'major_name'     => $userInfo->major,
             'username'       => $userInfo->user_info->username,
             'gender'         => $userInfo->user_info->gender,
+            'type'           => $userInfo->user_info->type,
             'last_login'     => date('Y-m-d H:i:s', time()),
         ];
 
@@ -108,18 +116,8 @@ class UserService
         if (!auth()->check())
             return null;
         $user = auth()->user();
-        //dd($user);
-        $data = [
-            'userNumber'    => $user->user_number,
-            'username'      => $user->username,
-            'major'         => $user->major_name,
-            'collegeId'     => $user->college_id,
-            'college'       => $user->college->collegename,
-            'partyBranchId' => $user->info->partybranch_id,
-            'partyBranch'   => $user->info->partyBranch->partybranch_name,
-            'grade'         => $user->grade,
-        ];
-        return $data;
+
+        return $user ? Resources::UserInfo($user) : null;
     }
 
     protected function existLocal()
@@ -127,4 +125,47 @@ class UserService
 
     }
 
+    /**
+     * @param null $userNumber
+     * @return bool
+     */
+    public function isTeacher($userNumber = null){
+        if($userNumber)
+            $user = $this->getUserInfoFromLocal($userNumber);
+        else
+            $user = $this->getCurrentUser();
+        if(!$user)
+            return false;
+        return UserType::check($user['type'], UserType::USER_PERSON_TEACHER);
+    }
+
+    /**
+     * @param null $userNumber
+     * @return bool
+     */
+    public function isStudent($userNumber = null){
+        if($userNumber)
+            $user = $this->getUserInfoFromLocal($userNumber);
+        else
+            $user = $this->getCurrentUser();
+        if(!$user)
+            return false;
+        return UserType::check($user['type'], UserType::USER_PERSON_STUDENT);
+    }
+
+    /**
+     * 叛党用户是否是党支部干部
+     * @param null $userNumber
+     * @return bool
+     */
+    public function isCadre($userNumber = null){
+        if($userNumber)
+            $user = $this->getUserInfoFromLocal($userNumber);
+        else
+            $user = $this->getCurrentUser();
+        if(!$user)
+            return false;
+        $isCadre = PartyBranch::isProbationary($user['userNumber']);
+        return boolval($isCadre);
+    }
 }

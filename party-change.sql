@@ -71,4 +71,8 @@ INSERT INTO `twt_applicant_exerciseanswertransform`(`exercise_answer_number`, `e
   (16, 'E'),(17, 'AE'),(18, 'BE'),(19, 'ABE'),(20, 'CE'),(21, 'ACE'),(22, 'BCE'),(23, 'ABCE'),(24, 'DE'),(25, 'ADE'),(26, 'BDE'),(27, 'ABDE'),(28, 'CDE'),
   (29, 'ACDE'),(30, 'BCDE'),(31, 'ABCDE');
 	
--- TODO userInfo需要整体更新
+-- 2018-04-25 删除UserInfo表中partyBranchId字段，增加Type字段，Type使用SSO中Type定义
+ALTER TABLE b_userinfo DROP COLUMN party_branch_id;
+ALTER TABLE b_userinfo ADD COLUMN type TINYINT(4);
+-- 以下操作需要从基础库把user表考过来
+-- UPDATE b_userinfo, twt_userinfos SET b_userinfo.type = twt_userinfos.type WHERE b_userinfo.user_number = twt_userinfos.user_number;

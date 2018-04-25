@@ -14,12 +14,12 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-Route::group(['namespace' => 'Front', 'middleware' => 'auth'], function(){
+Route::group(['namespace' => 'Front', 'middleware' => ['auth']], function(){
     // 首页
     Route::get('/', 'HomeController@index');
 
     // 入党申请人党校相关
-    Route::group(['prefix' => 'applicant'], function(){
+    Route::group(['prefix' => 'applicant', 'middleware' => []], function(){
         // 20课列表
         Route::get('courseStudy', 'ApplicantController@courseStudy');
         Route::get('courseStudy/{id}', 'ApplicantController@courseDetail');

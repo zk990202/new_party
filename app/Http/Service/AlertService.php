@@ -36,6 +36,7 @@ class AlertService{
 
     public function alertAndBack($title, $content, $url = null){
         alert()->alert($title, $content);
+        //dd(back());
         return $url ? redirect($url) : back();
     }
 

@@ -18,7 +18,7 @@ class Kernel extends HttpKernel
         \Illuminate\Foundation\Http\Middleware\ValidatePostSize::class,
         \App\Http\Middleware\TrimStrings::class,
         \Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class,
-//        VerifyToken::class,
+        //        VerifyToken::class,
     ];
 
     /**
@@ -51,20 +51,20 @@ class Kernel extends HttpKernel
      * @var array
      */
     protected $routeMiddleware = [
-//        'auth' => \Illuminate\Auth\Middleware\Authenticate::class,
         'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
-        'bindings' => \Illuminate\Routing\Middleware\SubstituteBindings::class,
-        'can' => \Illuminate\Auth\Middleware\Authorize::class,
-        'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
-        'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
+        'bindings'   => \Illuminate\Routing\Middleware\SubstituteBindings::class,
+        'can'        => \Illuminate\Auth\Middleware\Authorize::class,
+        'guest'      => \App\Http\Middleware\RedirectIfAuthenticated::class,
+        'throttle'   => \Illuminate\Routing\Middleware\ThrottleRequests::class,
 
-        'role' => \Zizaco\Entrust\Middleware\EntrustRole::class,
-        'permission' => \Zizaco\Entrust\Middleware\EntrustPermission::class,
-        'ability' => \Zizaco\Entrust\Middleware\EntrustAbility::class,
+        //'role'       => \Zizaco\Entrust\Middleware\EntrustRole::class,
+        //'permission' => \Zizaco\Entrust\Middleware\EntrustPermission::class,
+        //'ability'    => \Zizaco\Entrust\Middleware\EntrustAbility::class,
 
-        'Access' => \App\Http\Middleware\Access::class,
+        'Access'   => \App\Http\Middleware\Access::class,
         'HasToken' => \App\Http\Middleware\HasToken::class,
 
-        'auth'  =>  \App\Http\Middleware\Authentication::class,
+        'auth'      => \App\Http\Middleware\Authentication::class,
+        'role' => \App\Http\Middleware\CheckRole::class,
     ];
 }
