@@ -157,7 +157,8 @@ class PartyBuildController extends Controller{
         $title = $request->input('title');
         $content = $request->input('content');
         $column = $request->input('column');
-        $img_path = $request->input('imgPath') ?? '';
+        $file_path = $request->input('filePath') ?? '';
+        $file_name = $request->input('fileName');
         if(!$title || !$content || !$column){
             return response()->json([
                 'message' => '参数丢失'
@@ -167,7 +168,8 @@ class PartyBuildController extends Controller{
             'type' => $column,
             'title' => $title,
             'content' => $content,
-            'imgPath' => $img_path,
+            'filePath' => $file_path,
+            'fileName' => $file_name,
             // 介入登陆后进行调整
             'author'    =>  Admin::user()->name ?? '管理员'
         ]);

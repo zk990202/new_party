@@ -30,34 +30,30 @@ class FileController extends Controller
      * @return \Illuminate\Http\JsonResponse
      */
     public function upload(Request $request){
-//        dd("11");
         $usage = $request->input('usage');
         if(empty($usage) || !$this->checkUsage($usage)){
             return response()->json([
                 'message' => '规则不符'.$usage
             ]);
         }
-        //dd("11");
+
         if(!$request->hasFile('upload')){
             return response()->json([
                 'message' => '上传失败'
             ]);
         }
-        //dd("11");
+
         $file = $request->file('upload');
-//        dd($file);
-//        dd("12");
         $size = $file->getSize();
-//        dd($size);
-        //line 54 has some buuuuug
+
         $extension = $this->getExtension($file->getClientOriginalName());
-        //dd(114);
+
         if(!$this->checkExtension($extension, $usage)){
             return response()->json([
                 'message' => '文件类型不符'.$extension
             ]);
         }
-        //dd(13);
+
         if(!$this->checkFileSize($size, $usage)){
             return response()->json([
                 'message' => '文件不能大于5M'
@@ -66,6 +62,7 @@ class FileController extends Controller
         $name = $file->getClientOriginalName();
         $disk = $this->config['rules'][$usage]['disk'];
         $path = $file->store($this->config['rules'][$usage]['path'], $disk);
+//        dd($path);
 
         $file = File::createFile([
             'name'  => $name,
@@ -84,7 +81,6 @@ class FileController extends Controller
 
     public function download($file, $name){
         $file = realpath(public_path('upload')). '/' . $file;
-
         if(file_exists($file))
             return response()->download($file, $name);
         else

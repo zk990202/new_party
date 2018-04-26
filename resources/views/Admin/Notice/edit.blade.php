@@ -27,7 +27,8 @@
                             <input type="file" id="inputFile" name="file">
                             <p class="help-block">
                                 @if($notice['fileName'])
-                                    已有附件：{!! '<a target="_blank" href="' . $notice['filePath'] .'">' . $notice['fileName'] .'</a>'  !!}，如不更改请勿重新添加<br/>
+                                    {{--{{$notice['filePath'].'/'.$notice['fileName']}}--}}
+                                    已有附件：<a target="_blank" href="{{ $notice['filePath'].'/download/'.$notice['fileName']}}">{{ $notice['fileName'] }}</a>，如不更改请勿重新添加<br/>
                                 @endif
                                 支持文件格式：
                                 {{ \App\Http\Service\FileService::allowedFileExtension('noticeFile') }}

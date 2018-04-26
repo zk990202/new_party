@@ -707,8 +707,10 @@ Route::group([
      * 文件上传下载控制
      */
     $router->group(['prefix' => 'file'], function(Router $router){
-        $router->post('', ['as' => 'file', 'uses' => 'FileController@upload']);
-        //$router->get('/{filePath}', ['as' => 'admin-file-download', 'uses' => 'FileController@download']);
+        $router->post('/', ['as' => 'file', 'uses' => 'FileController@upload']);
+        $router->get('{filePath}/download/{fileName}', ['as' => 'admin-file-download', 'uses' => 'FileController@download']);
     });
 
 });
+
+//Route::get('{filePath}/{fileName}/download', ['as' => 'admin-file-download', 'uses' => 'FileController@download']);

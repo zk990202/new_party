@@ -13,8 +13,9 @@ class CommonFiles extends Model{
 
     //创建时间字段
     const CREATED_AT = 'file_addtime';
+    const UPDATED_AT = 'updated_at';
 
-    protected $fillable = ['file_title', 'file_content', 'file_addtime', 'file_type', 'file_img', 'file_isdeleted'];
+    protected $fillable = ['file_title', 'file_content', 'file_addtime', 'file_type', 'file_img', 'file_isdeleted', 'updated_at'];
 
     // 文件类别
     const REGULAR_FILE = 2;

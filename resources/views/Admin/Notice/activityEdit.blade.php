@@ -27,7 +27,7 @@
                             <input type="file" id="inputFile" name="file">
                             <p class="help-block">
                                 @if($notice['fileName'])
-                                    已有附件：{!! '<a target="_blank" href="' . $notice['filePath'] .'">' . $notice['fileName'] .'</a>'  !!}，如不更改请勿重新添加<br/>
+                                    已有附件：<a target="_blank" href="{{ $notice['filePath'].'/download/'.$notice['fileName']}}">{{ $notice['fileName'] }}</a>，如不更改请勿重新添加<br/>
                                 @endif
                                 支持文件格式：
                                 {{ \App\Http\Service\FileService::allowedFileExtension('noticeFile') }}
@@ -122,7 +122,7 @@
                     }
                 }).done(function(data){
                     if(data.success){
-                        var path = data.file;
+                        var path = data.info.path;
                         var file_name = data.info.name;
                         var form = new FormData();
                         form.append('title', $('#noticeTitle').val());

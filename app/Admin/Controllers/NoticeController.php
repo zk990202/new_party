@@ -206,6 +206,7 @@ class NoticeController extends Controller
         $column = $request->input('column');
         $filePath = $request->input('filePath') ?? '';
         $fileName = $request->input('fileName') ?? '';
+//        dd($filePath);
         if(!$title || !$content || !$column){
             return response()->json([
                 'message' => '参数丢失'
@@ -251,9 +252,10 @@ class NoticeController extends Controller
         $title = $request->input('title');
         $file_name = $request->input('fileName') ?? null;
         $file_path = $request->input('filePath') ?? null;
+
         try{
             $res = Notification::activityUpdateById($activity_id, [
-                // 防止编辑器xss攻击，这里进行编码，同时避免二次编码
+
                 'content'   => $content,
                 'title'     => $title,
                 'fileName'  => $file_name,
@@ -324,7 +326,7 @@ class NoticeController extends Controller
             'fileName'  =>  $fileName,
             'filePath'  =>  $filePath,
             // 介入登陆后进行调整
-            'author'    =>  Auth::user()->username ?? '3014218099'
+            'author'    =>  Auth::user()->username ?? '管理员'
         ]);
         if($res){
             return response()->json([

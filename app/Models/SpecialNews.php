@@ -79,7 +79,7 @@ class SpecialNews extends Model
             'type' => $data['type'],
             'title' => $data['title'],
             'content' => $data['content'],
-            'img_path' => $data['imgPath'],
+            'img_path' => $data['filePath'],
             'author' => $data['author'],
             'isrecommand' => 0,
             'isdeleted' => 0

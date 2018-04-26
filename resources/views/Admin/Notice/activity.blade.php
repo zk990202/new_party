@@ -29,7 +29,7 @@
                                 <td>{{ $notice['title'] }}</td>
                                 <td>{{ $notice['time'] }}</td>
                                 <td>{{ $notice['authorName']}}</td>
-                                <td>{{ $notice['filePath'] ? '有附件' : '无附件' }}</td>
+                                <td>{!! $notice['filePath'] ? '<a target="_blank" href="' . $notice['filePath'].'/download/'.$notice['fileName'] .'">有附件</a>' : '无附件' !!}</td>
 
                                 <td>{{ $notice['isHidden'] ? '隐藏' : '显示'}}</td>
                                 <td>
