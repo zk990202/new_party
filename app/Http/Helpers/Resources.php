@@ -157,9 +157,9 @@ class Resources
             'id'        => $testList->test_id,
             'name'      => $testList->test_name,
             'time'      => $testList->test_begintime,
-            'attention' => $testList->test_attention,
+            'attention' => clean($testList->test_attention),
             'fileName'  => $testList->test_filename,
-            'filePath'  => $testList->test_filepath,
+            'filePath'  => FileService::fileAccessUri($testList->test_filepath),
             'status'    => $testList->test_status,
             'isDeleted' => $testList->test_isdeleted
         ];
@@ -331,8 +331,8 @@ class Resources
             'name'              => $trainList->train_name,
             'time'              => $trainList->train_begintime,
             'fileName'          => $trainList->train_filename,
-            'filePath'          => $trainList->train_filepath,
-            'detail'            => $trainList->train_detail,
+            'filePath'          => FileService::fileAccessUri($trainList->train_filepath),
+            'detail'            => clean($trainList->train_detail),
             'entryStatus'       => $trainList->train_entry_status,
             'netChooseStatus'   => $trainList->train_netchoose_status,
             'gradeSearchStatus' => $trainList->train_gradesearch_status,

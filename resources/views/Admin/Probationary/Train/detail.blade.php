@@ -97,7 +97,7 @@
                             <th>附件</th>
                             <td style="text-align:left;padding-left:10px;">
                                 @if($train[0]['filePath'])
-                                    <a href="{{ $train[0]['filePath'] }}">{{ $train[0]['fileName'] }}</a>
+                                    <a target="_blank" href="{{ $train[0]['filePath'] .'/download/'.$train[0]['fileName'] }}">{{ $train[0]['fileName'] }}</a>
                                 @else
                                     无附件
                                 @endif

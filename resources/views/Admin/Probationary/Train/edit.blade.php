@@ -31,9 +31,9 @@
                                 <input type="file" id="inputFile" name="file">
                                 <p class="help-block">
                                     @if($train['fileName'])
-                                        已有附件：{{ $train['fileName'] }}，如不更改请勿重新添加
+                                        已有附件：<a target="_blank" href="{{ $train['filePath'].'/download/'.$train['fileName'] }}">{{ $train['fileName'] }}</a>，如不更改请勿重新添加
                                     @endif
-                                    支持文件格式：zip, rar, tar, tar.gz, tar.bz, doc, docx
+                                    {{ \App\Http\Service\FileService::allowedFileExtension('noticeFile') }}
                                 </p>
                             </div>
                         </div>
@@ -124,7 +124,7 @@
                         }
                     }).done(function(data){
                         if(data.success){
-                            var path = data.file;
+                            var path = data.info.path;
                             var file_name = data.info.name;
                             var form = new FormData();
                             form.append('name', $('#name').val());

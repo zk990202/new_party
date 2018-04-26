@@ -30,6 +30,8 @@
                         <div class="form-group">
                             <label for="inputFile">上传文件</label>
                             <input type="file" id="inputFile" name="file">
+                            <p class="help-block">支持文件格式:
+                                {{ \App\Http\Service\FileService::allowedFileExtension('applicantFile') }}  </p>
                         </div>
                     </div>
                     <!-- /.box-body -->
@@ -119,7 +121,7 @@
                     }
                 }).done(function(data){
                     if(data.success){
-                        var path = data.file;
+                        var path = data.info.path;
                         var file_name = data.info.name;
                         var form = new FormData();
                         form.append('name', $('#examTitle').val());

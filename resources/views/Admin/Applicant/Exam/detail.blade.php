@@ -54,7 +54,8 @@
                                 <td>
                                     @if($exam[0]['fileName'])
                                         {{--<a href="{{ url('admin/applicant/exam/'.$exam[0]['id'].'/download') }}">{{ $exam[0]['fileName'] }}</a>--}}
-                                        <a href="{{ $exam[0]['filePath'] }}">{{ $exam[0]['fileName'] }}</a>
+                                        {{--{{$exam[0]['filePath']}}--}}
+                                        <a target="_blank" href="{{ $exam[0]['filePath'] .'/download/'. $exam[0]['fileName'] }}">{{ $exam[0]['fileName'] }}</a>
                                     @else
                                         无附件
                                     @endif

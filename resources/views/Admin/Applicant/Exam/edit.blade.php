@@ -32,7 +32,7 @@
                             <input type="file" id="inputFile" name="file">
                             <p class="help-block">
                                 @if($exam['fileName'])
-                                    已有附件：{{ $exam['fileName'] }}，如不更改请勿重新添加
+                                    已有附件：<a target="_blank" href="{{ url($exam['filePath'].'/download/'.$exam['fileName']) }}">{{ $exam['fileName'] }}</a> ，如不更改请勿重新添加
                                 @endif
                             </p>
                         </div>
@@ -124,7 +124,7 @@
                     }
                 }).done(function(data){
                     if(data.success){
-                        var path = data.file;
+                        var path = data.info.path;
                         var file_name = data.info.name;
                         var form = new FormData();
                         form.append('name', $('#examTitle').val());
