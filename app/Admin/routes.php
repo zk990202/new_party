@@ -703,6 +703,12 @@ Route::group([
         $router->get('hided-list', ['as' => 'admin-party-branch-hided-list', 'uses' => 'PartyBranchController@hidedList']);
     });
 
+    $router->group(['prefix' => 'student-info'], function(Router $router){
+        $router->get('/status-reset-preview', ['as' => 'admin-student-info-status-reset-preview-page', 'uses' => 'StudentInfoController@statusResetPreviewPage']);
+        $router->get('/status-reset', ['as' => 'admin-student-info-status-reset-page', 'uses' => 'StudentInfoController@statusResetPage']);
+        $router->post('/status-reset', ['as' => 'admin-student-info-status-reset', 'uses' => 'StudentInfoController@statusReset']);
+    });
+
     /**
      * 文件上传下载控制
      */

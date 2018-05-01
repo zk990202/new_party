@@ -464,8 +464,8 @@ class Resources
             'propagator'       => $partyBranch->partybranch_propagator,
             'propagatorName'   => $partyBranch->user_propagator->username ?? '',
             'academy'          => $partyBranch->partybranch_academy,
-            'academyName'      => $partyBranch->college_->collegename,
-            'academyShortName' => $partyBranch->college_->shortname,
+            'academyName'      => $partyBranch->college_->collegename ?? '',
+            'academyShortName' => $partyBranch->college_->shortname ?? '',
             'type'             => $partyBranch->partybranch_type,
             'schoolYear'       => $partyBranch->partybranch_schoolyear,
             'establishTime'    => $partyBranch->partybranch_establishtime,
@@ -589,12 +589,13 @@ class Resources
     public static function UserInfo($user){
         return [
             'userNumber'    => $user->user_number,
-            'username'      => $user->username,
+            'userName'      => $user->username,
+            'majorId'       => $user->major,
             'major'         => $user->major_name,
             'collegeId'     => $user->college_id,
             'college'       => $user->college->collegename,
             'partyBranchId' => $user->info->partybranch_id,
-            'partyBranch'   => $user->info->partyBranch->partybranch_name,
+            'partyBranch'   => $user->info->partyBranch->partybranch_name ?? '',
             'grade'         => $user->grade,
             'type'          => $user->type,
         ];

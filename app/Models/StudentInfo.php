@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Http\Helpers\Resources;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Http\Request;
 
 
 class StudentInfo extends Model
@@ -427,6 +428,22 @@ class StudentInfo extends Model
         }, $res)[0];
     }
 
+    /**
+     * 由学号和初始状态获取学生信息
+     * @param $sno
+     * @return array
+     */
+    public static function getBySnoAndIsInit($sno){
+        $res = self::where('sno', $sno)
+//            ->where('is_init', 0)
+            ->get()->all();
+        return array_map(function ($studentInfo){
+            return Resources::StudentInfo($studentInfo);
+        }, $res);
+    }
+
+
+
     // 下面就是前台的了！！！
 
     /**
@@ -542,5 +559,7 @@ class StudentInfo extends Model
         }
         return $res;
     }
+
+
 
 }

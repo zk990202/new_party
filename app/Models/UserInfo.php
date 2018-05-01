@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Http\Helpers\Resources;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class UserInfo extends Authenticatable
@@ -61,6 +62,24 @@ class UserInfo extends Authenticatable
             ->update(['partybranchid' => 0]);
         return $res ? true : false;
     }
+
+    /**
+     * 由学院和年级获取学生信息
+     * @param $college_id
+     * @param $grade
+     * @return array
+     */
+    public static function getByCollegeIdAndGrade($college_id, $grade){
+        $res = self::where('college_id', $college_id)
+            ->where('grade', $grade)
+            ->get()->all();
+        return array_map(function ($userInfo){
+            return Resources::UserInfo($userInfo);
+        }, $res);
+    }
+
+
+
 
     public function updateSSOToken($token){
         $this->sso_token = $token;
