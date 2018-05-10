@@ -2,15 +2,23 @@
 
 namespace App\Models;
 
+use App\Http\Helpers\Resources;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Http\Request;
 
 class StudentFiles extends Model
 {
     //
     protected $table = "twt_student_files";
+    protected $primaryKey = "file_id";
+
+    protected $fillable = ['sno', 'file_title', 'file_content', 'file_addtime', 'file_dealtime', 'file_type', 'file_status', 'is_systemadd'];
+
+    const CREATED_AT = 'file_addtime';
+    const UPDATED_AT = 'file_dealtime';
 
     protected $guarded = [];
-    public $timestamps = false;
+    public $timestamps = true;
     //文件类型1表示申请书2表示思想汇报一3表示思想汇报二,4表示思想汇报三,5表示思想汇报四,6表示个人小结一,7表示个人小结二,8表示个人小结三,9表示个人小结四,10表示入党志愿书11表示转正申请
     const FILE_TYPE = [
         'APPLICANT' => 1,
@@ -53,5 +61,23 @@ class StudentFiles extends Model
             ->whereIn('file_status', $status)
             ->get()->toArray();
         return $res;
+    }
+
+
+    /**
+     * 学生信息管理--状态初始化--添加申请书
+     * @param $sno
+     * @return bool
+     */
+    public static function insertApplicantBookInStudentInfoInit($sno){
+        $res = self::create([
+            'sno' => $sno,
+            'file_title' => '系统初始化',
+            'file_content' =>'这是后台管理员在为你做系统初始化时添加的申请书,状态为通过!',
+            'file_type' => 1,
+            'file_status' => 1,
+            'is_systemadd' => 1
+        ]);
+        return $res ? true : false;
     }
 }

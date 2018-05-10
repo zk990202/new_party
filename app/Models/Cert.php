@@ -13,6 +13,7 @@ class Cert extends Model
     protected $primaryKey = 'cert_id';
 
     const CREATED_AT = 'cert_time';
+    const UPDATED_AT = 'updated_at';
 
     //1表示申请人的。2表示院级的3表示预备党员的
     const CERT_APPLICANT = 1;
@@ -289,4 +290,24 @@ class Cert extends Model
             return Resources::Cert($res);
         }, $res);
     }
+
+    /**
+     * 学生信息管理--申请人结业考试--系统添加证书
+     * @param $sno
+     * @param $entry_id
+     * @param $j
+     * @return bool
+     */
+    public static function systemAddCertInStudentInfoInit($sno, $entry_id, $j){
+        $res = self::create([
+            'sno' => $sno,
+            'entry_id' => $entry_id,
+            'cert_no' => date('hmdHis')+ $j,
+            'cert_type' => 1,
+            'cert_getperson' => '系统初始化设置',
+            'cert_place' => '系统初始化设置',
+        ]);
+        return $res ? true : false;
+    }
+
 }

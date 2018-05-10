@@ -704,9 +704,9 @@ Route::group([
     });
 
     $router->group(['prefix' => 'student-info'], function(Router $router){
-        $router->get('/status-reset-preview', ['as' => 'admin-student-info-status-reset-preview-page', 'uses' => 'StudentInfoController@statusResetPreviewPage']);
-        $router->get('/status-reset', ['as' => 'admin-student-info-status-reset-page', 'uses' => 'StudentInfoController@statusResetPage']);
-        $router->post('/status-reset', ['as' => 'admin-student-info-status-reset', 'uses' => 'StudentInfoController@statusReset']);
+        $router->get('/init-preview', ['as' => 'admin-student-info-init-preview', 'uses' => 'StudentInfoController@initPreviewPage']);
+        $router->get('/init', ['as' => 'admin-student-info-init-page', 'uses' => 'StudentInfoController@initPage']);
+        $router->post('/init', ['as' => 'admin-student-info-init', 'uses' => 'StudentInfoController@init']);
     });
 
     /**

@@ -13,7 +13,7 @@
                     <2>只有新生可以进行初始化操作,并且整个初始化的开放权在超管手中.会在相应的时间段开放初始化通道! <br>
                     <3>超管同样不能在本页面做初始化操作.如果有特殊情况,请在状态微调中对极少数学生进行状态修改操作!
                 </div>
-                <form method="GET" action="{{ url('admin/student-info/status-reset') }}">
+                <form method="GET" action="{{ url('admin/student-info/init') }}">
                     <div class="form-group">
                         <label for="academyName">学院</label>
                         <select name="collegeId" class="form-control">
@@ -32,6 +32,11 @@
                             @endif
                         </select>
                     </div>
+
+                    {{--<div class="form-group">--}}
+                        {{--<--}}
+                    {{--</div>--}}
+
                     <div class="box-footer">
                         <button id="submitButton" type="submit" class="btn btn-primary">提交</button>
                     </div>

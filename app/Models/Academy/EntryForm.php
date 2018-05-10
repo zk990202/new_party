@@ -19,6 +19,7 @@ class EntryForm extends Model
     protected $primaryKey = 'entry_id';
 
     const CREATED_AT = 'entry_time';
+    const UPDATED_AT = 'updated_at';
 
     //考试状态  0未录入,1正常，2作弊，3违纪，4缺考
     const NOT_ENTERED = 0;
@@ -222,6 +223,27 @@ class EntryForm extends Model
             return Resources::AcademyEntryForm($entryForm);
         }, $res);
     }
+
+    /**
+     * 学生信息管理--系统添加申请人党校结业考试成绩
+     * @param $sno
+     * @return array|bool
+     */
+    public static function systemAddInStudentInfoInit($sno){
+        $res = self::create([
+            'test_id' => 1,
+            'sno' => $sno,
+            'entry_practicegrade' => 60,
+            'entry_articlegrade' => 60,
+            'is_systemadd' => 1,
+            'entry_ispassed' => 1,
+            'entry_status' => 1,
+            'cert_isgrant' => 1
+        ]);
+        return $res ? Resources::AcademyEntryForm($res) : false;
+    }
+
+
 
     //--------------下面就是前台咯1111111111111111
 

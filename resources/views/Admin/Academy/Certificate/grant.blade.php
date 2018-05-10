@@ -58,7 +58,7 @@
                             </tr>
                             </tfoot>
                         </table>
-                        <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                        {{ csrf_token() }}
                         <div class="form-group">
                             <label for="getPerson">领取人</label>
                             <input type="text" name="getPerson">

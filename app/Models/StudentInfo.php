@@ -18,6 +18,8 @@ class StudentInfo extends Model
         'turn_real_meetingtime', 'approve_passedtime', 'partymember_time', 'thought_reportcount', 'personal_reportcount', 'main_status',
         'is_init'];
 
+    const CREATED_AT = 'pass_time';
+    const UPDATED_AT = 'updated_at';
 
     public function college(){
         return $this->belongsTo('App\Models\College', 'academy_id', 'code');
@@ -442,6 +444,30 @@ class StudentInfo extends Model
         }, $res);
     }
 
+    /**
+     * 学生信息管理--设置20课状态为通过
+     * @param $sno
+     * @return bool
+     */
+    public static function updateIsPass20ToTrueInStudentInfoInit($sno){
+        $res = self::where('sno', $sno)
+            ->update(['is_pass20' => 1]);
+        return $res ? true :false;
+    }
+
+    /**
+     * 学生信息管理--更改季度思想汇报提交的个数
+     * @param $sno
+     * @param $count
+     * @return bool
+     */
+    public static function updateThoughtReportInStudentInfoInit($sno, $count){
+        $res = self::where('sno', $sno)
+            ->update(['thought_reportcount' => $count]);
+        return $res ? true : false;
+    }
+
+
 
 
     // 下面就是前台的了！！！
@@ -455,7 +481,6 @@ class StudentInfo extends Model
         $res = self::where('sno', $sno)
             ->update([
                 'is_pass20' => $status,
-                'pass20_time' => date('Y-m-d')
             ]);
         return $res;
     }

@@ -218,10 +218,31 @@ class ScoresTwenty extends Model
         dd($res);
     }
 
+    /**
+     * 清除20课成绩
+     * @param $sno
+     * @return bool
+     */
     public static function clear($sno){
         $res = self::where('student_id', $sno)->update([
             'isdeleted' => 1
         ]);
-        return;
+        return $res ? true : false;
+    }
+
+    /**
+     * 学生信息管理--状态初始化--系统插入20课成绩
+     * @param $sno
+     * @param $course_20_id
+     * @return bool
+     */
+    public static function insert20scoreInStudentInfoInit($sno, $course_20_id){
+        $res = self::create([
+            'student_id' => $sno,
+            'course_id' => $course_20_id,
+            'score' => 60,
+            'is_systemadd' => 1
+        ]);
+        return $res ? true : false;
     }
 }
