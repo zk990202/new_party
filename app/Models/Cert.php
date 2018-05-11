@@ -94,7 +94,6 @@ class Cert extends Model
             'entry_id' => $entryId[$i]['entry_id'],
             'cert_no' => date('ymdHis') + $i,
             'cert_type' => 1,
-            'cert_time' => date('Y-m-d H:i:s'),
             'cert_getperson' => $getPerson,
             'cert_place' => $place,
             'cert_islost' => 0,
@@ -119,7 +118,7 @@ class Cert extends Model
             'entry_id' => $entryId['entry_id'],
             'cert_no' => date('ymdHis'),
             'cert_type' => $certType,
-            'cert_time' => date('Y-m-d H:i:s'),
+//            'cert_time' => date('Y-m-d H:i:s'),
             'cert_getperson' => $getPerson,
             'cert_place' => $place,
             'isdeleted' => 0
@@ -209,6 +208,27 @@ class Cert extends Model
     }
 
 
+    /**
+     * 学生信息管理--各种类型--系统添加证书
+     * @param $sno
+     * @param $entry_id
+     * @param $j
+     * @return bool
+     */
+    public static function systemAddCertInStudentInfoInit($sno, $entry_id, $j, $type){
+        $res = self::create([
+            'sno' => $sno,
+            'entry_id' => $entry_id,
+            'cert_no' => date('hmdHis')+ $j,
+            'cert_type' => $type,
+            'cert_getperson' => '系统初始化设置',
+            'cert_place' => '系统初始化设置',
+        ]);
+        return $res ? true : false;
+    }
+
+
+
     //--------------------------下面就是前台的了------------------------
 
     /**
@@ -291,23 +311,5 @@ class Cert extends Model
         }, $res);
     }
 
-    /**
-     * 学生信息管理--申请人结业考试--系统添加证书
-     * @param $sno
-     * @param $entry_id
-     * @param $j
-     * @return bool
-     */
-    public static function systemAddCertInStudentInfoInit($sno, $entry_id, $j){
-        $res = self::create([
-            'sno' => $sno,
-            'entry_id' => $entry_id,
-            'cert_no' => date('hmdHis')+ $j,
-            'cert_type' => 1,
-            'cert_getperson' => '系统初始化设置',
-            'cert_place' => '系统初始化设置',
-        ]);
-        return $res ? true : false;
-    }
 
 }

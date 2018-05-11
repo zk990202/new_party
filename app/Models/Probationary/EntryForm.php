@@ -427,6 +427,30 @@ class EntryForm extends Model
         }, $res);
     }
 
+    /**
+     * 学生信息管理--系统添加预备党员结业考试成绩
+     * @param $sno
+     * @return array|bool
+     */
+    public static function systemAddInStudentInfoInit($sno){
+        $res = self::create([
+            'sno' => $sno,
+            'train_id' => 1,
+            'entry_practicegrade' => 60,
+            'entry_articlegrade' => 60,
+            'entry_status' => 1,
+            'entry_isallpassed' => 1,
+            'is_systemadd' => 1,
+            'cert_isgrant' => 1,
+            'pass_must' => 3,
+            'pass_choose' => 1
+        ]);
+        return $res ? Resources::ProbationaryEntryForm($res) : false;
+    }
+
+
+
+
     //下面就是前台了‘’‘’‘’‘’
 
     /**

@@ -225,7 +225,7 @@ class EntryForm extends Model
     }
 
     /**
-     * 学生信息管理--系统添加申请人党校结业考试成绩
+     * 学生信息管理--系统添加积极分子党校结业考试成绩
      * @param $sno
      * @return array|bool
      */

@@ -467,6 +467,44 @@ class StudentInfo extends Model
         return $res ? true : false;
     }
 
+    /**
+     * 学生信息管理--更改季度个人小结提交的个数
+     * @param $sno
+     * @param $count
+     * @return bool
+     */
+    public static function updatePersonalReportInStudentInfoInit($sno, $count){
+        $res = self::where('sno', $sno)
+            ->update(['personal_reportcount' => $count]);
+        return $res ? true : false;
+    }
+
+    /**
+     * 学生信息管理--系统添加学生至学习小组
+     * @param $sno
+     * @return bool
+     */
+    public static function updateApplicantGroupInStudentInfoInit($sno){
+        $res = self::where('sno', $sno)
+            ->update(['captain_ofgroup' => 1]);
+        return $res ? true : false;
+    }
+
+    /**
+     * 学生信息管理--系统更改学生main_status
+     * @param $sno
+     * @param $main_status
+     * @return bool
+     */
+    public static function updateMainStatusInStudentInfoInit($sno, $main_status){
+        $res = self::where('sno', $sno)
+            ->update([
+                'main_status' => $main_status,
+                'is_init' => 1
+            ]);
+        return $res ? true : false;
+    }
+
 
 
 

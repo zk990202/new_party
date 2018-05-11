@@ -65,7 +65,7 @@ class StudentFiles extends Model
 
 
     /**
-     * 学生信息管理--状态初始化--添加申请书
+     * 学生信息管理--状态初始化--添加入党申请书
      * @param $sno
      * @return bool
      */
@@ -75,6 +75,40 @@ class StudentFiles extends Model
             'file_title' => '系统初始化',
             'file_content' =>'这是后台管理员在为你做系统初始化时添加的申请书,状态为通过!',
             'file_type' => 1,
+            'file_status' => 1,
+            'is_systemadd' => 1
+        ]);
+        return $res ? true : false;
+    }
+
+    /**
+     * 学生信息管理--状态初始化--添加志愿书
+     * @param $sno
+     * @return bool
+     */
+    public static function insertVolunteerBookInStudentInfoInit($sno){
+        $res = self::create([
+            'sno' => $sno,
+            'file_title' => '系统初始化',
+            'file_content' =>'这是后台管理员在为你做系统初始化时添加的入党志愿书,状态为通过!',
+            'file_type' => 10,
+            'file_status' => 1,
+            'is_systemadd' => 1
+        ]);
+        return $res ? true : false;
+    }
+
+    /**
+     * 学生信息管理--状态初始化--添加转正申请书
+     * @param $sno
+     * @return bool
+     */
+    public static function insertTransFormBookInStudentInfoInit($sno){
+        $res = self::create([
+            'sno' => $sno,
+            'file_title' => '系统初始化',
+            'file_content' =>'这是后台管理员在为你做系统初始化时添加的转正申请,状态为通过!',
+            'file_type' => 11,
             'file_status' => 1,
             'is_systemadd' => 1
         ]);

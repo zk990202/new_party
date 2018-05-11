@@ -279,6 +279,29 @@ class EntryForm extends Model
         return $res ? Resources::EntryForm($entry) : false;
     }
 
+    /**
+     * 学生信息管理--系统添加申请人结业考试成绩
+     * @param $sno
+     * @return array|bool
+     */
+    public static function systemAddInStudentInfoInit($sno){
+        $res = self::create([
+            'test_id' => 1,
+            'sno' => $sno,
+            'entry_practicegrade' => 60,
+            'entry_articlegrade' => 60,
+            'is_systemadd' => 1,
+            'entry_ispassed' => 1,
+            'entry_status' => 1,
+            'cert_isgrant' => 1,
+            'campus' => ' '
+        ]);
+        return $res ? Resources::EntryForm($res) : false;
+    }
+
+
+
+
     // ---下面就是前台了！！！
 
     /**
