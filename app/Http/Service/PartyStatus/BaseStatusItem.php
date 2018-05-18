@@ -38,6 +38,6 @@ abstract class BaseStatusItem extends BaseWorkItem{
     public function isActive()
     {
         $status = StudentInfo::getMainStatus($this->userNumber) ;
-        return $status >= $this->status && $status != MainStatus::ACTIVIST_COMMUNIST;
+        return $status >= $this->status && $status != MainStatus::MEMBER_RECOMMENDATION && $status != MainStatus::COMMUNIST_MEMBER_RECOMMENDATION;
     }
 }

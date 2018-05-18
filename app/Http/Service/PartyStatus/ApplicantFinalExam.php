@@ -13,15 +13,12 @@ use App\Models\Cert;
 
 class ApplicantFinalExam extends BaseWorkItem{
 
-    /**
-     * @return bool|void
-     */
     public function to()
     {
         parent::to();
 
         if($this->isActive())
-            return;
+            return false;
 
         $entryForm = EntryForm::where('sno', $this->userNumber)
             ->orderBy('entry_id', 'DESC')
@@ -51,7 +48,7 @@ class ApplicantFinalExam extends BaseWorkItem{
             ]);
         }
 
-        Cert::create([
+        $cert = Cert::create([
             'sno' => $this->userNumber,
             'entry_id' => $entryForm->entry_id,
             'cert_no' => date('ymdHis'),
@@ -62,6 +59,7 @@ class ApplicantFinalExam extends BaseWorkItem{
             'cert_islost' => 0,
             'isdeleted' => 0
         ]);
+        return boolval($entryForm && $cert);
     }
 
     public function cancel()
@@ -69,9 +67,9 @@ class ApplicantFinalExam extends BaseWorkItem{
         parent::cancel();
 
         if(!$this->isActive())
-            return;
+            return false;
 
-        EntryForm::where('sno', $this->userNumber)
+        $entryForm = EntryForm::where('sno', $this->userNumber)
             ->update([
                 'entry_practicegrade' =>0,
                 'entry_articlegrade' => 0,
@@ -79,10 +77,11 @@ class ApplicantFinalExam extends BaseWorkItem{
                 'entry_status' => EntryForm::ENTRY_NORMAL,
                 'cert_isgrant' => 0
             ]);
-        Cert::where(['sno' => $this->userNumber, 'cert_type' => Cert::CERT_APPLICANT])
+        $cert = Cert::where(['sno' => $this->userNumber, 'cert_type' => Cert::CERT_APPLICANT])
             ->update([
                 'isdeleted' => 1
             ]);
+        return boolval($entryForm && $cert);
     }
 
     public function isActive()

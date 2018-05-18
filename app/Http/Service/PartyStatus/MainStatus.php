@@ -13,8 +13,12 @@ class MainStatus{
     const ACTIVIST = 1;
     // 团支部推优
     const COMMUNIST = 2;
+    // 党员推荐
+    const MEMBER_RECOMMENDATION = 20;
+    // 党员推荐 && 团支部推优
+    const COMMUNIST_MEMBER_RECOMMENDATION = 22;
     // 团支部推优 && 入党积极分子
-    const ACTIVIST_COMMUNIST = 23;
+//    const ACTIVIST_COMMUNIST = 23;
     // 发展对象
     const DEVELOPMENT_TARGET = 3;
     // 集中培训

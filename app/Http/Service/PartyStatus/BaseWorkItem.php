@@ -33,6 +33,8 @@ abstract class BaseWorkItem implements IWorkable{
     }
 
     public function to(){
+        if (!$this->dependenceList)
+            return;
         foreach($this->dependenceList as $v){
             $v = config('party.namespace') . $v;
             $a =  app()->make($v);
@@ -42,6 +44,8 @@ abstract class BaseWorkItem implements IWorkable{
     }
 
     public function cancel(){
+        if (!$this->determinationList)
+            return;
         foreach($this->determinationList as $v){
             $v = config('party.namespace') . $v;
             $a = App::make($v);

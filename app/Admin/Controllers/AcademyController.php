@@ -21,6 +21,7 @@ use Encore\Admin\Facades\Admin;
 use Encore\Admin\Layout\Content;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Mockery\Exception;
 use Symfony\Component\VarDumper\Dumper\DataDumperInterface;
@@ -69,14 +70,31 @@ class AcademyController extends Controller {
 
     public function trainAddPage(){
         //return view('Manager.Academy.Train.add');
-        return Admin::content(function (Content $content){
-            // 选填
-            $content->header($this->titles[0] ?? '管理后台');
-            // 选填
-            $content->description($this->titles[1] ?? '');
-            // 填充页面body部分，这里可以填入任何可被渲染的对象
-            $content->body(view('Admin.Academy.Train.add'));
-        });
+
+        if (Admin::user()->isRole('administrator') || Admin::user()->isRole('column-manager')){
+            $viewData = [
+                'title' => '提示信息',
+                'message' => '不好意思,超级管理员/栏目管理员,院级考试的添加是以学院为单位的,只能是院级管理员录入.您不能进行成绩录入!'
+            ];
+            return Admin::content(function (Content $content) use ($viewData){
+                // 选填
+                $content->header($this->titles[0] ?? '管理后台');
+                // 选填
+                $content->description($this->titles[1] ?? '');
+                // 填充页面body部分，这里可以填入任何可被渲染的对象
+                $content->body(view('Admin.Message', $viewData));
+            });
+        }
+        else{
+            return Admin::content(function (Content $content){
+                // 选填
+                $content->header($this->titles[0] ?? '管理后台');
+                // 选填
+                $content->description($this->titles[1] ?? '');
+                // 填充页面body部分，这里可以填入任何可被渲染的对象
+                $content->body(view('Admin.Academy.Train.add'));
+            });
+        }
     }
 
     /**
@@ -280,17 +298,34 @@ class AcademyController extends Controller {
      * @return Content
      */
     public function TestAddPage(){
-        //获取的数据第一条为当前开启的总培训
-        $train = TestList::getAllTrain();
-        $colleges = College::getAll();
-        return Admin::content(function (Content $content) use ($train, $colleges){
-            // 选填
-            $content->header($this->titles[0] ?? '管理后台');
-            // 选填
-            $content->description($this->titles[1] ?? '');
-            // 填充页面body部分，这里可以填入任何可被渲染的对象
-            $content->body(view('Admin.Academy.Test.add', ['train' => $train, 'colleges' => $colleges]));
-        });
+
+        if (Admin::user()->isRole('administrator') || Admin::user()->isRole('column-manager')){
+            $viewData = [
+                'title' => '提示信息',
+                'message' => '不好意思,超级管理员/栏目管理员,院级考试的添加是以学院为单位的,只能是院级管理员录入.您不能进行成绩录入!'
+            ];
+            return Admin::content(function (Content $content) use ($viewData){
+                // 选填
+                $content->header($this->titles[0] ?? '管理后台');
+                // 选填
+                $content->description($this->titles[1] ?? '');
+                // 填充页面body部分，这里可以填入任何可被渲染的对象
+                $content->body(view('Admin.Message', $viewData));
+            });
+        }
+        else{
+            //获取的数据第一条为当前开启的总培训
+            $train = TestList::getAllTrain();
+            $colleges = College::getAll();
+            return Admin::content(function (Content $content) use ($train, $colleges){
+                // 选填
+                $content->header($this->titles[0] ?? '管理后台');
+                // 选填
+                $content->description($this->titles[1] ?? '');
+                // 填充页面body部分，这里可以填入任何可被渲染的对象
+                $content->body(view('Admin.Academy.Test.add', ['train' => $train, 'colleges' => $colleges]));
+            });
+        }
        // return view('Manager.Academy.Test.add', ['train' => $train, 'colleges' => $colleges]);
     }
 
@@ -434,21 +469,39 @@ class AcademyController extends Controller {
      * @return Content
      */
     public function gradeInputPage(){
-        $test = TestList::gradeInput();
-        $entries = array();
-        for ($i = 0; $i < count($test); $i++){
-            $testId = $test[$i]['id'];
-            $entries[$i] = EntryForm::gradeInput($testId);
+        if (Admin::user()->isRole('administrator') || Admin::user()->isRole('column-manager')){
+            $viewData = [
+                'title' => '提示信息',
+                'message' => '不好意思,超级管理员/栏目管理员,院级考试的添加是以学院为单位的,只能是院级管理员录入.您不能进行成绩录入!'
+            ];
+            return Admin::content(function (Content $content) use ($viewData){
+                // 选填
+                $content->header($this->titles[0] ?? '管理后台');
+                // 选填
+                $content->description($this->titles[1] ?? '');
+                // 填充页面body部分，这里可以填入任何可被渲染的对象
+                $content->body(view('Admin.Message', $viewData));
+            });
         }
-        $count = count($test);
-        return Admin::content(function (Content $content) use ($entries, $count){
-            // 选填
-            $content->header($this->titles[0] ?? '管理后台');
-            // 选填
-            $content->description($this->titles[1] ?? '');
-            // 填充页面body部分，这里可以填入任何可被渲染的对象
-            $content->body(view('Admin.Academy.GradeInput.gradeInput', ['entries' => $entries, 'count' => $count]));
-        });
+        else{
+            $test = TestList::gradeInput();
+            $entries = array();
+            for ($i = 0; $i < count($test); $i++){
+                $testId = $test[$i]['id'];
+                $entries[$i] = EntryForm::gradeInput($testId);
+            }
+            $count = count($test);
+
+            return Admin::content(function (Content $content) use ($entries, $count){
+                // 选填
+                $content->header($this->titles[0] ?? '管理后台');
+                // 选填
+                $content->description($this->titles[1] ?? '');
+                // 填充页面body部分，这里可以填入任何可被渲染的对象
+                $content->body(view('Admin.Academy.GradeInput.gradeInput', ['entries' => $entries, 'count' => $count]));
+            });
+        }
+
         //return view('Manager.Academy.GradeInput.gradeInput', ['entries' => $entries, 'count' => $count]);
     }
 

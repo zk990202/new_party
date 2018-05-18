@@ -9,25 +9,27 @@
 namespace App\Http\Service\PartyStatus;
 
 use App\Models\StudentInfo;
-
+//参加申请人学习小组
 class ApplicantLearningGroup extends BaseWorkItem{
 
     public function to()
     {
         if($this->isActive())
-            return;
+            return false;
         parent::to();
 
-        StudentInfo::where('sno', $this->userNumber)->update(['captain_ofgroup' => 1]);
+        $res = StudentInfo::where('sno', $this->userNumber)->update(['captain_ofgroup' => 1]);
+        return boolval($res);
     }
 
     public function cancel()
     {
         if(!$this->isActive())
-            return;
+            return false;
         parent::cancel();
 
-        StudentInfo::where('sno', $this->userNumber)->update(['captain_ofgroup' => 0]);
+        $res = StudentInfo::where('sno', $this->userNumber)->update(['captain_ofgroup' => 0]);
+        return boolval($res);
     }
 
     public function isActive()

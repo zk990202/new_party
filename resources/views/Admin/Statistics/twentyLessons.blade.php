@@ -28,7 +28,7 @@
     <script>
         $(function () {
             $.ajax({
-                'url' : '/admin/statistics/twenty-lessons',
+                'url' : '/admin/statistics/twentyLessons',
                 'method' : 'get',
                 'success' : function(data){
                     console.log(data);

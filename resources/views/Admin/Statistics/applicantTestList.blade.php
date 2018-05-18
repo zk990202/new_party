@@ -22,7 +22,7 @@
 
     <script>
         $.ajax({
-            'url' : '/admin/statistics/applicant-test-list',
+            'url' : '/admin/statistics/applicantTestList',
             'method' : 'get',
             'success' : function(data){
                 console.log(data);

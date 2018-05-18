@@ -9,25 +9,26 @@
 namespace App\Http\Service\PartyStatus;
 
 use App\Models\StudentInfo;
-
+//第二季度思想汇报
 class IdeologicalReport_2 extends BaseWorkItem{
 
     public function to()
     {
         if($this->isActive())
-            return;
+            return false;
         parent::to();
 
-        StudentInfo::updateReportTo($this->userNumber, 2);
-
+        $res = StudentInfo::updateReportTo($this->userNumber, 2);
+        return boolval($res);
     }
 
     public function cancel()
     {
         if(!$this->isActive())
-            return;
+            return false;
         parent::cancel();
-        StudentInfo::updateReportTo($this->userNumber, 1);
+        $res = StudentInfo::updateReportTo($this->userNumber, 1);
+        return boolval($res);
     }
     public function isActive()
     {

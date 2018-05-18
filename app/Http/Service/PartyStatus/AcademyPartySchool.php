@@ -10,7 +10,7 @@ namespace App\Http\Service\PartyStatus;
 
 use App\Models\Academy\EntryForm;
 use App\Models\Cert;
-
+//院级积极分子党校学习
 class AcademyPartySchool extends BaseWorkItem{
 
     public function to()
@@ -18,7 +18,7 @@ class AcademyPartySchool extends BaseWorkItem{
         parent::to();
 
         if($this->isActive())
-            return;
+            return false;
 
         $entryForm = EntryForm::where('sno', $this->userNumber)
             ->orderBy('entry_id', 'DESC')
@@ -48,7 +48,7 @@ class AcademyPartySchool extends BaseWorkItem{
             ]);
         }
 
-        Cert::create([
+        $cert = Cert::create([
             'sno' => $this->userNumber,
             'entry_id' => $entryForm->entry_id,
             'cert_no' => date('ymdHis'),
@@ -59,6 +59,7 @@ class AcademyPartySchool extends BaseWorkItem{
             'cert_islost' => 0,
             'isdeleted' => 0
         ]);
+        return boolval($entryForm && $cert);
     }
 
     public function cancel()
@@ -66,9 +67,9 @@ class AcademyPartySchool extends BaseWorkItem{
         parent::cancel();
 
         if(!$this->isActive())
-            return;
+            return false;
 
-        EntryForm::where('sno', $this->userNumber)
+        $entryForm = EntryForm::where('sno', $this->userNumber)
             ->update([
                 'entry_practicegrade' =>0,
                 'entry_articlegrade' => 0,
@@ -76,10 +77,11 @@ class AcademyPartySchool extends BaseWorkItem{
                 'entry_status' => EntryForm::ENTRY_NORMAL,
                 'cert_isgrant' => 0
             ]);
-        Cert::where(['sno' => $this->userNumber, 'cert_type' => Cert::CERT_ACADEMY])
+        $cert = Cert::where(['sno' => $this->userNumber, 'cert_type' => Cert::CERT_ACADEMY])
             ->update([
                 'isdeleted' => 1
             ]);
+        return boolval($entryForm && $cert);
     }
 
     public function isActive()

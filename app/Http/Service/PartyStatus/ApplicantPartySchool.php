@@ -18,11 +18,11 @@ class ApplicantPartySchool extends BaseWorkItem{
     public function to()
     {
         parent::to();
-
         ScoresTwenty::where(['is_systemadd' => 1, 'student_id' => $this->userNumber])->delete();
         $courses = CourseList::getAll();
+        $res2 = false;
         foreach($courses as $v){
-            ScoresTwenty::create([
+            $res = ScoresTwenty::create([
                 'student_id' => $this->userNumber,
                 'course_id' => $v['id'],
                 'score' => 60,
@@ -30,17 +30,20 @@ class ApplicantPartySchool extends BaseWorkItem{
                 'is_systemadd' => 1,
                 'isdeleted' => 0
             ]);
+            $res2 = $res2 && boolval($res);
         }
-
-        StudentInfo::updatePassTwenty($this->userNumber, $status = 1);
+        $res3 = StudentInfo::updatePassTwenty($this->userNumber, $status = 1);
+        return boolval($res2 && $res3);
     }
 
     public function cancel()
     {
+
         parent::cancel();
 
-        ScoresTwenty::clear($this->userNumber);
-        StudentInfo::updatePassTwenty($this->userNumber, $status = 0);
+        $res1 = ScoresTwenty::clear($this->userNumber);
+        $res2 = StudentInfo::updatePassTwenty($this->userNumber, $status = 0);
+        return boolval($res1) && boolval($res2);
     }
 
     public function isActive()

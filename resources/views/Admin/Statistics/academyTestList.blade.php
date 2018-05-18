@@ -44,7 +44,7 @@
     <script>
         $(function(){
             $.ajax({
-                'url' : '/admin/statistics/academy-test-list/0',
+                'url' : '/admin/statistics/academyTestList/0',
                 'method' : 'get',
                 'success' : function(data){
                     console.log(data);
@@ -75,7 +75,7 @@
                 $('#academyTestListChart').empty();
                 var form = new FormData();
                 $.ajax({
-                    url: '/admin/statistics/academy-test-list/'+ $('#test_parent').val(),
+                    url: '/admin/statistics/academyTestList/'+ $('#test_parent').val(),
                     method: 'get',
                     'success' : function(data){
                         console.log(data);

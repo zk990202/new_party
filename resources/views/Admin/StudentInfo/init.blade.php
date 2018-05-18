@@ -50,10 +50,10 @@
                     <input type="text" name="status_applicant_study" value="1">
                     <input type="text" name="status_applicant_exam_pass" value="1">
 
-                    <input type="text" name="status_thought_report[]" value="1">
-                    <input type="text" name="status_thought_report[]" value="2">
-                    <input type="text" name="status_thought_report[]" value="3">
-                    <input type="text" name="status_thought_report[]" value="4">
+                    <input type="text" name="status_thought_report_1" value="1">
+                    <input type="text" name="status_thought_report_2" value="1">
+                    <input type="text" name="status_thought_report_3" value="1">
+                    <input type="text" name="status_thought_report_4" value="1">
 
                     <input type="text" name="status_applicant_group" value="1">
                     <input type="text" name="status_party_member_recommendation" value="1">
