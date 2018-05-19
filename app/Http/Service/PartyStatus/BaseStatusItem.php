@@ -31,13 +31,21 @@ abstract class BaseStatusItem extends BaseWorkItem{
         if(!$this->isActive())
             return;
         parent::cancel();
-        // 这个逻辑不满足入党积极分子和团支部推优那里
-        StudentInfo::updateMainStatusTo($this->userNumber, $this->status - 1);
+        // 如果当前状态是发展对象（3），cancel后成为积极分子（1）
+        // 党员推荐+团支部推优的逻辑不在这里，在Communist.php和MemberRecommendation.php中单独完成的
+        // 其他情况，cancel后直接将状态码减一即可
+        $current_status = StudentInfo::getMainStatus($this->userNumber);
+        if ($current_status == MainStatus::DEVELOPMENT_TARGET){
+            StudentInfo::updateMainStatusTo($this->userNumber, MainStatus::ACTIVIST);
+        }
+        else{
+            StudentInfo::updateMainStatusTo($this->userNumber, $this->status - 1);
+        }
     }
 
     public function isActive()
     {
-        $status = StudentInfo::getMainStatus($this->userNumber) ;
-        return $status >= $this->status && $status != MainStatus::MEMBER_RECOMMENDATION && $status != MainStatus::COMMUNIST_MEMBER_RECOMMENDATION;
+        $current_status = StudentInfo::getMainStatus($this->userNumber) ;
+        return $current_status >= $this->status && $current_status != MainStatus::MEMBER_RECOMMENDATION && $current_status != MainStatus::COMMUNIST_MEMBER_RECOMMENDATION;
     }
 }

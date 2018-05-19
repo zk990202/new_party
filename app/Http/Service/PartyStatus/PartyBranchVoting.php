@@ -7,7 +7,7 @@
  */
 
 namespace App\Http\Service\PartyStatus;
-
+// 召开发展大会
 class PartyBranchVoting extends BaseStatusItem {
     public function __construct()
     {

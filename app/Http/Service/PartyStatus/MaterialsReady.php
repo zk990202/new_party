@@ -7,7 +7,7 @@
  */
 
 namespace App\Http\Service\PartyStatus;
-
+//入党材料准备齐全
 class MaterialsReady extends BaseStatusItem {
     public function __construct()
     {

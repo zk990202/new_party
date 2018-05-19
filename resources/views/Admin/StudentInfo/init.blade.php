@@ -62,30 +62,30 @@
                     <input type="text" name="status_become_academy" value="1">
                     <input type="text" name="status_academy_study" value="1">
 
-                    <input type="text" name="status_development_target_to_probationary[]" value="1">
-                    <input type="text" name="status_development_target_to_probationary[]" value="2">
-                    <input type="text" name="status_development_target_to_probationary[]" value="3">
-                    <input type="text" name="status_development_target_to_probationary[]" value="4">
-                    <input type="text" name="status_development_target_to_probationary[]" value="5">
-                    <input type="text" name="status_development_target_to_probationary[]" value="6">
-                    <input type="text" name="status_development_target_to_probationary[]" value="7">
-                    <input type="text" name="status_development_target_to_probationary[]" value="8">
-                    <input type="text" name="status_development_target_to_probationary[]" value="9">
+                    <input type="text" name="status_development_target" value="1">
+                    <input type="text" name="status_centralized_training" value="1">
+                    <input type="text" name="status_material_is_ready" value="1">
+                    <input type="text" name="status_report_to_superior" value="1">
+                    <input type="text" name="status_development_publicity" value="1">
+                    <input type="text" name="status_volunteer_book" value="1">
+                    <input type="text" name="status_party_branch_voting" value="1">
+                    <input type="text" name="status_committee_approval" value="1">
+                    <input type="text" name="status_probationary_member" value="1">
 
                     <input type="text" name="status_probationary_exam_pass" value="1">
 
-                    <input type="text" name="status_personal_report[]" value="1">
-                    <input type="text" name="status_personal_report[]" value="2">
-                    <input type="text" name="status_personal_report[]" value="3">
-                    <input type="text" name="status_personal_report[]" value="4">
+                    <input type="text" name="status_personal_report_1" value="1">
+                    <input type="text" name="status_personal_report_2" value="1">
+                    <input type="text" name="status_personal_report_3" value="1">
+                    <input type="text" name="status_personal_report_4" value="1">
 
                     <input type="text" name="status_join_party_activity" value="1">
 
-                    <input type="text" name="status_transform_to_official_member[]" value="1">
-                    <input type="text" name="status_transform_to_official_member[]" value="2">
-                    <input type="text" name="status_transform_to_official_member[]" value="3">
-                    <input type="text" name="status_transform_to_official_member[]" value="4">
-                    <input type="text" name="status_transform_to_official_member[]" value="5">
+                    <input type="text" name="status_correct_applicant" value="1">
+                    <input type="text" name="status_correct_publicity" value="1">
+                    <input type="text" name="status_vote_passed" value="1">
+                    <input type="text" name="status_party_approval" value="1">
+                    <input type="text" name="status_formal_member" value="1">
 
                     <input type="hidden" name="_token" value="{{ csrf_token() }}">
                     <div class="box-footer">

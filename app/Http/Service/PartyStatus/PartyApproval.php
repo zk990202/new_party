@@ -7,7 +7,7 @@
  */
 
 namespace App\Http\Service\PartyStatus;
-
+// 党委审批
 class PartyApproval extends BaseStatusItem {
     public function __construct()
     {

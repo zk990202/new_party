@@ -7,7 +7,7 @@
  */
 
 namespace App\Http\Service\PartyStatus;
-
+// 成为预备党员
 class ProbationaryMember extends BaseStatusItem {
     public function __construct()
     {

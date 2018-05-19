@@ -9,7 +9,7 @@
 namespace App\Http\Service\PartyStatus;
 
 use App\Models\StudentInfo;
-
+// 第一季度个人小结
 class PersonalSummary_1 extends BaseWorkItem{
 
     public function to()

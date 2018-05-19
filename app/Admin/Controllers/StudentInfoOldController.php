@@ -283,7 +283,7 @@ class StudentInfoOldController extends Controller
 
                         }
 
-                        //完成预备党结业考试
+                        //完成预备党党校学习
                         if ($status_probationary_exam_pass && $main_status == 10){
                             $flag = \App\Models\Probationary\EntryForm::systemAddInStudentInfoInit($sno[$j]);
                             if ($flag){

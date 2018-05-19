@@ -7,7 +7,7 @@
  */
 
 namespace App\Http\Service\PartyStatus;
-
+// 向上级党组织汇报
 class ReportToSuperior extends BaseStatusItem {
     public function __construct()
     {

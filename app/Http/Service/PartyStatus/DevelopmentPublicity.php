@@ -7,7 +7,7 @@
  */
 
 namespace App\Http\Service\PartyStatus;
-
+// 党员发展公示
 class DevelopmentPublicity extends BaseStatusItem {
     public function __construct()
     {

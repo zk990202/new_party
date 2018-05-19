@@ -16,14 +16,34 @@ use App\Http\Service\PartyStatus\AcademyPartySchool;
 use App\Http\Service\PartyStatus\Activity;
 use App\Http\Service\PartyStatus\ApplicantLearningGroup;
 use App\Http\Service\PartyStatus\ApplicantPartySchool;
+use App\Http\Service\PartyStatus\CentralizedTraining;
+use App\Http\Service\PartyStatus\CommitteeApproval;
 use App\Http\Service\PartyStatus\Communist;
+use App\Http\Service\PartyStatus\CorrectApplication;
+use App\Http\Service\PartyStatus\CorrectPublicity;
+use App\Http\Service\PartyStatus\DevelopmentPublicity;
+use App\Http\Service\PartyStatus\DevelopmentTarget;
+use App\Http\Service\PartyStatus\FormalMember;
 use App\Http\Service\PartyStatus\IdeologicalReport_1;
 use App\Http\Service\PartyStatus\IdeologicalReport_2;
 use App\Http\Service\PartyStatus\IdeologicalReport_3;
 use App\Http\Service\PartyStatus\IdeologicalReport_4;
 use App\Http\Service\PartyStatus\MainStatus;
+use App\Http\Service\PartyStatus\MaterialsReady;
 use App\Http\Service\PartyStatus\MemberRecommendation;
 use App\Http\Service\PartyStatus\PartyApplication;
+use App\Http\Service\PartyStatus\PartyApproval;
+use App\Http\Service\PartyStatus\PartyBranchVoting;
+use App\Http\Service\PartyStatus\PartyOrganization;
+use App\Http\Service\PartyStatus\PersonalSummary_1;
+use App\Http\Service\PartyStatus\PersonalSummary_2;
+use App\Http\Service\PartyStatus\PersonalSummary_3;
+use App\Http\Service\PartyStatus\PersonalSummary_4;
+use App\Http\Service\PartyStatus\ProbationaryMember;
+use App\Http\Service\PartyStatus\ProbationarySchool;
+use App\Http\Service\PartyStatus\ReportToSuperior;
+use App\Http\Service\PartyStatus\VolunteerBook;
+use App\Http\Service\PartyStatus\VotePassed;
 use App\Models\Applicant\EntryForm;
 use App\Models\Cert;
 use App\Models\Classes;
@@ -55,6 +75,29 @@ class StudentInfoController extends Controller
     protected $memberRecommendationService;
     protected $activityService;
 
+    protected $developmentTargetService;
+    protected $centralizedTrainingService;
+    protected $materialIsReadyService;
+    protected $reportToSuperiorService;
+    protected $developmentPublicityService;
+    protected $volunteerBookService;
+    protected $partyBranchVotingService;
+    protected $committeeApprovalService;
+    protected $probationaryMemberService;
+
+    protected $probationarySchoolService;
+    protected $personalSummary_1Service;
+    protected $personalSummary_2Service;
+    protected $personalSummary_3Service;
+    protected $personalSummary_4Service;
+    protected $partyOrganizationService;
+
+    protected $correctApplicationService;
+    protected $correctPublicityService;
+    protected $votePassedService;
+    protected $partyApprovalService;
+    protected $formalMemberService;
+
     public $module;
 
     public function __construct(PartyApplication $partyApplication,
@@ -67,7 +110,27 @@ class StudentInfoController extends Controller
                                 AcademyPartySchool $academyPartySchool,
                                 Communist $communist,
                                 MemberRecommendation $memberRecommendation,
-                                Activity $activity)
+                                Activity $activity,
+                                DevelopmentTarget $developmentTarget,
+                                CentralizedTraining $centralizedTraining,
+                                MaterialsReady $materialsReady,
+                                ReportToSuperior $reportToSuperior,
+                                DevelopmentPublicity $developmentPublicity,
+                                VolunteerBook $volunteerBook,
+                                PartyBranchVoting $partyBranchVoting,
+                                CommitteeApproval $committeeApproval,
+                                ProbationaryMember $probationaryMember,
+                                ProbationarySchool $probationarySchool,
+                                PersonalSummary_1 $personalSummary_1,
+                                PersonalSummary_2 $personalSummary_2,
+                                PersonalSummary_3 $personalSummary_3,
+                                PersonalSummary_4 $personalSummary_4,
+                                PartyOrganization $partyOrganization,
+                                CorrectApplication $correctApplication,
+                                CorrectPublicity $correctPublicity,
+                                VotePassed $votePassed,
+                                PartyApproval $partyApproval,
+                                FormalMember $formalMember)
     {
         $this->imgExtension = config('fileUpload');
         $this->titles = AdminMenuService::getMenuName();
@@ -82,6 +145,29 @@ class StudentInfoController extends Controller
         $this->communistService = $communist;
         $this->memberRecommendationService = $memberRecommendation;
         $this->activityService = $activity;
+
+        $this->developmentTargetService = $developmentTarget;
+        $this->centralizedTrainingService = $centralizedTraining;
+        $this->materialIsReadyService = $materialsReady;
+        $this->reportToSuperiorService = $reportToSuperior;
+        $this->developmentPublicityService = $developmentPublicity;
+        $this->volunteerBookService = $volunteerBook;
+        $this->partyBranchVotingService = $partyBranchVoting;
+        $this->committeeApprovalService = $committeeApproval;
+        $this->probationaryMemberService = $probationaryMember;
+
+        $this->probationarySchoolService = $probationarySchool;
+        $this->personalSummary_1Service = $personalSummary_1;
+        $this->personalSummary_2Service = $personalSummary_2;
+        $this->personalSummary_3Service = $personalSummary_3;
+        $this->personalSummary_4Service = $personalSummary_4;
+        $this->partyOrganizationService = $partyOrganization;
+
+        $this->correctApplicationService = $correctApplication;
+        $this->correctPublicityService = $correctPublicity;
+        $this->votePassedService = $votePassed;
+        $this->partyApprovalService = $partyApproval;
+        $this->formalMemberService = $formalMember;
     }
 
     /**
@@ -205,24 +291,48 @@ class StudentInfoController extends Controller
             //积极分子党校学习
             $status_academy_study = $request->input('status_academy_study');
 
-            //发展对象 到 预备党员
-            $status_development_target_to_probationary = $request->input('status_development_target_to_probationary');
+            // 发展对象
+            $status_development_target = $request->input("status_development_target");
+            // 集中培训
+            $status_centralized_training = $request->input("status_centralized_training");
+            // 入党材料准备齐全
+            $status_material_is_ready = $request->input("status_material_is_ready");
+            // 向上级汇报
+            $status_report_to_superior = $request->input("status_report_to_superior");
+            // 发展公示
+            $status_development_publicity = $request->input("status_development_publicity");
+            // 入党志愿书
+            $status_volunteer_book = $request->input("status_volunteer_book");
+            // 支部表决
+            $status_party_branch_voting = $request->input("status_party_branch_voting");
+            // 党委谈话
+            $status_committee_approval = $request->input("status_committee_approval");
+            // 成为预备党员
+            $status_probationary_member = $request->input("status_probationary_member");
 
-            //完成预备党员结业考试
+            //完成预备党员党校学习
             $status_probationary_exam_pass = $request->input('status_probationary_exam_pass');
 
             //递交季度个人小结
-            $status_personal_report = $request->input('status_personal_report');
+            $status_personal_report_1 = $request->input('status_personal_report_1');
+            $status_personal_report_2 = $request->input('status_personal_report_2');
+            $status_personal_report_3 = $request->input('status_personal_report_3');
+            $status_personal_report_4 = $request->input('status_personal_report_4');
 
             //参加党内活动
             $status_join_party_activity = $request->input('status_join_party_activity');
 
-            //递交转正申请 到 成为正式党员
-            $status_transform_to_official_member = $request->input('status_transform_to_official_member');
+            //递交转正申请
+            $status_correct_applicant = $request->input("status_correct_applicant");
+            // 党内公示
+            $status_correct_publicity = $request->input("status_correct_publicity");
+            // 表决通过
+            $status_vote_passed = $request->input("status_vote_passed");
+            // 党委审批
+            $status_party_approval = $request->input("status_party_approval");
+            // 正式党员
+            $status_formal_member = $request->input("status_formal_member");
 
-            $main_status = 0;//这是一个神一样的字段.....
-
-            $haveDone = ''; //记录错误信息
 
             for ($j = 0; $j < count($sno); $j++){
                 if ($sno[$j] != "" && strlen($sno[$j]) == 10){
@@ -317,7 +427,6 @@ class StudentInfoController extends Controller
                             $this->communistService->cancel();
                         }
 
-
                         // 经支委会同意成为积极分子
                         $this->activityService->setUserNumber($sno[$j]);
                         if ($status_become_academy){
@@ -335,9 +444,202 @@ class StudentInfoController extends Controller
                         elseif(!$status_academy_study){
                             $this->academyPartySchoolService->cancel();
                         }
+
+                        // 发展对象 -> 预备党员: 赋学号
+                        $this->developmentTargetService->setUserNumber($sno[$j]);
+                        $this->centralizedTrainingService->setUserNumber($sno[$j]);
+                        $this->materialIsReadyService->setUserNumber($sno[$j]);
+                        $this->reportToSuperiorService->setUserNumber($sno[$j]);
+                        $this->developmentPublicityService->setUserNumber($sno[$j]);
+                        $this->volunteerBookService->setUserNumber($sno[$j]);
+                        $this->partyBranchVotingService->setUserNumber($sno[$j]);
+                        $this->committeeApprovalService->setUserNumber($sno[$j]);
+                        $this->probationaryMemberService->setUserNumber($sno[$j]);
+
+                        // 发展对象
+                        if ($status_development_target){
+                            $this->developmentTargetService->to();
+                        }
+                        elseif (!$status_development_target){
+                            $this->developmentTargetService->cancel();
+                        }
+
+                        // 集中培训
+                        if ($status_centralized_training){
+                            $this->centralizedTrainingService->to();
+                        }
+                        elseif (!$status_centralized_training){
+                            $this->centralizedTrainingService->cancel();
+                        }
+
+                        // 材料准备齐全
+                        if ($status_material_is_ready){
+                            $this->materialIsReadyService->to();
+                        }
+                        elseif (!$status_material_is_ready){
+                            $this->materialIsReadyService->cancel();
+                        }
+
+                        // 向上级汇报
+                        if ($status_report_to_superior){
+                            $this->reportToSuperiorService->to();
+                        }
+                        elseif (!$status_report_to_superior){
+                            $this->reportToSuperiorService->cancel();
+                        }
+
+                        // 发展公示
+                        if ($status_development_publicity){
+                            $this->developmentPublicityService->to();
+                        }
+                        elseif (!$status_development_publicity){
+                            $this->developmentPublicityService->cancel();
+                        }
+
+                        // 入党志愿书
+                        if ($status_volunteer_book){
+                            $this->volunteerBookService->to();
+                        }
+                        elseif (!$status_volunteer_book){
+                            $this->volunteerBookService->cancel();
+                        }
+
+                        // 党支部表决
+                        if ($status_party_branch_voting){
+                            $this->partyBranchVotingService->to();
+                        }
+                        elseif (!$status_party_branch_voting){
+                            $this->partyBranchVotingService->cancel();
+                        }
+
+                        // 党员谈话
+                        if ($status_committee_approval){
+                            $this->committeeApprovalService->to();
+                        }
+                        elseif (!$status_committee_approval){
+                            $this->committeeApprovalService->cancel();
+                        }
+
+                        // 预备党员
+                        if ($status_probationary_member){
+                            $this->probationaryMemberService->to();
+                        }
+                        elseif (!$status_probationary_member){
+                            $this->probationaryMemberService->cancel();
+                        }
+
+                        // 完成预备党党校学习
+                        $this->probationarySchoolService->setUserNumber($sno[$j]);
+                        if ($status_probationary_exam_pass){
+                            $this->probationarySchoolService->to();
+                        }
+                        elseif (!$status_probationary_exam_pass){
+                            $this->probationarySchoolService->cancel();
+                        }
+                        
+                        // 递交个人小结
+                        $this->personalSummary_1Service->setUserNumber($sno[$j]);
+                        $this->personalSummary_2Service->setUserNumber($sno[$j]);
+                        $this->personalSummary_3Service->setUserNumber($sno[$j]);
+                        $this->personalSummary_4Service->setUserNumber($sno[$j]);
+                        // 1
+                        if ($status_personal_report_1){
+                            $this->personalSummary_1Service->to();
+                        }
+                        elseif (!$status_personal_report_1){
+                            $this->personalSummary_1Service->cancel();
+                        }
+                        // 2
+                        if ($status_personal_report_2){
+                            $this->personalSummary_2Service->to();
+                        }
+                        elseif (!$status_personal_report_2){
+                            $this->personalSummary_2Service->cancel();
+                        }
+                        // 3
+                        if ($status_personal_report_3){
+                            $this->personalSummary_3Service->to();
+                        }
+                        elseif (!$status_personal_report_3){
+                            $this->personalSummary_3Service->cancel();
+                        }
+                        // 4
+                        if ($status_personal_report_4){
+                            $this->personalSummary_4Service->to();
+                        }
+                        elseif (!$status_personal_report_4){
+                            $this->personalSummary_4Service->cancel();
+                        }
+
+                        // 党内生活
+                        $this->partyOrganizationService->setUserNumber($sno[$j]);
+                        if ($status_join_party_activity){
+                            $this->partyOrganizationService->to();
+                        }
+                        elseif (!$status_join_party_activity){
+                            $this->partyOrganizationService->cancel();
+                        }
+
+                        // 递交转正申请
+                        $this->correctApplicationService->setUserNumber($sno[$j]);
+                        if ($status_correct_applicant){
+                            $this->correctApplicationService->to();
+                        }
+                        elseif (!$status_correct_applicant){
+                            $this->correctApplicationService->cancel();
+                        }
+
+                        // 转正公示
+                        $this->correctPublicityService->setUserNumber($sno[$j]);
+                        if ($status_correct_publicity){
+                            $this->correctPublicityService->to();
+                        }
+                        elseif (!$status_correct_publicity){
+                            $this->correctPublicityService->cancel();
+                        }
+
+                        // 转正大会 表决通过
+                        $this->votePassedService->setUserNumber($sno[$j]);
+                        if ($status_vote_passed){
+                            $this->votePassedService->to();
+                        }
+                        elseif (!$status_vote_passed){
+                            $this->votePassedService->cancel();
+                        }
+
+                        // 党委审批
+                        $this->partyApprovalService->setUserNumber($sno[$j]);
+                        if ($status_party_approval){
+                            $this->partyApprovalService->to();
+                        }
+                        elseif (!$status_party_approval){
+                            $this->partyApprovalService->cancel();
+                        }
+
+                        // 正式党员
+                        $this->formalMemberService->setUserNumber($sno[$j]);
+                        if ($status_formal_member){
+                            $this->formalMemberService->to();
+                        }
+                        elseif (!$status_formal_member){
+                            $this->formalMemberService->cancel();
+                        }
                     }
                 }
             }
+
+            $viewData = [
+                'title' => '提示信息',
+                'message' => '学生信息状态初始化-操作完成!'
+            ];
+            return Admin::content(function (Content $content) use ($viewData){
+                // 选填
+                $content->header($this->titles[0] ?? '管理后台');
+                // 选填
+                $content->description($this->titles[1] ?? '');
+                // 填充页面body部分，这里可以填入任何可被渲染的对象
+                $content->body(view('Admin.Message', $viewData));
+            });
         }
         else{
             $viewData = [

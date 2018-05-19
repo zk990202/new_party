@@ -10,7 +10,7 @@ namespace App\Http\Service\PartyStatus;
 
 use App\Models\Cert;
 use App\Models\Probationary\EntryForm;
-
+// 预备党员党校学习
 class ProbationarySchool extends BaseWorkItem{
 
     /**

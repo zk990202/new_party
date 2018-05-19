@@ -20,7 +20,7 @@ class VolunteerBook extends BaseWorkItem{
         StudentFiles::create([
             'sno' => $this->userNumber,
             'file_title' => '系统添加',
-            'file_content' => '系统添加,并设置为通过状态!',
+            'file_content' => '这是后台管理员在为你做系统初始化时添加的入党志愿书,状态为通过!',
             'file_addtime' => date('Y-m-d H:i:s'),
             'file_dealtime' => date('Y-m-d H:i:s'),
             'file_type' => StudentFiles::FILE_TYPE['VOLUNTEER_BOOK'],

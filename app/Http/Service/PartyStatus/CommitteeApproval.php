@@ -7,7 +7,7 @@
  */
 
 namespace App\Http\Service\PartyStatus;
-
+// 党员谈话
 class CommitteeApproval extends BaseStatusItem {
     public function __construct()
     {

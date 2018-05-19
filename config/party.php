@@ -25,14 +25,9 @@ return [
         'ApplicantFinalExam' => [
             'name'      => '结业考试',
             'dependsOn' => ['ApplicantPartySchool'],
-            'determines'=> ['AcademyPartySchool']
+            'determines'=> ['Activity']
         ],
-        // 院级积极分子党校学习
-        'AcademyPartySchool' => [
-            'name'      => '院级积极分子党校学习',
-            'dependsOn' => ['ApplicantFinalExam'],
-            'determines'=> ['DevelopmentTarget']
-        ],
+
         // 第一季度思想汇报
         'IdeologicalReport_1' => [
             'name'      => '第一季度思想汇报',
@@ -58,24 +53,37 @@ return [
         'ApplicantLearningGroup' => [
             'name'      => '参加申请人学习小组',
             'dependsOn' => ['PartyApplication'],
-            'determines'=> ['PartyActivist', 'CommunistPartyBranch']
+            'determines'=> ['MemberRecommendation', 'Communist']
         ],
-        // 入党积极分子
-        'PartyActivist' => [
-            'name'      => '被确认为入党积极分子',
+        // 党员推荐
+        'MemberRecommendation' => [
+            'name' => '党员推荐',
             'dependsOn' => ['ApplicantLearningGroup'],
-            'determines'=> ['DevelopmentTarget']
+            'determines' => ['Activity']
         ],
         // 团支部推优
         'CommunistPartyBranch' => [
             'name'      => '团支部推优',
             'dependsOn' => ['ApplicantLearningGroup'],
+            'determines'=> ['Activity']
+        ],
+        // 入党积极分子
+        'Activity' => [
+            'name'      => '被确认为入党积极分子',
+            'dependsOn' => ['ApplicantFinalExam', 'MemberRecommendation', 'Communist'],
+            'determines'=> ['AcademyPartySchool']
+        ],
+        // 院级积极分子党校学习
+        'AcademyPartySchool' => [
+            'name'      => '院级积极分子党校学习',
+            'dependsOn' => ['Activity'],
             'determines'=> ['DevelopmentTarget']
         ],
+
         // 发展对象
         'DevelopmentTarget' => [
             'name'      => '成为发展对象',
-            'dependsOn' => ['AcademyPartySchool', 'IdeologicalReport_4', 'PartyActivist', 'CommunistPartyBranch'],
+            'dependsOn' => ['AcademyPartySchool', 'IdeologicalReport_4'],
             'determines'=> ['CentralizedTraining']
         ],
         // 集中培训

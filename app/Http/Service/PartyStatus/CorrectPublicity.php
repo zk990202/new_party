@@ -7,7 +7,7 @@
  */
 
 namespace App\Http\Service\PartyStatus;
-
+// 转正公示
 class CorrectPublicity extends BaseStatusItem {
     public function __construct()
     {

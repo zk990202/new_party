@@ -11,7 +11,7 @@ namespace App\Http\Service\PartyStatus;
 
 
 use App\Models\StudentInfo;
-
+//成为积极分子
 class Activity extends BaseWorkItem
 {
     public function to()

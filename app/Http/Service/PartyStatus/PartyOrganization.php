@@ -7,7 +7,7 @@
  */
 
 namespace App\Http\Service\PartyStatus;
-
+// 支部组织生活和党内活动
 class PartyOrganization extends BaseStatusItem {
     public function __construct()
     {

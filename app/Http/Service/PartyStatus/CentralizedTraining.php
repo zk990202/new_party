@@ -7,7 +7,7 @@
  */
 
 namespace App\Http\Service\PartyStatus;
-
+//参加集中训练
 class CentralizedTraining extends BaseStatusItem {
     public function __construct()
     {
