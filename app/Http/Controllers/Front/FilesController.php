@@ -11,6 +11,8 @@ namespace App\Http\Controllers\Front;
 use App\Http\Controllers\FrontBaseController;
 use App\Http\Service\ImportantFilesService;
 use App\Http\Service\NewsService;
+use App\Models\CommonFiles;
+use App\Models\Notification;
 use App\Models\SpecialNews;
 
 /**
@@ -32,6 +34,7 @@ class FilesController extends FrontBaseController{
         $data = [
             'files' => $files
         ];
+//        dd($data);
         return view('front.commonFiles.default', ['data' => $data, 'regulation' => 'nav1']);
     }
 
@@ -57,6 +60,13 @@ class FilesController extends FrontBaseController{
             'files' => $files
         ];
         return view('front.commonFiles.default', ['data' => $data, 'manual' => 'nav1']);
+    }
+
+    public function detail($id){
+        $common_file = CommonFiles::getCommonFileById($id);
+        if(!$common_file)
+            return $this->alertService->alertAndBack('提示', '文件不存在');
+        return view('front.commonFiles.detail', ['detail' => $common_file]);
     }
 
 }

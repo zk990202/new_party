@@ -11,6 +11,7 @@ namespace App\Http\Controllers\Front;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\FrontBaseController;
 use App\Http\Service\NotificationService;
+use App\Models\Notification;
 
 class NotificationController extends FrontBaseController{
     protected $notificationService;
@@ -28,7 +29,7 @@ class NotificationController extends FrontBaseController{
         $data = [
             'notice' => $notice
         ];
-        //dd($data);
+//        dd($data);
         return view('front.notification.default', ['data' => $data, 'applicant' => 'nav1']);
     }
 
@@ -64,7 +65,7 @@ class NotificationController extends FrontBaseController{
         $data = [
             'notice' => $notice
         ];
-        //dd($data);
+//        dd($data);
         return view('front.notification.default', ['data' => $data, 'secretary' => 'nav1']);
     }
 
@@ -76,8 +77,20 @@ class NotificationController extends FrontBaseController{
         $data = [
             'notice' => $notice
         ];
-        //dd($data);
+//        dd($data);
         return view('front.notification.default', ['data' => $data, 'activity' => 'nav1']);
+    }
+
+    /**
+     * 公告详情
+     * @param $id
+     * @return mixed
+     */
+    public function detail($id){
+        $notice = Notification::getNoticeById($id);
+        if(!$notice)
+            return $this->alertService->alertAndBack('提示', '通知不存在');
+        return view('front.notification.detail', ['detail' => $notice]);
     }
 
 

@@ -6,16 +6,17 @@
 @section('main')
 
     <div class="total">
-        @include('front.layouts.applicantSchoolSidebar')
+        @include('front.layouts.notificationSidebar ')
         <div class="courseLearning">
             <h4>{{ $detail['title'] }}</h4>
             <div>
                 {!! $detail['content'] !!}
+                {{--{{ htmlspecialchars($detail['content']) }}--}}
                 <p class="time">{{ $detail['time'] }}</p>
             </div>
             @if($detail['filePath'])
                 <p>
-                    <a href="{{ url($detail['filePath'].'/download/'.$detail['fileName']) }}">{{ $detail['fileName'] }}</a>
+                    <a href="{{ url($detail['filePath'].'/download/'.$detail['title']) }}">{{ $detail['title'] }}</a>
                 </p>
             @endif
         </div>

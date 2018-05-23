@@ -703,10 +703,15 @@ Route::group([
         $router->get('hided-list', ['as' => 'admin-party-branch-hided-list', 'uses' => 'PartyBranchController@hidedList']);
     });
 
+    //学生信息管理
     $router->group(['prefix' => 'student-info'], function(Router $router){
+        //状态初始化
         $router->get('/init-preview', ['as' => 'admin-student-info-init-preview', 'uses' => 'StudentInfoController@initPreviewPage']);
         $router->get('/init', ['as' => 'admin-student-info-init-page', 'uses' => 'StudentInfoController@initPage']);
         $router->post('/init', ['as' => 'admin-student-info-init', 'uses' => 'StudentInfoController@init']);
+        //状态查看
+        $router->get('/status-watch-preview', ['as' => 'admin-student-info-status-watch-preview', 'uses' => 'StudentInfoController@statusWatchPreview']);
+        $router->get('/status-watch', ['as' => 'admin-student-info-status-watch', 'uses' => 'StudentInfoController@statusWatch']);
     });
 
     /**

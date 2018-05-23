@@ -84,12 +84,13 @@ Route::group(['namespace' => 'Front', 'middleware' => ['auth']], function(){
         Route::get('probationary', 'NotificationController@probationary');
         Route::get('secretary', 'NotificationController@secretary');
         Route::get('activity', 'NotificationController@activity');
+        Route::get('detail/{id}', 'NotificationController@detail');
     });
 
     // 新闻板块
     Route::group(['prefix' => 'news'], function(){
         Route::get('partySchool', 'NewsController@partySchool');
-
+        Route::get('detail/{id}', 'NewsController@detail');
     });
 
     // 重要文件
@@ -98,6 +99,7 @@ Route::group(['namespace' => 'Front', 'middleware' => ['auth']], function(){
         Route::get('instrument', 'FilesController@instrument');
         Route::get('mustRead', 'FilesController@mustRead');
         Route::get('manual', 'FilesController@manual');
+        Route::get('detail/{id}', 'FilesController@detail');
     });
 
     // 个人支部
@@ -108,6 +110,9 @@ Route::group(['namespace' => 'Front', 'middleware' => ['auth']], function(){
         Route::get('doc', 'PersonalController@docPage');
         Route::post('doc', 'PersonalController@docStore');
     });
+
+    // 文件下载
+    Route::get('{filePath}/download/{fileName}', 'FileDownloadController@download');
 });
 
 Route::get('test', function() {

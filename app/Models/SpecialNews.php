@@ -189,6 +189,12 @@ class SpecialNews extends Model
 
     //下面为前台的模块了！！
 
+    public static function getNewsById($id){
+        $res = self::where('id', $id)
+            ->first();
+        return $res ? Resources::SpecialNews($res) : null;
+    }
+
     /**
      * 按照多个类别获取新闻
      * @param $type array

@@ -6,18 +6,23 @@
 @section('main')
 
     <div class="total">
-        @include('front.layouts.applicantSchoolSidebar')
+        <nav class="find">
+            <div class="active">党校培训</div>
+            <div class="btn">
+                <p class="nav1"><a href="{{ url('news/partySchool') }}">新闻中心</a></p>
+            </div>
+        </nav>
         <div class="courseLearning">
             <h4>{{ $detail['title'] }}</h4>
             <div>
                 {!! $detail['content'] !!}
                 <p class="time">{{ $detail['time'] }}</p>
             </div>
-            @if($detail['filePath'])
-                <p>
-                    <a href="{{ url($detail['filePath'].'/download/'.$detail['fileName']) }}">{{ $detail['fileName'] }}</a>
-                </p>
-            @endif
+            {{--@if($detail['filePath'])--}}
+                {{--<p>--}}
+                    {{--<a href="{{ url($detail['filePath'].'/download/'.$detail['fileName']) }}">{{ $detail['fileName'] }}</a>--}}
+                {{--</p>--}}
+            {{--@endif--}}
         </div>
     </div>
 @endsection

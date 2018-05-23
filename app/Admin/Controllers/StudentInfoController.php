@@ -12,6 +12,7 @@ namespace App\Admin\Controllers;
 use App\Http\Controllers\Controller;
 use App\Http\Middleware\Access;
 use App\Http\Service\AdminMenuService;
+use App\Http\Service\AlertService;
 use App\Http\Service\PartyStatus\AcademyPartySchool;
 use App\Http\Service\PartyStatus\Activity;
 use App\Http\Service\PartyStatus\ApplicantLearningGroup;
@@ -62,6 +63,8 @@ class StudentInfoController extends Controller
     protected $imgExtension;
     protected $imgUsage = 'partyBuildImg';
     protected $titles;
+
+    protected $alertServices;
 
     protected $partyApplicationService;
     protected $applicantPartySchoolService;
@@ -130,7 +133,9 @@ class StudentInfoController extends Controller
                                 CorrectPublicity $correctPublicity,
                                 VotePassed $votePassed,
                                 PartyApproval $partyApproval,
-                                FormalMember $formalMember)
+                                FormalMember $formalMember,
+
+                                AlertService $alertService)
     {
         $this->imgExtension = config('fileUpload');
         $this->titles = AdminMenuService::getMenuName();
@@ -168,6 +173,8 @@ class StudentInfoController extends Controller
         $this->votePassedService = $votePassed;
         $this->partyApprovalService = $partyApproval;
         $this->formalMemberService = $formalMember;
+
+        $this->alertServices = $alertService;
     }
 
     /**
@@ -259,6 +266,11 @@ class StudentInfoController extends Controller
         }
     }
 
+    /**
+     * 状态初始化--后台逻辑-更改学生状态
+     * @param Request $request
+     * @return Content
+     */
     public function init(Request $request)
     {
         $data = $request->all();
@@ -657,4 +669,61 @@ class StudentInfoController extends Controller
         }
     }
 
+    /**
+     * 状态查看--学号筛选
+     * @return Content
+     */
+    public function statusWatchPreview()
+    {
+        //先判断当前是否可以进行学生状态初始化
+        $status = Control::getStatusReset();
+        $status = 1;
+        if (!$status) {
+            if (!Admin::user()->isAdministrator()) {
+                $title = '功能初始化失败';
+                $message = '不好意思,该功能暂未开启.请等待超管开启!';
+                $viewData = ['title' => $title, 'message' => $message];
+            } else {
+                $title = '功能初始化失败';
+                $message = '不好意思,该功能暂未开启.您是超管,可以开启!';
+                $viewData = ['title' => $title, 'message' => $message];
+            }
+            return Admin::content(function (Content $content) use ($viewData) {
+                // 选填
+                $content->header($this->titles[0] ?? '管理后台');
+                // 选填
+                $content->description($this->titles[1] ?? '');
+                // 填充页面body部分，这里可以填入任何可被渲染的对象
+                $content->body(view('Admin.Message', $viewData));
+            });
+        }
+        else{
+            return Admin::content(function (Content $content){
+                // 选填
+                $content->header($this->titles[0] ?? '管理后台');
+                // 选填
+                $content->description($this->titles[1] ?? '');
+                // 填充页面body部分，这里可以填入任何可被渲染的对象
+                $content->body(view('Admin.StudentInfo.statusWatchPreview'));
+            });
+        }
+    }
+
+    public function statusWatch(Request $request)
+    {
+        $sno = $request->input('sno');
+        if ($sno == null){
+//            $url = url('/admin/student-info/status-watch-preview');
+            return $this->alertServices->alertAndBack('提示信息', '学号不能为空');
+        }
+        else{
+//            $studentInfo = UserInfo::;
+            if (!$studentInfo){
+                return;
+            }
+            else{
+                //这里要加上对院级管理员的限制
+            }
+        }
+    }
 }

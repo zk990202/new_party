@@ -57,6 +57,12 @@ class CommonFiles extends Model{
 //        }, $res_arr));
     }
 
+    public static function getCommonFileById($id){
+        $res = self::where('file_id', $id)
+            ->first();
+        return $res ? Resources::CommonFiles($res) : null;
+    }
+
     /**
      * 更新
      * @param $id

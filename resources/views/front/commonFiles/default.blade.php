@@ -24,7 +24,7 @@
         <hr/>
         @foreach($data['files'] as $v)
         <div>
-            <h1>{{ $v['title'] }}</h1>
+            <h1><a href="{{ url('/commonFiles/detail/'.$v['id']) }}">{{ $v['title'] }}</a> </h1>
             <p>{{ $v['content'] }}</p>
         </div>
         @endforeach

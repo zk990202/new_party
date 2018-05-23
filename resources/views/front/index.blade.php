@@ -33,7 +33,7 @@
             <p>最新通知</p>
             @foreach($data['notices'] as $v)
             <li>
-                <span class="news">{{ $v['title'] }}</span>
+                <span class="news"><a href="{{ url('/notification/detail/'.$v['id']) }} }}">{{ $v['title'] }}</a> </span>
                 <span class="date">{{ $v['time'] }}</span>
             </li>
             <hr/>
@@ -69,7 +69,9 @@
         </div>
     </div>
     <div class="item4">
-        <img src="/img3/onlineLectures.png" class="item2-pic"  />
+        <a href="{{ url('/applicant/courseStudy') }}">
+            <img src="/img3/onlineLectures.png" class="item2-pic"  />
+        </a>
         <div class="model">
             <img src="/img3/notice.png" class="item1-img" />
             <p>榜样力量</p>

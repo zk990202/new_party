@@ -5,7 +5,7 @@
     <nav>
         <ul>
             <li class="list">
-                <a href="index.blade.php" class="menu">首页</a>
+                <a href="{{ url('/') }}" class="menu">首页</a>
             </li>
             <li class="list"><a href="#" class="menu">网上党校</a>
                 <ul class="sub-menu">

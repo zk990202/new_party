@@ -31,4 +31,11 @@ class NewsController extends FrontBaseController{
         return view('front.news.default', ['data' => $data]);
     }
 
+    public function detail($id){
+        $news = SpecialNews::getNewsById($id);
+        if(!$news)
+            return $this->alertService->alertAndBack('提示', '文件不存在');
+        return view('front.news.detail', ['detail' => $news]);
+    }
+
 }

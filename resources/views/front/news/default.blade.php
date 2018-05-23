@@ -14,11 +14,11 @@
         </div>
     </nav>
     <div class="info">
-        <h2>申请人培训</h2>
+        <h2>新闻中心</h2>
         <hr/>
         @foreach($data['newsList'] as $v)
         <div>
-            <h1>{{ $v['title'] }}</h1>
+            <h1><a href="{{ url('/news/detail/'.$v['id']) }}">{{ $v['title'] }}</a> </h1>
             <p>{{ $v['content'] }}</p>
         </div>
         @endforeach
