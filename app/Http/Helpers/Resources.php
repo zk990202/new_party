@@ -53,7 +53,7 @@ class Resources
             'id'         => $partyBuild->id,
             'title'      => $partyBuild->title,
             'summary'    => $partyBuild->summary,
-            'content'    => $partyBuild->content,
+            'content'    => clean($partyBuild->content),
             'time'       => $partyBuild->inserttime,
             'authorName' => $partyBuild->userInfo->username ?? '',
             'type'       => $partyBuild->type,
@@ -69,7 +69,7 @@ class Resources
         return [
             'id'       => $commonFiles->file_id,
             'title'    => $commonFiles->file_title,
-            'content'  => $commonFiles->file_content,
+            'content'  => clean($commonFiles->file_content),
             'time'     => $commonFiles->file_addtime,
             'type'     => $commonFiles->file_type,
             'filePath' => FileService::fileAccessUri($commonFiles->file_img),

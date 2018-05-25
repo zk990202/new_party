@@ -36,10 +36,10 @@
             </li>
             <li class="list"><a href="#" class="menu">党建专项</a>
                 <ul class="sub-menu">
-                    <li><a href="Hero.html">身边的英雄</a></li>
-                    <li><a href="CentralSpirit.html">中央精神</a></li>
-                    <li><a href="MassLine.html">群众路线</a></li>
-                    <li><a href="ChineseDream.html">中国梦</a></li>
+                    <li><a href="{{ url('partyBuildSpecial/hero') }}">身边的英雄</a></li>
+                    <li><a href="{{ url('partyBuildSpecial/spirit') }}">中央精神</a></li>
+                    <li><a href="{{ url('partyBuildSpecial/massLine') }}">群众路线</a></li>
+                    <li><a href="{{ url('partyBuildSpecial/ChinaDream') }}">中国梦</a></li>
                 </ul>
             </li>
             <li class="list"><a href="#" class="menu">党校培训</a>

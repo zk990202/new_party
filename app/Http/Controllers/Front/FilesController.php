@@ -64,6 +64,7 @@ class FilesController extends FrontBaseController{
 
     public function detail($id){
         $common_file = CommonFiles::getCommonFileById($id);
+//        dd($common_file);
         if(!$common_file)
             return $this->alertService->alertAndBack('提示', '文件不存在');
         return view('front.commonFiles.detail', ['detail' => $common_file]);

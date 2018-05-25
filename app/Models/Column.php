@@ -21,6 +21,15 @@ class Column extends Model
     const PROBATIONARY_ID = 72;
     const SECRETARY_ID = 73;
 
+    // 身边的英雄
+    const HERO_ID = 75;
+    // 中央精神
+    const SPIRIT_ID = 78;
+    // 群众路线
+    const MASS_LINE = 81;
+    // 中国梦
+    const CHINA_DREAM = 83;
+
     /**
      * 模型的「启动」方法
      * @return void

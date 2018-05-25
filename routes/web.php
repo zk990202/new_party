@@ -87,10 +87,24 @@ Route::group(['namespace' => 'Front', 'middleware' => ['auth']], function(){
         Route::get('detail/{id}', 'NotificationController@detail');
     });
 
-    // 新闻板块
+    // 党校培训 新闻板块
     Route::group(['prefix' => 'news'], function(){
         Route::get('partySchool', 'NewsController@partySchool');
         Route::get('detail/{id}', 'NewsController@detail');
+    });
+
+    // 党建专项
+    Route::group(['prefix' => 'partyBuildSpecial'], function (){
+        // 身边的英雄
+        Route::get('hero', 'PartyBuildSpecialController@heroNews');
+        // 中央精神
+        Route::get('spirit', 'PartyBuildSpecialController@spiritNews');
+        // 群众路线
+        Route::get('massLine', 'PartyBuildSpecialController@massLineNews');
+        // 中国梦
+        Route::get('ChinaDream', 'PartyBuildSpecialController@ChinaDreamNews');
+
+        Route::get('detail/{id}', 'PartyBuildSpecialController@detail');
     });
 
     // 重要文件

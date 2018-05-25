@@ -10,7 +10,6 @@
         @include('front.layouts.applicantSchoolSidebar')
         <div class="courseLearning">
             <h2>{{ $data['course']['courseName'] }}</h2>
-            <hr/>
             <div>
                 @foreach($data['articles'] as $item)
                 <h4>{{ $item['articleName'] }}</h4>
