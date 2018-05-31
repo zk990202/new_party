@@ -114,4 +114,49 @@ class StudentFiles extends Model
         ]);
         return $res ? true : false;
     }
+
+    /**
+     *  根据类型获取文件
+     * @param $sno
+     * @param $type
+     * @return array
+     */
+    public static function getFileByTypeOnly($sno, $type){
+        $res = self::where('sno', $sno)
+            ->where('file_type', $type)
+            ->paginate(1);
+        foreach($res as $i => $v){
+            $res[$i] = (function($v){
+                $file = Resources::StudentFiles($v);
+                return $file;
+            })($v);
+        }
+        return $res;
+    }
+
+    /**
+     * 根据类型区间获取文件
+     * @param $sno
+     * @param $type_start
+     * @param $type_end
+     * @return mixed
+     */
+    public static function getFileByTypeBetween($sno, $type_start, $type_end){
+        $res = self::where('sno', $sno)
+            ->whereBetween('file_type', [$type_start, $type_end])
+            ->paginate(1);
+        foreach($res as $i => $v){
+            $res[$i] = (function($v){
+                $file = Resources::StudentFiles($v);
+                return $file;
+            })($v);
+        }
+        return $res;
+    }
+
+    public static function getFileById($id){
+        $res = self::where('file_id', $id)
+            ->first();
+        return Resources::StudentFiles($res);
+    }
 }

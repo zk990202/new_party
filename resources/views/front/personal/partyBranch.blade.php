@@ -12,7 +12,7 @@
             <h2>支部详情</h2>
             <hr/>
             <div class="information">
-                <p><b>姓名:</b><span>{{ $user['username'] }}</span></p>
+                <p><b>姓名:</b><span>{{ $user['userName'] }}</span></p>
                 <p><b>学号:</b><span>{{ $user['userNumber'] }}</span></p>
                 <p><b>年级:</b><span>{{ $user['grade'] }}</span></p>
                 <p><b>专业:</b><span>{{ $user['major'] }}</span></p>

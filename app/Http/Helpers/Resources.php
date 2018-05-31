@@ -520,6 +520,48 @@ class Resources
         ];
     }
 
+    public static function StudentFiles($studentFiles){
+        return [
+            'id' => $studentFiles->file_id,
+            'sno' => $studentFiles->sno,
+            'title' => $studentFiles->file_title,
+            'content' => $studentFiles->file_content,
+            'addTime' => $studentFiles->file_addtime,
+            'dealTime' => $studentFiles->file_dealtime,
+            'type' => $studentFiles->file_type,
+            'status' => $studentFiles->file_status,
+            'systemAdd' => $studentFiles->is_systemadd
+        ];
+    }
+    
+    public static function Report($report){
+        return [
+            'id' => $report->file_id,
+            'sno' => $report->sno,
+            'title' => $report->file_title,
+            'content' => $report->file_content,
+            'addTime' => $report->file_addtime,
+            'dealTime' => $report->file_dealtime,
+            'type' => $report->file_type,
+            'status' => $report->file_status,
+            'systemAdd' => $report->is_systemadd
+        ];
+    }
+
+    public static function Summary($summary){
+        return [
+            'id' => $summary->file_id,
+            'sno' => $summary->sno,
+            'title' => $summary->file_title,
+            'content' => $summary->file_content,
+            'addTime' => $summary->file_addtime,
+            'dealTime' => $summary->file_dealtime,
+            'type' => $summary->file_type,
+            'status' => $summary->file_status,
+            'systemAdd' => $summary->is_systemadd
+        ];
+    }
+
     public static function File($file)
     {
         return [

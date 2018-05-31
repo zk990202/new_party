@@ -15,6 +15,7 @@ use App\Http\Service\PartyStatus\IdeologicalReport_1;
 use App\Http\Service\PartyStatus\MainStatus;
 use App\Http\Service\PartyStatus\MaterialsReady;
 use App\Http\Service\PartyStatusService;
+use App\Http\Service\PersonalService;
 use App\Models\StudentInfo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -24,14 +25,16 @@ class PersonalController extends FrontBaseController {
 
     protected $partyStatusService;
     protected $alertService;
+    protected $personalService;
 
     protected $user;
 
-    public function __construct(PartyStatusService $partyStatusService, AlertService $alertService)
+    public function __construct(PartyStatusService $partyStatusService, AlertService $alertService, PersonalService $personalService)
     {
         parent::__construct();
         $this->partyStatusService = $partyStatusService;
         $this->alertService = $alertService;
+        $this->personalService = $personalService;
     }
 
     // 前台个人状态
@@ -103,5 +106,70 @@ class PersonalController extends FrontBaseController {
         // TODO
     }
 
+    /**
+     * 上传文献查看
+     * @param $type_start
+     * @param $type_end
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector|\Illuminate\View\View
+     */
+    public function fileWatch($type_start, $type_end){
+        $nav_data = '入党申请书';
+        if ($type_start == 1)
+            $nav_data = '入党申请书';
+        elseif($type_start == 2)
+            $nav_data = '思想汇报';
+        elseif($type_start == 6)
+            $nav_data = '个人小结';
+        elseif($type_start == 10)
+            $nav_data = '入党志愿书';
+        elseif($type_start == 11)
+            $nav_data = '转正申请';
+        else
+            return $this->alertService->alertAndBack('提示', '未知的文件类型！');
+
+        $user = $this->userService->getCurrentUser();
+        $sno = $user['userNumber'];
+
+        $result = [];
+        if ($type_start && $type_end){
+            if ($type_start == $type_end){
+                $result = $this->personalService->getFileByTypeOnly($sno, $type_start);
+            }
+            elseif ($type_start == 2){
+                $result = $this->personalService->getReportByTypeBetween($sno, $type_start, $type_end);
+            }
+            elseif ($type_start == 6){
+                $result = $this->personalService->getSummaryTypeBetween($sno, $type_start, $type_end);
+            }
+            elseif ($type_start == 10 || $type_start == 11){
+                $result = $this->personalService->getFileByTypeBetween($sno, $type_start, $type_end);
+            }
+        }
+        return view('front.personal.fileWatch', [
+            'result' => $result,
+            'nav' => $nav_data,
+            'user' => $user,
+        ]);
+
+    }
+
+    /**
+     * 上传文献详情
+     * @param $type
+     * @param $id
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function fileDetail($type, $id){
+        if ($type == 2){
+            $detail = $this->personalService->getReportById($id);
+        }
+        elseif ($type == 6){
+            $detail = $this->personalService->getSummaryById($id);
+        }
+        else{
+            $detail = $this->personalService->getFileById($id);
+        }
+        return view('front.personal.fileDetail', ['detail' => $detail]);
+    }
 
 }

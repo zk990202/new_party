@@ -17,10 +17,10 @@
             <li class="list"><a href="#" class="menu">我的支部</a>
                 <ul class="sub-menu">
                     <li><a href="{{ url('personal/status') }}">个人状态</a></li>
-                    <li><a href="detial.html">支部详情</a></li>
-                    <li><a href="member-list.html">支部成员列表</a></li>
+                    <li><a href="{{ url('personal/partyBranch') }}">支部详情</a></li>
+                    <li><a href="{{ url('personal/members') }}">支部成员列表</a></li>
                     <li><a href="#">我的学习小组</a></li>
-                    <li><a href="PartyMembershipApplication.html">上传文献查看</a></li>
+                    <li><a href="{{ url('personal/fileWatch/1/1') }}">上传文献查看</a></li>
                     <li><a href="MyNews.html">我的消息</a></li>
                     <li><a href="#">我的申诉</a></li>
                 </ul>

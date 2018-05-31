@@ -52,15 +52,21 @@ class MainStatus{
                 case self::APPLICANT:
                     $item[$key] = '申请人';
                     break;
-                case self::ACTIVIST:
-                    $item[$key] = '入党积极分子';
-                    break;
                 case self::COMMUNIST:
                     $item[$key] = '团支部推优';
                     break;
-                case self::ACTIVIST_COMMUNIST:
-                    $item[$key] = '团支部推优 && 入党积极分子';
+                case self::MEMBER_RECOMMENDATION:
+                    $item[$key] = '党员推荐';
                     break;
+                case self::COMMUNIST_MEMBER_RECOMMENDATION:
+                    $item[$key] = '党员推荐 && 团支部推优';
+                    break;
+                case self::ACTIVIST:
+                    $item[$key] = '入党积极分子';
+                    break;
+//                case self::ACTIVIST_COMMUNIST:
+//                    $item[$key] = '团支部推优 && 入党积极分子';
+//                    break;
                 case self::DEVELOPMENT_TARGET:
                     $item[$key] = '发展对象';
                     break;

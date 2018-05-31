@@ -7,11 +7,11 @@
         <p><a href="#">我的学习小组</a></p>
         <p><a href="#">上传文献查看</a></p>
         <ul>
-            <li><a href="PartyMembershipApplication.html">入党申请书</a></li>
-            <li><a href="ThoughtReport.html">思想汇报</a></li>
-            <li><a href="PartyVolunteer.html">入党志愿书</a></li>
-            <li><a href="PersonalSummary.html">个人小结</a></li>
-            <li><a href="CorrectionApplication.html">转正申请</a></li>
+            <li><a href="{{ url('personal/fileWatch/1/1') }}">入党申请书</a></li>
+            <li><a href="{{ url('personal/fileWatch/2/5') }}">思想汇报</a></li>
+            <li><a href="{{ url('personal/fileWatch/6/9') }}">个人小结</a></li>
+            <li><a href="{{ url('personal/fileWatch/10/10') }}">入党志愿书</a></li>
+            <li><a href="{{ url('personal/fileWatch/11/11') }}">转正申请</a></li>
         </ul>
         <p><a href="MyNews.html">我的消息</a></p>
         <p><a href="#">我的申诉</a></p>

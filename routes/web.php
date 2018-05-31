@@ -123,11 +123,18 @@ Route::group(['namespace' => 'Front', 'middleware' => ['auth']], function(){
         Route::get('members', 'PersonalController@members');
         Route::get('doc', 'PersonalController@docPage');
         Route::post('doc', 'PersonalController@docStore');
+        // 上传文献查看
+        Route::get('fileWatch/{type_start}/{type_end}', 'PersonalController@fileWatch');
+        // 文献详情
+        Route::get('fileDetail/{type}/{id}', 'PersonalController@fileDetail');
     });
 
     // 文件下载
     Route::get('{filePath}/download/{fileName}', 'FileDownloadController@download');
 });
+
+Route::get('/login', 'Front\LogController@login');
+Route::get('/logout', 'Front\LogController@logout');
 
 Route::get('test', function() {
     $a = new \App\Http\Service\PartyStatus\ApplicantPartySchool();

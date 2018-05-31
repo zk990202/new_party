@@ -154,7 +154,7 @@ class UserService
     }
 
     /**
-     * 叛党用户是否是党支部干部
+     * 叛党(??判断？？)用户是否是党支部干部
      * @param null $userNumber
      * @return bool
      */
