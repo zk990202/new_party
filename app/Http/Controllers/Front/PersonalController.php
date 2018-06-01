@@ -77,6 +77,10 @@ class PersonalController extends FrontBaseController {
         return view('front.personal.partyBranch', ['user' => $user, 'partyBranch' => 'nav1']);
     }
 
+    /**
+     * 支部成员
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function members(){
         $user = $this->userService->getCurrentUser();
         $members = StudentInfo::getPartyBranchMembersByIdWithPage($user['partyBranchId'], $limit = 20);
@@ -85,6 +89,20 @@ class PersonalController extends FrontBaseController {
         }
         //dd($members);
         return view('front.personal.members', ['list' => $members]);
+    }
+
+    /**
+     * 我的学习小组
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function groupMembers(){
+        $user = $this->userService->getCurrentUser();
+        $group = StudentInfo::getStudentInfo($user['userNumber'])['captionOfGroup'];
+        $groupMembers = StudentInfo::getPartyBranchGroupMembersByIdAndGroupWithPage($user['partyBranchId'], $group, $limit = 20);
+        foreach($groupMembers as $i => &$item){
+            $groupMembers[$i] = MainStatus::warpStatus($item);
+        }
+        return view('front.personal.groupMembers', ['list' => $groupMembers]);
     }
 
     public function docStore(Request $request){
@@ -213,6 +231,27 @@ class PersonalController extends FrontBaseController {
     public function messageDetail($id){
         $detail = $this->personalService->getMessageDetail($id);
         return view('front.personal.messageDetail', ['detail' => $detail]);
+    }
+
+    /**
+     * 我的申诉
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function myComplain(){
+        $user = $this->userService->getCurrentUser();
+        $sno = $user['userNumber'];
+        $complain = $this->personalService->getComplainBySno($sno);
+        return view('front.personal.myComplain', ['complain' => $complain, 'user' => $user]);
+    }
+
+    /**
+     * 申诉详情
+     * @param $id
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function complainDetail($id){
+        $detail = $this->personalService->getComplainDetail($id);
+        return view('front.personal.complainDetail', ['detail' => $detail]);
     }
 
 }

@@ -19,10 +19,10 @@
                     <li><a href="{{ url('personal/status') }}">个人状态</a></li>
                     <li><a href="{{ url('personal/partyBranch') }}">支部详情</a></li>
                     <li><a href="{{ url('personal/members') }}">支部成员列表</a></li>
-                    <li><a href="#">我的学习小组</a></li>
+                    <li><a href="{{ url('personal/groupMembers') }}">我的学习小组</a></li>
                     <li><a href="{{ url('personal/fileWatch/1/1') }}">上传文献查看</a></li>
                     <li><a href="{{ url('personal/myMessage/received') }}">我的消息</a></li>
-                    <li><a href="#">我的申诉</a></li>
+                    <li><a href="{{ url('personal/myComplain') }}">我的申诉</a></li>
                 </ul>
             </li>
             <li class="list"><a href="#" class="menu">通知公告</a>

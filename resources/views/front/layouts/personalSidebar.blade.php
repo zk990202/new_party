@@ -4,7 +4,7 @@
         <p {{ isset($status) ? 'class=' . $status : '' }}><a href="{{ url('personal/status') }}">个人状态</a></p>
         <p {{ isset($partyBranch) ? 'class=' . $partyBranch : '' }}><a href="{{ url('personal/partyBranch') }}">支部详情</a></p>
         <p><a href="{{ url('personal/members') }}">支部成员列表</a></p>
-        <p><a href="#">我的学习小组</a></p>
+        <p><a href="{{ url('personal/groupMembers') }}">我的学习小组</a></p>
         <p><a href="#">上传文献查看</a></p>
         <ul>
             <li><a href="{{ url('personal/fileWatch/1/1') }}">入党申请书</a></li>
@@ -18,6 +18,6 @@
             <li><a href="{{ url('personal/myMessage/received') }}">我收到的消息</a></li>
             <li><a href="{{ url('personal/myMessage/sent') }}">我发送的消息</a></li>
         </ul>
-        <p><a href="#">我的申诉</a></p>
+        <p><a href="{{ url('personal/myComplain') }}">我的申诉</a></p>
     </div>
 </nav>

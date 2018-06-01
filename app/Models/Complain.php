@@ -30,7 +30,7 @@ class Complain extends Model
     }
 
     public function user(){
-        return $this->belongsTo('App\Models\UserInfo', 'from_sno', 'user_number');
+        return $this->belongsTo('App\Models\User', 'from_sno', 'usernumb');
     }
 
     public function college(){
@@ -189,5 +189,34 @@ class Complain extends Model
             'isread' => 0
         ]);
         return $res ? true : false;
+    }
+
+    /**
+     * 根据学号获取申诉信息
+     * @param $sno
+     * @return mixed
+     */
+    public static function getComplainBySno($sno){
+        $res = self::where('from_sno', $sno)
+            ->orderBy('type')
+            ->paginate(5);
+        foreach($res as $i => $v){
+            $res[$i] = (function($v){
+                $complain = Resources::Complain($v);
+                return $complain;
+            })($v);
+        }
+        return $res;
+    }
+
+    /**
+     * 根据id获取申诉信息--前台
+     * @param $id
+     * @return array
+     */
+    public static function getComplainByIdFront($id){
+        $res = self::where('id', $id)
+            ->first();
+        return Resources::Complain($res);
     }
 }

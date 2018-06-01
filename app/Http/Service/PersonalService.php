@@ -10,6 +10,7 @@
 namespace App\Http\Service;
 
 
+use App\Models\Complain;
 use App\Models\Message;
 use App\Models\PartyBranch\PartyBranch;
 use App\Models\Report;
@@ -70,6 +71,16 @@ class PersonalService
 
     public function getMessageDetail($id){
         $data = Message::getMessageById($id);
+        return $data;
+    }
+
+    public function getComplainBySno($sno){
+        $data = Complain::getComplainBySno($sno);
+        return $data;
+    }
+
+    public function getComplainDetail($id){
+        $data = Complain::getComplainByIdFront($id);
         return $data;
     }
 

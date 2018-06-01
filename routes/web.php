@@ -120,7 +120,10 @@ Route::group(['namespace' => 'Front', 'middleware' => ['auth']], function(){
     Route::group(['prefix' => 'personal'], function(){
         Route::get('status', 'PersonalController@status');
         Route::get('partyBranch', 'PersonalController@partyBranch');
+        // 支部成员列表
         Route::get('members', 'PersonalController@members');
+        // 我的学习小组
+        Route::get('groupMembers', 'PersonalController@groupMembers');
         Route::get('doc', 'PersonalController@docPage');
         Route::post('doc', 'PersonalController@docStore');
         // 上传文献查看
@@ -131,6 +134,10 @@ Route::group(['namespace' => 'Front', 'middleware' => ['auth']], function(){
         Route::get('myMessage/{SentOrReceived}', 'PersonalController@myMessage');
         // 消息详情
         Route::get('messageDetail/{id}', 'PersonalController@messageDetail');
+        // 我的申诉
+        Route::get('myComplain', 'PersonalController@myComplain');
+        // 申诉详情
+        Route::get('complainDetail/{id}', 'PersonalController@complainDetail');
     });
 
     // 文件下载

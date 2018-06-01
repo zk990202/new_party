@@ -26,7 +26,7 @@ class StudentInfo extends Model
     }
 
     public function user(){
-        return $this->belongsTo('App\Models\UserInfo', 'sno', 'user_number');
+        return $this->belongsTo('App\Models\User', 'sno', 'usernumb');
     }
 
     public function userInfo(){
@@ -616,6 +616,16 @@ class StudentInfo extends Model
 
     public static function getPartyBranchMembersByIdWithPage($partyBranchId, $limit = 15){
         $res = self::where('partybranch_id', $partyBranchId)
+            ->paginate($limit);
+        foreach($res as $i => &$v){
+            $res[$i] = Resources::StudentInfo($v);
+        }
+        return $res;
+    }
+
+    public static function getPartyBranchGroupMembersByIdAndGroupWithPage($partyBranchId, $group, $limit = 15){
+        $res = self::where('partybranch_id', $partyBranchId)
+            ->where('captain_ofgroup', $group)
             ->paginate($limit);
         foreach($res as $i => &$v){
             $res[$i] = Resources::StudentInfo($v);
