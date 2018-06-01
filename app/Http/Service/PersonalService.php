@@ -10,6 +10,8 @@
 namespace App\Http\Service;
 
 
+use App\Models\Message;
+use App\Models\PartyBranch\PartyBranch;
 use App\Models\Report;
 use App\Models\StudentFiles;
 use App\Models\Summary;
@@ -48,6 +50,26 @@ class PersonalService
 
     public function getSummaryById($id){
         $data = Summary::getSummaryById($id);
+        return $data;
+    }
+
+    public function getPartyBranchInfoById($id){
+        $data = PartyBranch::getById($id);
+        return $data;
+    }
+
+    public function getReceivedMessageByTypeAndSno($type, $sno){
+        $data = Message::getReceivedMessageByTypeAndSno($type, $sno);
+        return $data;
+    }
+
+    public function getSentMessageBySno($sno){
+        $data = Message::getSentMessageBySno($sno);
+        return $data;
+    }
+
+    public function getMessageDetail($id){
+        $data = Message::getMessageById($id);
         return $data;
     }
 

@@ -14,8 +14,8 @@
         <div class="info">
             <h2>{{ $nav }}</h2>
             <hr/>
-            @foreach($result as $v)
-                <div class="information">
+            <div class="information">
+                @foreach($result as $v)
                     <table border="1">
                         <tr>
                             <td><span>学号:</span>{{ $v['sno'] }}</td>
@@ -44,8 +44,8 @@
                             <td><span>处理时间:</span>{{ $v['dealTime'] }}</td>
                         </tr>
                     </table>
-                </div>
-            @endforeach
+                @endforeach
+            </div>
             {{ $result->links() }}
         </div>
     </div>

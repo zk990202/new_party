@@ -172,4 +172,47 @@ class PersonalController extends FrontBaseController {
         return view('front.personal.fileDetail', ['detail' => $detail]);
     }
 
+    /**
+     * 我的消息
+     * 包括接受的消息和发送的消息
+     * @param $SentOrReceived
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector|\Illuminate\View\View
+     */
+    public function myMessage($SentOrReceived){
+        $user = $this->userService->getCurrentUser();
+        $sno = $user['userNumber'];
+        $partyBranchId = $user['partyBranchId'];
+        $partyBranchInfo = $this->personalService->getPartyBranchInfoById($partyBranchId);
+        if (!$partyBranchInfo)
+            return $this->alertService->alertAndBackWithError('未找到所在支部信息');
+        else{
+            $partyBranchInfo = $partyBranchInfo[0];
+            //0表示学生发给管理员 ,1表示老师发给所有用户,2表示发给所有学生,3表示发给全部管理员4表示发给全部支部委员,5表示发给指定用户
+            if ($SentOrReceived == 'received'){
+                //下面判断该用户是否是支部委员
+                if ($sno == $partyBranchInfo['secretary'] || $sno == $partyBranchInfo['organizer'] || $sno == $partyBranchInfo['propagator']){
+                    $messages = $this->personalService->getReceivedMessageByTypeAndSno([1, 2, 4], $sno);
+                }
+                else{
+                    $messages = $this->personalService->getReceivedMessageByTypeAndSno([1, 2], $sno);
+                }
+            }
+            else{
+                $messages = $this->personalService->getSentMessageBySno($sno);
+            }
+            return view('front.personal.myMessage', ['messages' => $messages, 'user' => $user]);
+        }
+
+    }
+
+    /**
+     * 消息详情
+     * @param $id
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function messageDetail($id){
+        $detail = $this->personalService->getMessageDetail($id);
+        return view('front.personal.messageDetail', ['detail' => $detail]);
+    }
+
 }

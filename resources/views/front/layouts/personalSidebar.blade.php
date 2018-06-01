@@ -13,7 +13,11 @@
             <li><a href="{{ url('personal/fileWatch/10/10') }}">入党志愿书</a></li>
             <li><a href="{{ url('personal/fileWatch/11/11') }}">转正申请</a></li>
         </ul>
-        <p><a href="MyNews.html">我的消息</a></p>
+        <p><a href="#">我的消息</a></p>
+        <ul>
+            <li><a href="{{ url('personal/myMessage/received') }}">我收到的消息</a></li>
+            <li><a href="{{ url('personal/myMessage/sent') }}">我发送的消息</a></li>
+        </ul>
         <p><a href="#">我的申诉</a></p>
     </div>
 </nav>

@@ -127,6 +127,10 @@ Route::group(['namespace' => 'Front', 'middleware' => ['auth']], function(){
         Route::get('fileWatch/{type_start}/{type_end}', 'PersonalController@fileWatch');
         // 文献详情
         Route::get('fileDetail/{type}/{id}', 'PersonalController@fileDetail');
+        // 我的消息
+        Route::get('myMessage/{SentOrReceived}', 'PersonalController@myMessage');
+        // 消息详情
+        Route::get('messageDetail/{id}', 'PersonalController@messageDetail');
     });
 
     // 文件下载

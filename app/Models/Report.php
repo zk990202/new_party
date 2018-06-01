@@ -32,7 +32,7 @@ class Report extends Model
         $res = self::where('sno', $sno)
             ->whereBetween('file_type', [$type_start, $type_end])
             ->orderBy('file_type', 'desc')
-            ->paginate(1);
+            ->paginate(5);
         foreach($res as $i => $v){
             $res[$i] = (function($v){
                 $file = Resources::Report($v);

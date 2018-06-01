@@ -21,7 +21,7 @@
                     <li><a href="{{ url('personal/members') }}">支部成员列表</a></li>
                     <li><a href="#">我的学习小组</a></li>
                     <li><a href="{{ url('personal/fileWatch/1/1') }}">上传文献查看</a></li>
-                    <li><a href="MyNews.html">我的消息</a></li>
+                    <li><a href="{{ url('personal/myMessage/received') }}">我的消息</a></li>
                     <li><a href="#">我的申诉</a></li>
                 </ul>
             </li>

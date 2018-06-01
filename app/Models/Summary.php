@@ -25,7 +25,7 @@ class Summary extends Model
     public static function getSummaryByTypeBetween($sno, $type_start, $type_end){
         $res = self::where('sno', $sno)
             ->whereBetween('file_type', [$type_start, $type_end])
-            ->paginate(1);
+            ->paginate(5);
         foreach($res as $i => $v){
             $res[$i] = (function($v){
                 $file = Resources::Summary($v);

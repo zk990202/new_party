@@ -562,6 +562,23 @@ class Resources
         ];
     }
 
+    public static function Message($message){
+        return [
+            'id' => $message->message_id,
+            'fromSno' => $message->form_user_no,
+            'fromName' => $message->fromUser->username ?? '',
+            'toSno' => $message->to_user_no,
+            'toName' => $message->toUser->username ?? '',
+            'title' => $message->message_title,
+            'content' => $message->message_content,
+            'type' => $message->message_type,
+            'isRead' => $message->message_isread,
+            'isHandled' => $message->message_ishandled,
+            'isDeleted' => $message->message_isdeleted,
+            'sendTime' => $message->message_sendtime
+        ];
+    }
+
     public static function File($file)
     {
         return [
