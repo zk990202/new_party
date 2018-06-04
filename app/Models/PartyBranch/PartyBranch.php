@@ -39,15 +39,15 @@ class PartyBranch extends Model
     }
 
     public function user_secretary(){
-        return $this->belongsTo('App\Models\UserInfo', 'partybranch_secretary', 'user_number');
+        return $this->belongsTo('App\Models\User', 'partybranch_secretary', 'usernumb');
     }
 
     public function user_organizer(){
-        return $this->belongsTo('App\Models\UserInfo', 'partybranch_organizer', 'user_number');
+        return $this->belongsTo('App\Models\User', 'partybranch_organizer', 'usernumb');
     }
 
     public function user_propagator(){
-        return $this->belongsTo('App\Models\UserInfo', 'partybranch_propagator', 'user_number');
+        return $this->belongsTo('App\Models\User', 'partybranch_propagator', 'usernumb');
     }
 
     public function college_(){

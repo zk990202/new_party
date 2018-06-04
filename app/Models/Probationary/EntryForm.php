@@ -39,12 +39,19 @@ class EntryForm extends Model
         });
     }
 
+
     //考试状态  0未录入,1正常，2作弊，3违纪，4缺考
     const NOT_ENTERED = 0;
     const ENTRY_NORMAL = 1;
     const ENTRY_CHEATED = 2;
     const ENTRY_VIOLATION = 3;
     const ENTRY_MISSED = 4;
+
+    const PASSED_STATUS = [
+        'NOT_PASS' => 0,
+        'PASSED'   => 1,
+        'EXCELLENT'=> 2
+    ];
 
     public function studentInfo(){
         return $this->belongsTo('App\Models\StudentInfo', 'sno', 'sno');
@@ -55,7 +62,7 @@ class EntryForm extends Model
     }
 
     public function user(){
-        return $this->belongsTo('App\Models\UserInfo', 'sno', 'user_number');
+        return $this->belongsTo('App\Models\User', 'sno', 'usernumb');
     }
 
     public function trainList(){
@@ -617,4 +624,23 @@ class EntryForm extends Model
         $info->save();
         return true;
     }
+
+    public static function warpIsPassed(&$item){
+        if(isset($item['isAllPassed'])){
+            switch ($item['isAllPassed']){
+                case self::PASSED_STATUS['NOT_PASS']:
+                    $item['isAllPassed'] = '不及格';
+                    break;
+                case self::PASSED_STATUS['PASSED']:
+                    $item['isAllPassed'] = '及格';
+                    break;
+                case self::PASSED_STATUS['EXCELLENT']:
+                    $item['isAllPassed'] = '优秀';
+                    break;
+                default:
+                    $item['isAllPassed'] = '未知状态';
+            }
+        }
+    }
+
 }

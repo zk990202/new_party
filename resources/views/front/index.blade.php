@@ -46,12 +46,10 @@
             <p>党建专项</p>
             <img class="item-pic" src="/img3/partySpecial.jpg"/>
             <ul class="index">
-                <li><span>习近平:要是暴力恐怖分子成为...</span></li>
-                <li><span>习近平致青年</span></li>
-                <li><span>习近平在北京大学师生座谈会上...</span></li>
-                <li><span>共同开创亚洲发展新未来</span></li>
-                <li><span>基层群众需要更多这样的好干部</span></li>
-                <li><span>河南兰考：以焦裕禄为镜子 到群...</span></li>
+                {{--<li><span>习近平:要是暴力恐怖分子成为...</span></li>--}}
+                @foreach($data['special'] as $v)
+                    <li><span><a href="{{ url('/partyBuildSpecial/'.$v['id']) }}">{{ $v['title'] }}</a> </span></li>
+                @endforeach
             </ul>
         </div>
         <div class="special1">
@@ -77,39 +75,26 @@
             <p>榜样力量</p>
             <img  class="str" src="/img3/branchPower.jpg"/>
             <ul class="index">
-                <li><span>习近平:要是暴力恐怖分子成为要更多这样的...</span></li>
-                <li><span>习近平致青年要更多这样的好干部</span></li>
-                <li><span>习近平在北京大学师生座谈会上要更多这样的...</span></li>
-                <li><span>共同开创亚洲发展新未来要更多这样的好干部</span></li>
+                @foreach($data['heroes'] as $v)
+                    <li><span><a href="{{ url('/partyBuildSpecial/detail/'.$v['id'])  }}">{{ $v['title'] }}</a> </span></li>
+                @endforeach
             </ul>
         </div>
-        <a href="TheoryStudy.html">
+        <a href="{{ url('theoryStudy') }}">
             <img src="/img3/theory.png" class="item2-pic1" />
         </a>
     </div>
     <div class="item5">
         <img src="/img3/notice.png" class="item1-img"/>
         <p style="padding-top: 8px">党校培训</p>
-        <div class="end">
-            <img src="/img3/partyTrain.jpg"/>
-            <p>习近平在北京大学师生座谈会上要更多这样的</p>
-        </div>
-        <div class="end">
-            <img src="/img3/partyTrain.jpg"/>
-            <p>习近平在北京大学师生座谈会上要更多这样的</p>
-        </div>
-        <div class="end">
-            <img src="/img3/partyTrain2.jpg"/>
-            <p>习近平在北京大学师生座谈会上要更多这样的</p>
-        </div>
-        <div class="end">
-            <img src="/img3/partyTrain3.jpg"/>
-            <p>习近平在北京大学师生座谈会上要更多这样的</p>
-        </div>
-        <div class="end">
-            <img src="/img3/partyTrain4.jpg"/>
-            <p>习近平在北京大学师生座谈会上要更多这样的</p>
-        </div>
+        @foreach($data['school'] as $v)
+            <a href="{{ url('/news/detail/'.$v['id']) }}">
+            <div class="end">
+                <img src="{{ $v['imgPath'] }}"/>
+                <p>{{ $v['title'] }}</p>
+            </div>
+            </a>
+        @endforeach
     </div>
 </div>
 @endsection

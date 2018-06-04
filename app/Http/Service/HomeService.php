@@ -20,18 +20,20 @@ class HomeService {
         $notices = Notification::getIndexData(4);
 
         // 党建专项新闻
-        $specialNews = SpecialNews::newsByTypesLimit(Column::getChildIds(Column::PARTY_BUILD_ID), 6);
+        $specialNews = SpecialNews::newsByTypesLimit(Column::getChildIds(Column::PARTY_BUILD_ID), 5);
 
         // TODO 支部风采
 
-        // TODO 榜样的力量
+        // 榜样的力量
+        $heroes = SpecialNews::heroNewsLimit(4);
 
         // 党校培训
         $school = SpecialNews::newsByTypeLimit(Column::PARTY_SCHOOL_ID, 5);
 
-        return[
+        return [
             'notices' => $notices,
             'special' => $specialNews,
+            'heroes'  => $heroes,
             'school'  => $school
         ];
     }

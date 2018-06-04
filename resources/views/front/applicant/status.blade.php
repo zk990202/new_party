@@ -13,7 +13,7 @@
             <table border="1">
                 <tr>
                     <td>学号:{{ $data['user']['userNumber'] }}</td>
-                    <td>姓名:{{ $data['user']['username'] }}</td>
+                    <td>姓名:{{ $data['user']['userName'] }}</td>
                 </tr>
                 <tr>
                     <td>学院:{{ $data['user']['college'] }}</td>

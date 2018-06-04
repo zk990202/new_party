@@ -107,6 +107,28 @@ class CommonFiles extends Model{
         }, $res_arr);
     }
 
+    /**
+     * 获取理论学习文章不包括视频（type = 8）
+     * @param int $perPage
+     * @return mixed
+     */
+    public static function getTheoryStudyFilesWithPage($perPage = 10){
+        $files = self::whereIn('file_type', [7, 9])
+            ->where('file_isdeleted', 0)
+            ->orderBy('file_addtime', 'DESC')
+            ->paginate($perPage);
+        foreach($files as $i => $v){
+            $files[$i] = (function($v){
+                $theory = Resources::CommonFiles($v);
+                $theory['content'] = htmlspecialchars_decode($theory['content']);
+                //$theory['content'] = str_limit(strip_tags($theory['content']), $limit = 100, $end = '...');
+                return $theory;
+            })($v);
+        }
+
+        return $files;
+    }
+
     public static function addVideo($data){
         $files = self::create([
             'file_type' => $data['type'],

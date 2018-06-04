@@ -34,6 +34,8 @@ Route::group(['namespace' => 'Front', 'middleware' => ['auth']], function(){
         Route::get('complain', 'ApplicantController@complainPage');
         Route::post('complain', 'ApplicantController@complain');
 
+        Route::get('certificate', 'ApplicantController@certificate');
+
         Route::get('status', 'ApplicantController@userStatus');
 
     });
@@ -53,6 +55,8 @@ Route::group(['namespace' => 'Front', 'middleware' => ['auth']], function(){
         Route::get('grade', 'AcademyController@grade');
         Route::get('complain', 'AcademyController@complainPage');
         Route::post('complain', 'AcademyController@complain');
+
+        Route::get('certificate', 'ApplicantController@certificate');
     });
 
     //预备党员党校党校学习
@@ -75,6 +79,8 @@ Route::group(['namespace' => 'Front', 'middleware' => ['auth']], function(){
         Route::get('grade', 'ProbationaryController@grade');
         Route::get('complain', 'ProbationaryController@complainPage');
         Route::post('complain', 'ProbationaryController@complain');
+
+        Route::get('certificate', 'ApplicantController@certificate');
     });
 
     // 通知公告
@@ -138,6 +144,12 @@ Route::group(['namespace' => 'Front', 'middleware' => ['auth']], function(){
         Route::get('myComplain', 'PersonalController@myComplain');
         // 申诉详情
         Route::get('complainDetail/{id}', 'PersonalController@complainDetail');
+    });
+
+    // 理论学习
+    Route::group(['prefix' => 'theoryStudy'], function (){
+       Route::get('/', 'TheoryStudyController@lists');
+       Route::get('{id}', 'TheoryStudyController@detail');
     });
 
     // 文件下载

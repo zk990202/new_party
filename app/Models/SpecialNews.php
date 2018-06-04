@@ -247,6 +247,23 @@ class SpecialNews extends Model
         return $res;
     }
 
+    /**
+     * 首页里取出限制数量的 "榜样力量"
+     * @param int $limit
+     * @return array
+     */
+    public static function heroNewsLimit($limit = 5){
+        $res = self::where('type', Column::HERO_ID)
+            ->where('isdeleted', 0)
+            ->orderBy('isrecommand', 'desc')
+            ->orderBy('inserttime', 'desc')
+            ->limit($limit)
+            ->get()->all();
+        return array_map(function ($specialNews){
+            return Resources::SpecialNews($specialNews);
+        }, $res);
+    }
+
 //    public static function getIndexDataStudyGroup(){
 //        $res = self::where('type', 1)
 //            ->where('isrecommand',  1)

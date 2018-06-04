@@ -48,7 +48,7 @@ class ChildEntryForm extends Model
     }
 
     public function user(){
-        return $this->belongsTo('App\Models\UserInfo', 'sno', 'user_number');
+        return $this->belongsTo('App\Models\User', 'sno', 'usernumbe');
     }
 
     public function courseList(){

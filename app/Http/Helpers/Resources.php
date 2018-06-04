@@ -200,7 +200,7 @@ class Resources
             'sno'           => $cert->sno,
             'studentName'   => $cert->user->username ?? '',
             'academyId'     => $cert->studentInfo->academy_id,
-            'academyName'   => $cert->studentInfo->college->shortname,
+            'academyName'   => $cert->studentInfo->college->shortname ?? '',
             'majorName'     => $cert->userInfo->majorInfo->majorname ?? '',
             'entryId'       => $cert->entry_id,
             'certNumber'    => $cert->cert_no,

@@ -13,6 +13,7 @@ use App\Http\Service\ApplicantService;
 use App\Models\Applicant\ArticleList;
 use App\Models\Applicant\EntryForm;
 use App\Models\Applicant\TestList;
+use App\Models\Cert;
 use App\Models\Complain;
 use App\Models\StudentInfo;
 use Illuminate\Http\Request;
@@ -208,8 +209,25 @@ class ApplicantController extends FrontBaseController{
     /**
      * 证书查询
      */
-    public function ca(){
-        // TODO
+    public function certificate(){
+        $user = $this->userService->getCurrentUser();
+        $entry = EntryForm::certificateCheck($user['userNumber']);
+        if (!$entry){
+            return $this->alertService->alertAndBack('提示：没有证书结果' ,'如果你没有参加过或者未通过申请人结业考试,或者通过,
+            但是结业证书还未发放,这些情况您都无法看到自己的证书.如果长时间查看不到自己的结业证书而[成绩查询]中显示您的考试状态
+            为通过.那么请联系管理员核实并解决此问题');
+        }
+        else{
+            $entry_id = $entry[0]['id'];
+            $cert = Cert::certCheckApplicant($entry_id);
+            if (!$cert){
+                return $this->alertService->alertAndBackWithError('不好意思,没有找到相应的证书,请联系管理员!');
+            }
+            else{
+                dd($cert);
+                return view('front.applicant.certificate', ['cert' => $cert]);
+            }
+        }
     }
 
     /**

@@ -131,7 +131,6 @@ class PersonalController extends FrontBaseController {
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector|\Illuminate\View\View
      */
     public function fileWatch($type_start, $type_end){
-        $nav_data = '入党申请书';
         if ($type_start == 1)
             $nav_data = '入党申请书';
         elseif($type_start == 2)
