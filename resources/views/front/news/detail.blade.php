@@ -1,22 +1,24 @@
 @extends('front.layouts.app')
 @section('css')
     <link rel="stylesheet" href="/css/detail.css" type="text/css" />
+    <link rel="stylesheet" href="/css/articleDetial.css" type="text/css">
 @endsection()
 
 @section('main')
 
-    <div class="total">
+    <div class="detialTotal" style="min-height:800px">
         <nav class="find">
             <div class="active">党校培训</div>
             <div class="btn">
                 <p class="nav1"><a href="{{ url('news/partySchool') }}">新闻中心</a></p>
             </div>
         </nav>
-        <div class="courseLearning">
+        <div class="wrapper">
             <h4>{{ $detail['title'] }}</h4>
             <div>
-                {!! $detail['content'] !!}
+                <p>{!! $detail['content'] !!}</p>
                 <p class="time">{{ $detail['time'] }}</p>
+                <div class="push"></div>
             </div>
             {{--@if($detail['filePath'])--}}
                 {{--<p>--}}

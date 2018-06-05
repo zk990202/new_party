@@ -20,7 +20,7 @@ class TheoryStudyController extends FrontBaseController
     }
 
     public function lists(){
-        $result = CommonFiles::getTheoryStudyFilesWithPage($perPage = 10);
+        $result = CommonFiles::getTheoryStudyFilesWithPage($perPage = 5);
         return view('front.theoryStudy.lists', ['result' => $result]);
     }
 

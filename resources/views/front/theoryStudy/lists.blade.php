@@ -13,7 +13,7 @@
         <nav class="find">
             <div class="active">理论学习</div>
             <div class="btn">
-                <a href="{{ url('theoryStudy') }}"><p class="nav1">理论经典</p></a>
+                <p class="nav1"><a href="{{ url('theoryStudy') }}">理论经典</a></p>
             </div>
         </nav>
         <div class="info">
@@ -21,9 +21,9 @@
             <hr/>
             <div class="information">
                 @foreach($result as $v)
-                    {{--<div>--}}
+                    <div style="height: 100px">
                         <h1><a href="{{ url('theoryStudy/'.$v['id']) }}">{{ $v['title'] }}</a></h1>
-                    {{--</div>--}}
+                    </div>
                 @endforeach
             </div>
             {{ $result->links() }}
