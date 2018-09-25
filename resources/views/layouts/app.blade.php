@@ -20,6 +20,7 @@
     <link rel="stylesheet" href="/AdminLTE/dist/css/skins/_all-skins.min.css">
     <!-- Morris chart -->
     <link rel="stylesheet" href="/AdminLTE/bower_components/morris.js/morris.css">
+    <link rel="stylesheet" href="Ownness.css" type="text/css">
 @section('css')
 
 @show

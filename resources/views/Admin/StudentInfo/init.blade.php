@@ -46,6 +46,181 @@
                         </tfoot>
                     </table>
 
+                    <div class="OwnInfo">
+                        <h2>个人状态</h2>
+                        <hr/>
+                        <img class="flowChart" src="img3/flowChart.png" />
+                        <div class="OwnFlow">
+                            <div class="own1">
+                                <div>
+                                    <a href="#">递交入党申请书</a>
+                                </div>
+                                <img src="img3/finish.png">
+                            </div>
+
+
+                            <div class="own2">
+                                <div class="finish">
+                                    <div>
+                                        <a href="">网上申请人党校学习</a>
+                                    </div>
+                                    <img src="img3/finish.png">
+                                </div>
+                                <div class="ready">
+                                    <div>
+                                        <a href="">通过结业考试</a>
+                                    </div>
+                                    <img src="img3/now.png">
+                                </div>
+                            </div>
+
+                            <div class="own3">
+                                <div class="finish">
+                                    <div>
+                                        <a href="">参加申请人学习小组</a>
+                                    </div>
+                                    <img src="img3/finish.png">
+                                </div>
+
+                                <div class="ready" id="special">
+                                    <div>
+                                        <a href="">团员推荐</a>
+                                    </div>
+                                    <img src="img3/now.png">
+                                </div>
+                                <div class="ready" id="Tspecial">
+                                    <div>
+                                        <a href="">团支部推优</a>
+                                    </div>
+                                    <img src="img3/now.png">
+                                </div>
+                            </div>
+
+
+                            <div class="own2">
+                                <div class="finish">
+                                    <div>
+                                        <a href="">递交第一季度思想汇报</a>
+                                    </div>
+                                    <img src="img3/finish.png">
+                                </div>
+                                <div class="finish">
+                                    <div>
+                                        <a>递交第二季度思想汇报</a>
+                                    </div>
+                                    <img src="img3/finish.png">
+                                </div>
+                                <div class="finish">
+                                    <div>
+                                        <a href="">递交第三季度思想汇报</a>
+                                    </div>
+                                    <img src="img3/finish.png">
+                                </div>
+                                <div class="ready">
+                                    <div>
+                                        <a href="">递交第四季度思想汇报</a>
+                                    </div>
+                                    <img src="img3/now.png">
+                                </div>
+                            </div>
+
+
+                            <div class="own4">
+                                <div class="finish">
+                                    <div>
+                                        <a href="#" >同意成为积极分子</a>
+                                    </div>
+                                    <img src="img3/finish.png">
+                                </div>
+
+                                <div class="ready" >
+                                    <div>
+                                        <a href="#">院级积极分子党校学习</a>
+                                    </div>
+                                    <img src="img3/now.png">
+                                </div>
+                            </div>
+
+
+                            <div class="own5">
+                                <div>
+                                    <a href="">经支委会同意，准备近期发展，成为发展对象</a>
+                                </div>
+                                <div>
+                                    <a href="">参加集中培训</a>
+                                </div>
+                                <div>
+                                    <a href="">入党材料准备齐全</a>
+                                </div>
+                                <div>
+                                    <a href="">支部向上级党组织汇报</a>
+                                </div>
+                                <div>
+                                    <a href="">党员发展公示</a>
+                                </div>
+                                <div>
+                                    <a href="">填写入党志愿书</a>
+                                </div>
+                                <div>
+                                    <a href="">召开发展大会，党支部表决</a>
+                                </div>
+                                <div>
+                                    <a href="">党委谈话，审批</a>
+                                </div>
+                                <div>
+                                    <a href="">成为预备党员</a>
+                                </div>
+                            </div>
+
+                            <div class="own6">
+                                <div class="own7">
+                                    <a href="">完成预备党员党校学习</a>
+                                </div>
+
+
+                                <div class="own8">
+                                    <div>
+                                        <a href="">递交第一季度个人小结</a>
+                                    </div>
+                                    <div>
+                                        <a href="">递交第二季度个人小结</a>
+                                    </div>
+                                    <div>
+                                        <a href="">递交第三季度个人小结</a>
+                                    </div>
+                                    <div>
+                                        <a href="">递交第四季度个人小结</a>
+                                    </div>
+                                </div>
+
+
+                                <div class="own9">
+                                    <div>
+                                        <a href="">按时参加党支部组织生活及党内活动</a>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="own5" id="OwnEnough">
+                                <div>
+                                    <a href="">递交转正申请</a>
+                                </div>
+                                <div>
+                                    <a href="">党员转正公示</a>
+                                </div>
+                                <div>
+                                    <a href="">党支部召开转正大会，表决通过</a>
+                                </div>
+                                <div>
+                                    <a href="">党委审批</a>
+                                </div>
+                                <div>
+                                    <a href="">成为中共正式党员</a>
+                                </div>
+                            </div>
+
+                        </div>
+
                     <input type="text" name="status_applicant_book" value="1">
                     <input type="text" name="status_applicant_study" value="1">
                     <input type="text" name="status_applicant_exam_pass" value="1">

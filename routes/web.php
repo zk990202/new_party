@@ -14,7 +14,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-Route::group(['namespace' => 'Front', 'middleware' => ['auth']], function(){
+Route::group(['namespace' => 'Front', 'middleware' => ['auth', 'log']], function(){
     // 首页
     Route::get('/', 'HomeController@index');
 
@@ -173,14 +173,14 @@ Route::get('mig', function(){
 
     $m = [];
     foreach($a as $v){
-        $m[$v->self_id] = $v->id + 12;
+        $m[$v->self_id] = $v->id + 7;
     }
 
 
     foreach($a as $i => $v){
         if($v->parent_id > 0)
             $v->parent_id = $m[$v->parent_id];
-        $c = $i + 13;
+        $c = $i + 8;
 
         $uri = str_replace("manager/", "", $v->url);
         $uri = str_replace("#", "", $uri);

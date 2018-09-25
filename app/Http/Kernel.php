@@ -35,6 +35,7 @@ class Kernel extends HttpKernel
             \Illuminate\View\Middleware\ShareErrorsFromSession::class,
             \App\Http\Middleware\VerifyCsrfToken::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
+            \App\Http\Middleware\Authentication::class,
         ],
 
         'api' => [
@@ -65,6 +66,8 @@ class Kernel extends HttpKernel
         'HasToken' => \App\Http\Middleware\HasToken::class,
 
         'auth'      => \App\Http\Middleware\Authentication::class,
-        'role' => \App\Http\Middleware\CheckRole::class,
+        'role'      => \App\Http\Middleware\CheckRole::class,
+
+        'log'       => \App\Http\Middleware\OperationLog::class,
     ];
 }
