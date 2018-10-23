@@ -37,7 +37,12 @@ class ApplicantController extends FrontBaseController{
         $data = [
             'courseList' => $courseList
         ];
-        return view('front.applicant.courseList', ['data' => $data, 'course' => 'nav1']);
+//        return view('front.applicant.courseList', ['data' => $data, 'course' => 'nav1']);
+        return response()->json([
+            'code' => 0,
+            'msg' => '',
+            'data' => $data
+        ]);
     }
 
     /**
@@ -48,10 +53,14 @@ class ApplicantController extends FrontBaseController{
     public function courseDetail($id){
         $course = $this->applicantService->getCourseById($id);
         if(!$course){
-            return $this->alertService->alertAndBackByConfig([
-                'type'    => AlertService::ALERT_TYPE['ERROR'],
-                'title'   => '错误',
-                'content' => '课程不存在'
+//            return $this->alertService->alertAndBackByConfig([
+//                'type'    => AlertService::ALERT_TYPE['ERROR'],
+//                'title'   => '错误',
+//                'content' => '课程不存在'
+//            ]);
+            return response()->json([
+                'code' => 1,
+                'msg'  => '错误，课程不存在',
             ]);
         }
         $articles = ArticleList::getArticleByCourseId($id);
@@ -59,7 +68,12 @@ class ApplicantController extends FrontBaseController{
             'articles' => $articles,
             'course'   => $course
         ];
-        return view('front.applicant.courseDetail', ['data' => $data]);
+//        return view('front.applicant.courseDetail', ['data' => $data]);
+        return response()->json([
+            'code' => 0,
+            'msg'  => '',
+            'data' => $data
+        ]);
     }
 
     /**

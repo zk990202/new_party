@@ -15,121 +15,151 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::group(['namespace' => 'Front', 'middleware' => ['auth', 'log']], function(){
+    // 首页
+    Route::get('/', 'HomeController@index');
 
+    // 入党申请人党校相关
+    Route::group(['prefix' => 'applicant', 'middleware' => []], function(){
+        // 20课列表
+        Route::get('courseStudy', 'ApplicantController@courseStudy');
+        Route::get('courseStudy/{id}', 'ApplicantController@courseDetail');
 
-Route::group(['middleware' => 'Access'], function (){
-    //首页
-    Route::get('/index', ['as' => 'api-index', 'uses' => 'Api\IndexController@index']);
+        Route::get('signUp', 'ApplicantController@signUpPage');
+        Route::post('signUp', 'ApplicantController@signUp');
 
-    //登录
-    Route::get('/login', ['as' => 'api-login', 'uses' => 'Api\LoginController@login']);
+        Route::get('signResult', 'ApplicantController@signUpResult');
+        Route::get('signExit', 'ApplicantController@signExit');
 
-    //通知公告模块
-    Route::group(['prefix' => 'notice', 'namespace' => 'Api'], function (){
-        //申请人培训公告
-        Route::get('/party-school/list/applicant', ['as' => 'api-notice-party-school-list-applicant', 'uses' => 'NoticeController@partySchoolApplicant']);
-        //院级积极分子培训公告
-        Route::get('/party-school/list/academy', ['as' => 'api-notice-party-school-list-academy', 'uses' => 'NoticeController@partySchoolAcademy']);
-        //预备党员培训公告
-        Route::get('/party-school/list/probationary', ['as' => 'api-notice-party-school-list-probationary', 'uses' => 'NoticeController@partySchoolProbationary']);
-        //党支部书记培训公告
-        Route::get('/party-school/list/secretary', ['as' => 'api-notice-party-school-list-secretary', 'uses' => 'NoticeController@partySchoolSecretary']);
-        //活动通知
-        Route::get('/activity/list', ['as' => 'api-notice-activity-list', 'uses' => 'NoticeController@activity']);
-        //通知详情
-        Route::get('/{id}/detail', ['as' => 'api-notice-detail', 'uses' => 'NoticeController@detail']);
-    });
+        Route::get('grade', 'ApplicantController@grade');
+        Route::get('complain', 'ApplicantController@complainPage');
+        Route::post('complain', 'ApplicantController@complain');
 
-    //网上党校--申请人党校
-    Route::group(['prefix' => 'applicant', 'namespace' => 'Api'], function (){
-        //课程学习--所有课程
-        Route::get('/course', ['as' => 'api-applicant-all-course', 'uses' => 'ApplicantController@allCourse']);
-        //课程详情--对应的几篇文章
-        Route::get('/{id}/course', ['as' => 'api-applicant-course', 'uses' => 'ApplicantController@course']);
-        //文章详情
-        Route::get('/{id}/article', ['api-applicant-article', 'uses' => 'ApplicantController@article']);
-        // 20课成绩
-        Route::get('/twenty-courses-score', ['api-applicant-twenty-courses-score', 'uses' => 'ApplicantController@twentyCoursesScore'])->middleware('HasToken');
-        //课程对应的题目
-        Route::get('/{id}/exercise', ['api-applicant-exercise-page', 'uses' => 'ApplicantController@exercisePage'])->middleware('HasToken');
-        Route::post('/{id}/exercise', ['api-applicant-exercise', 'uses' => 'ApplicantController@exercise'])->middleware('HasToken');
-        //报名
-        Route::get('/sign', ['as' => 'api-applicant-sign-page', 'uses' => 'ApplicantController@signPage'])->middleware('HasToken');
-        Route::post('/sign', ['as' => 'api-applicant-sign', 'uses' => 'ApplicantController@sign'])->middleware('HasToken');
-        //报名结果
-        Route::get('/sign-result', ['as' => 'api-applicant-sign-result', 'uses' => 'ApplicantController@signResult'])->middleware('HasToken');
-        //退出报名
-        Route::get('/{entry_id}/sign-exit', ['as' => 'api-applicant-sign-exit', 'uses' => 'ApplicantController@signExit'])->middleware('HasToken');
-        //成绩查询
-        Route::get('/grade-check', ['as' => 'api-applicant-grade-check', 'uses' => 'ApplicantController@gradeCheck'])->middleware('HasToken');
-        //证书查询
-        Route::get('/{entry_id}/certificate-check', ['as' => 'api-applicant-certificate-check', 'uses' => 'ApplicantController@certificateCheck'])->middleware('HasToken');
-        //账号状态
-        Route::get('/account-status', ['as' => 'api-applicant-account-status', 'uses' => 'ApplicantController@accountStatus'])->middleware('HasToken');
-    });
+        Route::get('certificate', 'ApplicantController@certificate');
 
-    //网上党校--院级积极分子培训
-    Route::group(['prefix' => 'academy', 'namespace' => 'Api'], function (){
-        //课程学习--所有课程
-        Route::get('/course', ['as' => 'api-academy-all-course', 'uses' => 'AcademyController@allCourse'])->middleware('HasToken');
-        //课程详情
-        Route::get('/{test_id}/course-detail', ['as' => 'api-academy-course-detail', 'uses' => 'AcademyController@courseDetail']);
-        //考试报名
-        Route::get('/sign', ['as' => 'api-academy-sign-page', 'uses' => 'AcademyController@signPage'])->middleware('HasToken');
-        Route::post('/sign', ['as' => 'api-academy-sign', 'uses' => 'AcademyController@sign'])->middleware('HasToken');
-        //我的报名表(报名详情)
-        Route::get('/sign-detail', ['as' => 'api-academy-sign-detail', 'uses' => 'AcademyController@signDetail'])->middleware('HasToken');
-        //退出报名
-        Route::get('/{entry_id}/sign-exit', ['as' => 'api-academy-sign-exit', 'uses' => 'AcademyController@signExit'])->middleware('HasToken');
-        //成绩查询
-        Route::get('/grade-check', ['as' => 'api-academy-grade=check', 'uses' => 'AcademyController@gradeCheck'])->middleware('HasToken');
-        //申诉
-        Route::get('/{test_id}/complain', ['as' => 'api-academy-complain-page', 'uses' => 'AcademyController@complainPage'])->middleware('HasToken');
-        Route::post('/{test_id}/complain', ['as' => 'api-academy-complain', 'uses' => 'AcademyController@complain'])->middleware('HasToken');
-        //证书查询
-        Route::get('/certificate-check', ['as' => 'api-academy-certificate-check', 'uses' => 'AcademyController@certificateCheck'])->middleware('HasToken');
-    });
-
-    //网上党校--预备党员培训
-    Route::group(['prefix' => 'probationary', 'namespace' => 'Api'], function (){
-        //我的课表
-        Route::get('/course', ['as' => 'api-probationary-course', 'uses' => 'ProbationaryController@course'])->middleware('HasToken');
-        //退课
-        Route::get('/{entry_id}/course-exit', ['as' => 'api-probationary-course-exit', 'uses' => 'ProbationaryController@courseExit'])->middleware('HasToken');
-        //选课
-        Route::get('/course-choose', ['as' => 'api-probationary-course-choose-page', 'uses' => 'ProbationaryController@courseChoosePage'])->middleware('HasToken');
-        Route::post('/course-choose', ['as' => 'api-probationary-course-choose', 'uses' => 'ProbationaryController@courseChoose'])->middleware('HasToken');
-        //考试报名
-        Route::get('/test-sign', ['as' => 'api-probationary-test-sign-page', 'uses' => 'ProbationaryController@testSignPage'])->middleware('HasToken');
-        Route::get('/test-sign-real', ['as' => 'api-probationary-test-sign', 'uses' => 'ProbationaryController@testSign'])->middleware('HasToken');
-        //报名结果
-        Route::get('/sign-result', ['as' => 'api-probationary-sign-result', 'uses' => 'ProbationaryController@signResult'])->middleware('HasToken');
-        //退出报名
-        Route::get('/{entry_id}/sign-exit', ['as' => 'api-probationary-sign-exit', 'uses' => 'ProbationaryController@signExit'])->middleware('HasToken');
-        //成绩查询
-        Route::get('/grade-check', ['as' => 'api-probationary-grade-check', 'uses' => 'ProbationaryController@gradeCheck'])->middleware('HasToken');
-        //申诉
-        Route::get('/{train_id}/complain', ['as' => 'api-probationary-complain-page', 'uses' => 'ProbationaryController@complainPage'])->middleware('HasToken');
-        Route::post('/{train_id}/complain', ['as' => 'api-probationary-complain', 'uses' => 'ProbationaryController@complain'])->middleware('HasToken');
-        //证书查询
-        Route::get('/certificate-check', ['as' => 'api-probationary-certificate-check', 'uses' => 'ProbationaryController@certificateCheck'])->middleware('HasToken');
-    });
-
-    //证书
-    Route::group(['prefix' => 'cert', 'namespace' => 'Api'], function (){
-        //证书补办申诉
-        Route::get('/{cert_id}/makeup', ['as' => 'api-cert-makeup-page', 'uses' => 'CertController@makeupPage'])->middleware('HasToken');
-        Route::post('{cert_id}/makeup', ['as' => 'api-cert-makeup', 'uses' => 'CertController@makeup']);
-    });
-
-    //我的支部
-    Route::group(['prefix' => 'party-branch', 'namespace' => 'Api'], function (){
-        //个人状态
-        Route::get('/personal-status', ['as' => 'api-party-branch-personal-status', 'uses' => 'PartyBranchController@personalStatus'])->middleware('HasToken');
+        Route::get('status', 'ApplicantController@userStatus');
 
     });
 
+    //院级积极分子党校学习
+    Route::group(['prefix' => 'academy'], function(){
+        // 课程学习列表
+        Route::get('courseStudy', 'AcademyController@courseStudy');
+        Route::get('courseStudy/{id}', 'AcademyController@courseDetail');
+
+        Route::get('signUp', 'AcademyController@signUpPage');
+        Route::get('signResult', 'AcademyController@signUpResult');
+        Route::post('signUp', 'AcademyController@signUp');
+
+        Route::get('signExit', 'AcademyController@signExit');
+
+        Route::get('grade', 'AcademyController@grade');
+        Route::get('complain', 'AcademyController@complainPage');
+        Route::post('complain', 'AcademyController@complain');
+
+        Route::get('certificate', 'ApplicantController@certificate');
+    });
+
+    //预备党员党校党校学习
+    Route::group(['prefix' => 'probationary'], function(){
+
+        Route::get('notice', 'ProbationaryController@notice');
+        Route::get('notice/{id}', 'ProbationaryController@noticeDetail');
+
+        Route::get('signUp', 'ProbationaryController@signUpPage');
+        Route::get('signResult', 'ProbationaryController@signUpResult');
+        Route::post('signUp', 'ProbationaryController@signUp');
+        Route::get('signExit', 'ProbationaryController@signExit');
+
+        Route::get('courseChoose', 'ProbationaryController@courseChoosePage');
+        Route::post('courseChoose', 'ProbationaryController@courseChoose');
+        // 课程学习列表
+        Route::get('studyList', 'ProbationaryController@courseChooseResult');
+        Route::get('courseExit/{id}', 'ProbationaryController@courseExit');
+
+        Route::get('grade', 'ProbationaryController@grade');
+        Route::get('complain', 'ProbationaryController@complainPage');
+        Route::post('complain', 'ProbationaryController@complain');
+
+        Route::get('certificate', 'ApplicantController@certificate');
+    });
+
+    // 通知公告
+    Route::group(['prefix' => 'notification'], function(){
+        Route::get('applicant', 'NotificationController@applicant');
+        Route::get('academy', 'NotificationController@academy');
+        Route::get('probationary', 'NotificationController@probationary');
+        Route::get('secretary', 'NotificationController@secretary');
+        Route::get('activity', 'NotificationController@activity');
+        Route::get('detail/{id}', 'NotificationController@detail');
+    });
+
+    // 党校培训 新闻板块
+    Route::group(['prefix' => 'news'], function(){
+        Route::get('partySchool', 'NewsController@partySchool');
+        Route::get('detail/{id}', 'NewsController@detail');
+    });
+
+    // 党建专项
+    Route::group(['prefix' => 'partyBuildSpecial'], function (){
+        // 身边的英雄
+        Route::get('hero', 'PartyBuildSpecialController@heroNews');
+        // 中央精神
+        Route::get('spirit', 'PartyBuildSpecialController@spiritNews');
+        // 群众路线
+        Route::get('massLine', 'PartyBuildSpecialController@massLineNews');
+        // 中国梦
+        Route::get('ChinaDream', 'PartyBuildSpecialController@ChinaDreamNews');
+
+        Route::get('detail/{id}', 'PartyBuildSpecialController@detail');
+    });
+
+    // 重要文件
+    Route::group(['prefix' => 'commonFiles'], function(){
+        Route::get('regulation', 'FilesController@regulation');
+        Route::get('instrument', 'FilesController@instrument');
+        Route::get('mustRead', 'FilesController@mustRead');
+        Route::get('manual', 'FilesController@manual');
+        Route::get('detail/{id}', 'FilesController@detail');
+    });
+
+    // 个人支部
+    Route::group(['prefix' => 'personal'], function(){
+        Route::get('status', 'PersonalController@status');
+        Route::get('partyBranch', 'PersonalController@partyBranch');
+        // 支部成员列表
+        Route::get('members', 'PersonalController@members');
+        // 我的学习小组
+        Route::get('groupMembers', 'PersonalController@groupMembers');
+        Route::get('doc', 'PersonalController@docPage');
+        Route::post('doc', 'PersonalController@docStore');
+        // 上传文献查看
+        Route::get('fileWatch/{type_start}/{type_end}', 'PersonalController@fileWatch');
+        // 文献详情
+        Route::get('fileDetail/{type}/{id}', 'PersonalController@fileDetail');
+        // 我的消息
+        Route::get('myMessage/{SentOrReceived}', 'PersonalController@myMessage');
+        // 消息详情
+        Route::get('messageDetail/{id}', 'PersonalController@messageDetail');
+        // 我的申诉
+        Route::get('myComplain', 'PersonalController@myComplain');
+        // 申诉详情
+        Route::get('complainDetail/{id}', 'PersonalController@complainDetail');
+    });
+
+    // 理论学习
+    Route::group(['prefix' => 'theoryStudy'], function (){
+        Route::get('/', 'TheoryStudyController@lists');
+        Route::get('{id}', 'TheoryStudyController@detail');
+    });
+
+    // 文件下载
+    Route::get('{filePath}/download/{fileName}', 'FileDownloadController@download');
 });
+
+Route::get('/login', 'Front\LogController@login');
+Route::get('/logout', 'Front\LogController@logout');
+
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
