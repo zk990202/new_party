@@ -8,6 +8,7 @@
 namespace App\Http\Controllers\Front;
 
 use App\Http\Controllers\FrontBaseController;
+use App\Http\Helpers\CodeAndMessage;
 use App\Http\Service\AlertService;
 use App\Http\Service\ApplicantService;
 use App\Models\Applicant\ArticleList;
@@ -40,7 +41,7 @@ class ApplicantController extends FrontBaseController{
 //        return view('front.applicant.courseList', ['data' => $data, 'course' => 'nav1']);
         return response()->json([
             'code' => 0,
-            'msg' => '',
+            'msg' => CodeAndMessage::returnMsg(0),
             'data' => $data
         ]);
     }
@@ -60,7 +61,7 @@ class ApplicantController extends FrontBaseController{
 //            ]);
             return response()->json([
                 'code' => 1,
-                'msg'  => '错误，课程不存在',
+                'msg'  => CodeAndMessage::returnMsg(1, '课程不存在'),
             ]);
         }
         $articles = ArticleList::getArticleByCourseId($id);
@@ -71,7 +72,7 @@ class ApplicantController extends FrontBaseController{
 //        return view('front.applicant.courseDetail', ['data' => $data]);
         return response()->json([
             'code' => 0,
-            'msg'  => '',
+            'msg'  => CodeAndMessage::returnMsg(0),
             'data' => $data
         ]);
     }
@@ -83,26 +84,45 @@ class ApplicantController extends FrontBaseController{
         $user = $this->userService->getCurrentUser();
 
         $can = $this->applicantService->canEntryTest($user['userNumber']);
-        if(!$can['status'])
-            return $this->alertService->alertAndBack('提示', $can['msg']);
+        if(!$can['status']){
+//            return $this->alertService->alertAndBack('提示', $can['msg']);
+            return response()->json([
+                'code' => 2,
+                'msg'  => CodeAndMessage::returnMsg(2, $can['msg'])
+            ]);
+        }
 
         $data = [
             'user' => $user,
             'test' => $can['test'],
         ];
-        return view('front.applicant.signUp', ['data' => $data]);
+//        return view('front.applicant.signUp', ['data' => $data]);
+        return response()->json([
+            'code' => 0,
+            'msg'  => CodeAndMessage::returnMsg(0),
+            'data' => $data
+        ]);
     }
 
     public function signUp(Request $request){
         $data = $request->only(['school']);
         if(count($data) != 1){
-            return $this->alertService->alertAndBack('提示', '请选择考试校区');
+//            return $this->alertService->alertAndBack('提示', '请选择考试校区');
+            return response()->json([
+                'code' => 3,
+                'msg'  => CodeAndMessage::returnMsg(3, '请选择考试校区')
+            ]);
         }
 
         $user = $this->userService->getCurrentUser();
         $can = $this->applicantService->canEntryTest($user['userNumber']);
-        if(!$can['status'])
-            return $this->alertService->alertAndBack('提示', $can['msg']);
+        if(!$can['status']){
+//            return $this->alertService->alertAndBack('提示', $can['msg']);
+            return response()->json([
+                'code' => 2,
+                'msg'  => CodeAndMessage::returnMsg(2, $can['msg'])
+            ]);
+        }
 
         $form = EntryForm::create([
             'sno'	=>	$user['userNumber'],
@@ -111,9 +131,17 @@ class ApplicantController extends FrontBaseController{
             'campus'    => $data['school'] == 'new' ? '新校区' : '老校区'
         ]);
         if(! $form){
-            return $this->alertService->alertAndBackWithError('遇到了一个错误');
+//            return $this->alertService->alertAndBackWithError('遇到了一个错误');
+            return response()->json([
+                'code' => 500,
+                'msg'  => CodeAndMessage::returnMsg(500),
+            ]);
         }
-        return $this->alertService->alertAndBackWithSuccess('请查看报名结果以确保报名信息无误', $url = url('applicant/signResult'));
+//        return $this->alertService->alertAndBackWithSuccess('请查看报名结果以确保报名信息无误', $url = url('applicant/signResult'));
+        return response()->json([
+            'code' => 0,
+            'msg'  => CodeAndMessage::returnMsg(0)
+        ]);
     }
 
     /**
