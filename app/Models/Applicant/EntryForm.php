@@ -389,6 +389,24 @@ class EntryForm extends Model
     }
 
     /**
+     *  申诉前的查询
+     * @param $sno
+     * @return array
+     */
+    public static function complain($sno){
+        $res = self::leftJoin('twt_applicant_testlist', 'twt_applicant_entryform.test_id', '=', 'twt_applicant_testlist.test_id')
+            ->where('sno', $sno)
+            ->where('twt_applicant_testlist.test_status', '>=', 4)
+            ->orderBy('twt_applicant_entryform.entry_time', 'desc')
+            ->limit(1)
+            ->get()->all();
+        return array_map(function ($entryForm){
+            return Resources::EntryForm($entryForm);
+        }, $res);
+    }
+
+
+    /**
      * 证书查询
      * @param $sno
      * @return array

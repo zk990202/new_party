@@ -153,7 +153,11 @@ class ApplicantController extends FrontBaseController{
         $entryForm = EntryForm::getSignResult($user['userNumber']);
 
         if(!$entryForm)
-            return $this->alertService->alertAndBack('提示', '您没有报名考试');
+//            return $this->alertService->alertAndBack('提示', '您没有报名考试');
+            return response()->json([
+                'code' => 2,
+                'msg'  => CodeAndMessage::returnMsg(2, '您没有报名考试')
+            ]);
         $entryForm = $entryForm[0];
         TestList::warpStatus($entryForm);
         EntryForm::warpStatus($entryForm);
@@ -163,7 +167,12 @@ class ApplicantController extends FrontBaseController{
             'form' => $entryForm
         ];
 
-        return view('front.applicant.signUpResult', ['data' => $data]);
+//        return view('front.applicant.signUpResult', ['data' => $data]);
+        return response()->json([
+            'code' => 0,
+            'msg'  => CodeAndMessage::returnMsg(0),
+            'data' => $data
+        ]);
     }
 
     /**
@@ -174,16 +183,34 @@ class ApplicantController extends FrontBaseController{
         $user = $this->userService->getCurrentUser();
         $entryForm = EntryForm::getSignResult($user['userNumber']);
         if(!$entryForm)
-            return $this->alertService->alertAndBack('提示', '您没有报名考试');
+//            return $this->alertService->alertAndBack('提示', '您没有报名考试');
+            return response()->json([
+                'code' => 2,
+                'msg'  => CodeAndMessage::returnMsg(2, '您没有报名考试')
+            ]);
         $entryForm = $entryForm[0];
         if($entryForm['isExit'])
-            return $this->alertService->alertAndBack('提示', '您已经退出考试了！');
+//            return $this->alertService->alertAndBack('提示', '您已经退出考试了！');
+            return response()->json([
+                'code' => 2,
+                'msg'  => CodeAndMessage::returnMsg(2, '您已经退出考试了！')
+            ]);
 
         $flag = EntryForm::exitEntryByUserNumber($user['userNumber'], $entryForm['id']);
 
-        if(!$flag)
-            return $this->alertService->alertAndBackWithError('遇到了一个错误');
-        return $this->alertService->alertAndBackWithSuccess('退出成功');
+        if(!$flag){
+            //            return $this->alertService->alertAndBackWithError('遇到了一个错误');
+            return response()->json([
+                'code' => 500,
+                'msg'  => CodeAndMessage::returnMsg(500)
+            ]);
+        }
+
+//        return $this->alertService->alertAndBackWithSuccess('退出成功');
+        return response()->json([
+            'code' => 0,
+            'msg'  => CodeAndMessage::returnMsg(0, '退出成功')
+        ]);
     }
 
     /**
@@ -203,7 +230,12 @@ class ApplicantController extends FrontBaseController{
             'list' => $entryList
         ];
         //dd($entryList);
-        return view('front.applicant.grade', ['data' => $data]);
+//        return view('front.applicant.grade', ['data' => $data]);
+        return response()->json([
+            'code' => 0,
+            'msg'  => CodeAndMessage::returnMsg(0),
+            'data' => $data
+        ]);
     }
 
     /**
@@ -211,7 +243,25 @@ class ApplicantController extends FrontBaseController{
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function complainPage(){
-        return view('front.applicant.complain');
+        $user = $this->userService->getCurrentUser();
+        $entry = EntryForm::complain($user['userNumber']);
+        if (count($entry) != 1){
+            return response()->json([
+                'code' => 2,
+                'msg'  => CodeAndMessage::returnMsg(2, '你还没有参加结业考试，无法申诉')
+            ]);
+        }
+        $data = [
+            'user' => $user,
+            'entry' => $entry[0]
+        ];
+        return response()->json([
+            'code' => 0,
+            'msg'  => CodeAndMessage::returnMsg(0),
+            'data' => $data
+        ]);
+
+//        return view('front.applicant.complain');
     }
 
     /**
@@ -221,14 +271,32 @@ class ApplicantController extends FrontBaseController{
      */
     public function complain(Request $request){
         $data = $request->only(['title', 'content', 'testId']);
-        if(count($data) != 2){
-            return $this->alertService->alertAndBackWithError('请确认标题与内容填写无误');
+        if(count($data) != 3){
+//            return $this->alertService->alertAndBackWithError('请确认标题与内容填写无误');
+            return response()->json([
+                'code' => 3,
+                'msg'  => CodeAndMessage::returnMsg(3, '请确认标题与内容填写无误')
+            ]);
         }
         $user = $this->userService->getCurrentUser();
 
         $entryList = EntryForm::getGradeBySnoAndTestId($user['userNumber'], $data['testId']);
-        if(!$entryList)
-            return $this->alertService->alertAndBackWithError('您没有参加这场考试，无法申诉');
+
+        if(!$entryList){
+//            return $this->alertService->alertAndBackWithError('您没有参加这场考试，无法申诉');
+            return response()->json([
+                'code' => 2,
+                'msg'  => CodeAndMessage::returnMsg(2, '您没有参加这场考试，无法申诉')
+            ]);
+        }
+
+        if (( time() - strtotime(date($entryList[0]['time'])))/(24*60*60) > 7){
+            return response()->json([
+                'code' => 2,
+                'msg'  => CodeAndMessage::returnMsg(2, '距成绩公布已经超过七天，无法申诉')
+            ]);
+        }
+
         $flag = Complain::create([
             'from_sno' => $user['userNumber'],
             'to_sno' => '',
@@ -241,10 +309,18 @@ class ApplicantController extends FrontBaseController{
         ]);
 
         if(!$flag){
-            return $this->alertService->alertAndBackWithError('系统发生了错误，请稍后重试，或联系管理员解决');
+//            return $this->alertService->alertAndBackWithError('系统发生了错误，请稍后重试，或联系管理员解决');
+            return response()->json([
+                'code' => 500,
+                'msg'  => CodeAndMessage::returnMsg(500, '系统发生了错误，请稍后重试，或联系管理员解决')
+            ]);
         }
 
-        // TODO 加一个申诉界面吧，还有需要控制申诉期，申诉期过了就不能申诉了
+        return response()->json([
+            'code' => 0,
+            'msg'  => CodeAndMessage::returnMsg(0, '申诉成功')
+        ]);
+
 
     }
 
@@ -255,19 +331,38 @@ class ApplicantController extends FrontBaseController{
         $user = $this->userService->getCurrentUser();
         $entry = EntryForm::certificateCheck($user['userNumber']);
         if (!$entry){
-            return $this->alertService->alertAndBack('提示：没有证书结果' ,'如果你没有参加过或者未通过申请人结业考试,或者通过,
-            但是结业证书还未发放,这些情况您都无法看到自己的证书.如果长时间查看不到自己的结业证书而[成绩查询]中显示您的考试状态
-            为通过.那么请联系管理员核实并解决此问题');
+//            return $this->alertService->alertAndBack('提示：没有证书结果' ,'如果你没有参加过或者未通过申请人结业考试,或者通过,
+//            但是结业证书还未发放,这些情况您都无法看到自己的证书.如果长时间查看不到自己的结业证书而[成绩查询]中显示您的考试状态
+//            为通过.那么请联系管理员核实并解决此问题');
+            return response()->json([
+                'code' => 500,
+                'msg'  => CodeAndMessage::returnMsg(500, '没有证书结果：如果你没有参加过或者未通过申请人结业考试,或者通过,
+                    但是结业证书还未发放,这些情况您都无法看到自己的证书.如果长时间查看不到自己的结业证书而[成绩查询]中显示您的考试状态
+                    为通过.那么请联系管理员核实并解决此问题')
+            ]);
         }
         else{
             $entry_id = $entry[0]['id'];
             $cert = Cert::certCheckApplicant($entry_id);
             if (!$cert){
-                return $this->alertService->alertAndBackWithError('不好意思,没有找到相应的证书,请联系管理员!');
+//                return $this->alertService->alertAndBackWithError('不好意思,没有找到相应的证书,请联系管理员!');
+                return response()->json([
+                    'code' => 500,
+                    'msg'  => CodeAndMessage::returnMsg(500, '不好意思,没有找到相应的证书,请联系管理员!')
+                ]);
             }
             else{
-                dd($cert);
-                return view('front.applicant.certificate', ['cert' => $cert]);
+//                dd($cert);
+//                return view('front.applicant.certificate', ['cert' => $cert]);
+                $data = [
+                    'user' => $user,
+                    'cert' => $cert[0]
+                ];
+                return response()->json([
+                    'code' => 0,
+                    'msg'  => CodeAndMessage::returnMsg(0),
+                    'data' => $data
+                ]);
             }
         }
     }
@@ -291,6 +386,11 @@ class ApplicantController extends FrontBaseController{
                 'isPassed' => $isPassed,
             ]
         ];
-        return view('front.applicant.status', ['data' => $data]);
+//        return view('front.applicant.status', ['data' => $data]);
+        return response()->json([
+            'code' => 0,
+            'msg'  => CodeAndMessage::returnMsg(0),
+            'data' => $data
+        ]);
     }
 }

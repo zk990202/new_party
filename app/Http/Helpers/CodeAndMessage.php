@@ -12,6 +12,14 @@ namespace App\Http\Helpers;
 
 class CodeAndMessage
 {
+    protected static $indexTrans = [
+        0 => 0,
+        1 => 1,
+        2 => 2,
+        3 => 3,
+        500 => 4
+    ];
+
     protected static $codeMessage = [
         ['code' => 0, 'msg' => '操作成功'],
         ['code' => 1, 'msg' => '参数错误'],
@@ -23,13 +31,13 @@ class CodeAndMessage
     public static function returnMsg($code, $msg='empty'){
         if ($msg == 'empty'){
             $msg = [
-                'category' => self::$codeMessage[$code]['msg'],
+                'category' => self::$codeMessage[self::$indexTrans[$code]]['msg'],
                 'detail'   => ''
             ];
         }
         else{
             $msg = [
-                'category' => self::$codeMessage[$code]['msg'],
+                'category' => self::$codeMessage[self::$indexTrans[$code]]['msg'],
                 'detail'   => $msg
             ];
         }

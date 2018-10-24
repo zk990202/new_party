@@ -29,7 +29,7 @@ Route::group(['namespace' => 'Front', 'middleware' => ['auth', 'log']], function
         Route::post('signUp', 'ApplicantController@signUp');
 
         Route::get('signResult', 'ApplicantController@signUpResult');
-        Route::get('signExit', 'ApplicantController@signExit');
+        Route::post('signExit', 'ApplicantController@signExit');
 
         Route::get('grade', 'ApplicantController@grade');
         Route::get('complain', 'ApplicantController@complainPage');
