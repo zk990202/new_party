@@ -494,7 +494,7 @@ class EntryForm extends Model
      * @return bool
      */
     public static function courseExit($entry_id){
-        $res = self::where('entry_id')
+        $res = self::where('entry_id', $entry_id)
             ->increment('exitcount');
         return $res ? true : false;
     }
@@ -623,6 +623,11 @@ class EntryForm extends Model
         $info->exitcount ++;
         $info->save();
         return true;
+    }
+
+    public static function exitEntryByUserNumber($userNumber, $entryId){
+        return self::where(['entry_id' => $entryId, 'sno' => $userNumber])
+            ->update(['isexit' => 1]);
     }
 
     public static function warpIsPassed(&$item){

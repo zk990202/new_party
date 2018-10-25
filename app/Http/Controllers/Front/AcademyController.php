@@ -247,10 +247,14 @@ class AcademyController extends FrontBaseController {
             }
             else{
 //                return view('front.academy.certificate', ['cert' => $cert]);
+                $data = [
+                    'user' => $user,
+                    'cert' => $cert[0]
+                ];
                 return response()->json([
                     'code' => 0,
                     'msg'  => CodeAndMessage::returnMsg(0),
-                    'data' => $cert
+                    'data' => $data
                 ]);
             }
         }

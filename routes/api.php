@@ -69,13 +69,13 @@ Route::group(['namespace' => 'Front', 'middleware' => ['auth', 'log']], function
         Route::get('signUp', 'ProbationaryController@signUpPage');
         Route::get('signResult', 'ProbationaryController@signUpResult');
         Route::post('signUp', 'ProbationaryController@signUp');
-        Route::get('signExit', 'ProbationaryController@signExit');
+        Route::post('signExit', 'ProbationaryController@signExit');
 
         Route::get('courseChoose', 'ProbationaryController@courseChoosePage');
         Route::post('courseChoose', 'ProbationaryController@courseChoose');
         // 课程学习列表
         Route::get('studyList', 'ProbationaryController@courseChooseResult');
-        Route::get('courseExit/{id}', 'ProbationaryController@courseExit');
+        Route::post('courseExit', 'ProbationaryController@courseExit');
 
         Route::get('grade', 'ProbationaryController@grade');
         Route::get('complain', 'ProbationaryController@complainPage');
