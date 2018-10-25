@@ -51,7 +51,7 @@ Route::group(['namespace' => 'Front', 'middleware' => ['auth', 'log']], function
         Route::get('signResult', 'AcademyController@signUpResult');
         Route::post('signUp', 'AcademyController@signUp');
 
-        Route::get('signExit', 'AcademyController@signExit');
+        Route::post('signExit', 'AcademyController@signExit');
 
         Route::get('grade', 'AcademyController@grade');
         Route::get('complain', 'AcademyController@complainPage');
