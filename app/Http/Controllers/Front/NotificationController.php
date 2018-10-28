@@ -10,6 +10,7 @@ namespace App\Http\Controllers\Front;
 
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\FrontBaseController;
+use App\Http\Helpers\CodeAndMessage;
 use App\Http\Service\NotificationService;
 use App\Models\Notification;
 
@@ -30,7 +31,12 @@ class NotificationController extends FrontBaseController{
             'notice' => $notice
         ];
 //        dd($data);
-        return view('front.notification.default', ['data' => $data, 'applicant' => 'nav1']);
+//        return view('front.notification.default', ['data' => $data, 'applicant' => 'nav1']);
+        return response()->json([
+            'code' => 0,
+            'msg' => CodeAndMessage::returnMsg(0),
+            'data' => $data
+        ]);
     }
 
     /**
@@ -42,7 +48,12 @@ class NotificationController extends FrontBaseController{
             'notice' => $notice
         ];
         //dd($data);
-        return view('front.notification.default', ['data' => $data, 'academy' => 'nav1']);
+//        return view('front.notification.default', ['data' => $data, 'academy' => 'nav1']);
+        return response()->json([
+            'code' => 0,
+            'msg'  => CodeAndMessage::returnMsg(0),
+            'data' => $data
+        ]);
     }
 
     /**
@@ -54,7 +65,12 @@ class NotificationController extends FrontBaseController{
             'notice' => $notice
         ];
         //dd($data);
-        return view('front.notification.default', ['data' => $data, 'probationary' => 'nav1']);
+//        return view('front.notification.default', ['data' => $data, 'probationary' => 'nav1']);
+        return response()->json([
+            'code' => 0,
+            'msg'  => CodeAndMessage::returnMsg(0),
+            'data' => $data
+        ]);
     }
 
     /**
@@ -66,7 +82,12 @@ class NotificationController extends FrontBaseController{
             'notice' => $notice
         ];
 //        dd($data);
-        return view('front.notification.default', ['data' => $data, 'secretary' => 'nav1']);
+//        return view('front.notification.default', ['data' => $data, 'secretary' => 'nav1']);
+        return response()->json([
+            'code' => 0,
+            'msg'  => CodeAndMessage::returnMsg(0),
+            'data' => $data
+        ]);
     }
 
     /**
@@ -78,7 +99,12 @@ class NotificationController extends FrontBaseController{
             'notice' => $notice
         ];
 //        dd($data);
-        return view('front.notification.default', ['data' => $data, 'activity' => 'nav1']);
+//        return view('front.notification.default', ['data' => $data, 'activity' => 'nav1']);
+        return response()->json([
+            'code' => 0,
+            'msg'  => CodeAndMessage::returnMsg(0),
+            'data' => $data
+        ]);
     }
 
     /**
@@ -88,9 +114,19 @@ class NotificationController extends FrontBaseController{
      */
     public function detail($id){
         $notice = Notification::getNoticeById($id);
-        if(!$notice)
-            return $this->alertService->alertAndBack('提示', '通知不存在');
-        return view('front.notification.detail', ['detail' => $notice]);
+        if(!$notice){
+//            return $this->alertService->alertAndBack('提示', '通知不存在');
+            return response()->json([
+                'code' => 1,
+                'msg'  => CodeAndMessage::returnMsg(1),
+            ]);
+        }
+//        return view('front.notification.detail', ['detail' => $notice]);
+        return response()->json([
+            'code' => 0,
+            'msg'  => CodeAndMessage::returnMsg(0),
+            'data' => $notice
+        ]);
     }
 
 

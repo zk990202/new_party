@@ -35,6 +35,7 @@ class PartyStatusService{
         while(!empty($determinationList)){
             $tmp = [];
             foreach($determinationList as $v){
+                // 如果当前节点状态已设置，则进入下一循环
                 if(isset($status[$v]))
                     continue;
 
@@ -43,10 +44,12 @@ class PartyStatusService{
 
                 //要保证当前节点父节点都已经完成了初始化，如果未完成，放进下一轮迭代数组进行初始化
                 $flag = true;
-                foreach($obj->dependenceList() as $item){
-                    if(!isset($status[$item])){
-                        $flag = false;
-                        break;
+                if (!empty($obj->dependenceList())){
+                    foreach($obj->dependenceList() as $item){
+                        if(!isset($status[$item])){
+                            $flag = false;
+                            break;
+                        }
                     }
                 }
                 if(!$flag){
@@ -67,8 +70,10 @@ class PartyStatusService{
                     if($flag)
                         $status[$v] = 1;
                 }
-
-                $tmp = array_merge($tmp, $obj->determinationList());
+//                dd($obj->determinationList());
+                if (!empty($obj->determinationList())){
+                    $tmp = array_merge($tmp, $obj->determinationList());
+                }
             }
             $determinationList = array_unique($tmp);
         }

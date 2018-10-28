@@ -9,6 +9,7 @@
 namespace App\Http\Controllers\Front;
 
 use App\Http\Controllers\FrontBaseController;
+use App\Http\Helpers\CodeAndMessage;
 use App\Http\Service\NewsService;
 use App\Models\SpecialNews;
 
@@ -28,14 +29,30 @@ class NewsController extends FrontBaseController{
         $data = [
             'newsList' => $newsList
         ];
-        return view('front.news.default', ['data' => $data]);
+//        return view('front.news.default', ['data' => $data]);
+        return response()->json([
+            'code' => 0,
+            'msg'  => CodeAndMessage::returnMsg(0),
+            'data' => $data
+        ]);
     }
 
     public function detail($id){
         $news = SpecialNews::getNewsById($id);
-        if(!$news)
-            return $this->alertService->alertAndBack('提示', '文件不存在');
-        return view('front.news.detail', ['detail' => $news]);
+        if(!$news){
+//            return $this->alertService->alertAndBack('提示', '文件不存在');
+            return response()->json([
+                'code' => 1,
+                'msg'  => CodeAndMessage::returnMsg(1, '文件不存在')
+            ]);
+        }
+//        return view('front.news.detail', ['detail' => $news]);
+        return response()->json([
+            'code' => 0,
+            'msg'  => CodeAndMessage::returnMsg(0),
+            'data' => $news
+        ]);
     }
+
 
 }

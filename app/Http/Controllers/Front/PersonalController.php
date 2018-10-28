@@ -8,6 +8,7 @@
 namespace App\Http\Controllers\Front;
 
 use App\Http\Controllers\FrontBaseController;
+use App\Http\Helpers\CodeAndMessage;
 use App\Http\Helpers\Resources;
 use App\Http\Service\AlertService;
 use App\Http\Service\PartyStatus\DevelopmentTarget;
@@ -39,7 +40,9 @@ class PersonalController extends FrontBaseController {
 
     // 前台个人状态
     public function status(){
-        $status = $this->partyStatusService->getPersonalStatus(auth()->user()->userNumber());
+        $user = $this->userService->getCurrentUser();
+//        $status = $this->partyStatusService->getPersonalStatus(auth()->user()->userNumber());
+        $status = $this->partyStatusService->getPersonalStatus($user['userNumber']);
         foreach($status as &$v){
             if($v == 2)
                 $v = [
@@ -59,10 +62,16 @@ class PersonalController extends FrontBaseController {
         }
 
         $data = [
+            'user'   => $user,
             'status' => $status
         ];
         //dd($data);
-        return view('front.personal.status', ['data' => $data, 'status' => 'nav1']);
+//        return view('front.personal.status', ['data' => $data, 'status' => 'nav1']);
+        return response()->json([
+            'code' => 0,
+            'msg'  => CodeAndMessage::returnMsg(0),
+            'data' => $data
+        ]);
     }
 
     /**
@@ -74,7 +83,12 @@ class PersonalController extends FrontBaseController {
         //$partyBranch = $this->partyStatusService->getPartyBranchInfoById($user['partyBranchId']);
         //dd($partyBranch, $user);
 
-        return view('front.personal.partyBranch', ['user' => $user, 'partyBranch' => 'nav1']);
+//        return view('front.personal.partyBranch', ['user' => $user, 'partyBranch' => 'nav1']);
+        return response()->json([
+            'code' => 0,
+            'msg'  => CodeAndMessage::returnMsg(0),
+            'data' => $user
+        ]);
     }
 
     /**

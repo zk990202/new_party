@@ -9,6 +9,7 @@
 namespace App\Http\Controllers\Front;
 
 use App\Http\Controllers\FrontBaseController;
+use App\Http\Helpers\CodeAndMessage;
 use App\Http\Service\ImportantFilesService;
 use App\Http\Service\NewsService;
 use App\Models\CommonFiles;
@@ -35,7 +36,12 @@ class FilesController extends FrontBaseController{
             'files' => $files
         ];
 //        dd($data);
-        return view('front.commonFiles.default', ['data' => $data, 'regulation' => 'nav1']);
+//        return view('front.commonFiles.default', ['data' => $data, 'regulation' => 'nav1']);
+        return response()->json([
+            'code' => 0,
+            'msg'  => CodeAndMessage::returnMsg(0),
+            'data' => $data
+        ]);
     }
 
     public function instrument(){
@@ -43,7 +49,12 @@ class FilesController extends FrontBaseController{
         $data = [
             'files' => $files
         ];
-        return view('front.commonFiles.default', ['data' => $data, 'instrument' => 'nav1']);
+//        return view('front.commonFiles.default', ['data' => $data, 'instrument' => 'nav1']);
+        return response()->json([
+            'code' => 0,
+            'msg'  => CodeAndMessage::returnMsg(0),
+            'data' => $data
+        ]);
     }
 
     public function mustRead(){
@@ -51,7 +62,12 @@ class FilesController extends FrontBaseController{
         $data = [
             'files' => $files
         ];
-        return view('front.commonFiles.default', ['data' => $data, 'mustRead' => 'nav1']);
+//        return view('front.commonFiles.default', ['data' => $data, 'mustRead' => 'nav1']);
+        return response()->json([
+            'code' => 0,
+            'msg'  => CodeAndMessage::returnMsg(0),
+            'data' => $data
+        ]);
     }
 
     public function manual(){
@@ -59,15 +75,31 @@ class FilesController extends FrontBaseController{
         $data = [
             'files' => $files
         ];
-        return view('front.commonFiles.default', ['data' => $data, 'manual' => 'nav1']);
+//        return view('front.commonFiles.default', ['data' => $data, 'manual' => 'nav1']);
+        return response()->json([
+            'code' => 0,
+            'msg'  => CodeAndMessage::returnMsg(0),
+            'data' => $data
+        ]);
     }
 
     public function detail($id){
         $common_file = CommonFiles::getCommonFileById($id);
 //        dd($common_file);
         if(!$common_file)
-            return $this->alertService->alertAndBack('提示', '文件不存在');
-        return view('front.commonFiles.detail', ['detail' => $common_file]);
+//            return $this->alertService->alertAndBack('提示', '文件不存在');
+        {
+            return response()->json([
+                'code' => 1,
+                'msg'  => CodeAndMessage::returnMsg(1, '文件不存在')
+            ]);
+        }
+//        return view('front.commonFiles.detail', ['detail' => $common_file]);
+        return response()->json([
+            'code' => 0,
+            'msg'  => CodeAndMessage::returnMsg(0),
+            'data' => $common_file
+        ]);
     }
 
 }

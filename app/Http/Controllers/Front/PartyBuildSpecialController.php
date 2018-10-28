@@ -11,6 +11,7 @@ namespace App\Http\Controllers\Front;
 
 
 use App\Http\Controllers\FrontBaseController;
+use App\Http\Helpers\CodeAndMessage;
 use App\Http\Service\PartyBuildSpecialService;
 use App\Models\SpecialNews;
 
@@ -34,7 +35,12 @@ class PartyBuildSpecialController extends FrontBaseController
             'newsList' => $newsList
         ];
 //        dd($data);
-        return view('front.partyBuildSpecial.default', ['data' => $data]);
+//        return view('front.partyBuildSpecial.default', ['data' => $data]);
+        return response()->json([
+            'code' => 0,
+            'msg'  => CodeAndMessage::returnMsg(0),
+            'data' => $data
+        ]);
     }
 
     /**
@@ -46,7 +52,12 @@ class PartyBuildSpecialController extends FrontBaseController
         $data = [
             'newsList' => $newsList
         ];
-        return view('front.partyBuildSpecial.default', ['data' => $data]);
+//        return view('front.partyBuildSpecial.default', ['data' => $data]);
+        return response()->json([
+            'code' => 0,
+            'msg'  => CodeAndMessage::returnMsg(0),
+            'data' => $data
+        ]);
     }
 
     /**
@@ -54,11 +65,16 @@ class PartyBuildSpecialController extends FrontBaseController
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function massLineNews(){
-        $newsList = $this->partyBuildSpecialService->getSpiritNews();
+        $newsList = $this->partyBuildSpecialService->getMassLineNews();
         $data = [
             'newsList' => $newsList
         ];
-        return view('front.partyBuildSpecial.default', ['data' => $data]);
+//        return view('front.partyBuildSpecial.default', ['data' => $data]);
+        return response()->json([
+            'code' => 0,
+            'msg'  => CodeAndMessage::returnMsg(0),
+            'data' => $data
+        ]);
     }
 
     /**
@@ -66,17 +82,32 @@ class PartyBuildSpecialController extends FrontBaseController
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function ChinaDreamNews(){
-        $newsList = $this->partyBuildSpecialService->getSpiritNews();
+        $newsList = $this->partyBuildSpecialService->getChinaDreamNews();
         $data = [
             'newsList' => $newsList
         ];
-        return view('front.partyBuildSpecial.default', ['data' => $data]);
+//        return view('front.partyBuildSpecial.default', ['data' => $data]);
+        return response()->json([
+            'code' => 0,
+            'msg'  => CodeAndMessage::returnMsg(0),
+            'data' => $data
+        ]);
     }
 
     public function detail($id){
         $news = SpecialNews::getNewsById($id);
-        if(!$news)
-            return $this->alertService->alertAndBack('提示', '文件不存在');
-        return view('front.partyBuildSpecial.detail', ['detail' => $news]);
+        if(!$news){
+            return response()->json([
+                'code' => 1,
+                'msg'  => CodeAndMessage::returnMsg(1)
+            ]);
+        }
+//            return $this->alertService->alertAndBack('提示', '文件不存在');
+//        return view('front.partyBuildSpecial.detail', ['detail' => $news]);
+        return response()->json([
+            'code' => 0,
+            'msg'  => CodeAndMessage::returnMsg(0),
+            'data' => $news
+        ]);
     }
 }
