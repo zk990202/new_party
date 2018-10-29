@@ -13,11 +13,12 @@ namespace App\Http\Helpers;
 class CodeAndMessage
 {
     protected static $indexTrans = [
-        0 => 0,
-        1 => 1,
-        2 => 2,
-        3 => 3,
-        500 => 4
+         0  => 0,
+         1  => 1,
+         2  => 2,
+         3  => 3,
+        500 => 4,
+        501 => 5
     ];
 
     protected static $codeMessage = [
@@ -25,7 +26,8 @@ class CodeAndMessage
         ['code' => 1, 'msg' => '参数错误'],
         ['code' => 2, 'msg' => '状态不匹配'],
         ['code' => 3, 'msg' => '参数丢失'],
-        ['code' => 500, 'msg' => '系统错误']
+        ['code' => 500, 'msg' => '系统错误'],
+        ['code' => 501, 'msg' => '未登录']
     ];
 
     public static function returnMsg($code, $msg='empty'){

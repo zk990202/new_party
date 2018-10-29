@@ -17,9 +17,13 @@ use App\Http\Service\PartyStatus\MainStatus;
 use App\Http\Service\PartyStatus\MaterialsReady;
 use App\Http\Service\PartyStatusService;
 use App\Http\Service\PersonalService;
+use App\Models\Manager;
+use App\Models\Message;
+use App\Models\PartyBranch\PartyBranch;
 use App\Models\StudentInfo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Prophecy\Doubler\CachedDoubler;
 use RealRashid\SweetAlert\Facades\Alert;
 
 class PersonalController extends FrontBaseController {
@@ -102,7 +106,12 @@ class PersonalController extends FrontBaseController {
             $members[$i] = MainStatus::warpStatus($item);
         }
         //dd($members);
-        return view('front.personal.members', ['list' => $members]);
+//        return view('front.personal.members', ['list' => $members]);
+        return response()->json([
+            'code' => 0,
+            'msg'  => CodeAndMessage::returnMsg(0),
+            'data' => $members
+        ]);
     }
 
     /**
@@ -116,7 +125,12 @@ class PersonalController extends FrontBaseController {
         foreach($groupMembers as $i => &$item){
             $groupMembers[$i] = MainStatus::warpStatus($item);
         }
-        return view('front.personal.groupMembers', ['list' => $groupMembers]);
+//        return view('front.personal.groupMembers', ['list' => $groupMembers]);
+        return response()->json([
+            'code' => 0,
+            'msg'  => CodeAndMessage::returnMsg(0),
+            'data' => $groupMembers
+        ]);
     }
 
     public function docStore(Request $request){
@@ -156,7 +170,11 @@ class PersonalController extends FrontBaseController {
         elseif($type_start == 11)
             $nav_data = '转正申请';
         else
-            return $this->alertService->alertAndBack('提示', '未知的文件类型！');
+//            return $this->alertService->alertAndBack('提示', '未知的文件类型！');
+            return response()->json([
+                'code' => 1,
+                'msg'  => CodeAndMessage::returnMsg(1, '未知的文件类型！')
+            ]);
 
         $user = $this->userService->getCurrentUser();
         $sno = $user['userNumber'];
@@ -176,10 +194,19 @@ class PersonalController extends FrontBaseController {
                 $result = $this->personalService->getFileByTypeBetween($sno, $type_start, $type_end);
             }
         }
-        return view('front.personal.fileWatch', [
-            'result' => $result,
-            'nav' => $nav_data,
-            'user' => $user,
+//        return view('front.personal.fileWatch', [
+//            'result' => $result,
+//            'nav' => $nav_data,
+//            'user' => $user,
+//        ]);
+        return response()->json([
+            'code' => 0,
+            'msg'  => CodeAndMessage::returnMsg(0),
+            'data' => [
+                'user'   => $user,
+                'result' => $result,
+                'fileType' => $nav_data
+            ]
         ]);
 
     }
@@ -200,7 +227,18 @@ class PersonalController extends FrontBaseController {
         else{
             $detail = $this->personalService->getFileById($id);
         }
-        return view('front.personal.fileDetail', ['detail' => $detail]);
+        if ($detail['id']  == -1){
+            return response()->json([
+                'code' => 1,
+                'msg'  => CodeAndMessage::returnMsg(1, '文件不存在')
+            ]);
+        }
+//        return view('front.personal.fileDetail', ['detail' => $detail]);
+        return response()->json([
+            'code' => 0,
+            'msg'  => CodeAndMessage::returnMsg(0),
+            'data' => $detail
+        ]);
     }
 
     /**
@@ -215,23 +253,34 @@ class PersonalController extends FrontBaseController {
         $partyBranchId = $user['partyBranchId'];
         $partyBranchInfo = $this->personalService->getPartyBranchInfoById($partyBranchId);
         if (!$partyBranchInfo)
-            return $this->alertService->alertAndBackWithError('未找到所在支部信息');
+//            return $this->alertService->alertAndBackWithError('未找到所在支部信息');
+            return response()->json([
+                'code' => 500,
+                'msg'  => CodeAndMessage::returnMsg(500, '未找到所在支部信息')
+            ]);
         else{
             $partyBranchInfo = $partyBranchInfo[0];
             //0表示学生发给管理员 ,1表示老师发给所有用户,2表示发给所有学生,3表示发给全部管理员4表示发给全部支部委员,5表示发给指定用户
             if ($SentOrReceived == 'received'){
                 //下面判断该用户是否是支部委员
                 if ($sno == $partyBranchInfo['secretary'] || $sno == $partyBranchInfo['organizer'] || $sno == $partyBranchInfo['propagator']){
-                    $messages = $this->personalService->getReceivedMessageByTypeAndSno([1, 2, 4], $sno);
+                    $messages = $this->personalService->getReceivedMessageByTypeAndSno([1, 2, 4, 5], $sno);
                 }
                 else{
-                    $messages = $this->personalService->getReceivedMessageByTypeAndSno([1, 2], $sno);
+                    $messages = $this->personalService->getReceivedMessageByTypeAndSno([1, 2, 5], $sno);
                 }
             }
             else{
                 $messages = $this->personalService->getSentMessageBySno($sno);
             }
-            return view('front.personal.myMessage', ['messages' => $messages, 'user' => $user]);
+//            return view('front.personal.myMessage', ['messages' => $messages, 'user' => $user]);
+            return response()->json([
+                'code' => 0,
+                'data' => [
+                    'user' => $user,
+                    'messages' => $messages
+                ]
+            ]);
         }
 
     }
@@ -243,7 +292,85 @@ class PersonalController extends FrontBaseController {
      */
     public function messageDetail($id){
         $detail = $this->personalService->getMessageDetail($id);
-        return view('front.personal.messageDetail', ['detail' => $detail]);
+        if($detail['id'] == -1){
+            return response()->json([
+                'code' => 1,
+                'msg'  => CodeAndMessage::returnMsg(1, '消息不存在')
+            ]);
+        }
+//        return view('front.personal.messageDetail', ['detail' => $detail]);
+        return response()->json([
+            'code' => 0,
+            'msg'  => CodeAndMessage::returnMsg(0),
+            'data' => $detail
+        ]);
+    }
+
+    /**
+     * 写信页面
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function messageWritePage(){
+        $user = $this->userService->getCurrentUser();
+//        dd($user);
+        $branch = PartyBranch::getById($user['partyBranchId'])[0];
+        $collegeManager = Manager::getCollegeManagerByCollegeId($user['collegeId']);
+//        dd($collegeManager);
+        $data = [
+            'secretaryId'   => $branch['secretary'],
+            'secretaryName' => $branch['secretaryName'],
+//            'organizerId'   => $branch['organizer'],
+//            'organizerName' => $branch['organizerName'],
+            'collegeManager' => $collegeManager,
+            'adminManger'    => '127',
+            'adminMangerName' => '超级管理员'
+        ];
+        return response()->json([
+            'code' => 0,
+            'msg'  => CodeAndMessage::returnMsg(0),
+            'data' => $data
+        ]);
+    }
+
+    /**
+     * 写信提交
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function messageWrite(Request $request){
+        $data = $request->only(['title', 'to_user', 'content']);
+        if (count($data) != 3){
+            return response()->json([
+                'code' => 3,
+                'msg'  => CodeAndMessage::returnMsg(3, '请确认内容填写无误')
+            ]);
+        }
+        $user = $this->userService->getCurrentUser();
+
+        // 发给超级管理员的
+        if ($data['to_user'] == '127'){
+            $data['to_user'] = null;
+            $flag = Message::studentSendMessage($user['userNumber'], $data, 0);
+            if(!$flag)
+                return response()->json([
+                    'code' => 500,
+                    'msg'  => CodeAndMessage::returnMsg(500)
+                ]);
+        }
+        else{
+            $flag = Message::studentSendMessage($user['userNumber'], $data, 5);
+            if(!$flag)
+                return response()->json([
+                    'code' => 500,
+                    'msg'  => CodeAndMessage::returnMsg(500)
+                ]);
+        }
+
+        return response()->json([
+            'code' => 0,
+            'msg'  => CodeAndMessage::returnMsg(0, '信件发送成功')
+        ]);
+
     }
 
     /**
@@ -254,7 +381,15 @@ class PersonalController extends FrontBaseController {
         $user = $this->userService->getCurrentUser();
         $sno = $user['userNumber'];
         $complain = $this->personalService->getComplainBySno($sno);
-        return view('front.personal.myComplain', ['complain' => $complain, 'user' => $user]);
+//        return view('front.personal.myComplain', ['complain' => $complain, 'user' => $user]);
+        return response()->json([
+            'code' => 0,
+            'msg'  => CodeAndMessage::returnMsg(0),
+            'data' => [
+                'user' => $user,
+                'complain' => $complain
+            ]
+        ]);
     }
 
     /**
@@ -264,7 +399,18 @@ class PersonalController extends FrontBaseController {
      */
     public function complainDetail($id){
         $detail = $this->personalService->getComplainDetail($id);
-        return view('front.personal.complainDetail', ['detail' => $detail]);
+        if ($detail['id'] == -1){
+            return response()->json([
+                'code' => 1,
+                'msg'  => CodeAndMessage::returnMsg(1, '申诉不存在')
+            ]);
+        }
+//        return view('front.personal.complainDetail', ['detail' => $detail]);
+        return response()->json([
+            'code' => 0,
+            'msg'  => CodeAndMessage::returnMsg(0),
+            'data' => $detail
+        ]);
     }
 
 }

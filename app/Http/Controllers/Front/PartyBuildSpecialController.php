@@ -99,7 +99,7 @@ class PartyBuildSpecialController extends FrontBaseController
         if(!$news){
             return response()->json([
                 'code' => 1,
-                'msg'  => CodeAndMessage::returnMsg(1)
+                'msg'  => CodeAndMessage::returnMsg(1, '文件不存在')
             ]);
         }
 //            return $this->alertService->alertAndBack('提示', '文件不存在');

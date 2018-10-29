@@ -141,6 +141,9 @@ Route::group(['namespace' => 'Front', 'middleware' => ['auth', 'log']], function
         Route::get('myMessage/{SentOrReceived}', 'PersonalController@myMessage');
         // 消息详情
         Route::get('messageDetail/{id}', 'PersonalController@messageDetail');
+        // 写信
+        Route::get('messageWrite', 'PersonalController@messageWritePage');
+        Route::post('messageWrite', 'PersonalController@messageWrite');
         // 我的申诉
         Route::get('myComplain', 'PersonalController@myComplain');
         // 申诉详情

@@ -436,9 +436,4 @@ class PartyBranch extends Model
             ->first();
         return $res ? Resources::PartyBranch($res) : null;
     }
-
-    public static function getBranchById($id){
-        $res = self::where('partybranch_id', $id)->first();
-        return $res ? Resources::PartyBranch($res) : null;
-    }
 }

@@ -241,19 +241,19 @@ class Resources
     public static function Complain($complain)
     {
         return [
-            'id'          => $complain->id,
-            'fromSno'     => $complain->from_sno,
-            'toSno'       => $complain->to_sno,
+            'id'          => $complain->id ?? -1,
+            'fromSno'     => $complain->from_sno ?? '',
+            'toSno'       => $complain->to_sno ?? '',
             'studentName' => $complain->user->username ?? '',
-            'academyId'   => $complain->collegeid,
+            'academyId'   => $complain->collegeid ?? -1,
             'academyName' => $complain->userInfo->college->shortname ?? '',
-            'testId'      => $complain->test_id,
-            'title'       => $complain->title,
-            'content'     => $complain->content,
-            'type'        => $complain->type,
-            'time'        => $complain->time,
-            'isRead'      => $complain->isread,
-            'isReply'     => $complain->isreplay,
+            'testId'      => $complain->test_id ?? -1,
+            'title'       => $complain->title ?? '',
+            'content'     => $complain->content ?? '',
+            'type'        => $complain->type ?? -1,
+            'time'        => $complain->time ?? '',
+            'isRead'      => $complain->isread ?? -1,
+            'isReply'     => $complain->isreplay ?? -1,
             'testName'    => $complain->testList->test_name ?? ''
         ];
     }
@@ -522,15 +522,15 @@ class Resources
 
     public static function StudentFiles($studentFiles){
         return [
-            'id' => $studentFiles->file_id,
-            'sno' => $studentFiles->sno,
-            'title' => $studentFiles->file_title,
-            'content' => $studentFiles->file_content,
-            'addTime' => $studentFiles->file_addtime,
-            'dealTime' => $studentFiles->file_dealtime,
-            'type' => $studentFiles->file_type,
-            'status' => $studentFiles->file_status,
-            'systemAdd' => $studentFiles->is_systemadd
+            'id' => $studentFiles->file_id ?? -1,
+            'sno' => $studentFiles->sno ?? '',
+            'title' => $studentFiles->file_title ?? '',
+            'content' => $studentFiles->file_content ?? '',
+            'addTime' => $studentFiles->file_addtime ?? '',
+            'dealTime' => $studentFiles->file_dealtime ?? '',
+            'type' => $studentFiles->file_type ?? -1,
+            'status' => $studentFiles->file_status ?? -1,
+            'systemAdd' => $studentFiles->is_systemadd ?? -1
         ];
     }
     
@@ -564,18 +564,18 @@ class Resources
 
     public static function Message($message){
         return [
-            'id' => $message->message_id,
-            'fromSno' => $message->form_user_no,
+            'id' => $message->message_id ?? -1,
+            'fromSno' => $message->form_user_no ?? '',
             'fromName' => $message->fromUser->username ?? '',
-            'toSno' => $message->to_user_no,
+            'toSno' => $message->to_user_no ?? '',
             'toName' => $message->toUser->username ?? '',
-            'title' => $message->message_title,
-            'content' => $message->message_content,
-            'type' => $message->message_type,
-            'isRead' => $message->message_isread,
-            'isHandled' => $message->message_ishandled,
-            'isDeleted' => $message->message_isdeleted,
-            'sendTime' => $message->message_sendtime
+            'title' => $message->message_title ?? '',
+            'content' => $message->message_content ?? '',
+            'type' => $message->message_type ?? '',
+            'isRead' => $message->message_isread ?? '',
+            'isHandled' => $message->message_ishandled ?? -1,
+            'isDeleted' => $message->message_isdeleted ?? -1,
+            'sendTime' => $message->message_sendtime ?? -1
         ];
     }
 
@@ -657,6 +657,22 @@ class Resources
             'partyBranch'   => $user->info->partyBranch->partybranch_name ?? '',
             'grade'         => $user->grade,
             'type'          => $user->type,
+        ];
+    }
+
+    public static function Manager($manager){
+        return [
+            'id'        => $manager->manager_id,
+            'twtName'      => $manager->manager_name,
+            'userNumber'=> $manager->user->usernumb ?? '',
+            'realName'  => $manager->user->username ?? '',
+            'academy'   => $manager->manager_academy,
+            'type'      => $manager->manager_type,
+            'status'    => $manager->manager_status,
+            'columnGrant' => $manager->manager_columngrant,
+            'imgId'     => $manager->img_id,
+            'lastLoginTime' => $manager->last_logintime,
+            'isDeleted' => $manager->manager_isdeleted
         ];
     }
 
